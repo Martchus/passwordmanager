@@ -1,0 +1,129 @@
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
+
+#include "passwordgeneratordialog.h"
+
+#include <passwordfile/io/passwordfile.h>
+
+#include <qtutilities/aboutdialog/aboutdialog.h>
+#include <c++utilities/io/binaryreader.h>
+#include <c++utilities/io/binarywriter.h>
+
+#include <QMainWindow>
+#include <QMap>
+
+#include <memory>
+#include <iostream>
+#include <fstream>
+
+QT_BEGIN_NAMESPACE
+class QCloseEvent;
+class QTreeWidgetItem;
+class QUndoStack;
+class QUndoView;
+QT_END_NAMESPACE
+
+namespace Io {
+DECLARE_ENUM(EntryType, int)
+DECLARE_ENUM(FieldType, int)
+}
+
+namespace QtGui {
+
+class FieldModel;
+class EntryModel;
+class EntryFilterModel;
+
+namespace Ui {
+class MainWindow;
+}
+
+class MainWindow : public QMainWindow
+{
+    Q_OBJECT
+    
+public:
+    explicit MainWindow(QWidget *parent = nullptr);
+    ~MainWindow();
+
+    // file management
+    bool openFile(const QString &path);
+    void createFile(const QString &path, const QString &password);
+    void createFile(const QString &path);
+
+public slots:
+    // file management
+    bool createFile();
+    void changePassword();
+    bool saveFile();
+    void exportFile();
+    bool closeFile();
+
+protected:
+    bool eventFilter(QObject *obj, QEvent *event);
+    void closeEvent(QCloseEvent *event);
+    void timerEvent(QTimerEvent *event);
+
+private slots:
+    // showing dialogs
+    void showAboutDialog();
+    void showPassowrdGeneratorDialog();
+    void showOpenFileDialog();
+    void showSaveFileDialog();
+    void showUndoView();
+    // file management
+    bool showFile();
+    // account/categories management
+    void addAccount();
+    void addCategory();
+    void addEntry(Io::EntryType type);
+    void removeEntry();
+    void applyFilter(const QString &filterText);
+    // row management
+    void accountSelected(const QModelIndex &selected, const QModelIndex &);
+    void insertRow();
+    void removeRows();
+    void markAsPasswordField();
+    void markAsNormalField();
+    void setFieldType(Io::FieldType fieldType);
+    QString selectedFieldsString() const;
+    void insertFields(const QString &fieldsString);
+    void copyFieldsForXMilliSeconds(int x = 5000);
+    void copyFields();
+    void insertFieldsFromClipboard();
+    // showing context menus
+    void showTreeViewContextMenu();
+    void showTableViewContextMenu();
+    // recent entries menu
+    void addRecentEntry(const QString &path);
+    void openRecentFile();
+    void clearRecent();
+    // other
+    void showContainingDirectory();
+    void clearClipboard();
+    void setSomethingChanged();
+
+private:   
+    // showing conditional messages/prompts
+    bool askForCreatingFile();
+    bool showNoFileOpened();
+    bool showNoAccount();
+    // other
+    void updateUiStatus();
+    void applyDefaultExpanding(const QModelIndex &parent);
+
+    std::unique_ptr<Ui::MainWindow> m_ui;
+    Io::PasswordFile m_file;
+    FieldModel *m_fieldModel;
+    EntryModel *m_entryModel;
+    EntryFilterModel *m_entryFilterModel;
+    QUndoStack *m_undoStack;
+    QUndoView *m_undoView;
+    bool m_somethingChanged;
+    bool m_dontUpdateSelection;
+    int m_clearClipboardTimer;
+};
+
+}
+
+#endif // MAINWINDOW_H

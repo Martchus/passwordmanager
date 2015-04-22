@@ -1,0 +1,20 @@
+<RCC>
+    <qresource prefix="/qml">
+        <file alias="main.qml">../qml/main.qml</file>
+        <file alias="pages/AccountsPage.qml">../qml/pages/AccountsPage.qml</file>
+        <file alias="pages/BasicPage.qml">../qml/pages/BasicPage.qml</file>
+        <file alias="pages/FieldsPage.qml">../qml/pages/FieldsPage.qml</file>
+        <file alias="pages/StartPage.qml">../qml/pages/StartPage.qml</file>
+        <file alias="pages/Separator.qml">../qml/pages/Separator.qml</file>
+        <file alias="touch/TouchButton.qml">../qml/touch/TouchButton.qml</file>
+        <file alias="touch/TouchLabel.qml">../qml/touch/TouchLabel.qml</file>
+        <file alias="touch/TouchTextField.qml">../qml/touch/TouchTextField.qml</file>
+        <file alias="touch/TouchSlider.qml">../qml/touch/TouchSlider.qml</file>
+        <file alias="touch/TouchScrollView.qml">../qml/touch/TouchScrollView.qml</file>
+        <file alias="touch/ListViewDelegate.qml">../qml/touch/ListViewDelegate.qml</file>
+        <file alias="images/clear.png">../qml/images/clear.png</file>
+        <file alias="images/magnifier.png">../qml/images/magnifier.png</file>
+        <file alias="images/backarrow.png">../qml/images/backarrow.png</file>
+        <file alias="images/close.png">../qml/images/close.png</file>
+    </qresource>
+</RCC>
