@@ -1,5 +1,5 @@
 _name=passwordmanager
-pkgname=mingw-w64-$_name
+pkgname=mingw-w64-passwordmanager
 pkgver=2.0.5
 pkgrel=2
 arch=('any')
@@ -7,14 +7,16 @@ pkgdesc="A simple password store using AES-256-CBC encryption via OpenSSL (mingw
 license=('GPL')
 depends=('mingw-w64-crt' 'mingw-w64-qt5-base' 'mingw-w64-qtutilities' 'mingw-w64-passwordfile' 'mingw-w64-openssl')
 makedepends=('mingw-w64-gcc')
-url="http://martchus.netai.net/"
-source=("${_name}.tar.gz")
-md5sums=('4e94aff9225d8873f752995c1bcc5f15')
+url="https://github.com/Martchus/passwordmanager"
+source=("passwordmanager-${pkgver}.tar.gz::https://github.com/Martchus/passwordmanager/archive/v${pkgver}.tar.gz")
+sha256sums=('4e94aff9225d8873f752995c1bcc5f15')
 _architectures="i686-w64-mingw32 x86_64-w64-mingw32"
+
 # head end
+
 build() {
     cd $srcdir/$_name
-    # build utilities for each architecture
+    # build for each architecture
     for _arch in ${_architectures}; do
         mkdir -p build-${_arch} && pushd build-${_arch}
         INSTALL_ROOT=$pkgdir/usr/ ${_arch}-qmake-qt5 -r ../${_name}.pro

@@ -7,10 +7,12 @@ license=('GPL')
 depends=('qt5-base' 'qtutilities' 'passwordfile' 'openssl' 'libxkbcommon-x11')
 makedepends=('qt5-tools')
 install=${pkgname}.install
-url="http://martchus.netai.net/"
-source=("$pkgname.tar.gz")
-md5sums=('d359927292464fcf41c8a11315ff79e2')
+url="https://github.com/Martchus/passwordmanager"
+source=("passwordmanager-${pkgver}.tar.gz::https://github.com/Martchus/passwordmanager/archive/v${pkgver}.tar.gz")
+sha256sums=('d359927292464fcf41c8a11315ff79e2')
+
 # head end
+
 build() {
     cd $srcdir/$pkgname
     INSTALL_ROOT=$pkgdir/usr/ qmake-qt5 "$pkgname.pro" -r -spec linux-g++
