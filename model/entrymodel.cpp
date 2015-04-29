@@ -327,11 +327,9 @@ bool EntryModel::setItemData(const QModelIndex &index, const QMap<int, QVariant>
 
 Qt::ItemFlags EntryModel::flags(const QModelIndex &index) const
 {
-    if(isNode(index)) {
-        return QAbstractItemModel::flags(index) | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
-    } else {
-        return QAbstractItemModel::flags(index) | Qt::ItemIsEditable | Qt::ItemIsDragEnabled;
-    }
+    return isNode(index)
+            ? QAbstractItemModel::flags(index) | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled
+            : QAbstractItemModel::flags(index) | Qt::ItemIsEditable | Qt::ItemIsDragEnabled;
 }
 
 QVariant EntryModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -354,7 +352,6 @@ QVariant EntryModel::headerData(int section, Qt::Orientation orientation, int ro
     default:
         ;
     }
-    return QVariant();
     return QVariant();
 }
 
