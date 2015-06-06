@@ -480,11 +480,12 @@ void MainWindow::addRecentEntry(const QString &path)
     if(!entry) {
         // remove old entries to have never more then 8 entries
         for(int i = existingEntries.size(); i > 9; --i) {
-            delete existingEntries.last();
+            delete existingEntries.back();
         }
         existingEntries = m_ui->menuRecent->actions();
         // create new action
         entry = new QAction(path, this);
+        entry->setProperty("file_path", path);
         connect(entry, &QAction::triggered, this, &MainWindow::openRecentFile);
     } else {
         // remove existing action (will be inserted again as first action)
@@ -493,7 +494,7 @@ void MainWindow::addRecentEntry(const QString &path)
     // ensure menu is enabled
     m_ui->menuRecent->setEnabled(true);
     // add action as first action in the recent menu
-    m_ui->menuRecent->insertAction(existingEntries.isEmpty() ? nullptr : existingEntries.first(), entry);
+    m_ui->menuRecent->insertAction(m_ui->menuRecent->isEmpty() ? nullptr : m_ui->menuRecent->actions().front(), entry);
 }
 
 /*!
