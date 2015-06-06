@@ -19,7 +19,7 @@ int runWidgetsGui(int argc, char *argv[], const QString &file)
     QGuiApplication::setOrganizationName(QStringLiteral("Martchus"));
     QGuiApplication::setOrganizationDomain(QStringLiteral("http://martchus.netai.net/"));
     QGuiApplication::setApplicationName(QStringLiteral("Password Manager"));
-    QGuiApplication::setApplicationVersion(QStringLiteral("2.0.5"));
+    QGuiApplication::setApplicationVersion(QStringLiteral("2.0.7"));
     // load translation files
     TranslationFiles::loadQtTranslationFile();
     TranslationFiles::loadApplicationTranslationFile(QStringLiteral("passwordmanager"));
