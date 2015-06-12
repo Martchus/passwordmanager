@@ -78,9 +78,7 @@ guiqtquick {
     TRANSLATIONS = translations/passwordmanager_en_US.ts \
                    translations/passwordmanager_de_DE.ts
 }
-updateqm.commands = lrelease $${projectname}.pro
-updateqm.target = updateqm
-QMAKE_EXTRA_TARGETS += updateqm
+include(translations.pri)
 
 OTHER_FILES += \
     README.md \
@@ -108,11 +106,11 @@ INCLUDEPATH += ../
 target.path = $$(INSTALL_ROOT)/bin
 INSTALLS += target
 icon.path = $$(INSTALL_ROOT)/share/icons/hicolor/scalable/apps/
-icon.files = ./resources/icons/hicolor/scalable/apps/$${projectname}.svg
+icon.files = $${PWD}/resources/icons/hicolor/scalable/apps/$${projectname}.svg
 INSTALLS += icon
 menu.path = $$(INSTALL_ROOT)/share/applications/
-menu.files = ./resources/desktop/applications/$${projectname}.desktop
+menu.files = $${PWD}/resources/desktop/applications/$${projectname}.desktop
 INSTALLS += menu
 translations.path = $$(INSTALL_ROOT)/share/$${projectname}/translations/
-translations.files = ./translations/*.qm
+translations.files = $${OUT_PWD}/translations/*.qm
 INSTALLS += translations
