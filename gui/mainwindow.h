@@ -102,6 +102,7 @@ private slots:
     void showContainingDirectory();
     void clearClipboard();
     void setSomethingChanged();
+    void setSomethingChanged(bool somethingChanged);
 
 private:   
     // showing conditional messages/prompts
@@ -110,6 +111,7 @@ private:
     bool showNoAccount();
     // other
     void updateUiStatus();
+    void updateWindowTitle();
     void applyDefaultExpanding(const QModelIndex &parent);
 
     std::unique_ptr<Ui::MainWindow> m_ui;

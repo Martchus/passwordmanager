@@ -21,6 +21,9 @@
    <locale language="English" country="UnitedStates"/>
   </property>
   <widget class="QWidget" name="centralWidget">
+   <property name="acceptDrops">
+    <bool>true</bool>
+   </property>
    <layout class="QVBoxLayout" name="verticalLayout_3">
     <property name="spacing">
      <number>0</number>

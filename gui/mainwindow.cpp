@@ -54,6 +54,49 @@ namespace QtGui {
  */
 
 /*!
+ * \brief Copies the selected cells to the clipboard.
+ */
+void MainWindow::copyFields()
+{
+    copyFieldsForXMilliSeconds(-1);
+}
+
+/*!
+ * \brief Inserts fields from the clipboard.
+ */
+void MainWindow::insertFieldsFromClipboard()
+{
+    insertFields(QApplication::clipboard()->text());
+}
+
+/*!
+ * \brief Clears the clipboard.
+ */
+void MainWindow::clearClipboard()
+{
+    QApplication::clipboard()->clear();
+}
+
+/*!
+ * \brief Flags the current file as being changed since the last save.
+ */
+void MainWindow::setSomethingChanged()
+{
+    setSomethingChanged(true);
+}
+
+/*!
+ * \brief Sets whether the current file has been changed since the last save.
+ */
+void MainWindow::setSomethingChanged(bool somethingChanged)
+{
+    if(m_somethingChanged != somethingChanged) {
+        m_somethingChanged = somethingChanged;
+        updateWindowTitle();
+    }
+}
+
+/*!
  * \brief Constructs a new main window.
  */
 MainWindow::MainWindow(QWidget *parent) :
@@ -67,7 +110,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setStyleSheet(QStringLiteral("* { font: 9pt \"Segoe UI\", \"Sans\"; } QMessageBox QLabel, QInputDialog QLabel { font-size: 12pt; color: #003399; } #statusBar { border-top: 1px solid #919191; padding-top: 1px; } #splitter QWidget { background-color: #FFF; } #assumePushButton { font-weight: bold; } #splitter #treeButtonsWidget, #splitter #listButtonsWidget { background-color: #F0F0F0; border-top: 1px solid #DFDFDF; } #leftWidget { border-right: 1px solid #DFDFDF; } #splitter QWidget *, #splitter QWidget * { background-color: none; }"));
 #endif
     // set default values
-    m_somethingChanged = false;
+    setSomethingChanged(false);
     m_dontUpdateSelection = false;
     updateUiStatus();
     // load settings
@@ -142,8 +185,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(m_ui->actionShowUndoStack, &QAction::triggered, this, &MainWindow::showUndoView);
     //   models
     connect(m_ui->treeView->selectionModel(), &QItemSelectionModel::currentRowChanged, this, &MainWindow::accountSelected);
-    connect(m_entryModel, &QAbstractItemModel::dataChanged, this, &MainWindow::setSomethingChanged);
-    connect(m_fieldModel, &QAbstractItemModel::dataChanged, this, &MainWindow::setSomethingChanged);
+    connect(m_entryModel, &QAbstractItemModel::dataChanged, this, static_cast<void (MainWindow::*)(void)>(&MainWindow::setSomethingChanged));
+    connect(m_fieldModel, &QAbstractItemModel::dataChanged, this, static_cast<void (MainWindow::*)(void)>(&MainWindow::setSomethingChanged));
     //   context menus
     connect(m_ui->treeView, &QTableView::customContextMenuRequested, this, &MainWindow::showTreeViewContextMenu);
     connect(m_ui->tableView, &QTableView::customContextMenuRequested, this, &MainWindow::showTableViewContextMenu);
@@ -154,6 +197,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_ui->actionAlwaysCreateBackup->setChecked(settings.value(QStringLiteral("alwayscreatebackup"), false).toBool());
     m_ui->accountFilterLineEdit->setText(settings.value(QStringLiteral("accountfilter"), QString()).toString());
     m_ui->actionHidePasswords->setChecked(m_fieldModel->hidePasswords());
+    m_ui->centralWidget->installEventFilter(this);
     settings.endGroup();
 }
 
@@ -170,6 +214,32 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
         case QEvent::Hide:
             m_ui->actionShowUndoStack->setChecked(false);
             break;
+        default:
+            ;
+        }
+    } else if(obj == m_ui->centralWidget) {
+        switch(event->type()) {
+        case QEvent::DragEnter:
+        case QEvent::Drop:
+            if(QDropEvent *dropEvent = static_cast<QDropEvent *>(event)) {
+                QString data;
+                const QMimeData *mimeData = dropEvent->mimeData();
+                if(mimeData->hasUrls()) {
+                    const QUrl url = mimeData->urls().front();
+                    if(url.scheme() == QLatin1String("file")) {
+                        data = url.path();
+                    }
+                } else if(mimeData->hasText()) {
+                    data = mimeData->text();
+                }
+                if(!data.isEmpty()) {
+                    event->accept();
+                    if(event->type() == QEvent::Drop) {
+                        openFile(data);
+                    }
+                }
+                return true;
+            }
         default:
             ;
         }
@@ -452,14 +522,13 @@ bool MainWindow::showFile()
     if(m_file.path().empty()) {
         m_ui->statusBar->showMessage(tr("A new password list has been created."), 5000);
     } else {
-        QString title = QString::fromStdString(m_file.path());
-        addRecentEntry(title);
-        m_ui->statusBar->showMessage(tr("The password list \"%1\" has been load.").arg(title), 5000);
-        setWindowTitle(QStringLiteral("%1 - %2").arg(title, QApplication::applicationName()));
+        addRecentEntry(QString::fromStdString(m_file.path()));
+        m_ui->statusBar->showMessage(tr("The password list has been load."), 5000);
     }
+    updateWindowTitle();
     updateUiStatus();
     applyFilter(m_ui->accountFilterLineEdit->text());
-    m_somethingChanged = false;
+    setSomethingChanged(false);
     return true;
 }
 
@@ -513,6 +582,31 @@ void MainWindow::updateUiStatus()
     m_ui->actionChangepassword->setEnabled(fileOpened);
     m_ui->menuEdit->setEnabled(fileOpened);
     m_ui->accountFilterLineEdit->setEnabled(true);
+}
+
+/*!
+ * \brief Updates the window title.
+ */
+void MainWindow::updateWindowTitle()
+{
+    if(m_file.path().empty()) {
+        if(m_file.hasRootEntry()) {
+            if(m_somethingChanged) {
+                setWindowTitle(QStringLiteral("*Unsaved - %1").arg(QApplication::applicationName()));
+            } else {
+                setWindowTitle(QStringLiteral("Unsaved - %1").arg(QApplication::applicationName()));
+            }
+        } else {
+            setWindowTitle(QApplication::applicationName());
+        }
+    } else {
+        QFileInfo file = QString::fromStdString(m_file.path());
+        if(m_somethingChanged) {
+            setWindowTitle(QStringLiteral("*%1 - %2 - %3").arg(file.fileName(), file.dir().path(), QApplication::applicationName()));
+        } else {
+            setWindowTitle(QStringLiteral("%1 - %2 - %3").arg(file.fileName(), file.dir().path(), QApplication::applicationName()));
+        }
+    }
 }
 
 void MainWindow::applyDefaultExpanding(const QModelIndex &parent)
@@ -694,9 +788,9 @@ bool MainWindow::closeFile()
     m_entryModel->reset();
     m_file.clear();
     m_ui->statusBar->showMessage(tr("The password list has been closed."));
-    setWindowTitle(QApplication::applicationName());
+    updateWindowTitle();
     updateUiStatus();
-    m_somethingChanged = false;
+    setSomethingChanged(false);
     return true;
 }
 
@@ -758,7 +852,7 @@ bool MainWindow::saveFile()
        QMessageBox::critical(this, QApplication::applicationName(), msg);
        return false;
     } else {
-        m_somethingChanged = false;
+        setSomethingChanged(false);
         addRecentEntry(QString::fromStdString(m_file.path()));
         m_ui->statusBar->showMessage(tr("The password list has been saved."), 5000);
         return true;
@@ -845,7 +939,7 @@ void MainWindow::addEntry(EntryType type)
                     m_entryModel->setInsertType(type);
                     if(m_entryModel->insertRow(row, selected)) {
                         m_entryModel->setData(m_entryModel->index(row, 0, selected), text, Qt::DisplayRole);
-                        setSomethingChanged();
+                        setSomethingChanged(true);
                     } else {
                         QMessageBox::warning(this, QApplication::applicationName(), tr("Unable to create new entry."));
                     }
@@ -995,21 +1089,21 @@ void MainWindow::setFieldType(FieldType fieldType)
 void MainWindow::changePassword()
 {
     using namespace Dialogs;
-    if(showNoFileOpened()) return;
-
+    if(showNoFileOpened()) {
+        return;
+    }
     EnterPasswordDialog pwDlg(this);
     pwDlg.setWindowTitle(QApplication::applicationName());
     pwDlg.setVerificationRequired(true);
-
     switch(pwDlg.exec()) {
     case QDialog::Accepted:
         if(pwDlg.password().isEmpty()) {
             m_file.clearPassword();
-            setSomethingChanged();
+            setSomethingChanged(true);
             QMessageBox::warning(this, QApplication::applicationName(), tr("You didn't enter a password. <strong>No encryption</strong> will be used when saving the file next time."));
         } else {
             m_file.setPassword(pwDlg.password().toStdString());
-            setSomethingChanged();
+            setSomethingChanged(true);
             QMessageBox::warning(this, QApplication::applicationName(), tr("The new password will be used next time you save the file."));
         }
         break;
@@ -1135,38 +1229,6 @@ void MainWindow::copyFieldsForXMilliSeconds(int x)
     } else {
         QMessageBox::warning(this, QApplication::applicationName(), tr("The selection is empty."));
     }
-}
-
-/*!
- * \brief Copies the selected cells to the clipboard.
- */
-void MainWindow::copyFields()
-{
-    copyFieldsForXMilliSeconds(-1);
-}
-
-/*!
- * \brief Inserts fields from the clipboard.
- */
-void MainWindow::insertFieldsFromClipboard()
-{
-    insertFields(QApplication::clipboard()->text());
-}
-
-/*!
- * \brief Clears the clipboard.
- */
-void MainWindow::clearClipboard()
-{
-    QApplication::clipboard()->clear();
-}
-
-/*!
- * \brief Sets the variable m_somethingChanged to true.
- */
-void MainWindow::setSomethingChanged()
-{
-    m_somethingChanged = true;
 }
 
 }
