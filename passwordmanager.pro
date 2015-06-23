@@ -1,4 +1,5 @@
 projectname = passwordmanager
+VERSION = 2.0.7
 
 # include ../../common.pri when building as part of a subdirs project; otherwise include general.pri
 !include(../../common.pri) {
@@ -79,6 +80,7 @@ guiqtquick {
                    translations/passwordmanager_de_DE.ts
 }
 include(translations.pri)
+#win32:include(windowsicon.pri) TODO
 
 OTHER_FILES += \
     README.md \
@@ -111,6 +113,3 @@ INSTALLS += icon
 menu.path = $$(INSTALL_ROOT)/share/applications/
 menu.files = $${PWD}/resources/desktop/applications/$${projectname}.desktop
 INSTALLS += menu
-translations.path = $$(INSTALL_ROOT)/share/$${projectname}/translations/
-translations.files = $${OUT_PWD}/translations/*.qm
-INSTALLS += translations
