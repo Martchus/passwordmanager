@@ -8,7 +8,6 @@
 #include <QApplication>
 #include <QFile>
 
-
 namespace QtGui {
 
 int runWidgetsGui(int argc, char *argv[], const QString &file)
