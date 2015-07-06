@@ -8,6 +8,7 @@
 #include <passwordfile/io/entry.h>
 
 #include <qtutilities/enterpassworddialog/enterpassworddialog.h>
+#include <qtutilities/misc/dialogutils.h>
 
 #include <c++utilities/io/path.h>
 
@@ -589,24 +590,17 @@ void MainWindow::updateUiStatus()
  */
 void MainWindow::updateWindowTitle()
 {
-    if(m_file.path().empty()) {
-        if(m_file.hasRootEntry()) {
-            if(m_somethingChanged) {
-                setWindowTitle(QStringLiteral("*Unsaved - %1").arg(QApplication::applicationName()));
-            } else {
-                setWindowTitle(QStringLiteral("Unsaved - %1").arg(QApplication::applicationName()));
-            }
+    Dialogs::DocumentStatus docStatus;
+    if(m_file.hasRootEntry()) {
+        if(m_somethingChanged) {
+            docStatus = Dialogs::DocumentStatus::Unsaved;
         } else {
-            setWindowTitle(QApplication::applicationName());
+            docStatus = Dialogs::DocumentStatus::Saved;
         }
     } else {
-        QFileInfo file = QString::fromStdString(m_file.path());
-        if(m_somethingChanged) {
-            setWindowTitle(QStringLiteral("*%1 - %2 - %3").arg(file.fileName(), file.dir().path(), QApplication::applicationName()));
-        } else {
-            setWindowTitle(QStringLiteral("%1 - %2 - %3").arg(file.fileName(), file.dir().path(), QApplication::applicationName()));
-        }
+        docStatus = Dialogs::DocumentStatus::NoDocument;
     }
+    setWindowTitle(Dialogs::generateWindowTitle(docStatus, QString::fromStdString(m_file.path())));
 }
 
 void MainWindow::applyDefaultExpanding(const QModelIndex &parent)
