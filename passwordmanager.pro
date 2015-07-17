@@ -75,12 +75,12 @@ guiqtquick {
     contains(DEFINES, GUI_QTQUICK) {
         RESOURCES += resources/qml.qrc
     }
-
     TRANSLATIONS = translations/passwordmanager_en_US.ts \
-                   translations/passwordmanager_de_DE.ts
+        translations/passwordmanager_de_DE.ts
 }
 include(translations.pri)
-#win32:include(windowsicon.pri) TODO
+
+win32:include(windowsicon.pri)
 
 OTHER_FILES += \
     README.md \
@@ -103,11 +103,19 @@ CONFIG(debug, debug|release) {
 INCLUDEPATH += ../
 
 # installs
-target.path = $$(INSTALL_ROOT)/bin
-INSTALLS += target
-icon.path = $$(INSTALL_ROOT)/share/icons/hicolor/scalable/apps/
-icon.files = $${PWD}/resources/icons/hicolor/scalable/apps/$${projectname}.svg
-INSTALLS += icon
-menu.path = $$(INSTALL_ROOT)/share/applications/
-menu.files = $${PWD}/resources/desktop/applications/$${projectname}.desktop
-INSTALLS += menu
+mingw-w64-install {
+    target.path = $$(INSTALL_ROOT)
+    target.extra = install -m755 -D $${OUT_PWD}/release/$(TARGET) $$(INSTALL_ROOT)/bin/$(TARGET)
+    INSTALLS += target
+} else {
+    target.path = $$(INSTALL_ROOT)/bin
+    INSTALLS += target
+}
+!mingw-w64-install {
+    icon.path = $$(INSTALL_ROOT)/share/icons/hicolor/scalable/apps/
+    icon.files = $${PWD}/resources/icons/hicolor/scalable/apps/$${projectname}.svg
+    INSTALLS += icon
+    menu.path = $$(INSTALL_ROOT)/share/applications/
+    menu.files = $${PWD}/resources/desktop/applications/$${projectname}.desktop
+    INSTALLS += menu
+}
