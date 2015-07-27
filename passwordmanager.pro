@@ -1,4 +1,7 @@
 projectname = passwordmanager
+appname = "Password Manager"
+appauthor = Martchus
+appurl = "https://github.com/$${appauthor}/$${projectname}"
 VERSION = 2.0.7
 
 # include ../../common.pri when building as part of a subdirs project; otherwise include general.pri

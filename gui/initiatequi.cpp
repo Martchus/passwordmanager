@@ -12,16 +12,11 @@ namespace QtGui {
 
 int runWidgetsGui(int argc, char *argv[], const QString &file)
 {
+    SET_APPLICATION_INFO;
     // init application
     QApplication a(argc, argv);
+    LOAD_TRANSLATIONS;
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
-    QGuiApplication::setOrganizationName(QStringLiteral("Martchus"));
-    QGuiApplication::setOrganizationDomain(QStringLiteral("http://martchus.netai.net/"));
-    QGuiApplication::setApplicationName(QStringLiteral("Password Manager"));
-    QGuiApplication::setApplicationVersion(QStringLiteral("2.0.7"));
-    // load translation files
-    TranslationFiles::loadQtTranslationFile();
-    TranslationFiles::loadApplicationTranslationFile(QStringLiteral("passwordmanager"));
     // load the other resources
     QtUtilitiesResources::init();
     Theme::setup();
