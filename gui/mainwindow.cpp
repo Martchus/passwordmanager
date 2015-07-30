@@ -1162,7 +1162,7 @@ void MainWindow::showTableViewContextMenu()
         return;
     }
     QMenu contextMenu(this);
-    FieldType firstType;
+    FieldType firstType = FieldType::Normal;
     bool allOfSameType = true;
     bool hasOneFieldType = false;
     int row = selectedIndexes.front().row();
