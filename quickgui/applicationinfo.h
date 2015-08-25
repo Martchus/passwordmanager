@@ -54,13 +54,13 @@ public:
 
     Q_INVOKABLE QString imagePath(const QString image);
 
-protected slots:
+protected Q_SLOTS:
     void notifyPortraitMode(Qt::ScreenOrientation);
 
 protected:
     qreal sizeWithRatio(const qreal height);
 
-signals:
+Q_SIGNALS:
     void currentFileChanged();
     void applicationWidthChanged();
     void portraitModeChanged();

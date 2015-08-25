@@ -51,7 +51,7 @@ public:
     void createFile(const QString &path, const QString &password);
     void createFile(const QString &path);
 
-public slots:
+public Q_SLOTS:
     // file management
     bool createFile();
     void changePassword();
@@ -64,7 +64,7 @@ protected:
     void closeEvent(QCloseEvent *event);
     void timerEvent(QTimerEvent *event);
 
-private slots:
+private Q_SLOTS:
     // showing dialogs
     void showAboutDialog();
     void showPassowrdGeneratorDialog();

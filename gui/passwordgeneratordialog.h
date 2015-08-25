@@ -21,7 +21,7 @@ public:
     explicit PasswordGeneratorDialog(QWidget *parent = 0);
     ~PasswordGeneratorDialog();
     
-private slots:
+private Q_SLOTS:
     void generateNewPassword();
     void handleCheckedCategoriesChanged();
     void handlePasswordChanged();

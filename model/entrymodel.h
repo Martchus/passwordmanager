@@ -67,7 +67,7 @@ public:
     bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
     Qt::DropActions supportedDropActions() const;
 
-public slots:
+public Q_SLOTS:
     void reset();
 
 private:

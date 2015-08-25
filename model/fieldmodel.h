@@ -55,7 +55,7 @@ public:
     QMimeData *mimeData(const QModelIndexList &indexes) const;
     const Io::Field *field(std::size_t row) const;
 
-public slots:
+public Q_SLOTS:
     void setHidePasswords(bool hidePasswords);
     void reset();
 
