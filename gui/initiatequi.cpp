@@ -12,10 +12,10 @@ namespace QtGui {
 
 int runWidgetsGui(int argc, char *argv[], const QString &file)
 {
-    SET_APPLICATION_INFO;
+    SET_QT_APPLICATION_INFO;
     // init application
     QApplication a(argc, argv);
-    LOAD_TRANSLATIONS;
+    LOAD_QT_TRANSLATIONS;
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
     // load the other resources
     QtUtilitiesResources::init();

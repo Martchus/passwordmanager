@@ -30,6 +30,7 @@ int main(int argc, char *argv[])
     // init open ssl
     OpenSsl::init();
     // setup argument parser
+    SET_APPLICATION_INFO;
     ArgumentParser parser;
     parser.setIgnoreUnknownArguments(true);
     // Qt configuration arguments
