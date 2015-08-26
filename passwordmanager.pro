@@ -91,19 +91,16 @@ OTHER_FILES += \
 
 # libs and includepath
 CONFIG(debug, debug|release) {
-    LIBS += -L../../ -lc++utilitiesd -lpasswordfiled
+    LIBS += -lc++utilitiesd -lpasswordfiled
     !no-gui {
         LIBS += -lqtutilitiesd
     }
 } else {
-    LIBS += -L../../ -lc++utilities -lpasswordfile
+    LIBS += -lc++utilities -lpasswordfile
     !no-gui {
         LIBS += -lqtutilities
     }
 }
-
-# requried when building in subdirs project
-INCLUDEPATH += ../
 
 # installs
 mingw-w64-install {
