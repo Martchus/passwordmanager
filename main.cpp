@@ -1,15 +1,16 @@
 #include "cli/cli.h"
 #ifdef GUI_QTWIDGETS
-# include "gui/initiate.h"
+# include "gui/initiategui.h"
 #endif
 #ifdef GUI_QTQUICK
-# include "quickgui/initiate.h"
+# include "quickgui/initiatequick.h"
 #endif
 
 #include <passwordfile/util/openssl.h>
 
 #include <c++utilities/application/argumentparser.h>
 #include <c++utilities/application/failure.h>
+#include <c++utilities/application/commandlineutils.h>
 
 #if defined(GUI_QTWIDGETS) || defined(GUI_QTQUICK)
 # include <qtutilities/resources/qtconfigarguments.h>
@@ -67,27 +68,31 @@ int main(int argc, char *argv[])
             }
             if(qtConfigArgs.qtWidgetsGuiArg().isPresent()) {
 #ifdef GUI_QTWIDGETS
-                res = QtGui::runWidgetsGui(argc, argv, file);
+                res = QtGui::runWidgetsGui(argc, argv, qtConfigArgs, file);
 #else
+                CMD_UTILS_START_CONSOLE;
                 cout << "The application has not been built with Qt widgets support." << endl;
 #endif
             } else if(qtConfigArgs.qtQuickGuiArg().isPresent()) {
 #ifdef GUI_QTQUICK
-                res = QtGui::runQuickGui(argc, argv);
+                res = QtGui::runQuickGui(argc, argv, qtConfigArgs);
 #else
+                CMD_UTILS_START_CONSOLE;
                 cout << "The application has not been built with Qt quick support." << endl;
 #endif
             } else {
 #if defined(GUI_QTQUICK)
-                res = QtGui::runQuickGui(argc, argv);
+                res = QtGui::runQuickGui(argc, argv, qtConfigArgs);
 #elif defined(GUI_QTWIDGETS)
-                res = QtGui::runWidgetsGui(argc, argv, file);
+                res = QtGui::runWidgetsGui(argc, argv, qtConfigArgs, file);
 #else
+                CMD_UTILS_START_CONSOLE;
                 cout << "See --help for usage." << endl;
 #endif
             }
         }
     } catch(Failure &ex) {
+        CMD_UTILS_START_CONSOLE;
         cout << "Unable to parse arguments. " << ex.what() << "\nSee --help for available commands." << endl;
     }
     // clean open ssl

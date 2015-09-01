@@ -56,20 +56,20 @@ HEADERS  += model/entrymodel.h \
     model/fieldmodel.h \
     model/entryfiltermodel.h \
     util/testroutines.h \
-    cli/cli.h
+    cli/cli.h \
+    gui/initiategui.h
 
 guiqtwidgets {
     HEADERS += gui/mainwindow.h \
         gui/passwordgeneratordialog.h \
         gui/undocommands.h \
-        gui/stacksupport.h \
-        gui/initiate.h
+        gui/stacksupport.h
 }
 
 guiqtquick {
     HEADERS += quickgui/applicationinfo.h \
-        quickgui/applicationpaths.h
-        quickgui/initiate.h
+        quickgui/applicationpaths.h \
+        quickgui/initiatequick.h
 }
 
 # resources and translations

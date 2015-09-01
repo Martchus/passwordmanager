@@ -1,11 +1,12 @@
-#include "initiate.h"
+#include "initiatequick.h"
 
 # include "model/entryfiltermodel.h"
 # include "model/entrymodel.h"
 # include "model/fieldmodel.h"
 
-# include "quickgui/applicationinfo.h"
+#include "quickgui/applicationinfo.h"
 
+#include <qtutilities/resources/qtconfigarguments.h>
 #include <qtutilities/resources/resources.h>
 
 #if defined(GUI_QTWIDGETS)
@@ -19,6 +20,8 @@
 #include <QQmlApplicationEngine>
 #include <QDebug>
 
+using namespace ApplicationUtilities;
+
 namespace QtGui {
 
 #if defined(GUI_QTQUICK)
@@ -30,26 +33,21 @@ static QObject *applicationInfo(QQmlEngine *engine, QJSEngine *scriptEngine)
 }
 #endif
 
-int runQuickGui(int argc, char *argv[])
+int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs)
 {
     // init application
+    SET_QT_APPLICATION_INFO;
 #if defined(GUI_QTWIDGETS)
     QApplication a(argc, argv);
 #else
     QGuiApplication a(argc, argv);
 #endif
-    QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
-    QGuiApplication::setOrganizationName(QStringLiteral("Martchus"));
-    QGuiApplication::setOrganizationDomain(QStringLiteral("http://martchus.netai.net/"));
-    QGuiApplication::setApplicationName(QStringLiteral("Password Manager (mobile)"));
-    QGuiApplication::setApplicationVersion(QStringLiteral("2.0.5"));
-    // load translation files
-    TranslationFiles::loadQtTranslationFile();
-    TranslationFiles::loadApplicationTranslationFile(QStringLiteral("passwordmanager"));
-    // load the other resources
+    // load resources needed by classes of qtutilities
     QtUtilitiesResources::init();
-    Theme::setup();
-    qDebug() << "test 2";
+    // apply settings specified via command line args
+    qtConfigArgs.applySettings();
+    LOAD_QT_TRANSLATIONS;
+    QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
     // init quick GUI
     qmlRegisterSingletonType<QtGui::ApplicationInfo>("martchus.passwordmanager", 2, 0, "ApplicationInfo", applicationInfo);
     qmlRegisterType<QtGui::EntryFilterModel>("martchus.passwordmanager", 2, 0, "EntryFilterModel");

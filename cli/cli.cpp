@@ -7,8 +7,7 @@
 #include <passwordfile/io/field.h>
 
 #include <c++utilities/conversion/stringconversion.h>
-
-#include <c++utilities/application/global.h>
+#include <c++utilities/application/commandlineutils.h>
 
 #if defined(PLATFORM_UNIX)
 #include <unistd.h>
@@ -88,7 +87,9 @@ InteractiveCli::InteractiveCli() :
     m_currentEntry(nullptr),
     m_modified(false),
     m_quit(false)
-{}
+{
+    CMD_UTILS_START_CONSOLE;
+}
 
 void InteractiveCli::run(const string &file)
 {
