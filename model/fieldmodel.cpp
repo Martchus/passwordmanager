@@ -1,4 +1,4 @@
-#include "fieldmodel.h"
+#include "./fieldmodel.h"
 #ifdef MODEL_UNDO_SUPPORT
 #include "gui/undocommands.h"
 #endif

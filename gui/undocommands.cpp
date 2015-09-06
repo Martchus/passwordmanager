@@ -1,7 +1,8 @@
-#include "undocommands.h"
-#include "stacksupport.h"
-#include "model/fieldmodel.h"
-#include "model/entrymodel.h"
+#include "./undocommands.h"
+#include "./stacksupport.h"
+
+#include "../model/fieldmodel.h"
+#include "../model/entrymodel.h"
 
 #include <passwordfile/io/entry.h>
 

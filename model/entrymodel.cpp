@@ -1,4 +1,4 @@
-#include "entrymodel.h"
+#include "./entrymodel.h"
 
 #ifdef MODEL_UNDO_SUPPORT
 #include "gui/undocommands.h"

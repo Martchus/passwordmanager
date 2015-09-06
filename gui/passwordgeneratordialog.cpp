@@ -1,5 +1,6 @@
-#include "passwordgeneratordialog.h"
-#include "ui_passwordgeneratordialog.h"
+#include "./passwordgeneratordialog.h"
+
+#include "gui/ui_passwordgeneratordialog.h"
 
 #include <passwordfile/io/cryptoexception.h>
 

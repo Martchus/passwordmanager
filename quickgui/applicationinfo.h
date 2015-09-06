@@ -1,7 +1,7 @@
 #ifndef APPLICATIONINFO_H
 #define APPLICATIONINFO_H
 
-#include "model/fieldmodel.h"
+#include "../model/fieldmodel.h"
 
 #include <QObject>
 #include <QQmlPropertyMap>

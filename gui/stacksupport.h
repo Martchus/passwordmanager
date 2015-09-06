@@ -1,7 +1,7 @@
 #ifndef QTGUI_STACKSUPPORT_H
 #define QTGUI_STACKSUPPORT_H
 
-#include "undocommands.h"
+#include "./undocommands.h"
 
 #include <QUndoStack>
 

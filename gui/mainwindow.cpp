@@ -1,8 +1,10 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
-#include "model/fieldmodel.h"
-#include "model/entrymodel.h"
-#include "model/entryfiltermodel.h"
+#include "./mainwindow.h"
+
+#include "../model/fieldmodel.h"
+#include "../model/entrymodel.h"
+#include "../model/entryfiltermodel.h"
+
+#include "gui/ui_mainwindow.h"
 
 #include <passwordfile/io/cryptoexception.h>
 #include <passwordfile/io/entry.h>

@@ -1,9 +1,9 @@
-#include "cli/cli.h"
+#include "./cli/cli.h"
 #ifdef GUI_QTWIDGETS
-# include "gui/initiategui.h"
+# include "./gui/initiategui.h"
 #endif
 #ifdef GUI_QTQUICK
-# include "quickgui/initiatequick.h"
+# include "./quickgui/initiatequick.h"
 #endif
 
 #include <passwordfile/util/openssl.h>

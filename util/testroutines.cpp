@@ -1,4 +1,4 @@
-#include "testroutines.h"
+#include "./testroutines.h"
 
 #include <c++utilities/io/binaryreader.h>
 #include <c++utilities/io/binarywriter.h>

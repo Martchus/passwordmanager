@@ -1,5 +1,5 @@
-#include "entryfiltermodel.h"
-#include "entrymodel.h"
+#include "./entryfiltermodel.h"
+#include "./entrymodel.h"
 
 namespace QtGui {
 

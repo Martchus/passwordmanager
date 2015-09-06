@@ -1,4 +1,4 @@
-#include "stacksupport.h"
+#include "./stacksupport.h"
 
 namespace QtGui {
 

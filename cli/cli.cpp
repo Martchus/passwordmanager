@@ -1,4 +1,4 @@
-#include "cli.h"
+#include "./cli.h"
 
 #include <passwordfile/io/passwordfile.h>
 #include <passwordfile/io/cryptoexception.h>

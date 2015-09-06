@@ -1,4 +1,4 @@
-#include "initiategui.h"
+#include "./initiategui.h"
 
 #include "gui/mainwindow.h"
 

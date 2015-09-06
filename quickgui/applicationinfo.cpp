@@ -1,4 +1,4 @@
-#include "applicationinfo.h"
+#include "./applicationinfo.h"
 
 #include <qmath.h>
 

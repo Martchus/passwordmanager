@@ -1,8 +1,8 @@
-#include "initiatequick.h"
+#include "./initiatequick.h"
 
-# include "model/entryfiltermodel.h"
-# include "model/entrymodel.h"
-# include "model/fieldmodel.h"
+# include "../model/entryfiltermodel.h"
+# include "../model/entrymodel.h"
+# include "../model/fieldmodel.h"
 
 #include "quickgui/applicationinfo.h"
 

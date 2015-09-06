@@ -1,7 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "passwordgeneratordialog.h"
+#include "./passwordgeneratordialog.h"
 
 #include <passwordfile/io/passwordfile.h>
 
