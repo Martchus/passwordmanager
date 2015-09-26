@@ -4,6 +4,8 @@
 
 #include <passwordfile/io/cryptoexception.h>
 
+#include <qtutilities/misc/dialogutils.h>
+
 #include <c++utilities/conversion/binaryconversion.h>
 
 #include <openssl/rand.h>
@@ -19,6 +21,7 @@
 using namespace std;
 using namespace Io;
 using namespace Util;
+using namespace Dialogs;
 
 namespace QtGui {
 
@@ -51,20 +54,19 @@ PasswordGeneratorDialog::PasswordGeneratorDialog(QWidget *parent) :
 {
     m_ui->setupUi(this);
 #ifdef Q_OS_WIN32
-    setStyleSheet(QStringLiteral("* { font: 9pt \"Segoe UI\", \"Sans\"; } #mainFrame { border: none; background: white; } #bottomFrame { background-color: #F0F0F0; border-top: 1px solid #DFDFDF; } #mainFrame #captionNameLabel, QMessageBox QLabel, QCommandLinkButton  { font-size: 12pt; color: #003399; font-weight: normal; } #atLeastOneOfEachCategoryFrame { border-top: 1px solid #eee; }"));
-#else
-    setStyleSheet(QStringLiteral("#mainFrame #captionNameLabel { font-weight: bold; }"));
+    setStyleSheet(QStringLiteral("%1 QCommandLinkButton  { font-size: 12pt; color: %2; font-weight: normal; }").arg(dialogStyle(), instructionTextColor().name()));
 #endif
-
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
 
-    connect(m_ui->copyPasswordCommandLinkButton, SIGNAL(clicked()), this, SLOT(copyPassword()));
-    connect(m_ui->generatePassowordCommandLinkButton, SIGNAL(clicked()), this, SLOT(generateNewPassword()));
-    connect(m_ui->useCapitalLettersCheckBox, SIGNAL(stateChanged(int)), this, SLOT(handleCheckedCategoriesChanged()));
-    connect(m_ui->useDigitsCheckBox, SIGNAL(stateChanged(int)), this, SLOT(handleCheckedCategoriesChanged()));
-    connect(m_ui->otherCharsLineEdit, SIGNAL(editingFinished()), this, SLOT(handleCheckedCategoriesChanged()));
-    connect(m_ui->useSmallLettersCheckBox, SIGNAL(stateChanged(int)), this, SLOT(handleCheckedCategoriesChanged()));
-    connect(m_ui->passwordLineEdit, SIGNAL(textChanged(QString)), this, SLOT(handlePasswordChanged()));
+    connect(m_ui->copyPasswordCommandLinkButton, &QCommandLinkButton::clicked, this, &PasswordGeneratorDialog::copyPassword);
+    connect(m_ui->generatePassowordCommandLinkButton, &QCommandLinkButton::clicked, this, &PasswordGeneratorDialog::generateNewPassword);
+    connect(m_ui->useCapitalLettersCheckBox, &QCheckBox::stateChanged, this, &PasswordGeneratorDialog::handleCheckedCategoriesChanged);
+    connect(m_ui->useCapitalLettersCheckBox, &QCheckBox::stateChanged, this, &PasswordGeneratorDialog::handleCheckedCategoriesChanged);
+    connect(m_ui->useSmallLettersCheckBox, &QCheckBox::stateChanged, this, &PasswordGeneratorDialog::handleCheckedCategoriesChanged);
+    connect(m_ui->useDigitsCheckBox, &QCheckBox::stateChanged, this, &PasswordGeneratorDialog::handleCheckedCategoriesChanged);
+    connect(m_ui->otherCharsLineEdit, &QLineEdit::textChanged, this, &PasswordGeneratorDialog::handleCheckedCategoriesChanged);
+    connect(m_ui->passwordLineEdit, &QLineEdit::textChanged, this, &PasswordGeneratorDialog::handlePasswordChanged);
+    connect(m_ui->closePushButton, &QPushButton::clicked, this, &PasswordGeneratorDialog::close);
 
     handlePasswordChanged();
 }

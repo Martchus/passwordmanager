@@ -38,6 +38,7 @@
 using namespace std;
 using namespace IoUtilities;
 using namespace Io;
+using namespace Dialogs;
 
 namespace QtGui {
 
@@ -110,7 +111,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // setup ui
     m_ui->setupUi(this);
 #ifdef Q_OS_WIN32
-    setStyleSheet(QStringLiteral("* { font: 9pt \"Segoe UI\", \"Sans\"; } QMessageBox QLabel, QInputDialog QLabel { font-size: 12pt; color: #003399; } #statusBar { border-top: 1px solid #919191; padding-top: 1px; } #splitter QWidget { background-color: #FFF; } #assumePushButton { font-weight: bold; } #splitter #treeButtonsWidget, #splitter #listButtonsWidget { background-color: #F0F0F0; border-top: 1px solid #DFDFDF; } #leftWidget { border-right: 1px solid #DFDFDF; } #splitter QWidget *, #splitter QWidget * { background-color: none; }"));
+    setStyleSheet(QStringLiteral("%1 #splitter QWidget { background-color: palette(base); color: palette(text); } #splitter QWidget *, #splitter QWidget * { background-color: none; } #leftWidget { border-right: 1px solid %2; }").arg(dialogStyle(), windowFrameColor().name()));
 #endif
     // set default values
     setSomethingChanged(false);
