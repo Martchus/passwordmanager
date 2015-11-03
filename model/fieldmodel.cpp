@@ -29,7 +29,7 @@ FieldModel::FieldModel(QObject *parent) :
     QAbstractTableModel(parent),
     m_accountEntry(nullptr),
     m_fields(nullptr),
-    m_hidePasswords(false)
+    m_passwordVisibility(PasswordVisibility::OnlyWhenEditing)
 {}
 
 #ifdef MODEL_UNDO_SUPPORT
@@ -76,14 +76,24 @@ QVariant FieldModel::data(const QModelIndex &index, int role) const
                 switch(index.column()) {
                 case 0:
                     return QString::fromStdString(m_fields->at(index.row()).name());
-                case 1:
-                    if(role == Qt::DisplayRole
-                            && m_hidePasswords
-                            && m_fields->at(index.row()).type() == FieldType::Password) {
-                        return QString(m_fields->at(index.row()).value().size(), QChar(0x2022));
-                    } else {
-                        return QString::fromStdString(m_fields->at(index.row()).value());
+                case 1: {
+                    bool showPassword = m_fields->at(index.row()).type() != FieldType::Password;
+                    if(!showPassword) {
+                        switch(m_passwordVisibility) {
+                        case PasswordVisibility::Always:
+                            showPassword = true;
+                            break;
+                        case PasswordVisibility::OnlyWhenEditing:
+                            showPassword = role == Qt::EditRole;
+                            break;
+                        case PasswordVisibility::Never:
+                            showPassword = false;
+                        }
                     }
+                    return showPassword
+                            ? QString::fromStdString(m_fields->at(index.row()).value())
+                            : QString(m_fields->at(index.row()).value().size(), QChar(0x2022));
+                }
                 default:
                     ;
                 }

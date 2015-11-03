@@ -24,6 +24,16 @@ enum FieldModelRoles
     FieldTypeRole = Qt::UserRole + 1 /**< the field type */
 };
 
+/*!
+ * \brief The PasswordVisibility enum defines when passwords will be visible.
+ */
+enum PasswordVisibility
+{
+    Always, /**< passwords are always visible */
+    OnlyWhenEditing, /**< passwords are only visible when editing */
+    Never /**< passwords are never visible */
+};
+
 class FieldModel : public QAbstractTableModel
 #ifdef MODEL_UNDO_SUPPORT
         , public StackSupport
@@ -40,7 +50,7 @@ public:
     const Io::AccountEntry *accountEntry() const;
     void setAccountEntry(Io::AccountEntry *entry);
     std::vector<Io::Field> *fields();
-    bool hidePasswords() const;
+    PasswordVisibility passwordVisibility() const;
     QVariant data(const QModelIndex &index, int role) const;
     QMap<int, QVariant> itemData(const QModelIndex &index) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role);
@@ -56,13 +66,13 @@ public:
     const Io::Field *field(std::size_t row) const;
 
 public Q_SLOTS:
-    void setHidePasswords(bool hidePasswords);
+    void setPasswordVisibility(PasswordVisibility passwordVisibility);
     void reset();
 
 private:
     Io::AccountEntry *m_accountEntry;
     std::vector<Io::Field> *m_fields;
-    bool m_hidePasswords;
+    PasswordVisibility m_passwordVisibility;
 };
 
 /*!
@@ -103,16 +113,22 @@ inline void FieldModel::reset()
     setAccountEntry(nullptr);
 }
 
-inline bool FieldModel::hidePasswords() const
+/*!
+ * \brief Returns the password visibility.
+ */
+inline PasswordVisibility FieldModel::passwordVisibility() const
 {
-    return m_hidePasswords;
+    return m_passwordVisibility;
 }
 
-inline void FieldModel::setHidePasswords(bool hidePasswords)
+/*!
+ * \brief Sets the password visibility.
+ */
+inline void FieldModel::setPasswordVisibility(PasswordVisibility passwordVisibility)
 {
-    m_hidePasswords = hidePasswords;
+    m_passwordVisibility = passwordVisibility;
     if(m_fields) {
-        emit dataChanged(index(0, 1), index(m_fields->size() - 1, 1), QVector<int>() << Qt::DisplayRole);
+        emit dataChanged(index(0, 1), index(m_fields->size() - 1, 1), QVector<int>() << Qt::DisplayRole << Qt::EditRole);
     }
 }
 

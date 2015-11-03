@@ -183,7 +183,7 @@
      <x>0</x>
      <y>0</y>
      <width>848</width>
-     <height>29</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuProgramm">
@@ -196,8 +196,7 @@
      </property>
      <property name="icon">
       <iconset theme="document-open-recent">
-       <normaloff/>
-      </iconset>
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <addaction name="actionSepRecent"/>
      <addaction name="actionClearRecent"/>
@@ -246,7 +245,15 @@
     <property name="title">
      <string>&amp;View</string>
     </property>
-    <addaction name="actionHidePasswords"/>
+    <widget class="QMenu" name="menuPassword_visibility">
+     <property name="title">
+      <string>Password &amp;visibility</string>
+     </property>
+     <addaction name="actionShowAlways"/>
+     <addaction name="actionShowOnlyWhenEditing"/>
+     <addaction name="actionHideAlways"/>
+    </widget>
+    <addaction name="menuPassword_visibility"/>
     <addaction name="actionShowUndoStack"/>
    </widget>
    <addaction name="menuProgramm"/>
@@ -263,8 +270,7 @@
   <action name="actionOpen">
    <property name="icon">
     <iconset theme="document-open">
-     <normaloff/>
-    </iconset>
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>&amp;Open ...</string>
@@ -276,8 +282,7 @@
   <action name="actionQuit">
    <property name="icon">
     <iconset theme="application-exit">
-     <normaloff/>
-    </iconset>
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>&amp;Quit</string>
@@ -289,8 +294,7 @@
   <action name="actionAbout">
    <property name="icon">
     <iconset theme="help-about">
-     <normaloff/>
-    </iconset>
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>&amp;About</string>
@@ -299,8 +303,7 @@
   <action name="actionSave">
    <property name="icon">
     <iconset theme="document-save">
-     <normaloff/>
-    </iconset>
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>&amp;Save</string>
@@ -312,8 +315,7 @@
   <action name="actionCreate">
    <property name="icon">
     <iconset theme="document-new">
-     <normaloff/>
-    </iconset>
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>&amp;New ...</string>
@@ -325,8 +327,7 @@
   <action name="actionClose">
    <property name="icon">
     <iconset theme="window-close">
-     <normaloff/>
-    </iconset>
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>&amp;Close</string>
@@ -338,8 +339,7 @@
   <action name="actionChangepassword">
    <property name="icon">
     <iconset theme="dialog-password">
-     <normaloff/>
-    </iconset>
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Change &amp;password ...</string>
@@ -348,8 +348,7 @@
   <action name="actionAddAccount">
    <property name="icon">
     <iconset theme="list-add">
-     <normaloff/>
-    </iconset>
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>&amp;Add new account</string>
@@ -361,8 +360,7 @@
   <action name="actionSaveAs">
    <property name="icon">
     <iconset theme="document-save-as">
-     <normaloff/>
-    </iconset>
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Sa&amp;ve as ...</string>
@@ -374,8 +372,7 @@
   <action name="actionRemoveAccount">
    <property name="icon">
     <iconset theme="list-remove">
-     <normaloff/>
-    </iconset>
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="iconText">
     <string>Remove selected entry</string>
@@ -387,8 +384,7 @@
   <action name="actionInsertRow">
    <property name="icon">
     <iconset theme="insert-text">
-     <normaloff/>
-    </iconset>
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>&amp;Insert field</string>
@@ -397,8 +393,7 @@
   <action name="actionRemoveRows">
    <property name="icon">
     <iconset theme="list-remove">
-     <normaloff/>
-    </iconset>
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Remove selected &amp;field(s)</string>
@@ -412,8 +407,7 @@
   <action name="actionClearRecent">
    <property name="icon">
     <iconset theme="edit-clear">
-     <normaloff/>
-    </iconset>
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>&amp;Clear list</string>
@@ -433,8 +427,7 @@
   <action name="actionExport">
    <property name="icon">
     <iconset theme="document-export">
-     <normaloff/>
-    </iconset>
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>&amp;Export ...</string>
@@ -443,8 +436,7 @@
   <action name="actionShowContainingDirectory">
    <property name="icon">
     <iconset theme="folder">
-     <normaloff/>
-    </iconset>
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Show containing &amp;directory</string>
@@ -456,8 +448,7 @@
    </property>
    <property name="icon">
     <iconset theme="edit-undo">
-     <normaloff/>
-    </iconset>
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>&amp;Undo</string>
@@ -469,8 +460,7 @@
    </property>
    <property name="icon">
     <iconset theme="edit-redo">
-     <normaloff/>
-    </iconset>
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>&amp;Redo</string>
@@ -479,8 +469,7 @@
   <action name="actionAddCategory">
    <property name="icon">
     <iconset theme="list-add">
-     <normaloff/>
-    </iconset>
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Add &amp;new category</string>
@@ -494,15 +483,31 @@
     <string>&amp;Show undo stack</string>
    </property>
   </action>
-  <action name="actionHidePasswords">
+  <action name="actionSepRecent"/>
+  <action name="actionShowAlways">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>&amp;Hide passwords</string>
+    <string>show always</string>
    </property>
   </action>
-  <action name="actionSepRecent"/>
+  <action name="actionShowOnlyWhenEditing">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>show only when editing</string>
+   </property>
+  </action>
+  <action name="actionHideAlways">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>hide always</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>

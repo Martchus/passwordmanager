@@ -86,6 +86,7 @@ private Q_SLOTS:
     void markAsPasswordField();
     void markAsNormalField();
     void setFieldType(Io::FieldType fieldType);
+    void setPasswordVisibility(QAction *selectedAction);
     QString selectedFieldsString() const;
     void insertFields(const QString &fieldsString);
     void copyFieldsForXMilliSeconds(int x = 5000);

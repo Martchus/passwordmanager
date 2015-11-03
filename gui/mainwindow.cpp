@@ -143,7 +143,6 @@ MainWindow::MainWindow(QWidget *parent) :
     // setup models, tree and table view
     m_ui->treeView->setModel(m_entryFilterModel = new EntryFilterModel(this));
     m_ui->tableView->setModel(m_fieldModel = new FieldModel(m_undoStack, this));
-    m_fieldModel->setHidePasswords(settings.value("hidepasswords", true).toBool());
     m_entryFilterModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     m_entryFilterModel->setSourceModel(m_entryModel = new EntryModel(m_undoStack, this));
 #ifdef Q_OS_WIN32
@@ -156,6 +155,22 @@ MainWindow::MainWindow(QWidget *parent) :
     m_ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     // splitter sizes
     m_ui->splitter->setSizes(QList<int>() << 100 << 800);
+    // password visibility group
+    auto *passwordVisibilityGroup = new QActionGroup(this);
+    passwordVisibilityGroup->addAction(m_ui->actionShowAlways);
+    passwordVisibilityGroup->addAction(m_ui->actionShowOnlyWhenEditing);
+    passwordVisibilityGroup->addAction(m_ui->actionHideAlways);
+    QString pwVisibility(settings.value(QStringLiteral("pwvisibility")).toString());
+    QAction *pwVisibilityAction;
+    if(pwVisibility == QStringLiteral("always")) {
+        pwVisibilityAction = m_ui->actionShowAlways;
+    } else if(pwVisibility == QStringLiteral("hidden")) {
+        pwVisibilityAction = m_ui->actionHideAlways;
+    } else {
+        pwVisibilityAction = m_ui->actionShowOnlyWhenEditing;
+    }
+    pwVisibilityAction->setChecked(true);
+    setPasswordVisibility(pwVisibilityAction);
     // connect signals and slots
     //    file related actions
     connect(m_ui->actionSave, &QAction::triggered, this, &MainWindow::saveFile);
@@ -185,7 +200,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(m_undoStack, &QUndoStack::canUndoChanged, m_ui->actionUndo, &QAction::setEnabled);
     connect(m_undoStack, &QUndoStack::canRedoChanged, m_ui->actionRedo, &QAction::setEnabled);
     //   view
-    connect(m_ui->actionHidePasswords, &QAction::triggered, m_fieldModel, &FieldModel::setHidePasswords);
+    connect(passwordVisibilityGroup, &QActionGroup::triggered, this, &MainWindow::setPasswordVisibility);
     connect(m_ui->actionShowUndoStack, &QAction::triggered, this, &MainWindow::showUndoView);
     //   models
     connect(m_ui->treeView->selectionModel(), &QItemSelectionModel::currentRowChanged, this, &MainWindow::accountSelected);
@@ -200,7 +215,6 @@ MainWindow::MainWindow(QWidget *parent) :
     // setup other controls
     m_ui->actionAlwaysCreateBackup->setChecked(settings.value(QStringLiteral("alwayscreatebackup"), false).toBool());
     m_ui->accountFilterLineEdit->setText(settings.value(QStringLiteral("accountfilter"), QString()).toString());
-    m_ui->actionHidePasswords->setChecked(m_fieldModel->hidePasswords());
     m_ui->centralWidget->installEventFilter(this);
     settings.endGroup();
 }
@@ -281,7 +295,15 @@ void MainWindow::closeEvent(QCloseEvent *event)
     settings.setValue(QStringLiteral("recententries"), existingEntires);
     settings.setValue(QStringLiteral("accountfilter"), m_ui->accountFilterLineEdit->text());
     settings.setValue(QStringLiteral("alwayscreatebackup"), m_ui->actionAlwaysCreateBackup->isChecked());
-    settings.setValue(QStringLiteral("hidepasswords"), m_ui->actionHidePasswords->isChecked());
+    QString pwVisibility;
+    if(m_ui->actionShowAlways->isChecked()) {
+        pwVisibility = QStringLiteral("always");
+    } else if(m_ui->actionHideAlways->isChecked()) {
+        pwVisibility = QStringLiteral("hidden");
+    } else {
+        pwVisibility = QStringLiteral("editing");
+    }
+    settings.setValue(QStringLiteral("pwvisibility"), pwVisibility);
     settings.endGroup();
 }
 
@@ -1077,6 +1099,22 @@ void MainWindow::setFieldType(FieldType fieldType)
         }
     } else {
         QMessageBox::warning(this, windowTitle(), tr("No fields have been changed since there are currently no fields selected."));
+    }
+}
+
+/*!
+ * \brief Sets the password visibility of m_fieldModel depending on which action has been chosen.
+ *
+ * This private slot is connected to the triggered signal of the passwordVisibility QActionGroup.
+ */
+void MainWindow::setPasswordVisibility(QAction *selectedAction)
+{
+    if(selectedAction == m_ui->actionShowAlways) {
+        m_fieldModel->setPasswordVisibility(PasswordVisibility::Always);
+    } else if(selectedAction == m_ui->actionShowOnlyWhenEditing) {
+        m_fieldModel->setPasswordVisibility(PasswordVisibility::OnlyWhenEditing);
+    } else if(selectedAction == m_ui->actionHideAlways) {
+        m_fieldModel->setPasswordVisibility(PasswordVisibility::Never);
     }
 }
 

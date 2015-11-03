@@ -18,7 +18,6 @@ using namespace Io;
 
 namespace QtGui {
 
-
 /*!
  * \class EntryModel
  * \brief The EntryModel class provides a model interface for a hierarchy of Entry instances.
