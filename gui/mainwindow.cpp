@@ -1,4 +1,5 @@
 #include "./mainwindow.h"
+#include "./fielddelegate.h"
 
 #include "../model/fieldmodel.h"
 #include "../model/entrymodel.h"
@@ -18,16 +19,12 @@
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QDesktopServices>
-#include <QAction>
 #include <QActionGroup>
-#include <QTableWidgetItem>
 #include <QClipboard>
 #include <QSettings>
 #include <QCloseEvent>
-#include <QTreeWidgetItem>
 #include <QTimerEvent>
 #include <QPushButton>
-#include <QHeaderView>
 #include <QUndoStack>
 #include <QUndoView>
 #include <QMimeData>
@@ -143,6 +140,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // setup models, tree and table view
     m_ui->treeView->setModel(m_entryFilterModel = new EntryFilterModel(this));
     m_ui->tableView->setModel(m_fieldModel = new FieldModel(m_undoStack, this));
+    m_ui->tableView->setItemDelegate(new FieldDelegate(this));
     m_entryFilterModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     m_entryFilterModel->setSourceModel(m_entryModel = new EntryModel(m_undoStack, this));
 #ifdef Q_OS_WIN32

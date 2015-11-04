@@ -191,6 +191,9 @@
      <string>Fi&amp;le</string>
     </property>
     <widget class="QMenu" name="menuRecent">
+     <property name="toolTip">
+      <string>Recently opened files</string>
+     </property>
      <property name="title">
       <string>&amp;Recent</string>
      </property>
@@ -246,6 +249,9 @@
      <string>&amp;View</string>
     </property>
     <widget class="QMenu" name="menuPassword_visibility">
+     <property name="toolTip">
+      <string>Sets the visibility of fields marked as &quot;password field&quot;</string>
+     </property>
      <property name="title">
       <string>Password &amp;visibility</string>
      </property>
@@ -432,6 +438,9 @@
    <property name="text">
     <string>&amp;Export ...</string>
    </property>
+   <property name="toolTip">
+    <string>Export passwords to plain text files</string>
+   </property>
   </action>
   <action name="actionShowContainingDirectory">
    <property name="icon">
@@ -489,7 +498,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>show always</string>
+    <string>&amp;show always</string>
    </property>
   </action>
   <action name="actionShowOnlyWhenEditing">
@@ -497,7 +506,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>show only when editing</string>
+    <string>show &amp;only when editing</string>
    </property>
   </action>
   <action name="actionHideAlways">
@@ -505,7 +514,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>hide always</string>
+    <string>&amp;hide always</string>
    </property>
   </action>
  </widget>

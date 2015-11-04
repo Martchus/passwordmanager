@@ -42,7 +42,8 @@ guiqtwidgets {
         gui/passwordgeneratordialog.cpp \
         gui/undocommands.cpp \
         gui/stacksupport.cpp \
-        gui/initiatequi.cpp
+        gui/initiatequi.cpp \
+        gui/fielddelegate.cpp
 
     FORMS += gui/mainwindow.ui \
         gui/passwordgeneratordialog.ui
@@ -57,14 +58,15 @@ HEADERS  += model/entrymodel.h \
     model/fieldmodel.h \
     model/entryfiltermodel.h \
     util/testroutines.h \
-    cli/cli.h \
-    gui/initiategui.h
+    cli/cli.h
 
 guiqtwidgets {
     HEADERS += gui/mainwindow.h \
         gui/passwordgeneratordialog.h \
         gui/undocommands.h \
-        gui/stacksupport.h
+        gui/stacksupport.h \
+        gui/initiategui.h \
+        gui/fielddelegate.h
 }
 
 guiqtquick {

@@ -76,24 +76,12 @@ QVariant FieldModel::data(const QModelIndex &index, int role) const
                 switch(index.column()) {
                 case 0:
                     return QString::fromStdString(m_fields->at(index.row()).name());
-                case 1: {
-                    bool showPassword = m_fields->at(index.row()).type() != FieldType::Password;
-                    if(!showPassword) {
-                        switch(m_passwordVisibility) {
-                        case PasswordVisibility::Always:
-                            showPassword = true;
-                            break;
-                        case PasswordVisibility::OnlyWhenEditing:
-                            showPassword = role == Qt::EditRole;
-                            break;
-                        case PasswordVisibility::Never:
-                            showPassword = false;
-                        }
-                    }
-                    return showPassword
+                case 1:
+                    return (m_passwordVisibility == PasswordVisibility::Always
+                            || role == Qt::EditRole
+                            || m_fields->at(index.row()).type() != FieldType::Password)
                             ? QString::fromStdString(m_fields->at(index.row()).value())
                             : QString(m_fields->at(index.row()).value().size(), QChar(0x2022));
-                }
                 default:
                     ;
                 }
