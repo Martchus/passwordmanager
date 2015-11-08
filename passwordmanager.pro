@@ -3,7 +3,7 @@ appname = "Password Manager"
 appauthor = Martchus
 appurl = "https://github.com/$${appauthor}/$${projectname}"
 QMAKE_TARGET_DESCRIPTION = "A simple password manager."
-VERSION = 2.0.8
+VERSION = 2.0.9
 
 # include ../../common.pri when building as part of a subdirs project; otherwise include general.pri
 !include(../../common.pri) {
