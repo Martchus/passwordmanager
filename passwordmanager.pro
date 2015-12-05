@@ -33,9 +33,11 @@ SOURCES += main.cpp\
     model/entrymodel.cpp \
     model/fieldmodel.cpp \
     model/entryfiltermodel.cpp \
-    util/testroutines.cpp \
     cli/cli.cpp
 
+testing {
+    SOURCES += util/testroutines.cpp
+}
 
 guiqtwidgets {
     SOURCES += gui/mainwindow.cpp \
@@ -57,8 +59,11 @@ guiqtquick {
 HEADERS  += model/entrymodel.h \
     model/fieldmodel.h \
     model/entryfiltermodel.h \
-    util/testroutines.h \
     cli/cli.h
+
+testing {
+    HEADERS += util/testroutines.h
+}
 
 guiqtwidgets {
     HEADERS += gui/mainwindow.h \

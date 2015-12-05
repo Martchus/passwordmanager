@@ -63,8 +63,7 @@ ApplicationWindow {
         initialItem: startPage
         delegate: StackViewDelegate {
             pushTransition: StackViewTransition {
-                function transitionFinished(properties)
-                {
+                function transitionFinished(properties) {
                     properties.exitItem.opacity = 1
                 }
                 PropertyAnimation {
@@ -138,7 +137,7 @@ ApplicationWindow {
         }
         Touch.TouchLabel {
             id: label
-            y: 32 * ApplicationInfo.ratio - height/2
+            y: 32 * ApplicationInfo.ratio - height / 2
             width: parent.width // The text will only wrap if an explicit width has been set
             text: statusBarMessage
             textFormat: Text.RichText
@@ -150,14 +149,16 @@ ApplicationWindow {
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             function decreaseFontSizeOnNarrowScreen() {
-                if (label.implicitHeight > statusbar.statusBarHeight)
-                    pixelSize = Math.floor(pixelSize * statusbar.statusBarHeight/label.implicitHeight)
+                if (label.implicitHeight > statusbar.statusBarHeight) {
+                    pixelSize = Math.floor(pixelSize * statusbar.statusBarHeight / label.implicitHeight)
+                }
             }
             onTextChanged: {
-                if (text === "")
+                if (text === "") {
                     pixelSize = 18
-                else
+                } else {
                     decreaseFontSizeOnNarrowScreen()
+                }
             }
             onWidthChanged: decreaseFontSizeOnNarrowScreen()
         }

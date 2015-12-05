@@ -1,6 +1,11 @@
 #include "./initiategui.h"
 
-#include "gui/mainwindow.h"
+#include "./gui/mainwindow.h"
+
+// include configuration from separate header file when building with CMake
+#ifndef APP_METADATA_AVAIL
+#include "config.h"
+#endif
 
 #include <qtutilities/resources/qtconfigarguments.h>
 #include <qtutilities/resources/resources.h>
