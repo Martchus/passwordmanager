@@ -1,3 +1,4 @@
+# meta data
 projectname = passwordmanager
 appname = "Password Manager"
 appauthor = Martchus
@@ -12,92 +13,105 @@ VERSION = 2.0.9
     }
 }
 
+# basic configuration: application, might be configured with no Qt
 TEMPLATE = app
-
 no-gui {
-    CONFIG -= qt # Qt is only required for GUI
+    # Qt is only required for GUI
+    CONFIG -= qt
 } else {
     QT += core gui
-    android {
-        OTHER_FILES += android/AndroidManifest.xml
-        include(../../deployment.pri)
-    }
 }
 
 guiqtquick {
     QML_IMPORT_PATH += ./quick ./qml ./qml/pages ./qml/touch
 }
 
-# files
-SOURCES += main.cpp\
+# add project files
+HEADERS  += \
+    model/entrymodel.h \
+    model/fieldmodel.h \
+    model/entryfiltermodel.h \
+    cli/cli.h
+
+SOURCES += \
+    main.cpp \
     model/entrymodel.cpp \
     model/fieldmodel.cpp \
     model/entryfiltermodel.cpp \
     cli/cli.cpp
 
+
 testing {
-    SOURCES += util/testroutines.cpp
+    HEADERS += \
+        util/testroutines.h
+
+    SOURCES += \
+        util/testroutines.cpp
 }
 
 guiqtwidgets {
-    SOURCES += gui/mainwindow.cpp \
+    HEADERS += \
+        gui/mainwindow.h \
+        gui/passwordgeneratordialog.h \
+        gui/undocommands.h \
+        gui/stacksupport.h \
+        gui/initiategui.h \
+        gui/fielddelegate.h
+
+    SOURCES += \
+        gui/mainwindow.cpp \
         gui/passwordgeneratordialog.cpp \
         gui/undocommands.cpp \
         gui/stacksupport.cpp \
         gui/initiatequi.cpp \
         gui/fielddelegate.cpp
 
-    FORMS += gui/mainwindow.ui \
+    FORMS += \
+        gui/mainwindow.ui \
         gui/passwordgeneratordialog.ui
 }
 
 guiqtquick {
-    SOURCES += quickgui/applicationinfo.cpp \
-        quickgui/initiatequick.cpp
-}
-
-HEADERS  += model/entrymodel.h \
-    model/fieldmodel.h \
-    model/entryfiltermodel.h \
-    cli/cli.h
-
-testing {
-    HEADERS += util/testroutines.h
-}
-
-guiqtwidgets {
-    HEADERS += gui/mainwindow.h \
-        gui/passwordgeneratordialog.h \
-        gui/undocommands.h \
-        gui/stacksupport.h \
-        gui/initiategui.h \
-        gui/fielddelegate.h
-}
-
-guiqtquick {
-    HEADERS += quickgui/applicationinfo.h \
+    HEADERS += \
+        quickgui/applicationinfo.h \
         quickgui/applicationpaths.h \
         quickgui/initiatequick.h
+
+    SOURCES += \
+        quickgui/applicationinfo.cpp \
+        quickgui/initiatequick.cpp
+
+    RESOURCES += \
+        resources/qml.qrc
 }
 
-# resources and translations
 !no-gui {
-    RESOURCES += resources/icons.qrc
-    contains(DEFINES, GUI_QTQUICK) {
-        RESOURCES += resources/qml.qrc
-    }
-    TRANSLATIONS = translations/passwordmanager_en_US.ts \
+    RESOURCES += \
+        resources/icons.qrc
+
+    TRANSLATIONS += \
+        translations/passwordmanager_en_US.ts \
         translations/passwordmanager_de_DE.ts
 }
-include(translations.pri)
-
-win32:include(windowsicon.pri)
 
 OTHER_FILES += \
     README.md \
-    LICENSE
+    LICENSE \
+    CMakeLists.txt \
+    resources/config.h.in \
+    resources/windows.rc.in \
+    android/AndroidManifest.xml
 
-# libs and includepath
+# add deployment for android
+android:include(../../deployment.pri)
+
+# release translations
+include(translations.pri)
+
+# make windows icon
+win32:include(windowsicon.pri)
+
+# add libs
 CONFIG(debug, debug|release) {
     LIBS += -lc++utilitiesd -lpasswordfiled
     !no-gui {
