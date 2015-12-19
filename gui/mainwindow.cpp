@@ -443,7 +443,7 @@ bool MainWindow::openFile(const QString &path)
     if(m_file.isEncryptionUsed()) {
         EnterPasswordDialog pwDlg(this);
         pwDlg.setWindowTitle(QApplication::applicationName());
-        pwDlg.setInstruction(tr("Enter the password to open the file"));
+        pwDlg.setInstruction(tr("Enter the password to open the file \"%1\"").arg(path));
         pwDlg.setPasswordRequired(true);
         switch(pwDlg.exec()) {
         case QDialog::Accepted:
