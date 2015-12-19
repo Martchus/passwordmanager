@@ -128,7 +128,10 @@ MainWindow::MainWindow(QWidget *parent) :
             connect(action, &QAction::triggered, this, &MainWindow::openRecentFile);
         }
     }
-    m_ui->menuRecent->setEnabled(action);
+    if(action) {
+        m_ui->menuRecent->actions().front()->setShortcut(QKeySequence(Qt::Key_F6));
+        m_ui->menuRecent->setEnabled(true);
+    }
     // set position and size
     resize(settings.value("size", size()).toSize());
     move(settings.value("pos", QPoint(300, 200)).toPoint());
@@ -565,6 +568,9 @@ void MainWindow::addRecentEntry(const QString &path)
     QList<QAction *> existingEntries = m_ui->menuRecent->actions();
     QAction *entry = nullptr;
     for(QAction *existingEntry : existingEntries) {
+        // remove shortcut from existing entries
+        existingEntry->setShortcut(QKeySequence());
+        // check whether existing entry matches entry to add
         if(existingEntry->property("file_path").toString() == path) {
             entry = existingEntry;
             break;
@@ -584,6 +590,8 @@ void MainWindow::addRecentEntry(const QString &path)
         // remove existing action (will be inserted again as first action)
         m_ui->menuRecent->removeAction(entry);
     }
+    // add shortcut for new entry
+    entry->setShortcut(QKeySequence(Qt::Key_F6));
     // ensure menu is enabled
     m_ui->menuRecent->setEnabled(true);
     // add action as first action in the recent menu
