@@ -8,7 +8,7 @@ set(META_APP_URL "https://github.com/${META_APP_AUTHOR}/${META_PROJECT_NAME}")
 set(META_APP_DESCRIPTION "A simple password manager.")
 set(META_VERSION_MAJOR 2)
 set(META_VERSION_MINOR 1)
-set(META_VERSION_PATCH 0)
+set(META_VERSION_PATCH 1)
 set(META_APP_VERSION ${META_VERSION_MAJOR}.${META_VERSION_MINOR}.${META_VERSION_PATCH})
 
 # stringification of meta data
@@ -158,28 +158,40 @@ install(FILES ${QM_FILES}
     DESTINATION share/${META_PROJECT_NAME}/translations
     COMPONENT localization
 )
-add_custom_target(install-binary
-    DEPENDS ${META_PROJECT_NAME}
-    COMMAND "${CMAKE_COMMAND}" -DCMAKE_INSTALL_COMPONENT=binary -P "${CMAKE_BINARY_DIR}/cmake_install.cmake"
-)
-add_custom_target(install-desktop
-    DEPENDS ${META_PROJECT_NAME}
-    COMMAND "${CMAKE_COMMAND}" -DCMAKE_INSTALL_COMPONENT=desktop -P "${CMAKE_BINARY_DIR}/cmake_install.cmake"
-)
-add_custom_target(install-localization
-    DEPENDS ${META_PROJECT_NAME}
-    COMMAND "${CMAKE_COMMAND}" -DCMAKE_INSTALL_COMPONENT=localization -P "${CMAKE_BINARY_DIR}/cmake_install.cmake"
-)
-add_custom_target(strip-mingw-w64
-    DEPENDS install-binary install-localization
-)
-add_custom_target(install-binary-strip
-    DEPENDS ${META_PROJECT_NAME}
-    COMMAND "${CMAKE_COMMAND}" -DCMAKE_INSTALL_DO_STRIP=1 -DCMAKE_INSTALL_COMPONENT=binary -P "${CMAKE_BINARY_DIR}/cmake_install.cmake"
-)
-add_custom_target(install-mingw-w64-strip
-    DEPENDS install-binary-strip install-localization
-)
+if(NOT TARGET install-binary)
+    add_custom_target(install-binary
+        DEPENDS ${META_PROJECT_NAME}
+        COMMAND "${CMAKE_COMMAND}" -DCMAKE_INSTALL_COMPONENT=binary -P "${CMAKE_BINARY_DIR}/cmake_install.cmake"
+    )
+endif()
+if(NOT TARGET install-desktop)
+    add_custom_target(install-desktop
+        DEPENDS ${META_PROJECT_NAME}
+        COMMAND "${CMAKE_COMMAND}" -DCMAKE_INSTALL_COMPONENT=desktop -P "${CMAKE_BINARY_DIR}/cmake_install.cmake"
+    )
+endif()
+if(NOT TARGET install-localization)
+    add_custom_target(install-localization
+        DEPENDS ${META_PROJECT_NAME}
+        COMMAND "${CMAKE_COMMAND}" -DCMAKE_INSTALL_COMPONENT=localization -P "${CMAKE_BINARY_DIR}/cmake_install.cmake"
+    )
+endif()
+if(NOT TARGET strip-mingw-w64)
+    add_custom_target(strip-mingw-w64
+        DEPENDS install-binary install-localization
+    )
+endif()
+if(NOT TARGET install-binary-strip)
+    add_custom_target(install-binary-strip
+        DEPENDS ${META_PROJECT_NAME}
+        COMMAND "${CMAKE_COMMAND}" -DCMAKE_INSTALL_DO_STRIP=1 -DCMAKE_INSTALL_COMPONENT=binary -P "${CMAKE_BINARY_DIR}/cmake_install.cmake"
+    )
+endif()
+if(NOT TARGET install-mingw-w64-strip)
+    add_custom_target(install-mingw-w64-strip
+        DEPENDS install-binary-strip install-localization
+    )
+endif()
 
 # manual stripping
 
