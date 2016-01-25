@@ -51,6 +51,10 @@ set(WIDGETS_SRC_FILES
     gui/undocommands.cpp
     resources/icons.qrc
 )
+set(WIDGETS_UI_FILES
+    gui/mainwindow.ui
+    gui/passwordgeneratordialog.ui
+)
 set(QUICK_HEADER_FILES
     quickgui/applicationinfo.h
     quickgui/applicationpaths.h
@@ -135,7 +139,7 @@ qt5_add_translation(QM_FILES ${TS_FILES})
 ADD_CUSTOM_TARGET(translations ALL DEPENDS ${QM_FILES})
 
 # executable and linking
-add_executable(${META_PROJECT_NAME} ${GUI_TYPE} ${HEADER_FILES} ${SRC_FILES} ${WIDGETS_HEADER_FILES} ${WIDGETS_SRC_FILES} ${QM_FILES} ${RES_FILES} ${WINDOWS_ICON_PATH})
+add_executable(${META_PROJECT_NAME} ${GUI_TYPE} ${HEADER_FILES} ${SRC_FILES} ${WIDGETS_HEADER_FILES} ${WIDGETS_SRC_FILES} ${WIDGETS_UI_FILES} ${QM_FILES} ${RES_FILES} ${WINDOWS_ICON_PATH})
 target_link_libraries(${META_PROJECT_NAME} c++utilities qtutilities passwordfile Qt5::Core Qt5::Widgets)
 set_target_properties(${META_PROJECT_NAME} PROPERTIES
     CXX_STANDARD 11
