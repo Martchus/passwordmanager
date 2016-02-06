@@ -108,9 +108,6 @@ android:include(../../deployment.pri)
 # release translations
 include(translations.pri)
 
-# make windows icon
-win32:include(windowsicon.pri)
-
 # add libs
 CONFIG(debug, debug|release) {
     LIBS += -lc++utilitiesd -lpasswordfiled
