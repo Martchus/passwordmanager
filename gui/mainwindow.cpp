@@ -12,13 +12,13 @@
 
 #include <qtutilities/enterpassworddialog/enterpassworddialog.h>
 #include <qtutilities/misc/dialogutils.h>
+#include <qtutilities/misc/desktoputils.h>
 
 #include <c++utilities/io/path.h>
 
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QInputDialog>
-#include <QDesktopServices>
 #include <QActionGroup>
 #include <QClipboard>
 #include <QSettings>
@@ -746,7 +746,7 @@ bool MainWindow::askForCreatingFile()
         m_file.setPath(fileName.toStdString());
         try {
             m_file.create();
-        } catch (ios_base::failure &ex) {
+        } catch (const ios_base::failure &ex) {
             QMessageBox::critical(this, QApplication::applicationName(), QString::fromLocal8Bit(ex.what()));
             return false;
         }
@@ -834,7 +834,7 @@ bool MainWindow::saveFile()
         if(m_ui->actionAlwaysCreateBackup->isChecked()) {
             try {
                 m_file.doBackup();
-            } catch(ios_base::failure &ex) {
+            } catch(const ios_base::failure &ex) {
                 QString message(tr("The backup file couldn't be created. %1").arg(QString::fromLocal8Bit(ex.what())));
                 QMessageBox::critical(this, QApplication::applicationName(), message);
                 m_ui->statusBar->showMessage(message, 7000);
@@ -868,7 +868,7 @@ bool MainWindow::saveFile()
         m_file.save(m_file.password()[0] != 0);
     } catch (CryptoException &ex) {
         msg = tr("The password list couldn't be saved due to encryption failure.\nOpenSSL error queue: %1").arg(QString::fromLocal8Bit(ex.what()));
-    } catch(ios_base::failure &ex) {
+    } catch(const ios_base::failure &ex) {
         msg = QString::fromLocal8Bit(ex.what());
     }
     // show status
@@ -921,7 +921,7 @@ void MainWindow::showContainingDirectory()
     } else {
         QFileInfo file(QString::fromStdString(m_file.path()));
         if(file.dir().exists()) {
-            QDesktopServices::openUrl(file.dir().absolutePath());
+            DesktopUtils::openLocalFileOrDir(file.dir().absolutePath());
         }
     }
 }
@@ -957,7 +957,7 @@ void MainWindow::addEntry(EntryType type)
         QModelIndex selected = m_entryFilterModel->mapToSource(selectedIndexes.at(0));
         if(m_entryModel->isNode(selected)) {
             bool result;
-            QString text = QInputDialog::getText(this, type == EntryType::Account ? tr("Add account") : tr("Add category"), tr("Enter the entry name"), QLineEdit::Normal, tr("new entry"), &result);
+            const QString text = QInputDialog::getText(this, type == EntryType::Account ? tr("Add account") : tr("Add category"), tr("Enter the entry name"), QLineEdit::Normal, tr("new entry"), &result);
             if (result) {
                 if(!text.isEmpty()) {
                     int row = m_entryModel->rowCount(selected);
@@ -988,7 +988,7 @@ void MainWindow::removeEntry()
     }
     QModelIndexList selectedIndexes = m_ui->treeView->selectionModel()->selectedRows(0);
     if(selectedIndexes.size() == 1) {
-        QModelIndex selected = m_entryFilterModel->mapToSource(selectedIndexes.at(0));
+        const QModelIndex selected = m_entryFilterModel->mapToSource(selectedIndexes.at(0));
         if(!m_entryModel->removeRow(selected.row(), selected.parent())) {
             QMessageBox::warning(this, QApplication::applicationName(), tr("Unable to remove the entry."));
         }
@@ -1036,7 +1036,7 @@ void MainWindow::insertRow()
     QModelIndexList selectedIndexes = m_ui->tableView->selectionModel()->selectedIndexes();
     if(selectedIndexes.size()) {
         int row = m_fieldModel->rowCount();
-        foreach(const QModelIndex &index, selectedIndexes) {
+        for(const QModelIndex &index : selectedIndexes) {
             if(index.row() < row) {
                 row = index.row();
             }
@@ -1057,9 +1057,9 @@ void MainWindow::removeRows()
     if(showNoFileOpened() || showNoAccount()) {
         return;
     }
-    QModelIndexList selectedIndexes = m_ui->tableView->selectionModel()->selectedIndexes();
+    const QModelIndexList selectedIndexes = m_ui->tableView->selectionModel()->selectedIndexes();
     QList<int> rows;
-    foreach(const QModelIndex &index, selectedIndexes) {
+    for(const QModelIndex &index : selectedIndexes) {
         rows << index.row();
     }
     if(rows.size()) {
@@ -1099,8 +1099,8 @@ void MainWindow::setFieldType(FieldType fieldType)
     }
     QModelIndexList selectedIndexes = m_ui->tableView->selectionModel()->selectedIndexes();
     if(!selectedIndexes.isEmpty()) {
-        QVariant typeVariant(static_cast<int>(fieldType));
-        foreach(const QModelIndex &index, selectedIndexes) {
+        const QVariant typeVariant(static_cast<int>(fieldType));
+        for(const QModelIndex &index : selectedIndexes) {
             m_fieldModel->setData(index, typeVariant, FieldTypeRole);
         }
     } else {
@@ -1209,12 +1209,12 @@ void MainWindow::showTableViewContextMenu()
         return;
     }
     QMenu contextMenu(this);
-    FieldType firstType = FieldType::Normal;
+    auto firstType = FieldType::Normal;
     bool allOfSameType = true;
     bool hasOneFieldType = false;
     int row = selectedIndexes.front().row();
     int multipleRows = 1;
-    foreach(const QModelIndex &index, selectedIndexes) {
+    for(const QModelIndex &index : selectedIndexes) {
         if(const Field *field = m_fieldModel->field(index.row())) {
             if(hasOneFieldType) {
                 if(firstType != field->type()) {
