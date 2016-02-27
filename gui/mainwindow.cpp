@@ -7,6 +7,11 @@
 
 #include "ui_mainwindow.h"
 
+// include configuration from separate header file when building with CMake
+#ifndef APP_METADATA_AVAIL
+#include "resources/config.h"
+#endif
+
 #include <passwordfile/io/cryptoexception.h>
 #include <passwordfile/io/entry.h>
 
@@ -442,7 +447,7 @@ bool MainWindow::openFile(const QString &path)
     // ask for a password if required
     if(m_file.isEncryptionUsed()) {
         EnterPasswordDialog pwDlg(this);
-        pwDlg.setWindowTitle(QApplication::applicationName());
+        pwDlg.setWindowTitle(tr("Opening file") + QStringLiteral(" - " APP_NAME));
         pwDlg.setInstruction(tr("Enter the password to open the file \"%1\"").arg(path));
         pwDlg.setPasswordRequired(true);
         switch(pwDlg.exec()) {
@@ -835,7 +840,7 @@ bool MainWindow::saveFile()
             try {
                 m_file.doBackup();
             } catch(const ios_base::failure &ex) {
-                QString message(tr("The backup file couldn't be created. %1").arg(QString::fromLocal8Bit(ex.what())));
+                QString message(tr("The backup file couldn't be created because in IO error occured: %1").arg(QString::fromLocal8Bit(ex.what())));
                 QMessageBox::critical(this, QApplication::applicationName(), message);
                 m_ui->statusBar->showMessage(message, 7000);
                 return false;
@@ -849,7 +854,7 @@ bool MainWindow::saveFile()
     // ask for a password if none is set
     if(m_file.password()[0] == 0) {
         EnterPasswordDialog pwDlg(this);
-        pwDlg.setWindowTitle(QApplication::applicationName());
+        pwDlg.setWindowTitle(tr("Saving file") + QStringLiteral(" - " APP_NAME));
         pwDlg.setInstruction(tr("Enter a password to save the file"));
         pwDlg.setVerificationRequired(true);
 
@@ -1134,7 +1139,7 @@ void MainWindow::changePassword()
         return;
     }
     EnterPasswordDialog pwDlg(this);
-    pwDlg.setWindowTitle(QApplication::applicationName());
+    pwDlg.setWindowTitle(tr("Changing password") + QStringLiteral(" - " APP_NAME));
     pwDlg.setVerificationRequired(true);
     switch(pwDlg.exec()) {
     case QDialog::Accepted:
