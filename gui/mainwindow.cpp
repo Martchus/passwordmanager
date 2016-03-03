@@ -20,6 +20,7 @@
 #include <qtutilities/misc/desktoputils.h>
 
 #include <c++utilities/io/path.h>
+#include <c++utilities/conversion/stringconversion.h>
 
 #include <QFileDialog>
 #include <QMessageBox>
@@ -33,6 +34,7 @@
 #include <QUndoStack>
 #include <QUndoView>
 #include <QMimeData>
+#include <QDesktopServices>
 
 #include <stdexcept>
 #include <cassert>
@@ -1209,52 +1211,76 @@ void MainWindow::showTreeViewContextMenu()
  */
 void MainWindow::showTableViewContextMenu()
 {
+    // check whether there is a selection at all
     QModelIndexList selectedIndexes = m_ui->tableView->selectionModel()->selectedIndexes();
     if(!m_file.hasRootEntry() || !m_fieldModel->fields() || selectedIndexes.isEmpty()) {
         return;
     }
-    QMenu contextMenu(this);
+
+    // check what kind of fields have been selected
     auto firstType = FieldType::Normal;
     bool allOfSameType = true;
-    bool hasOneFieldType = false;
+    bool hasFirstFieldType = false;
     int row = selectedIndexes.front().row();
     int multipleRows = 1;
+    QUrl url;
+    static const string protocols[] = {
+        "http:", "https:", "file:"
+    };
     for(const QModelIndex &index : selectedIndexes) {
         if(const Field *field = m_fieldModel->field(index.row())) {
-            if(hasOneFieldType) {
+            if(url.isEmpty() && field->type() != FieldType::Password) {
+                for(const string &protocol : protocols) {
+                    if(ConversionUtilities::startsWith(field->value(), protocol)) {
+                        url = QString::fromUtf8(field->value().data());
+                    }
+                }
+            }
+            if(hasFirstFieldType) {
                 if(firstType != field->type()) {
                     allOfSameType = false;
                     break;
                 }
             } else {
                 firstType = field->type();
-                hasOneFieldType = true;
+                hasFirstFieldType = true;
             }
         }
         if(multipleRows == 1 && index.row() != row) {
             ++multipleRows;
         }
     }
-    // insertion and removal
-    contextMenu.addAction(QIcon::fromTheme("list-add"), tr("Insert field(s)", nullptr, multipleRows), this, SLOT(insertRow()));
-    contextMenu.addAction(QIcon::fromTheme("list-remove"), tr("Remove field(s)", nullptr, multipleRows), this, SLOT(removeRows()));
-    // show the "Mark as ..." action only when all selected indexes are of the same type
-    if(hasOneFieldType && allOfSameType) {
+
+    // create context menu
+    QMenu contextMenu(this);
+    // -> insertion and removal
+    contextMenu.addAction(QIcon::fromTheme(QStringLiteral("list-add")), tr("Insert field"), this, SLOT(insertRow()));
+    contextMenu.addAction(QIcon::fromTheme(QStringLiteral("list-remove")), tr("Remove field(s)", nullptr, multipleRows), this, SLOT(removeRows()));
+    // -> show the "Mark as ..." action only when all selected indexes are of the same type
+    if(hasFirstFieldType && allOfSameType) {
         switch(firstType) {
         case FieldType::Normal:
-            contextMenu.addAction(tr("Mark as password field"), this, SLOT(markAsPasswordField()));
+            contextMenu.addAction(QIcon::fromTheme(QStringLiteral("flag-black")), tr("Mark as password field"), this, SLOT(markAsPasswordField()));
             break;
         case FieldType::Password:
-            contextMenu.addAction(tr("Mark as normal field"), this, SLOT(markAsNormalField()));
+            contextMenu.addAction(QIcon::fromTheme(QStringLiteral("flag-blue")), tr("Mark as normal field"), this, SLOT(markAsNormalField()));
             break;
         }
     }
+    // -> insert copy & paste
     contextMenu.addSeparator();
-    contextMenu.addAction(QIcon::fromTheme("edit-copy"), tr("Copy"), this, SLOT(copyFields()));
-    contextMenu.addAction(QIcon::fromTheme("edit-copy"), tr("Copy for 5 seconds"), this, SLOT(copyFieldsForXMilliSeconds()));
+    contextMenu.addAction(QIcon::fromTheme(QStringLiteral("edit-copy")), tr("Copy"), this, SLOT(copyFields()));
+    contextMenu.addAction(QIcon::fromTheme(QStringLiteral("edit-copy")), tr("Copy for 5 seconds"), this, SLOT(copyFieldsForXMilliSeconds()));
     if(QApplication::clipboard()->mimeData()->hasText()) {
-        contextMenu.addAction(QIcon::fromTheme("edit-paste"), tr("Paste"), this, SLOT(insertFieldsFromClipboard()));
+        contextMenu.addAction(QIcon::fromTheme(QStringLiteral("edit-paste")), tr("Paste"), this, SLOT(insertFieldsFromClipboard()));
     }
+    // -> insert open URL
+    if(multipleRows == 1 && !url.isEmpty()) {
+        auto *openUrlAction = new QAction(QIcon::fromTheme(QStringLiteral("applications-internet")), tr("Open URL"), &contextMenu);
+        connect(openUrlAction, &QAction::triggered, bind(&QDesktopServices::openUrl, url));
+        contextMenu.addAction(openUrlAction);
+    }
+
     contextMenu.exec(QCursor::pos());
 }
 
