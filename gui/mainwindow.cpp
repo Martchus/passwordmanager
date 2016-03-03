@@ -1255,7 +1255,7 @@ void MainWindow::showTableViewContextMenu()
     QMenu contextMenu(this);
     // -> insertion and removal
     contextMenu.addAction(QIcon::fromTheme(QStringLiteral("list-add")), tr("Insert field"), this, SLOT(insertRow()));
-    contextMenu.addAction(QIcon::fromTheme(QStringLiteral("list-remove")), tr("Remove field(s)", nullptr, multipleRows), this, SLOT(removeRows()));
+    contextMenu.addAction(QIcon::fromTheme(QStringLiteral("list-remove")), tr("Remove field(s)", 0, multipleRows), this, SLOT(removeRows()));
     // -> show the "Mark as ..." action only when all selected indexes are of the same type
     if(hasFirstFieldType && allOfSameType) {
         switch(firstType) {
