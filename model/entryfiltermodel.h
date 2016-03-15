@@ -13,6 +13,10 @@ public:
 
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
+
+private:
+    bool hasAcceptedChildren(const QModelIndex &index) const;
+
 };
 
 }

@@ -22,9 +22,15 @@ bool EntryFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex &source
     if(QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent)) {
         return true;
     }
-    QModelIndex sourceIndex = sourceModel()->index(sourceRow, 0, sourceParent);
-    if(sourceModel()->hasChildren(sourceIndex)) {
-        return true;
+    return hasAcceptedChildren(sourceModel()->index(sourceRow, 0, sourceParent));
+}
+
+bool EntryFilterModel::hasAcceptedChildren(const QModelIndex &index) const
+{
+    for(int i = 0, rowCount = sourceModel()->rowCount(index); i < rowCount; ++i) {
+        if(filterAcceptsRow(i, index)) {
+            return true;
+        }
     }
     return false;
 }
