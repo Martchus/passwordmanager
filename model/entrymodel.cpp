@@ -1,7 +1,7 @@
 #include "./entrymodel.h"
 
 #ifdef MODEL_UNDO_SUPPORT
-#include "./gui/undocommands.h"
+# include "./gui/undocommands.h"
 #endif
 
 #include <passwordfile/io/entry.h>

@@ -19,9 +19,17 @@ EntryFilterModel::EntryFilterModel(QObject *parent) :
 
 bool EntryFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
+    // just use default implementation
     if(QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent)) {
         return true;
     }
+
+    // also accept rows where the direct parent is accepted
+    if(sourceParent.isValid() && QSortFilterProxyModel::filterAcceptsRow(sourceParent.row(), sourceParent.parent())) {
+        return true;
+    }
+
+    // also accept rows which contain accepted childs
     return hasAcceptedChildren(sourceModel()->index(sourceRow, 0, sourceParent));
 }
 

@@ -1,10 +1,11 @@
 #ifndef FIELDMODEL_H
 #define FIELDMODEL_H
 
-#include <passwordfile/io/entry.h>
 #ifdef MODEL_UNDO_SUPPORT
-#include "gui/stacksupport.h"
+# include "gui/stacksupport.h"
 #endif
+
+#include <passwordfile/io/entry.h>
 
 #include <QAbstractTableModel>
 

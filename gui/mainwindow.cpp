@@ -1010,12 +1010,12 @@ void MainWindow::removeEntry()
  */
 void MainWindow::applyFilter(const QString &filterText)
 {
+    m_entryFilterModel->setFilterRegExp(filterText);
     if(filterText.isEmpty()) {
         applyDefaultExpanding(QModelIndex());
     } else {
         m_ui->treeView->expandAll();
     }
-    m_entryFilterModel->setFilterRegExp(filterText);
 }
 
 /*!
