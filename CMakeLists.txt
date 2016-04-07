@@ -114,19 +114,44 @@ if(MINGW)
     enable_language(RC)
 endif(MINGW)
 
+# read cached variables
+set(WIDGETS_GUI "yes" CACHE STRING "enables/disables building the Qt Widgets GUI: yes (default) or no")
+if(${WIDGETS_GUI} STREQUAL "yes")
+    message(STATUS "Building with Qt Widgets GUI.")
+elseif(${WIDGETS_GUI} STREQUAL "no")
+    message(STATUS "Building WITHOUT Qt Widgets GUI.")
+else()
+    message(FATAL_ERROR "Specification whether to build with Qt Widgets GUI is invalid (must be either yes or no).")
+endif()
+
 # enable Qt Widgets GUI
+if(${WIDGETS_GUI} STREQUAL "yes")
+    add_definitions(
+        -DGUI_QTWIDGETS
+        -DMODEL_UNDO_SUPPORT
+        ${JS_DEFINITION}
+        ${WEBVIEW_DEFINITION}
+    )
+endif()
+
 # disable new ABI (can't catch ios_base::failure with new ABI)
 add_definitions(
-    -DGUI_QTWIDGETS
-    -DMODEL_UNDO_SUPPORT
     -D_GLIBCXX_USE_CXX11_ABI=0
 )
 
+# enable code for debugging
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_definitions(-DDEBUG_BUILD)
+    message(STATUS "Debug build enabled.")
+endif()
+
 # check required Qt 5 modules
-find_package(Qt5Core REQUIRED)
-find_package(Qt5Gui REQUIRED)
-find_package(Qt5Widgets REQUIRED)
-find_package(Qt5LinguistTools REQUIRED)
+if(${WIDGETS_GUI} STREQUAL "yes")
+    find_package(Qt5Core REQUIRED)
+    find_package(Qt5Gui REQUIRED)
+    find_package(Qt5Widgets REQUIRED)
+    find_package(Qt5LinguistTools REQUIRED)
+endif()
 
 # enable moc, uic and rcc
 set(CMAKE_AUTOMOC ON)
@@ -135,11 +160,19 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # enable lrelease
-qt5_add_translation(QM_FILES ${TS_FILES})
-ADD_CUSTOM_TARGET(translations ALL DEPENDS ${QM_FILES})
+if(${WIDGETS_GUI} STREQUAL "yes")
+    qt5_add_translation(QM_FILES ${TS_FILES})
+    add_custom_target(translations ALL DEPENDS ${QM_FILES})
+endif()
+
+
+# stuff which is only required when building Qt GUI
+if(${WIDGETS_GUI} STREQUAL "yes")
+    set(WIDGETS_STUFF ${GUI_TYPE} ${WIDGETS_HEADER_FILES} ${WIDGETS_SRC_FILES} ${WIDGETS_UI_FILES} ${QM_FILES} ${RES_FILES})
+endif()
 
 # executable and linking
-add_executable(${META_PROJECT_NAME} ${GUI_TYPE} ${HEADER_FILES} ${SRC_FILES} ${WIDGETS_HEADER_FILES} ${WIDGETS_SRC_FILES} ${WIDGETS_UI_FILES} ${QM_FILES} ${RES_FILES} ${WINDOWS_ICON_PATH})
+add_executable(${META_PROJECT_NAME} ${HEADER_FILES} ${SRC_FILES} ${WIDGETS_STUFF} ${WINDOWS_ICON_PATH})
 target_link_libraries(${META_PROJECT_NAME} c++utilities qtutilities passwordfile Qt5::Core Qt5::Widgets)
 set_target_properties(${META_PROJECT_NAME} PROPERTIES
     CXX_STANDARD 11
@@ -150,39 +183,49 @@ install(TARGETS ${META_PROJECT_NAME}
     RUNTIME DESTINATION bin
     COMPONENT binary
 )
-install(FILES resources/icons/hicolor/scalable/apps/${META_PROJECT_NAME}.svg
-    DESTINATION share/icons/hicolor/scalable/apps
-    COMPONENT desktop
-)
-install(FILES resources/desktop/applications/${META_PROJECT_NAME}.desktop
-    DESTINATION share/applications
-    COMPONENT desktop
-)
-install(FILES ${QM_FILES}
-    DESTINATION share/${META_PROJECT_NAME}/translations
-    COMPONENT localization
-)
+if(${WIDGETS_GUI} STREQUAL "yes")
+    install(FILES resources/icons/hicolor/scalable/apps/${META_PROJECT_NAME}.svg
+        DESTINATION share/icons/hicolor/scalable/apps
+        COMPONENT desktop
+    )
+    install(FILES resources/desktop/applications/${META_PROJECT_NAME}.desktop
+        DESTINATION share/applications
+        COMPONENT desktop
+    )
+    install(FILES resources/desktop/applications/${META_PROJECT_NAME}-renamingutility.desktop
+        DESTINATION share/applications
+        COMPONENT desktop
+    )
+    install(FILES ${QM_FILES}
+        DESTINATION share/${META_PROJECT_NAME}/translations
+        COMPONENT localization
+    )
+endif()
 if(NOT TARGET install-binary)
     add_custom_target(install-binary
         DEPENDS ${META_PROJECT_NAME}
         COMMAND "${CMAKE_COMMAND}" -DCMAKE_INSTALL_COMPONENT=binary -P "${CMAKE_BINARY_DIR}/cmake_install.cmake"
     )
 endif()
-if(NOT TARGET install-desktop)
-    add_custom_target(install-desktop
-        DEPENDS ${META_PROJECT_NAME}
-        COMMAND "${CMAKE_COMMAND}" -DCMAKE_INSTALL_COMPONENT=desktop -P "${CMAKE_BINARY_DIR}/cmake_install.cmake"
-    )
+if(${WIDGETS_GUI} STREQUAL "yes")
+    if(NOT TARGET install-desktop)
+        add_custom_target(install-desktop
+            DEPENDS ${META_PROJECT_NAME}
+            COMMAND "${CMAKE_COMMAND}" -DCMAKE_INSTALL_COMPONENT=desktop -P "${CMAKE_BINARY_DIR}/cmake_install.cmake"
+        )
+    endif()
+    # localization isn't provided for the command line interface
+    if(NOT TARGET install-localization)
+        set(LOCALIZATION_TARGET "install-localization")
+        add_custom_target(install-localization
+            DEPENDS ${META_PROJECT_NAME}
+            COMMAND "${CMAKE_COMMAND}" -DCMAKE_INSTALL_COMPONENT=localization -P "${CMAKE_BINARY_DIR}/cmake_install.cmake"
+        )
+    endif()
 endif()
-if(NOT TARGET install-localization)
-    add_custom_target(install-localization
-        DEPENDS ${META_PROJECT_NAME}
-        COMMAND "${CMAKE_COMMAND}" -DCMAKE_INSTALL_COMPONENT=localization -P "${CMAKE_BINARY_DIR}/cmake_install.cmake"
-    )
-endif()
-if(NOT TARGET strip-mingw-w64)
-    add_custom_target(strip-mingw-w64
-        DEPENDS install-binary install-localization
+if(NOT TARGET install-mingw-w64)
+    add_custom_target(install-mingw-w64
+        DEPENDS install-binary ${LOCALIZATION_TARGET}
     )
 endif()
 if(NOT TARGET install-binary-strip)
@@ -193,9 +236,6 @@ if(NOT TARGET install-binary-strip)
 endif()
 if(NOT TARGET install-mingw-w64-strip)
     add_custom_target(install-mingw-w64-strip
-        DEPENDS install-binary-strip install-localization
+        DEPENDS install-binary-strip ${LOCALIZATION_TARGET}
     )
 endif()
-
-# manual stripping
-
