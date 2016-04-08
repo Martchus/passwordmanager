@@ -571,11 +571,10 @@ bool MainWindow::showFile()
  */
 void MainWindow::addRecentEntry(const QString &path)
 {
-    // check if the path already exists
     QList<QAction *> existingEntries = m_ui->menuRecent->actions();
     QAction *entry = nullptr;
+    // remove shortcut from existing entries
     for(QAction *existingEntry : existingEntries) {
-        // remove shortcut from existing entries
         existingEntry->setShortcut(QKeySequence());
         // check whether existing entry matches entry to add
         if(existingEntry->property("file_path").toString() == path) {
@@ -584,9 +583,9 @@ void MainWindow::addRecentEntry(const QString &path)
         }
     }
     if(!entry) {
-        // remove old entries to have never more then 8 entries
-        for(int i = existingEntries.size(); i > 9; --i) {
-            delete existingEntries.back();
+        // remove old entries to have never more then 10 entries
+        for(int i = existingEntries.size() - 1; i > 8; --i) {
+            delete existingEntries[i];
         }
         existingEntries = m_ui->menuRecent->actions();
         // create new action
