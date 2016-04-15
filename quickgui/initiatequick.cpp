@@ -1,15 +1,14 @@
 #include "./initiatequick.h"
 #include "./applicationinfo.h"
 
-# include "../model/entryfiltermodel.h"
-# include "../model/entrymodel.h"
-# include "../model/fieldmodel.h"
+#include "../model/entryfiltermodel.h"
+#include "../model/entrymodel.h"
+#include "../model/fieldmodel.h"
 
 // include configuration from separate header file when building with CMake
 #ifndef APP_METADATA_AVAIL
-#include "resources/config.h"
+# include "resources/config.h"
 #endif
-
 
 #include <qtutilities/resources/qtconfigarguments.h>
 #include <qtutilities/resources/resources.h>
@@ -29,14 +28,12 @@ using namespace ApplicationUtilities;
 
 namespace QtGui {
 
-#if defined(GUI_QTQUICK)
 static QObject *applicationInfo(QQmlEngine *engine, QJSEngine *scriptEngine)
 {
     Q_UNUSED(engine)
     Q_UNUSED(scriptEngine)
     return new ApplicationInfo();
 }
-#endif
 
 int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs)
 {
