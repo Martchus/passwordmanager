@@ -9,7 +9,7 @@
 
 // include configuration from separate header file when building with CMake
 #ifndef APP_METADATA_AVAIL
-#include "resources/config.h"
+# include "resources/config.h"
 #endif
 
 #include <passwordfile/io/cryptoexception.h>
@@ -350,7 +350,7 @@ void MainWindow::showOpenFileDialog()
     if(m_file.hasRootEntry() && !closeFile()) {
         return;
     }
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Select a password list"));
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Select a password list"), QString(), tr("Password Manager files (*.pwmgr);;All files (*)"));
     if(!fileName.isEmpty()) {
         openFile(fileName);
     }
@@ -433,7 +433,7 @@ bool MainWindow::openFile(const QString &path)
     m_file.setPath(path.toStdString());
     try {
         m_file.open();
-    } catch (ios_base::failure &ex) {
+    } catch (const ios_base::failure &ex) {
         QString errmsg = tr("An IO error occured when opening the specified file \"%1\".\n\n(%2)").arg(path, QString::fromLocal8Bit(ex.what()));
         m_ui->statusBar->showMessage(errmsg, 5000);
         QMessageBox::critical(this, QApplication::applicationName(), errmsg);
@@ -536,7 +536,7 @@ void MainWindow::createFile(const QString &path, const QString &password)
     // create the file and show it
     try {
         m_file.create();
-    } catch (ios_base::failure) {
+    } catch (const ios_base::failure) {
         QMessageBox::critical(this, QApplication::applicationName(), tr("The file <i>%1</i> couldn't be created.").arg(path));
         return;
     }
@@ -744,7 +744,7 @@ bool MainWindow::askForCreatingFile()
                 this,
                 tr("Select where you want to save the password list"),
                 QString(),
-                tr("All files (*.*)"));
+                tr("Password Manager files (*.pwmgr);;All files (*)"));
     if(fileName.isEmpty()) {
         m_ui->statusBar->showMessage(tr("The file was not be saved."), 7000);
         return false;
@@ -752,6 +752,7 @@ bool MainWindow::askForCreatingFile()
         m_file.setPath(fileName.toStdString());
         try {
             m_file.create();
+            updateWindowTitle();
         } catch (const ios_base::failure &ex) {
             QMessageBox::critical(this, QApplication::applicationName(), QString::fromLocal8Bit(ex.what()));
             return false;
@@ -872,7 +873,7 @@ bool MainWindow::saveFile()
     QString msg;
     try {
         m_file.save(m_file.password()[0] != 0);
-    } catch (CryptoException &ex) {
+    } catch (const CryptoException &ex) {
         msg = tr("The password list couldn't be saved due to encryption failure.\nOpenSSL error queue: %1").arg(QString::fromLocal8Bit(ex.what()));
     } catch(const ios_base::failure &ex) {
         msg = QString::fromLocal8Bit(ex.what());
@@ -898,7 +899,7 @@ void MainWindow::exportFile()
     if(showNoFileOpened()) {
         return;
     }
-    QString targetPath = QFileDialog::getSaveFileName(this, QApplication::applicationName());
+    QString targetPath = QFileDialog::getSaveFileName(this, QApplication::applicationName(), QString(), tr("Plain text document (*.txt);;All files (*.*)"));
     if(!targetPath.isNull()) {
         QString errmsg;
         try {
