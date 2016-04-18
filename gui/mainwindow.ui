@@ -183,7 +183,7 @@
      <x>0</x>
      <y>0</y>
      <width>848</width>
-     <height>27</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuProgramm">
@@ -194,15 +194,6 @@
      <property name="toolTip">
       <string>Recently opened files</string>
      </property>
-     <property name="title">
-      <string>&amp;Recent</string>
-     </property>
-     <property name="icon">
-      <iconset theme="document-open-recent">
-       <normaloff>.</normaloff>.</iconset>
-     </property>
-     <addaction name="actionSepRecent"/>
-     <addaction name="actionClearRecent"/>
     </widget>
     <addaction name="actionCreate"/>
     <addaction name="actionOpen"/>
@@ -410,15 +401,6 @@
     <string>&amp;Password generator</string>
    </property>
   </action>
-  <action name="actionClearRecent">
-   <property name="icon">
-    <iconset theme="edit-clear">
-     <normaloff>.</normaloff>.</iconset>
-   </property>
-   <property name="text">
-    <string>&amp;Clear list</string>
-   </property>
-  </action>
   <action name="actionAlwaysCreateBackup">
    <property name="checkable">
     <bool>true</bool>
@@ -492,7 +474,6 @@
     <string>&amp;Show undo stack</string>
    </property>
   </action>
-  <action name="actionSepRecent"/>
   <action name="actionShowAlways">
    <property name="checkable">
     <bool>true</bool>

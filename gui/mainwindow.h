@@ -6,6 +6,7 @@
 #include <passwordfile/io/passwordfile.h>
 
 #include <qtutilities/aboutdialog/aboutdialog.h>
+
 #include <c++utilities/io/binaryreader.h>
 #include <c++utilities/io/binarywriter.h>
 
@@ -16,16 +17,18 @@
 #include <iostream>
 #include <fstream>
 
-QT_BEGIN_NAMESPACE
-class QCloseEvent;
-class QTreeWidgetItem;
-class QUndoStack;
-class QUndoView;
-QT_END_NAMESPACE
+QT_FORWARD_DECLARE_CLASS(QCloseEvent)
+QT_FORWARD_DECLARE_CLASS(QTreeWidgetItem)
+QT_FORWARD_DECLARE_CLASS(QUndoStack)
+QT_FORWARD_DECLARE_CLASS(QUndoView)
 
 namespace Io {
 DECLARE_ENUM(EntryType, int)
 DECLARE_ENUM(FieldType, int)
+}
+
+namespace MiscUtils {
+class RecentMenuManager;
 }
 
 namespace QtGui {
@@ -95,10 +98,6 @@ private Q_SLOTS:
     // showing context menus
     void showTreeViewContextMenu();
     void showTableViewContextMenu();
-    // recent entries menu
-    void addRecentEntry(const QString &path);
-    void openRecentFile();
-    void clearRecent();
     // other
     void showContainingDirectory();
     void clearClipboard();
@@ -125,6 +124,7 @@ private:
     bool m_somethingChanged;
     bool m_dontUpdateSelection;
     int m_clearClipboardTimer;
+    MiscUtils::RecentMenuManager *m_recentMgr;
 };
 
 }

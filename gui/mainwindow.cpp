@@ -18,6 +18,7 @@
 #include <qtutilities/enterpassworddialog/enterpassworddialog.h>
 #include <qtutilities/misc/dialogutils.h>
 #include <qtutilities/misc/desktoputils.h>
+#include <qtutilities/misc/recentmenumanager.h>
 
 #include <c++utilities/io/path.h>
 #include <c++utilities/conversion/stringconversion.h>
@@ -30,7 +31,6 @@
 #include <QSettings>
 #include <QCloseEvent>
 #include <QTimerEvent>
-#include <QPushButton>
 #include <QUndoStack>
 #include <QUndoView>
 #include <QMimeData>
@@ -43,6 +43,7 @@ using namespace std;
 using namespace IoUtilities;
 using namespace Io;
 using namespace Dialogs;
+using namespace MiscUtils;
 
 namespace QtGui {
 
@@ -124,21 +125,10 @@ MainWindow::MainWindow(QWidget *parent) :
     // load settings
     QSettings settings(QSettings::IniFormat, QSettings::UserScope,  QApplication::organizationName(), QApplication::applicationName());
     settings.beginGroup(QStringLiteral("mainwindow"));
-    QStringList recentEntries = settings.value(QStringLiteral("recententries"), QStringList()).toStringList();
-    QAction *action = nullptr;
-    m_ui->actionSepRecent->setSeparator(true);
-    for(const QString &path : recentEntries) {
-        if(!path.isEmpty()) {
-            action = new QAction(path, this);
-            action->setProperty("file_path", path);
-            m_ui->menuRecent->insertAction(m_ui->actionSepRecent, action);
-            connect(action, &QAction::triggered, this, &MainWindow::openRecentFile);
-        }
-    }
-    if(action) {
-        m_ui->menuRecent->actions().front()->setShortcut(QKeySequence(Qt::Key_F6));
-        m_ui->menuRecent->setEnabled(true);
-    }
+    // init recent menu manager
+    m_recentMgr = new RecentMenuManager(m_ui->menuRecent, this);
+    m_recentMgr->restore(settings.value(QStringLiteral("recententries"), QStringList()).toStringList());
+    connect(m_recentMgr, &RecentMenuManager::fileSelected, this, &MainWindow::openFile);
     // set position and size
     resize(settings.value("size", size()).toSize());
     move(settings.value("pos", QPoint(300, 200)).toPoint());
@@ -193,8 +183,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(m_ui->actionAbout, &QAction::triggered, this, &MainWindow::showAboutDialog);
     connect(m_ui->actionOpen, &QAction::triggered, this, &MainWindow::showOpenFileDialog);
     connect(m_ui->actionSaveAs, &QAction::triggered, this, &MainWindow::showSaveFileDialog);
-    //   recent menu
-    connect(m_ui->actionClearRecent, &QAction::triggered, this, &MainWindow::clearRecent);
     //   add/remove account
     connect(m_ui->actionAddAccount, &QAction::triggered, this, &MainWindow::addAccount);
     connect(m_ui->actionAddCategory, &QAction::triggered, this, &MainWindow::addCategory);
@@ -291,16 +279,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     settings.beginGroup(QStringLiteral("mainwindow"));
     settings.setValue(QStringLiteral("size"), size());
     settings.setValue(QStringLiteral("pos"), pos());
-    QStringList existingEntires;
-    QList<QAction *> entryActions = m_ui->menuRecent->actions();
-    existingEntires.reserve(entryActions.size());
-    for(const QAction *action : entryActions) {
-        QVariant path = action->property("file_path");
-        if(!path.isNull()) {
-            existingEntires << path.toString();
-        }
-    }
-    settings.setValue(QStringLiteral("recententries"), existingEntires);
+    settings.setValue(QStringLiteral("recententries"), m_recentMgr->save());
     settings.setValue(QStringLiteral("accountfilter"), m_ui->accountFilterLineEdit->text());
     settings.setValue(QStringLiteral("alwayscreatebackup"), m_ui->actionAlwaysCreateBackup->isChecked());
     QString pwVisibility;
@@ -353,35 +332,6 @@ void MainWindow::showOpenFileDialog()
     QString fileName = QFileDialog::getOpenFileName(this, tr("Select a password list"), QString(), tr("Password Manager files (*.pwmgr);;All files (*)"));
     if(!fileName.isEmpty()) {
         openFile(fileName);
-    }
-}
-
-/*!
- * \brief Opens a file from the "recently opened" list.
- *
- * This private slot is directly called when the corresponding QAction is triggered.
- */
-void MainWindow::openRecentFile()
-{
-    if(QAction* action = qobject_cast<QAction *>(sender())) {
-        QString path = action->property("file_path").toString();
-        if(!path.isEmpty()) {
-            if(QFile::exists(path)) {
-                openFile(path);
-            } else {
-                QMessageBox msg(this);
-                msg.setWindowTitle(QApplication::applicationName());
-                msg.setText(tr("The selected file can't be found anymore. Do you want to delete the obsolete entry from the list?"));
-                msg.setIcon(QMessageBox::Warning);
-                QPushButton *keepEntryButton = msg.addButton(tr("keep entry"), QMessageBox::NoRole);
-                QPushButton *deleteEntryButton = msg.addButton(tr("delete entry"), QMessageBox::YesRole);
-                msg.setEscapeButton(keepEntryButton);
-                msg.exec();
-                if(msg.clickedButton() == deleteEntryButton) {
-                    delete action;
-                }
-            }
-        }
     }
 }
 
@@ -556,7 +506,7 @@ bool MainWindow::showFile()
     if(m_file.path().empty()) {
         m_ui->statusBar->showMessage(tr("A new password list has been created."), 5000);
     } else {
-        addRecentEntry(QString::fromStdString(m_file.path()));
+        m_recentMgr->addEntry(QString::fromStdString(m_file.path()));
         m_ui->statusBar->showMessage(tr("The password list has been load."), 5000);
     }
     updateWindowTitle();
@@ -564,44 +514,6 @@ bool MainWindow::showFile()
     applyFilter(m_ui->accountFilterLineEdit->text());
     setSomethingChanged(false);
     return true;
-}
-
-/*!
- * \brief Adds a recent entry for the specified \a path. Called within showFile().
- */
-void MainWindow::addRecentEntry(const QString &path)
-{
-    QList<QAction *> existingEntries = m_ui->menuRecent->actions();
-    QAction *entry = nullptr;
-    // remove shortcut from existing entries
-    for(QAction *existingEntry : existingEntries) {
-        existingEntry->setShortcut(QKeySequence());
-        // check whether existing entry matches entry to add
-        if(existingEntry->property("file_path").toString() == path) {
-            entry = existingEntry;
-            break;
-        }
-    }
-    if(!entry) {
-        // remove old entries to have never more then 10 entries
-        for(int i = existingEntries.size() - 1; i > 8; --i) {
-            delete existingEntries[i];
-        }
-        existingEntries = m_ui->menuRecent->actions();
-        // create new action
-        entry = new QAction(path, this);
-        entry->setProperty("file_path", path);
-        connect(entry, &QAction::triggered, this, &MainWindow::openRecentFile);
-    } else {
-        // remove existing action (will be inserted again as first action)
-        m_ui->menuRecent->removeAction(entry);
-    }
-    // add shortcut for new entry
-    entry->setShortcut(QKeySequence(Qt::Key_F6));
-    // ensure menu is enabled
-    m_ui->menuRecent->setEnabled(true);
-    // add action as first action in the recent menu
-    m_ui->menuRecent->insertAction(m_ui->menuRecent->isEmpty() ? nullptr : m_ui->menuRecent->actions().front(), entry);
 }
 
 /*!
@@ -885,7 +797,7 @@ bool MainWindow::saveFile()
        return false;
     } else {
         setSomethingChanged(false);
-        addRecentEntry(QString::fromStdString(m_file.path()));
+        m_recentMgr->addEntry(QString::fromStdString(m_file.path()));
         m_ui->statusBar->showMessage(tr("The password list has been saved."), 5000);
         return true;
     }
@@ -1158,20 +1070,6 @@ void MainWindow::changePassword()
     default:
         QMessageBox::warning(this, QApplication::applicationName(), tr("You aborted. The old password will still be used when saving the file next time."));
     }
-}
-
-/*!
- * \brief Clears all entries in the "recently opened" list.
- */
-void MainWindow::clearRecent()
-{
-    QList<QAction *> entries = m_ui->menuRecent->actions();
-    for(auto i = entries.begin(), end = entries.end() - 2; i != end; ++i) {
-        if(*i != m_ui->actionClearRecent) {
-            delete *i;
-        }
-    }
-    m_ui->menuRecent->setEnabled(false);
 }
 
 /*!
