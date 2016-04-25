@@ -7,10 +7,7 @@
 
 #include "ui_mainwindow.h"
 
-// include configuration from separate header file when building with CMake
-#ifndef APP_METADATA_AVAIL
-# include "resources/config.h"
-#endif
+#include "resources/config.h"
 
 #include <passwordfile/io/cryptoexception.h>
 #include <passwordfile/io/entry.h>

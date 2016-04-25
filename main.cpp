@@ -6,10 +6,7 @@
 # include "./quickgui/initiatequick.h"
 #endif
 
-// include configuration from separate header file when building with CMake
-#ifndef APP_METADATA_AVAIL
 #include "resources/config.h"
-#endif
 
 #include <passwordfile/util/openssl.h>
 
