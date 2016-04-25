@@ -71,15 +71,15 @@ set(ICON_FILES
 )
 
 # find c++utilities
-find_package(c++utilities REQUIRED)
+find_package(c++utilities 3.3.0 REQUIRED)
 use_cpp_utilities()
 
 # find qtutilities
-find_package(qtutilities REQUIRED)
+find_package(qtutilities 4.0.0 REQUIRED)
 use_qt_utilities()
 
 # find passwordfile
-find_package(passwordfile REQUIRED)
+find_package(passwordfile 3.1.0 REQUIRED)
 use_password_file()
 
 # include modules to apply configuration
