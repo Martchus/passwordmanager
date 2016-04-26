@@ -14,8 +14,6 @@
 #include <QMap>
 
 #include <memory>
-#include <iostream>
-#include <fstream>
 
 QT_FORWARD_DECLARE_CLASS(QCloseEvent)
 QT_FORWARD_DECLARE_CLASS(QTreeWidgetItem)
@@ -49,13 +47,11 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+public slots:
     // file management
     bool openFile(const QString &path);
     void createFile(const QString &path, const QString &password);
     void createFile(const QString &path);
-
-public Q_SLOTS:
-    // file management
     bool createFile();
     void changePassword();
     bool saveFile();
@@ -67,7 +63,7 @@ protected:
     void closeEvent(QCloseEvent *event);
     void timerEvent(QTimerEvent *event);
 
-private Q_SLOTS:
+private slots:
     // showing dialogs
     void showAboutDialog();
     void showPassowrdGeneratorDialog();
