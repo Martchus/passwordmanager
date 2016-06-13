@@ -36,20 +36,22 @@ int main(int argc, char *argv[])
     SET_APPLICATION_INFO;
     ArgumentParser parser;
     parser.setIgnoreUnknownArguments(true);
-    // Qt configuration arguments
-    QT_CONFIG_ARGUMENTS qtConfigArgs;
     // file argument
-    Argument fileArg("file", "f", "specifies the file to be opened (or created when using --modify)");
+    Argument fileArg("file", 'f', "specifies the file to be opened (or created when using --modify)");
     fileArg.setValueNames({"path"});
     fileArg.setRequiredValueCount(1);
     fileArg.setCombinable(true);
     fileArg.setRequired(false);
     fileArg.setImplicit(true);
+    // Qt configuration arguments
+    QT_CONFIG_ARGUMENTS qtConfigArgs;
+    qtConfigArgs.qtWidgetsGuiArg().addSubArgument(&fileArg);
     // cli argument
-    Argument cliArg("interactive-cli", "i", "starts the interactive command line interface");
+    Argument cliArg("interactive-cli", 'i', "starts the interactive command line interface");
+    cliArg.setSubArguments({&fileArg});
     // help argument
     HelpArgument helpArg(parser);
-    parser.setMainArguments({&fileArg, &helpArg, &(qtConfigArgs.qtWidgetsGuiArg()), &(qtConfigArgs.qtQuickGuiArg()), &cliArg});
+    parser.setMainArguments({&qtConfigArgs.qtWidgetsGuiArg(), &qtConfigArgs.qtQuickGuiArg(), &cliArg, &helpArg});
     // holds the application's return code
     int res = 0;
     // parse the specified arguments
@@ -57,16 +59,16 @@ int main(int argc, char *argv[])
         parser.parseArgs(argc, argv);
         if(cliArg.isPresent()) {
             Cli::InteractiveCli cli;
-            if(fileArg.isPresent() && fileArg.valueCount() == 1) {
-                cli.run(fileArg.value(0));
+            if(fileArg.isPresent()) {
+                cli.run(fileArg.values().front());
             } else {
                 cli.run();
             }
         } else if(qtConfigArgs.areQtGuiArgsPresent()) {
             // run Qt gui if no arguments, --qt-gui or --qt-quick-gui specified, a file might be specified
             QString file;
-            if(fileArg.valueCount() > 0) {
-                file = QString::fromLocal8Bit(fileArg.value(0).c_str());
+            if(fileArg.isPresent()) {
+                file = QString::fromLocal8Bit(fileArg.values().front());
             }
             if(qtConfigArgs.qtWidgetsGuiArg().isPresent()) {
 #ifdef GUI_QTWIDGETS
@@ -93,7 +95,7 @@ int main(int argc, char *argv[])
 #endif
             }
         }
-    } catch(Failure &ex) {
+    } catch(const Failure &ex) {
         CMD_UTILS_START_CONSOLE;
         cout << "Unable to parse arguments. " << ex.what() << "\nSee --help for available commands." << endl;
     }
