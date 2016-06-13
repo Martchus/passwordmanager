@@ -45,6 +45,16 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../gui/mainwindow.ui" line="214"/>
+        <source>?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/mainwindow.ui" line="220"/>
+        <source>Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../gui/mainwindow.ui" line="234"/>
         <source>&amp;Tools</source>
         <translation type="unfinished"></translation>
@@ -70,8 +80,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../gui/mainwindow.ui" line="276"/>
+        <source>Ctrl+O</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../gui/mainwindow.ui" line="285"/>
         <source>&amp;Quit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/mainwindow.ui" line="288"/>
+        <source>Ctrl+Q</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -85,13 +105,28 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../gui/mainwindow.ui" line="309"/>
+        <source>Ctrl+S</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../gui/mainwindow.ui" line="318"/>
         <source>&amp;New ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../gui/mainwindow.ui" line="321"/>
+        <source>Ctrl+N</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../gui/mainwindow.ui" line="330"/>
         <source>&amp;Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/mainwindow.ui" line="333"/>
+        <source>Ctrl+Shift+Q</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -105,8 +140,24 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../gui/mainwindow.ui" line="354"/>
+        <source>Ctrl+Shift+A</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../gui/mainwindow.ui" line="363"/>
         <source>Sa&amp;ve as ...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/mainwindow.ui" line="366"/>
+        <source>Ctrl+Shift+S</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/mainwindow.ui" line="375"/>
+        <location filename="../gui/mainwindow.ui" line="378"/>
+        <source>Remove selected entry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -180,57 +231,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="214"/>
-        <source>?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/mainwindow.ui" line="220"/>
-        <source>Edit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/mainwindow.ui" line="276"/>
-        <source>Ctrl+O</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/mainwindow.ui" line="288"/>
-        <source>Ctrl+Q</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/mainwindow.ui" line="309"/>
-        <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/mainwindow.ui" line="321"/>
-        <source>Ctrl+N</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/mainwindow.ui" line="333"/>
-        <source>Ctrl+Shift+Q</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/mainwindow.ui" line="354"/>
-        <source>Ctrl+Shift+A</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/mainwindow.ui" line="366"/>
-        <source>Ctrl+Shift+S</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/mainwindow.ui" line="375"/>
-        <location filename="../gui/mainwindow.ui" line="378"/>
-        <source>Remove selected entry</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../gui/mainwindow.cpp" line="308"/>
         <source>A simple password store using AES-256-CBC encryption via OpenSSL.</source>
         <translation type="unfinished"></translation>
@@ -238,6 +238,12 @@
     <message>
         <location filename="../gui/mainwindow.cpp" line="329"/>
         <source>Select a password list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/mainwindow.cpp" line="329"/>
+        <location filename="../gui/mainwindow.cpp" line="656"/>
+        <source>Password Manager files (*.pwmgr);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -255,6 +261,16 @@
     <message>
         <location filename="../gui/mainwindow.cpp" line="391"/>
         <source>The file you want to load seems to be very big. Do you really want to open it?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/mainwindow.cpp" line="399"/>
+        <source>Opening file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/mainwindow.cpp" line="400"/>
+        <source>Enter the password to open the file &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -327,22 +343,6 @@ OpenSSL error queue: %1</source>
     <message>
         <location filename="../gui/mainwindow.cpp" line="731"/>
         <source>The password list has been closed.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/mainwindow.cpp" line="399"/>
-        <source>Opening file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/mainwindow.cpp" line="329"/>
-        <location filename="../gui/mainwindow.cpp" line="656"/>
-        <source>Password Manager files (*.pwmgr);;All files (*)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/mainwindow.cpp" line="400"/>
-        <source>Enter the password to open the file &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -517,6 +517,11 @@ OpenSSL error queue: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../gui/mainwindow.cpp" line="1168"/>
+        <source>Copy for 5 seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../gui/mainwindow.cpp" line="1170"/>
         <source>Paste</source>
         <translation type="unfinished"></translation>
@@ -529,11 +534,6 @@ OpenSSL error queue: %1</source>
     <message>
         <location filename="../gui/mainwindow.cpp" line="1197"/>
         <source>The selection is empty.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/mainwindow.cpp" line="1168"/>
-        <source>Copy for 5 seconds</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -623,6 +623,26 @@ OpenSSL error: %1</source>
         <source>setting field name »%1« to »%2«</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../gui/undocommands.cpp" line="91"/>
+        <source>setting value of empty field</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/undocommands.cpp" line="93"/>
+        <source>setting value of »%1« field</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/undocommands.cpp" line="99"/>
+        <source>setting type of »%1« field</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/undocommands.cpp" line="102"/>
+        <source>setting field property in row »%1«</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message numerus="yes">
         <location filename="../gui/undocommands.cpp" line="134"/>
         <source>insertion of %1 row(s) before row %2</source>
@@ -646,26 +666,6 @@ OpenSSL error: %1</source>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
-    </message>
-    <message>
-        <location filename="../gui/undocommands.cpp" line="91"/>
-        <source>setting value of empty field</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/undocommands.cpp" line="93"/>
-        <source>setting value of »%1« field</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/undocommands.cpp" line="99"/>
-        <source>setting type of »%1« field</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/undocommands.cpp" line="102"/>
-        <source>setting field property in row »%1«</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../gui/undocommands.cpp" line="247"/>
