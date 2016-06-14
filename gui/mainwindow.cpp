@@ -18,6 +18,7 @@
 #include <qtutilities/misc/recentmenumanager.h>
 
 #include <c++utilities/io/path.h>
+#include <c++utilities/io/catchiofailure.h>
 #include <c++utilities/conversion/stringconversion.h>
 
 #include <QFileDialog>
@@ -380,8 +381,8 @@ bool MainWindow::openFile(const QString &path)
     m_file.setPath(path.toStdString());
     try {
         m_file.open();
-    } catch (const ios_base::failure &ex) {
-        QString errmsg = tr("An IO error occured when opening the specified file \"%1\".\n\n(%2)").arg(path, QString::fromLocal8Bit(ex.what()));
+    } catch (...) {
+        const QString errmsg = tr("An IO error occured when opening the specified file \"%1\".\n\n(%2)").arg(path, QString::fromLocal8Bit(catchIoFailure()));
         m_ui->statusBar->showMessage(errmsg, 5000);
         QMessageBox::critical(this, QApplication::applicationName(), errmsg);
         return false;
@@ -421,12 +422,14 @@ bool MainWindow::openFile(const QString &path)
     QString msg;
     try {
         m_file.load();
-    } catch(CryptoException &ex) {
-        msg = tr("The file couldn't be decrypted.\nOpenSSL error queue: %1").arg(QString::fromLocal8Bit(ex.what()));
-    } catch(ios_base::failure &ex) {
-        msg = QString::fromLocal8Bit(ex.what());
-    } catch(runtime_error &ex) {
-        msg = tr("Unable to parse the file. %1").arg(QString::fromLocal8Bit(ex.what()));
+    } catch(const CryptoException &e) {
+        msg = tr("The file couldn't be decrypted.\nOpenSSL error queue: %1").arg(QString::fromLocal8Bit(e.what()));
+    } catch (...) {
+        try {
+            msg = QString::fromLocal8Bit(catchIoFailure());
+        } catch(const runtime_error &e) {
+            msg = tr("Unable to parse the file. %1").arg(QString::fromLocal8Bit(e.what()));
+        }
     }
     // show a message in the error case
     if(!msg.isEmpty()) {
@@ -483,7 +486,8 @@ void MainWindow::createFile(const QString &path, const QString &password)
     // create the file and show it
     try {
         m_file.create();
-    } catch (const ios_base::failure) {
+    } catch (...) {
+        catchIoFailure();
         QMessageBox::critical(this, QApplication::applicationName(), tr("The file <i>%1</i> couldn't be created.").arg(path));
         return;
     }
@@ -662,8 +666,8 @@ bool MainWindow::askForCreatingFile()
         try {
             m_file.create();
             updateWindowTitle();
-        } catch (const ios_base::failure &ex) {
-            QMessageBox::critical(this, QApplication::applicationName(), QString::fromLocal8Bit(ex.what()));
+        } catch (...) {
+            QMessageBox::critical(this, QApplication::applicationName(), QString::fromLocal8Bit(catchIoFailure()));
             return false;
         }
     }
@@ -750,8 +754,8 @@ bool MainWindow::saveFile()
         if(m_ui->actionAlwaysCreateBackup->isChecked()) {
             try {
                 m_file.doBackup();
-            } catch(const ios_base::failure &ex) {
-                QString message(tr("The backup file couldn't be created because in IO error occured: %1").arg(QString::fromLocal8Bit(ex.what())));
+            } catch(...) {
+                QString message(tr("The backup file couldn't be created because in IO error occured: %1").arg(QString::fromLocal8Bit(catchIoFailure())));
                 QMessageBox::critical(this, QApplication::applicationName(), message);
                 m_ui->statusBar->showMessage(message, 7000);
                 return false;
@@ -784,8 +788,8 @@ bool MainWindow::saveFile()
         m_file.save(m_file.password()[0] != 0);
     } catch (const CryptoException &ex) {
         msg = tr("The password list couldn't be saved due to encryption failure.\nOpenSSL error queue: %1").arg(QString::fromLocal8Bit(ex.what()));
-    } catch(const ios_base::failure &ex) {
-        msg = QString::fromLocal8Bit(ex.what());
+    } catch(...) {
+        msg = QString::fromLocal8Bit(catchIoFailure());
     }
     // show status
     if(!msg.isEmpty()) {
@@ -813,8 +817,8 @@ void MainWindow::exportFile()
         QString errmsg;
         try {
             m_file.exportToTextfile(targetPath.toStdString());
-        } catch (ios_base::failure &ex) {
-            errmsg = tr("The password list couldn't be exported. %1").arg(QString::fromLocal8Bit(ex.what()));
+        } catch (...) {
+            errmsg = tr("The password list couldn't be exported. %1").arg(QString::fromLocal8Bit(catchIoFailure()));
         }
         if(errmsg.isEmpty()) {
             m_ui->statusBar->showMessage(tr("The password list has been exported."), 5000);

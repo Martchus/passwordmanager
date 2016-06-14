@@ -6,6 +6,8 @@
 
 #include <passwordfile/io/entry.h>
 
+#include <c++utilities/io/catchiofailure.h>
+
 #include <QIcon>
 #include <QBuffer>
 #include <QMimeData>
@@ -230,7 +232,8 @@ QVariant EntryModel::data(const QModelIndex &index, int role) const
                         entry->make(ss);
                         string string = ss.str();
                         return QByteArray(string.data(), string.size());
-                    } catch(const ios_base::failure &) {
+                    } catch(...) {
+                        IoUtilities::catchIoFailure();
                         return false;
                     }
                 }
@@ -293,7 +296,9 @@ bool EntryModel::setData(const QModelIndex &index, const QVariant &value, int ro
                                 newEntry->setParent(parent, row);
                                 endInsertRows();
                                 return true;
-                            } catch(const ios_base::failure &) {}
+                            } catch(...) {
+                                IoUtilities::catchIoFailure();
+                            }
                         }
                     }
                 }

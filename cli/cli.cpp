@@ -8,6 +8,7 @@
 
 #include <c++utilities/conversion/stringconversion.h>
 #include <c++utilities/application/commandlineutils.h>
+#include <c++utilities/io/catchiofailure.h>
 
 #if defined(PLATFORM_UNIX)
 #include <unistd.h>
@@ -20,6 +21,7 @@
 using namespace std;
 using namespace std::placeholders;
 using namespace ConversionUtilities;
+using namespace IoUtilities;
 using namespace Io;
 
 namespace Cli {
@@ -248,20 +250,18 @@ void InteractiveCli::openFile(const string &file, bool readOnly)
                 m_file.load();
                 m_currentEntry = m_file.rootEntry();
                 m_o << "file \"" << file << "\" opened" << endl;
-            } catch (ParsingException &) {
+            } catch (const ParsingException &) {
                 m_o << "error occured when parsing file \"" << file << "\"" << endl;
                 throw;
-            } catch (CryptoException &) {
+            } catch (const CryptoException &) {
                 m_o << "error occured when decrypting file \"" << file << "\"" << endl;
                 throw;
-            } catch (ios_base::failure &) {
+            } catch(...) {
+                const char *what = catchIoFailure();
                 m_o << "IO error occured when opening file \"" << file << "\"" << endl;
-                throw;
-            } catch (exception &) {
-                m_o << "an unexpected exception occured when opening file \"" << file << "\"" << endl;
-                terminate();
+                throw ios_base::failure(what);
             }
-        } catch(exception &e) {
+        } catch(const std::exception &e) {
             if(*e.what() != 0) {
                 m_o << e.what() << endl;
             }
@@ -290,20 +290,18 @@ void InteractiveCli::saveFile()
             try {
                 m_file.save(*m_file.password());
                 m_o << "file \"" << m_file.path() << "\" saved" << endl;
-            } catch (ParsingException &) {
+            } catch (const ParsingException &) {
                 m_o << "error occured when parsing file \"" << m_file.path() << "\"" << endl;
                 throw;
-            } catch (CryptoException &) {
+            } catch (const CryptoException &) {
                 m_o << "error occured when encrypting file \"" << m_file.path() << "\"" << endl;
                 throw;
-            } catch (ios_base::failure &) {
+            } catch (...) {
+                const char *what = catchIoFailure();
                 m_o << "IO error occured when saving file \"" << m_file.path() << "\"" << endl;
-                throw;
-            } catch (exception &) {
-                m_o << "an unexpected exception occured when saving file \"" << m_file.path() << "\"" << endl;
-                terminate();
+                throw ios_base::failure(what);
             }
-        } catch(exception &e) {
+        } catch(const exception &e) {
             if(*e.what() != 0) {
                 m_o << e.what() << endl;
             }
@@ -328,12 +326,10 @@ void InteractiveCli::createFile(const string &file)
                 m_file.generateRootEntry();
                 m_currentEntry = m_file.rootEntry();
                 m_o << "file \"" << file << "\" created and opened" << endl;
-            } catch (ios_base::failure &) {
+            } catch (...) {
+                const char *what = catchIoFailure();
                 m_o << "IO error occured when creating file \"" << file << "\"" << endl;
-                throw;
-            } catch (exception &) {
-                m_o << "an unexpected exception occured when creating file \"" << file << "\"" << endl;
-                terminate();
+                throw ios_base::failure(what);
             }
         } catch(exception &e) {
             if(*e.what() != 0) {
