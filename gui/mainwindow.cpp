@@ -16,6 +16,7 @@
 #include <qtutilities/misc/dialogutils.h>
 #include <qtutilities/misc/desktoputils.h>
 #include <qtutilities/misc/recentmenumanager.h>
+#include <qtutilities/aboutdialog/aboutdialog.h>
 
 #include <c++utilities/io/path.h>
 #include <c++utilities/io/catchiofailure.h>
@@ -109,7 +110,8 @@ void MainWindow::setSomethingChanged(bool somethingChanged)
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     m_ui(new Ui::MainWindow),
-    m_clearClipboardTimer(0)
+    m_clearClipboardTimer(0),
+    m_aboutDlg(nullptr)
 {
     // setup ui
     m_ui->setupUi(this);
@@ -305,9 +307,10 @@ void MainWindow::timerEvent(QTimerEvent *event)
  */
 void MainWindow::showAboutDialog()
 {
-    using namespace Dialogs;
-    AboutDialog* aboutDlg = new AboutDialog(this, tr("A simple password store using AES-256-CBC encryption via OpenSSL."), QImage(":/icons/hicolor/128x128/apps/passwordmanager.png"));
-    aboutDlg->show();
+    if(!m_aboutDlg) {
+        m_aboutDlg = new AboutDialog(this, tr("A simple password store using AES-256-CBC encryption via OpenSSL."), QImage(":/icons/hicolor/128x128/apps/passwordmanager.png"));
+    }
+    m_aboutDlg->show();
 }
 
 /*!

@@ -35,7 +35,6 @@ int main(int argc, char *argv[])
     // setup argument parser
     SET_APPLICATION_INFO;
     ArgumentParser parser;
-    parser.setIgnoreUnknownArguments(true);
     // file argument
     Argument fileArg("file", 'f', "specifies the file to be opened (or created when using --modify)");
     fileArg.setValueNames({"path"});

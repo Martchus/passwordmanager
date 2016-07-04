@@ -5,8 +5,6 @@
 
 #include <passwordfile/io/passwordfile.h>
 
-#include <qtutilities/aboutdialog/aboutdialog.h>
-
 #include <c++utilities/io/binaryreader.h>
 #include <c++utilities/io/binarywriter.h>
 
@@ -27,6 +25,10 @@ DECLARE_ENUM(FieldType, int)
 
 namespace MiscUtils {
 class RecentMenuManager;
+}
+
+namespace Dialogs {
+class AboutDialog;
 }
 
 namespace QtGui {
@@ -121,6 +123,7 @@ private:
     bool m_dontUpdateSelection;
     int m_clearClipboardTimer;
     MiscUtils::RecentMenuManager *m_recentMgr;
+    Dialogs::AboutDialog *m_aboutDlg;
 };
 
 }
