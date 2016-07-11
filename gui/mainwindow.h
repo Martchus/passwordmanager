@@ -19,8 +19,8 @@ QT_FORWARD_DECLARE_CLASS(QUndoStack)
 QT_FORWARD_DECLARE_CLASS(QUndoView)
 
 namespace Io {
-DECLARE_ENUM(EntryType, int)
-DECLARE_ENUM(FieldType, int)
+DECLARE_ENUM_CLASS(EntryType, int);
+DECLARE_ENUM_CLASS(FieldType, int);
 }
 
 namespace MiscUtils {

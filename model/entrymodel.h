@@ -2,7 +2,7 @@
 #define ENTRYMODEL_H
 
 #ifdef MODEL_UNDO_SUPPORT
-#include "gui/stacksupport.h"
+# include "gui/stacksupport.h"
 #endif
 
 #include <c++utilities/application/global.h>
@@ -12,7 +12,7 @@
 namespace Io {
 class Entry;
 class NodeEntry;
-DECLARE_ENUM(EntryType, int)
+DECLARE_ENUM_CLASS(EntryType, int);
 }
 
 namespace QtGui {
