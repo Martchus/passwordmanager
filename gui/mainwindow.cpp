@@ -130,8 +130,8 @@ MainWindow::MainWindow(QWidget *parent) :
     m_recentMgr->restore(settings.value(QStringLiteral("recententries"), QStringList()).toStringList());
     connect(m_recentMgr, &RecentMenuManager::fileSelected, this, &MainWindow::openFile);
     // set position and size
-    resize(settings.value("size", size()).toSize());
-    move(settings.value("pos", QPoint(300, 200)).toPoint());
+    restoreGeometry(settings.value(QStringLiteral("geometry")).toByteArray());
+    restoreState(settings.value(QStringLiteral("state")).toByteArray());
     // setup undo stack and related actions
     m_undoStack = new QUndoStack(this);
     m_undoView = nullptr;
@@ -277,8 +277,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
     // save settings
     QSettings settings(QSettings::IniFormat, QSettings::UserScope,  QApplication::organizationName(), QApplication::applicationName());
     settings.beginGroup(QStringLiteral("mainwindow"));
-    settings.setValue(QStringLiteral("size"), size());
-    settings.setValue(QStringLiteral("pos"), pos());
+    settings.setValue(QStringLiteral("geometry"), saveGeometry());
+    settings.setValue(QStringLiteral("state"), saveState());
     settings.setValue(QStringLiteral("recententries"), m_recentMgr->save());
     settings.setValue(QStringLiteral("accountfilter"), m_ui->accountFilterLineEdit->text());
     settings.setValue(QStringLiteral("alwayscreatebackup"), m_ui->actionAlwaysCreateBackup->isChecked());
