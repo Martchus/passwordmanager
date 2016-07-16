@@ -74,6 +74,38 @@ set(DOC_FILES
     README.md
 )
 
+set(REQUIRED_ICONS
+    edit-paste
+    window-close
+    document-save-as
+    document-open
+    insert-text
+    edit-copy
+    document-open-recent
+    list-remove
+    dialog-ok
+    flag-black
+    dialog-password
+    dialog-cancel
+    edit-clear
+    list-add
+    dialog-ok-apply
+    help-about
+    application-exit
+    flag-blue
+    edit-undo
+    folder
+    system-file-manager
+    document-new
+    document-save
+    applications-internet
+    edit-redo
+    system-run
+    go-next
+    qtcreator
+    document-export
+)
+
 # find c++utilities
 find_package(c++utilities 4.0.0 REQUIRED)
 use_cpp_utilities()
