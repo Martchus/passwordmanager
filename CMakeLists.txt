@@ -2,11 +2,12 @@ cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
 
 # meta data
 set(META_PROJECT_NAME passwordmanager)
+set(META_PROJECT_TYPE application)
 set(META_APP_NAME "Password Manager")
 set(META_APP_CATEGORIES "Utility")
 set(META_APP_AUTHOR "Martchus")
 set(META_APP_URL "https://github.com/${META_APP_AUTHOR}/${META_PROJECT_NAME}")
-set(META_APP_DESCRIPTION "A simple password store using AES-256-CBC encryption via OpenSSL.")
+set(META_APP_DESCRIPTION "A simple password store using AES-256-CBC encryption via OpenSSL")
 set(META_VERSION_MAJOR 2)
 set(META_VERSION_MINOR 1)
 set(META_VERSION_PATCH 1)
@@ -22,6 +23,14 @@ set(HEADER_FILES
 set(SRC_FILES
     cli/cli.cpp
     main.cpp
+)
+
+set(GUI_HEADER_FILES
+    model/entryfiltermodel.cpp
+    model/entrymodel.cpp
+    model/fieldmodel.cpp
+)
+set(GUI_SRC_FILES
     model/entryfiltermodel.cpp
     model/entrymodel.cpp
     model/fieldmodel.cpp
@@ -111,8 +120,10 @@ find_package(c++utilities 4.0.0 REQUIRED)
 use_cpp_utilities()
 
 # find qtutilities
-find_package(qtutilities 4.0.0 REQUIRED)
-use_qt_utilities()
+if(WIDGETS_GUI OR QUICK_GUI)
+    find_package(qtutilities 5.0.0 REQUIRED)
+    use_qt_utilities()
+endif()
 
 # find passwordfile
 find_package(passwordfile 3.1.0 REQUIRED)
@@ -120,8 +131,10 @@ use_password_file()
 
 # include modules to apply configuration
 include(BasicConfig)
-include(QtGuiConfig)
-include(QtConfig)
+if(WIDGETS_GUI OR QUICK_GUI)
+    include(QtGuiConfig)
+    include(QtConfig)
+endif()
 include(WindowsResources)
 include(AppTarget)
 include(ShellCompletion)

@@ -16,11 +16,10 @@
 
 #if defined(GUI_QTWIDGETS) || defined(GUI_QTQUICK)
 # include <qtutilities/resources/qtconfigarguments.h>
+# include <QString>
 #else
 # include <c++utilities/application/fakeqtconfigarguments.h>
 #endif
-
-#include <QString>
 
 #include <iostream>
 
@@ -65,10 +64,12 @@ int main(int argc, char *argv[])
             }
         } else if(qtConfigArgs.areQtGuiArgsPresent()) {
             // run Qt gui if no arguments, --qt-gui or --qt-quick-gui specified, a file might be specified
+#if defined(GUI_QTWIDGETS) || defined(GUI_QTQUICK)
             QString file;
             if(fileArg.isPresent()) {
                 file = QString::fromLocal8Bit(fileArg.values().front());
             }
+#endif
             if(qtConfigArgs.qtWidgetsGuiArg().isPresent()) {
 #ifdef GUI_QTWIDGETS
                 res = QtGui::runWidgetsGui(argc, argv, qtConfigArgs, file);
