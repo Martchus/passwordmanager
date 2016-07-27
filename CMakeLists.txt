@@ -138,6 +138,7 @@ endif()
 include(WindowsResources)
 include(AppTarget)
 include(ShellCompletion)
+include(ConfigHeader)
 
 # create desktop file using previously defined meta data
 add_desktop_file()
