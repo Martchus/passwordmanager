@@ -194,6 +194,9 @@
      <property name="toolTip">
       <string>Recently opened files</string>
      </property>
+     <property name="title">
+      <string/>
+     </property>
     </widget>
     <addaction name="actionCreate"/>
     <addaction name="actionOpen"/>
@@ -234,6 +237,7 @@
      <string>&amp;Tools</string>
     </property>
     <addaction name="actionPasswordGenerator"/>
+    <addaction name="actionQtSettings"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
@@ -397,6 +401,9 @@
    </property>
   </action>
   <action name="actionPasswordGenerator">
+   <property name="icon">
+    <iconset theme="password-generate"/>
+   </property>
    <property name="text">
     <string>&amp;Password generator</string>
    </property>
@@ -496,6 +503,14 @@
    </property>
    <property name="text">
     <string>&amp;hide always</string>
+   </property>
+  </action>
+  <action name="actionQtSettings">
+   <property name="icon">
+    <iconset theme="qtcreator"/>
+   </property>
+   <property name="text">
+    <string>Qt settings</string>
    </property>
   </action>
  </widget>

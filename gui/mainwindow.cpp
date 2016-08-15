@@ -17,6 +17,9 @@
 #include <qtutilities/misc/desktoputils.h>
 #include <qtutilities/misc/recentmenumanager.h>
 #include <qtutilities/aboutdialog/aboutdialog.h>
+#include <qtutilities/settingsdialog/settingsdialog.h>
+#include <qtutilities/settingsdialog/optioncategorymodel.h>
+#include <qtutilities/settingsdialog/qtsettings.h>
 
 #include <c++utilities/io/path.h>
 #include <c++utilities/io/catchiofailure.h>
@@ -107,11 +110,14 @@ void MainWindow::setSomethingChanged(bool somethingChanged)
 /*!
  * \brief Constructs a new main window.
  */
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(QSettings &settings, Dialogs::QtSettings *qtSettings, QWidget *parent) :
     QMainWindow(parent),
     m_ui(new Ui::MainWindow),
     m_clearClipboardTimer(0),
-    m_aboutDlg(nullptr)
+    m_aboutDlg(nullptr),
+    m_settings(settings),
+    m_qtSettings(qtSettings),
+    m_settingsDlg(nullptr)
 {
     // setup ui
     m_ui->setupUi(this);
@@ -123,7 +129,6 @@ MainWindow::MainWindow(QWidget *parent) :
     m_dontUpdateSelection = false;
     updateUiStatus();
     // load settings
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope,  QApplication::organizationName(), QApplication::applicationName());
     settings.beginGroup(QStringLiteral("mainwindow"));
     // init recent menu manager
     m_recentMgr = new RecentMenuManager(m_ui->menuRecent, this);
@@ -170,7 +175,7 @@ MainWindow::MainWindow(QWidget *parent) :
     pwVisibilityAction->setChecked(true);
     setPasswordVisibility(pwVisibilityAction);
     // connect signals and slots
-    //    file related actions
+    // -> file related actions
     connect(m_ui->actionSave, &QAction::triggered, this, &MainWindow::saveFile);
     connect(m_ui->actionExport, &QAction::triggered, this, &MainWindow::exportFile);
     connect(m_ui->actionShowContainingDirectory, &QAction::triggered, this, &MainWindow::showContainingDirectory);
@@ -178,34 +183,35 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(m_ui->actionCreate, &QAction::triggered, this, static_cast<bool (MainWindow::*)(void)>(&MainWindow::createFile));
     connect(m_ui->actionQuit, &QAction::triggered, this, &MainWindow::close);
     connect(m_ui->actionChangepassword, &QAction::triggered, this, &MainWindow::changePassword);
-    //   showing dialogs
+    // -> showing dialogs
     connect(m_ui->actionPasswordGenerator, &QAction::triggered, this, &MainWindow::showPassowrdGeneratorDialog);
     connect(m_ui->actionAbout, &QAction::triggered, this, &MainWindow::showAboutDialog);
     connect(m_ui->actionOpen, &QAction::triggered, this, &MainWindow::showOpenFileDialog);
     connect(m_ui->actionSaveAs, &QAction::triggered, this, &MainWindow::showSaveFileDialog);
-    //   add/remove account
+    connect(m_ui->actionQtSettings, &QAction::triggered, this, &MainWindow::showSettingsDialog);
+    // -> add/remove account
     connect(m_ui->actionAddAccount, &QAction::triggered, this, &MainWindow::addAccount);
     connect(m_ui->actionAddCategory, &QAction::triggered, this, &MainWindow::addCategory);
     connect(m_ui->actionRemoveRows, &QAction::triggered, this, &MainWindow::removeEntry);
-    //   insert/remove fields
+    // -> insert/remove fields
     connect(m_ui->actionInsertRow, &QAction::triggered, this, &MainWindow::insertRow);
     connect(m_ui->actionRemoveAccount, &QAction::triggered, this, &MainWindow::removeRows);
-    //   undo/redo
+    // -> undo/redo
     connect(m_ui->actionUndo, &QAction::triggered, m_undoStack, &QUndoStack::undo);
     connect(m_ui->actionRedo, &QAction::triggered, m_undoStack, &QUndoStack::redo);
     connect(m_undoStack, &QUndoStack::canUndoChanged, m_ui->actionUndo, &QAction::setEnabled);
     connect(m_undoStack, &QUndoStack::canRedoChanged, m_ui->actionRedo, &QAction::setEnabled);
-    //   view
+    // -> view
     connect(passwordVisibilityGroup, &QActionGroup::triggered, this, &MainWindow::setPasswordVisibility);
     connect(m_ui->actionShowUndoStack, &QAction::triggered, this, &MainWindow::showUndoView);
-    //   models
+    // -> models
     connect(m_ui->treeView->selectionModel(), &QItemSelectionModel::currentRowChanged, this, &MainWindow::accountSelected);
     connect(m_entryModel, &QAbstractItemModel::dataChanged, this, static_cast<void (MainWindow::*)(void)>(&MainWindow::setSomethingChanged));
     connect(m_fieldModel, &QAbstractItemModel::dataChanged, this, static_cast<void (MainWindow::*)(void)>(&MainWindow::setSomethingChanged));
-    //   context menus
+    // -> context menus
     connect(m_ui->treeView, &QTableView::customContextMenuRequested, this, &MainWindow::showTreeViewContextMenu);
     connect(m_ui->tableView, &QTableView::customContextMenuRequested, this, &MainWindow::showTableViewContextMenu);
-    //   filter
+    // -> filter
     //connect(m_ui->accountFilterLineEdit, &QLineEdit::textChanged, m_entryFilterModel, &QSortFilterProxyModel::setFilterFixedString);
     connect(m_ui->accountFilterLineEdit, &QLineEdit::textChanged, this, &MainWindow::applyFilter);
     // setup other controls
@@ -275,13 +281,12 @@ void MainWindow::closeEvent(QCloseEvent *event)
         m_undoView->close();
     }
     // save settings
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope,  QApplication::organizationName(), QApplication::applicationName());
-    settings.beginGroup(QStringLiteral("mainwindow"));
-    settings.setValue(QStringLiteral("geometry"), saveGeometry());
-    settings.setValue(QStringLiteral("state"), saveState());
-    settings.setValue(QStringLiteral("recententries"), m_recentMgr->save());
-    settings.setValue(QStringLiteral("accountfilter"), m_ui->accountFilterLineEdit->text());
-    settings.setValue(QStringLiteral("alwayscreatebackup"), m_ui->actionAlwaysCreateBackup->isChecked());
+    m_settings.beginGroup(QStringLiteral("mainwindow"));
+    m_settings.setValue(QStringLiteral("geometry"), saveGeometry());
+    m_settings.setValue(QStringLiteral("state"), saveState());
+    m_settings.setValue(QStringLiteral("recententries"), m_recentMgr->save());
+    m_settings.setValue(QStringLiteral("accountfilter"), m_ui->accountFilterLineEdit->text());
+    m_settings.setValue(QStringLiteral("alwayscreatebackup"), m_ui->actionAlwaysCreateBackup->isChecked());
     QString pwVisibility;
     if(m_ui->actionShowAlways->isChecked()) {
         pwVisibility = QStringLiteral("always");
@@ -290,8 +295,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
     } else {
         pwVisibility = QStringLiteral("editing");
     }
-    settings.setValue(QStringLiteral("pwvisibility"), pwVisibility);
-    settings.endGroup();
+    m_settings.setValue(QStringLiteral("pwvisibility"), pwVisibility);
+    m_settings.endGroup();
 }
 
 void MainWindow::timerEvent(QTimerEvent *event)
@@ -299,6 +304,26 @@ void MainWindow::timerEvent(QTimerEvent *event)
     if(event->timerId() == m_clearClipboardTimer) {
         clearClipboard();
         m_clearClipboardTimer = 0;
+    }
+}
+
+/*!
+ * \brief Shows the settings dialog (which currently only consists of the Qt settings category).
+ */
+void MainWindow::showSettingsDialog()
+{
+    if(!m_settingsDlg) {
+        m_settingsDlg = new SettingsDialog(this);
+        if(m_qtSettings) {
+            m_settingsDlg->setWindowTitle(tr("Qt settings"));
+            m_settingsDlg->setSingleCategory(m_qtSettings->category());
+        }
+        //connect(m_settingsDlg, &SettingsDialog::applied, this, &MainWindow::settingsAccepted);
+    }
+    if(m_settingsDlg->isHidden()) {
+        m_settingsDlg->showNormal();
+    } else {
+        m_settingsDlg->activateWindow();
     }
 }
 

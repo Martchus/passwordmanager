@@ -17,6 +17,7 @@ QT_FORWARD_DECLARE_CLASS(QCloseEvent)
 QT_FORWARD_DECLARE_CLASS(QTreeWidgetItem)
 QT_FORWARD_DECLARE_CLASS(QUndoStack)
 QT_FORWARD_DECLARE_CLASS(QUndoView)
+QT_FORWARD_DECLARE_CLASS(QSettings)
 
 namespace Io {
 DECLARE_ENUM_CLASS(EntryType, int);
@@ -29,6 +30,8 @@ class RecentMenuManager;
 
 namespace Dialogs {
 class AboutDialog;
+class SettingsDialog;
+class QtSettings;
 }
 
 namespace QtGui {
@@ -46,7 +49,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
     
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QSettings &settings, Dialogs::QtSettings *qtSettings = nullptr, QWidget *parent = nullptr);
     ~MainWindow();
 
 public slots:
@@ -59,6 +62,13 @@ public slots:
     bool saveFile();
     void exportFile();
     bool closeFile();
+    // show dialogs
+    void showOpenFileDialog();
+    void showSaveFileDialog();
+    void showSettingsDialog();
+    void showAboutDialog();
+    void showPassowrdGeneratorDialog();
+    void showUndoView();
 
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
@@ -66,12 +76,6 @@ protected:
     void timerEvent(QTimerEvent *event);
 
 private slots:
-    // showing dialogs
-    void showAboutDialog();
-    void showPassowrdGeneratorDialog();
-    void showOpenFileDialog();
-    void showSaveFileDialog();
-    void showUndoView();
     // file management
     bool showFile();
     // account/categories management
@@ -124,6 +128,9 @@ private:
     int m_clearClipboardTimer;
     MiscUtils::RecentMenuManager *m_recentMgr;
     Dialogs::AboutDialog *m_aboutDlg;
+    QSettings &m_settings;
+    Dialogs::QtSettings *m_qtSettings;
+    Dialogs::SettingsDialog *m_settingsDlg;
 };
 
 }

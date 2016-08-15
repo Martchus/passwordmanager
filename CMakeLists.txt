@@ -8,6 +8,7 @@ set(META_APP_CATEGORIES "Utility")
 set(META_APP_AUTHOR "Martchus")
 set(META_APP_URL "https://github.com/${META_APP_AUTHOR}/${META_PROJECT_NAME}")
 set(META_APP_DESCRIPTION "A simple password store using AES-256-CBC encryption via OpenSSL")
+set(META_GUI_OPTIONAL true)
 set(META_VERSION_MAJOR 2)
 set(META_VERSION_MINOR 1)
 set(META_VERSION_PATCH 1)
@@ -113,11 +114,13 @@ set(REQUIRED_ICONS
     go-next
     qtcreator
     document-export
+    password-generate
 )
 
 # find c++utilities
 find_package(c++utilities 4.0.0 REQUIRED)
 use_cpp_utilities()
+include(BasicConfig)
 
 # find qtutilities
 if(WIDGETS_GUI OR QUICK_GUI)
@@ -130,7 +133,6 @@ find_package(passwordfile 3.1.0 REQUIRED)
 use_password_file()
 
 # include modules to apply configuration
-include(BasicConfig)
 if(WIDGETS_GUI OR QUICK_GUI)
     include(QtGuiConfig)
     include(QtConfig)
