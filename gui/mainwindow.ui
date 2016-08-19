@@ -402,7 +402,8 @@
   </action>
   <action name="actionPasswordGenerator">
    <property name="icon">
-    <iconset theme="password-generate"/>
+    <iconset theme="password-generate">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>&amp;Password generator</string>
@@ -507,10 +508,11 @@
   </action>
   <action name="actionQtSettings">
    <property name="icon">
-    <iconset theme="qtcreator"/>
+    <iconset theme="qtcreator" resource="../../qtutilities/resources/qtutilsicons.qrc">
+     <normaloff>:/qtutilities/icons/hicolor/48x48/apps/qtcreator.svg</normaloff>:/qtutilities/icons/hicolor/48x48/apps/qtcreator.svg</iconset>
    </property>
    <property name="text">
-    <string>Qt settings</string>
+    <string>&amp;Qt settings</string>
    </property>
   </action>
  </widget>
@@ -523,6 +525,7 @@
   </customwidget>
  </customwidgets>
  <resources>
+  <include location="../../qtutilities/resources/qtutilsicons.qrc"/>
   <include location="../resources/icons.qrc"/>
  </resources>
  <connections/>

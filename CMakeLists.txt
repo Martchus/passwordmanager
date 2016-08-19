@@ -112,7 +112,6 @@ set(REQUIRED_ICONS
     edit-redo
     system-run
     go-next
-    qtcreator
     document-export
     password-generate
 )

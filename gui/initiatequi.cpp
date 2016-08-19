@@ -6,6 +6,7 @@
 
 #include <qtutilities/resources/qtconfigarguments.h>
 #include <qtutilities/resources/resources.h>
+#include <qtutilities/resources/importplugin.h>
 #include <qtutilities/settingsdialog/qtsettings.h>
 
 #include <QApplication>
