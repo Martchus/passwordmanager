@@ -30,7 +30,7 @@ int runWidgetsGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs,
     // load resources needed by classes of qtutilities
     QtUtilitiesResources::init();
     // apply settings specified via command line args
-    qtConfigArgs.applySettings();
+    qtConfigArgs.applySettings(qtSettings.hasCustomFont());
     LOAD_QT_TRANSLATIONS;
     // init widgets GUI
     MainWindow w(settings, &qtSettings);
