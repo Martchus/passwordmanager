@@ -3,12 +3,10 @@
 
 #include <passwordfile/io/passwordfile.h>
 
-#include <c++utilities/application/global.h>
-
 #if defined(PLATFORM_UNIX)
-#include <termios.h>
+# include <termios.h>
 #elif defined(PLATFORM_WINDOWS)
-#include <windows.h>
+# include <windows.h>
 #endif
 
 #include <string>
@@ -17,9 +15,7 @@
 #include <ostream>
 
 namespace ApplicationUtilities {
-
 typedef std::vector<std::string> StringVector;
-
 }
 
 namespace Io {
