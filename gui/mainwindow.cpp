@@ -1115,14 +1115,14 @@ void MainWindow::showTreeViewContextMenu()
         QModelIndex selected = m_entryFilterModel->mapToSource(selectedIndexes.at(0));
         Entry *entry = m_entryModel->entry(selected);
         if(entry->type() == EntryType::Node) {
-            contextMenu.addAction(QIcon::fromTheme(QStringLiteral("list-add")), tr("Add account"), this, SLOT(addAccount()));
-            contextMenu.addAction(QIcon::fromTheme(QStringLiteral("list-add")), tr("Add category"), this, SLOT(addCategory()));
+            contextMenu.addAction(QIcon::fromTheme(QStringLiteral("list-add")), tr("Add account"), this, &MainWindow::addAccount);
+            contextMenu.addAction(QIcon::fromTheme(QStringLiteral("list-add")), tr("Add category"), this, &MainWindow::addCategory);
         }
-        contextMenu.addAction(QIcon::fromTheme(QStringLiteral("list-remove")), tr("Remove entry"), this, SLOT(removeEntry()));
+        contextMenu.addAction(QIcon::fromTheme(QStringLiteral("list-remove")), tr("Remove entry"), this, &MainWindow::removeEntry);
         if(entry->type() == EntryType::Node) {
-            NodeEntry *nodeEntry = static_cast<NodeEntry *>(entry);
+            auto *nodeEntry = static_cast<NodeEntry *>(entry);
             contextMenu.addSeparator();
-            QAction *action = new QAction(&contextMenu);
+            auto *action = new QAction(&contextMenu);
             action->setCheckable(true);
             action->setText(tr("Expanded by default"));
             action->setChecked(nodeEntry->isExpandedByDefault());
@@ -1181,25 +1181,25 @@ void MainWindow::showTableViewContextMenu()
     // create context menu
     QMenu contextMenu(this);
     // -> insertion and removal
-    contextMenu.addAction(QIcon::fromTheme(QStringLiteral("list-add")), tr("Insert field"), this, SLOT(insertRow()));
-    contextMenu.addAction(QIcon::fromTheme(QStringLiteral("list-remove")), tr("Remove field(s)", 0, multipleRows), this, SLOT(removeRows()));
+    contextMenu.addAction(QIcon::fromTheme(QStringLiteral("list-add")), tr("Insert field"), this, &MainWindow::insertRow);
+    contextMenu.addAction(QIcon::fromTheme(QStringLiteral("list-remove")), tr("Remove field(s)", 0, multipleRows), this, &MainWindow::removeRows);
     // -> show the "Mark as ..." action only when all selected indexes are of the same type
     if(hasFirstFieldType && allOfSameType) {
         switch(firstType) {
         case FieldType::Normal:
-            contextMenu.addAction(QIcon::fromTheme(QStringLiteral("flag-black")), tr("Mark as password field"), this, SLOT(markAsPasswordField()));
+            contextMenu.addAction(QIcon::fromTheme(QStringLiteral("flag-black")), tr("Mark as password field"), this, &MainWindow::markAsPasswordField);
             break;
         case FieldType::Password:
-            contextMenu.addAction(QIcon::fromTheme(QStringLiteral("flag-blue")), tr("Mark as normal field"), this, SLOT(markAsNormalField()));
+            contextMenu.addAction(QIcon::fromTheme(QStringLiteral("flag-blue")), tr("Mark as normal field"), this, &MainWindow::markAsNormalField);
             break;
         }
     }
     // -> insert copy & paste
     contextMenu.addSeparator();
-    contextMenu.addAction(QIcon::fromTheme(QStringLiteral("edit-copy")), tr("Copy"), this, SLOT(copyFields()));
-    contextMenu.addAction(QIcon::fromTheme(QStringLiteral("edit-copy")), tr("Copy for 5 seconds"), this, SLOT(copyFieldsForXMilliSeconds()));
+    contextMenu.addAction(QIcon::fromTheme(QStringLiteral("edit-copy")), tr("Copy"), this, &MainWindow::copyFields);
+    contextMenu.addAction(QIcon::fromTheme(QStringLiteral("edit-copy")), tr("Copy for 5 seconds"), this, &MainWindow::copyFieldsForXMilliSeconds);
     if(QApplication::clipboard()->mimeData()->hasText()) {
-        contextMenu.addAction(QIcon::fromTheme(QStringLiteral("edit-paste")), tr("Paste"), this, SLOT(insertFieldsFromClipboard()));
+        contextMenu.addAction(QIcon::fromTheme(QStringLiteral("edit-paste")), tr("Paste"), this, &MainWindow::insertFieldsFromClipboard);
     }
     // -> insert open URL
     if(multipleRows == 1 && !url.isEmpty()) {
