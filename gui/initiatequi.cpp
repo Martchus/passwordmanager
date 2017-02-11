@@ -27,8 +27,6 @@ int runWidgetsGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs,
     QSettings settings(QSettings::IniFormat, QSettings::UserScope,  QApplication::organizationName(), QApplication::applicationName());
     qtSettings.restore(settings);
     qtSettings.apply();
-    // load resources needed by classes of qtutilities
-    QtUtilitiesResources::init();
     // apply settings specified via command line args
     qtConfigArgs.applySettings(qtSettings.hasCustomFont());
     LOAD_QT_TRANSLATIONS;
@@ -40,8 +38,6 @@ int runWidgetsGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs,
     }
     // start event loop
     int res = a.exec();
-    // cleanup resources
-    QtUtilitiesResources::cleanup();
     // save Qt settings
     qtSettings.save(settings);
     return res;

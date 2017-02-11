@@ -17,6 +17,7 @@
 #if defined(GUI_QTWIDGETS) || defined(GUI_QTQUICK)
 # include <qtutilities/resources/qtconfigarguments.h>
 # include <QString>
+ENABLE_QT_RESOURCES_OF_STATIC_DEPENDENCIES
 #else
 # include <c++utilities/application/fakeqtconfigarguments.h>
 #endif

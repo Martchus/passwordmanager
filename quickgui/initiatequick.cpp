@@ -41,8 +41,6 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs)
 #else
     QGuiApplication a(argc, argv);
 #endif
-    // load resources needed by classes of qtutilities
-    QtUtilitiesResources::init();
     // apply settings specified via command line args
     qtConfigArgs.applySettings();
     LOAD_QT_TRANSLATIONS;
@@ -55,8 +53,6 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs)
     QQmlApplicationEngine engine(QUrl("qrc:/qml/main.qml"));
     // start event loop
     int res = a.exec();
-    // cleanup resources
-    QtUtilitiesResources::cleanup();
     return res;
 }
 
