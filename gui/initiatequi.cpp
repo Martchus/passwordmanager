@@ -11,6 +11,7 @@
 
 #include <QApplication>
 #include <QSettings>
+#include <QFile>
 
 using namespace ApplicationUtilities;
 using namespace Dialogs;
@@ -24,7 +25,11 @@ int runWidgetsGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs,
     QApplication a(argc, argv);
     // restore Qt settings
     QtSettings qtSettings;
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope,  QApplication::organizationName(), QApplication::applicationName());
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, QStringLiteral(PROJECT_NAME));
+    // move old config to new location
+    const QString oldConfig = QSettings(QSettings::IniFormat, QSettings::UserScope, QApplication::organizationName(), QApplication::applicationName()).fileName();
+    QFile::rename(oldConfig, settings.fileName()) || QFile::remove(oldConfig);
+    settings.sync();
     qtSettings.restore(settings);
     qtSettings.apply();
     // apply settings specified via command line args
