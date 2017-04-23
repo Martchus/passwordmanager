@@ -93,13 +93,13 @@ set(REQUIRED_ICONS
     edit-copy
     document-open-recent
     list-remove
+    dialog-cancel
     dialog-ok
+    dialog-ok-apply
     flag-black
     dialog-password
-    dialog-cancel
     edit-clear
     list-add
-    dialog-ok-apply
     help-about
     application-exit
     flag-blue
@@ -114,6 +114,9 @@ set(REQUIRED_ICONS
     go-next
     document-export
     password-generate
+    preferences-desktop-icons
+    preferences-desktop-locale
+    system-search
 )
 
 # find c++utilities
