@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
 
 # meta data
 set(META_PROJECT_NAME passwordmanager)
+set(META_PROJECT_VARNAME password_manager)
 set(META_PROJECT_TYPE application)
 set(META_APP_NAME "Password Manager")
 set(META_APP_CATEGORIES "Utility;Security;")
@@ -126,7 +127,7 @@ include(BasicConfig)
 
 # find qtutilities
 if(WIDGETS_GUI OR QUICK_GUI)
-    find_package(qtutilities 5.0.0 REQUIRED)
+    find_package(qtutilities 5.7.0 REQUIRED)
     use_qt_utilities()
 endif()
 

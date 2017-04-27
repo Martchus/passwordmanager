@@ -1,7 +1,7 @@
 #ifndef ENTRYMODEL_H
 #define ENTRYMODEL_H
 
-#ifdef MODEL_UNDO_SUPPORT
+#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
 # include "gui/stacksupport.h"
 #endif
 
@@ -27,14 +27,14 @@ enum EntryModelRoles
 };
 
 class EntryModel : public QAbstractItemModel
-#ifdef MODEL_UNDO_SUPPORT
+#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
         , public StackSupport
 #endif
 {
     Q_OBJECT
 public:
     explicit EntryModel(QObject *parent = nullptr);
-#ifdef MODEL_UNDO_SUPPORT
+#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
     explicit EntryModel(QUndoStack *undoStack, QObject *parent = nullptr);
 #endif
 
@@ -84,12 +84,13 @@ inline Io::NodeEntry *EntryModel::rootEntry()
 }
 
 /*!
- * \brief Sets the root entry. Causes a model reset. The undo stack will be cleard if MODEL_UNDO_SUPPORT is defined.
+ * \brief Sets the root entry. Causes a model reset. The undo stack for the Qt Widgets GUI will be cleared if building
+ *        with Qt Widgets GUI support.
  */
 inline void EntryModel::setRootEntry(Io::NodeEntry *entry)
 {
     if(m_rootEntry != entry) {
-#ifdef MODEL_UNDO_SUPPORT
+#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
         clearUndoStack();
 #endif
         beginResetModel();

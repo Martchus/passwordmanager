@@ -1,7 +1,7 @@
 #ifndef FIELDMODEL_H
 #define FIELDMODEL_H
 
-#ifdef MODEL_UNDO_SUPPORT
+#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
 # include "gui/stacksupport.h"
 #endif
 
@@ -36,14 +36,14 @@ enum PasswordVisibility
 };
 
 class FieldModel : public QAbstractTableModel
-#ifdef MODEL_UNDO_SUPPORT
+#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
         , public StackSupport
 #endif
 {
     Q_OBJECT
 public:    
     explicit FieldModel(QObject *parent = nullptr);
-#ifdef MODEL_UNDO_SUPPORT
+#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
     explicit FieldModel(QUndoStack *undoStack, QObject *parent = nullptr);
 #endif
 

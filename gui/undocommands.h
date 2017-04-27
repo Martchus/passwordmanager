@@ -8,9 +8,7 @@
 #include <QList>
 #include <QVariant>
 
-QT_BEGIN_NAMESPACE
-class QModelIndex;
-QT_END_NAMESPACE
+QT_FORWARD_DECLARE_CLASS(QModelIndex)
 
 namespace Io {
 class Entry;

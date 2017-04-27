@@ -1,6 +1,6 @@
 #include "./entrymodel.h"
 
-#ifdef MODEL_UNDO_SUPPORT
+#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
 # include "./gui/undocommands.h"
 #endif
 
@@ -24,7 +24,7 @@ namespace QtGui {
  * \class EntryModel
  * \brief The EntryModel class provides a model interface for a hierarchy of Entry instances.
  *
- * If MODEL_UNDO_SUPPORT the model supports Qt's undo framework.
+ * When building the Qt Widgets GUI, the model also supports Qt Widgets' undo framework.
  * \sa http://qt-project.org/doc/qt-5/qabstractitemmodel.html
  * \sa http://qt-project.org/doc/qt-5/qundo.html
  */
@@ -38,11 +38,11 @@ EntryModel::EntryModel(QObject *parent) :
     m_insertType(EntryType::Node)
 {}
 
-#ifdef MODEL_UNDO_SUPPORT
+#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
 /*!
  * \brief Constructs a new entry model with the specified \a undoStack.
  *
- * This constructor is only available when MODEL_UNDO_SUPPORT is defined.
+ * This constructor is only available when PASSWORD_MANAGER_GUI_QTWIDGETS is defined.
  */
 EntryModel::EntryModel(QUndoStack *undoStack, QObject *parent) :
     QAbstractItemModel(parent),
@@ -258,7 +258,7 @@ QMap<int, QVariant> EntryModel::itemData(const QModelIndex &index) const
 
 bool EntryModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-#ifdef MODEL_UNDO_SUPPORT
+#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
     if(undoStack()) {
         return push(new EntryModelSetValueCommand(this, index, value, role));
     }
@@ -383,7 +383,7 @@ int EntryModel::columnCount(const QModelIndex &) const
 
 bool EntryModel::insertRows(int row, int count, const QModelIndex &parent)
 {
-#ifdef MODEL_UNDO_SUPPORT
+#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
     if(undoStack()) {
         return push(new EntryModelInsertRowsCommand(this, row, count, parent));
     }
@@ -416,7 +416,7 @@ bool EntryModel::insertRows(int row, int count, const QModelIndex &parent)
 
 bool EntryModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-#ifdef MODEL_UNDO_SUPPORT
+#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
     if(undoStack()) {
         return push(new EntryModelRemoveRowsCommand(this, row, count, parent));
     }
@@ -436,7 +436,7 @@ bool EntryModel::removeRows(int row, int count, const QModelIndex &parent)
 
 bool EntryModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int count, const QModelIndex &destinationParent, int destinationChild)
 {
-#ifdef MODEL_UNDO_SUPPORT
+#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
     if(undoStack()) {
         return push(new EntryModelMoveRowsCommand(this, sourceParent, sourceRow, count, destinationParent, destinationChild));
     }

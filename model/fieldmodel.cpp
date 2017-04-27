@@ -1,6 +1,6 @@
 #include "./fieldmodel.h"
 
-#ifdef MODEL_UNDO_SUPPORT
+#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
 # include "./gui/undocommands.h"
 #endif
 
@@ -18,7 +18,7 @@ namespace QtGui {
  * \class FieldModel
  * \brief The FieldModel class provides a model interface for the fields of an AccountEntry.
  *
- * If MODEL_UNDO_SUPPORT the model supports Qt's undo framework.
+ * When building the Qt Widgets GUI, the model also supports Qt Widgets' undo framework.
  * \sa http://qt-project.org/doc/qt-5/qabstracttablemodel.html
  * \sa http://qt-project.org/doc/qt-5/qundo.html
  */
@@ -33,11 +33,11 @@ FieldModel::FieldModel(QObject *parent) :
     m_passwordVisibility(PasswordVisibility::OnlyWhenEditing)
 {}
 
-#ifdef MODEL_UNDO_SUPPORT
+#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
 /*!
  * \brief Constructs a new field model with the specified \a undoStack.
  *
- * This constructor is only available when MODEL_UNDO_SUPPORT is defined.
+ * This constructor is only available when PASSWORD_MANAGER_GUI_QTWIDGETS is defined.
  */
 FieldModel::FieldModel(QUndoStack *undoStack, QObject *parent) :
     QAbstractTableModel(parent),
@@ -129,7 +129,7 @@ QMap<int, QVariant> FieldModel::itemData(const QModelIndex &index) const
 
 bool FieldModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-#if MODEL_UNDO_SUPPORT
+#if PASSWORD_MANAGER_GUI_QTWIDGETS
     if(undoStack()) {
         return push(new FieldModelSetValueCommand(this, index, value, role));
     }
@@ -262,7 +262,7 @@ int FieldModel::columnCount(const QModelIndex &parent) const
 
 bool FieldModel::insertRows(int row, int count, const QModelIndex &parent)
 {
-#ifdef MODEL_UNDO_SUPPORT
+#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
     if(undoStack()) {
         return push(new FieldModelInsertRowsCommand(this, row, count));
     }
@@ -278,7 +278,7 @@ bool FieldModel::insertRows(int row, int count, const QModelIndex &parent)
 
 bool FieldModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-#ifdef MODEL_UNDO_SUPPORT
+#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
     if(undoStack()) {
         return push(new FieldModelRemoveRowsCommand(this, row, count));
     }
