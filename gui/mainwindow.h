@@ -44,10 +44,9 @@ namespace Ui {
 class MainWindow;
 }
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
-    
+
 public:
     explicit MainWindow(QSettings &settings, Dialogs::QtSettings *qtSettings = nullptr, QWidget *parent = nullptr);
     ~MainWindow();
@@ -106,7 +105,7 @@ private slots:
     void setSomethingChanged();
     void setSomethingChanged(bool somethingChanged);
 
-private:   
+private:
     // showing conditional messages/prompts
     bool askForCreatingFile();
     bool showNoFileOpened();
@@ -132,7 +131,6 @@ private:
     Dialogs::QtSettings *m_qtSettings;
     Dialogs::SettingsDialog *m_settingsDlg;
 };
-
 }
 
 #endif // MAINWINDOW_H

@@ -2,7 +2,7 @@
 #define FIELDMODEL_H
 
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
-# include "gui/stacksupport.h"
+#include "gui/stacksupport.h"
 #endif
 
 #include <passwordfile/io/entry.h>
@@ -20,16 +20,14 @@ namespace QtGui {
 /*!
  * \brief The FieldModelRoles enum defines custom roles for the FieldModel class.
  */
-enum FieldModelRoles
-{
+enum FieldModelRoles {
     FieldTypeRole = Qt::UserRole + 1 /**< the field type */
 };
 
 /*!
  * \brief The PasswordVisibility enum defines when passwords will be visible.
  */
-enum PasswordVisibility
-{
+enum PasswordVisibility {
     Always, /**< passwords are always visible */
     OnlyWhenEditing, /**< passwords are only visible when editing */
     Never /**< passwords are never visible */
@@ -37,11 +35,12 @@ enum PasswordVisibility
 
 class FieldModel : public QAbstractTableModel
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
-        , public StackSupport
+                   ,
+                   public StackSupport
 #endif
 {
     Q_OBJECT
-public:    
+public:
     explicit FieldModel(QObject *parent = nullptr);
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
     explicit FieldModel(QUndoStack *undoStack, QObject *parent = nullptr);
@@ -128,11 +127,10 @@ inline PasswordVisibility FieldModel::passwordVisibility() const
 inline void FieldModel::setPasswordVisibility(PasswordVisibility passwordVisibility)
 {
     m_passwordVisibility = passwordVisibility;
-    if(m_fields) {
+    if (m_fields) {
         emit dataChanged(index(0, 1), index(m_fields->size() - 1, 1), QVector<int>() << Qt::DisplayRole << Qt::EditRole);
     }
 }
-
 }
 
 #endif // FIELDMODEL_H

@@ -12,7 +12,6 @@ class QtConfigArguments;
 namespace QtGui {
 
 int runWidgetsGui(int argc, char *argv[], const ApplicationUtilities::QtConfigArguments &qtConfigArgs, const QString &file);
-
 }
 
 #endif // INITIATE_H

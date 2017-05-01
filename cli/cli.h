@@ -4,15 +4,15 @@
 #include <passwordfile/io/passwordfile.h>
 
 #if defined(PLATFORM_UNIX)
-# include <termios.h>
+#include <termios.h>
 #elif defined(PLATFORM_WINDOWS)
-# include <windows.h>
+#include <windows.h>
 #endif
 
-#include <string>
-#include <vector>
 #include <istream>
 #include <ostream>
+#include <string>
+#include <vector>
 
 namespace ApplicationUtilities {
 typedef std::vector<std::string> StringVector;
@@ -25,8 +25,7 @@ enum class EntryType : int;
 
 namespace Cli {
 
-class InputMuter
-{
+class InputMuter {
 public:
     InputMuter();
     ~InputMuter();
@@ -42,8 +41,7 @@ private:
 
 void clearConsole();
 
-class InteractiveCli
-{
+class InteractiveCli {
 public:
     InteractiveCli();
     void run(const std::string &file = std::string());
@@ -80,7 +78,6 @@ private:
     bool m_modified;
     bool m_quit;
 };
-
 }
 
 #endif // CLI_CLI_H

@@ -13,14 +13,13 @@ namespace Ui {
 class PasswordGeneratorDialog;
 }
 
-class PasswordGeneratorDialog : public QDialog
-{
+class PasswordGeneratorDialog : public QDialog {
     Q_OBJECT
-    
+
 public:
     explicit PasswordGeneratorDialog(QWidget *parent = 0);
     ~PasswordGeneratorDialog();
-    
+
 private Q_SLOTS:
     void generateNewPassword();
     void handleCheckedCategoriesChanged();
@@ -32,7 +31,6 @@ private:
     std::vector<char> m_charset;
     Util::OpenSslRandomDevice m_random;
 };
-
 }
 
 #endif // PASSWORDGENERATORDIALOG_H

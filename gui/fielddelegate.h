@@ -5,8 +5,7 @@
 
 namespace QtGui {
 
-class FieldDelegate : public QStyledItemDelegate
-{
+class FieldDelegate : public QStyledItemDelegate {
 public:
     FieldDelegate(QObject *parent = nullptr);
 

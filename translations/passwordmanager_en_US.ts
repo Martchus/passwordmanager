@@ -265,92 +265,92 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="318"/>
+        <location filename="../gui/mainwindow.cpp" line="319"/>
         <source>Qt settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="336"/>
+        <location filename="../gui/mainwindow.cpp" line="337"/>
         <source>A simple password store using AES-256-CBC encryption via OpenSSL.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="358"/>
+        <location filename="../gui/mainwindow.cpp" line="361"/>
         <source>Select a password list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="358"/>
+        <location filename="../gui/mainwindow.cpp" line="361"/>
         <location filename="../gui/mainwindow.cpp" line="688"/>
         <source>Password Manager files (*.pwmgr);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="385"/>
+        <location filename="../gui/mainwindow.cpp" line="388"/>
         <source>Undo stack</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="413"/>
+        <location filename="../gui/mainwindow.cpp" line="417"/>
         <source>An IO error occured when opening the specified file &quot;%1&quot;.
 
 (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="420"/>
+        <location filename="../gui/mainwindow.cpp" line="425"/>
         <source>The file you want to load seems to be very big. Do you really want to open it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="428"/>
+        <location filename="../gui/mainwindow.cpp" line="434"/>
         <source>Opening file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="429"/>
+        <location filename="../gui/mainwindow.cpp" line="435"/>
         <source>Enter the password to open the file &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="434"/>
-        <location filename="../gui/mainwindow.cpp" line="435"/>
+        <location filename="../gui/mainwindow.cpp" line="440"/>
+        <location filename="../gui/mainwindow.cpp" line="441"/>
         <source>A password is needed to open the file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="454"/>
+        <location filename="../gui/mainwindow.cpp" line="459"/>
         <source>The file couldn&apos;t be decrypted.
 OpenSSL error queue: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="459"/>
+        <location filename="../gui/mainwindow.cpp" line="464"/>
         <source>Unable to parse the file. %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="519"/>
+        <location filename="../gui/mainwindow.cpp" line="523"/>
         <source>The file &lt;i&gt;%1&lt;/i&gt; couldn&apos;t be created.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="536"/>
+        <location filename="../gui/mainwindow.cpp" line="540"/>
         <source>A new password list has been created.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="539"/>
+        <location filename="../gui/mainwindow.cpp" line="543"/>
         <source>The password list has been load.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="670"/>
+        <location filename="../gui/mainwindow.cpp" line="674"/>
         <source>Exactly one fields needs to be selected (top-left corner for insertion).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="686"/>
+        <location filename="../gui/mainwindow.cpp" line="688"/>
         <source>Select where you want to save the password list</source>
         <translation type="unfinished"></translation>
     </message>
@@ -380,7 +380,7 @@ OpenSSL error queue: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="763"/>
+        <location filename="../gui/mainwindow.cpp" line="762"/>
         <source>The password list has been closed.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -416,124 +416,124 @@ OpenSSL error queue: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="843"/>
+        <location filename="../gui/mainwindow.cpp" line="844"/>
         <source>Plain text document (*.txt);;All files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="849"/>
+        <location filename="../gui/mainwindow.cpp" line="850"/>
         <source>The password list couldn&apos;t be exported. %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="852"/>
+        <location filename="../gui/mainwindow.cpp" line="853"/>
         <source>The password list has been exported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="868"/>
+        <location filename="../gui/mainwindow.cpp" line="869"/>
         <source>The currently opened file hasn&apos;t been saved yet.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="908"/>
-        <location filename="../gui/mainwindow.cpp" line="1118"/>
+        <location filename="../gui/mainwindow.cpp" line="909"/>
+        <location filename="../gui/mainwindow.cpp" line="1123"/>
         <source>Add account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="908"/>
-        <location filename="../gui/mainwindow.cpp" line="1119"/>
+        <location filename="../gui/mainwindow.cpp" line="909"/>
+        <location filename="../gui/mainwindow.cpp" line="1124"/>
         <source>Add category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="908"/>
+        <location filename="../gui/mainwindow.cpp" line="910"/>
         <source>Enter the entry name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="908"/>
+        <location filename="../gui/mainwindow.cpp" line="910"/>
         <source>new entry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="917"/>
+        <location filename="../gui/mainwindow.cpp" line="919"/>
         <source>Unable to create new entry.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="920"/>
+        <location filename="../gui/mainwindow.cpp" line="922"/>
         <source>You didn&apos;t enter text.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="926"/>
+        <location filename="../gui/mainwindow.cpp" line="928"/>
         <source>No node element selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="941"/>
+        <location filename="../gui/mainwindow.cpp" line="943"/>
         <source>Unable to remove the entry.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="944"/>
+        <location filename="../gui/mainwindow.cpp" line="946"/>
         <source>No entry selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="996"/>
+        <location filename="../gui/mainwindow.cpp" line="999"/>
         <source>A field has to be selected since new fields are always inserted before the currently selected field.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1020"/>
+        <location filename="../gui/mainwindow.cpp" line="1023"/>
         <source>No fields have been removed since there are currently no fields selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1055"/>
+        <location filename="../gui/mainwindow.cpp" line="1058"/>
         <source>No fields have been changed since there are currently no fields selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1085"/>
+        <location filename="../gui/mainwindow.cpp" line="1088"/>
         <source>Changing password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1092"/>
+        <location filename="../gui/mainwindow.cpp" line="1096"/>
         <source>You didn&apos;t enter a password. &lt;strong&gt;No encryption&lt;/strong&gt; will be used when saving the file next time.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1096"/>
+        <location filename="../gui/mainwindow.cpp" line="1100"/>
         <source>The new password will be used next time you save the file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1100"/>
+        <location filename="../gui/mainwindow.cpp" line="1105"/>
         <source>You aborted. The old password will still be used when saving the file next time.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1121"/>
+        <location filename="../gui/mainwindow.cpp" line="1126"/>
         <source>Remove entry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1127"/>
+        <location filename="../gui/mainwindow.cpp" line="1132"/>
         <source>Expanded by default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1184"/>
+        <location filename="../gui/mainwindow.cpp" line="1188"/>
         <source>Insert field</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../gui/mainwindow.cpp" line="1185"/>
+        <location filename="../gui/mainwindow.cpp" line="1189"/>
         <source>Remove field(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -541,37 +541,37 @@ OpenSSL error queue: %1</source>
         </translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1190"/>
+        <location filename="../gui/mainwindow.cpp" line="1195"/>
         <source>Mark as password field</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1193"/>
+        <location filename="../gui/mainwindow.cpp" line="1198"/>
         <source>Mark as normal field</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1199"/>
+        <location filename="../gui/mainwindow.cpp" line="1204"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1200"/>
+        <location filename="../gui/mainwindow.cpp" line="1205"/>
         <source>Copy for 5 seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1202"/>
+        <location filename="../gui/mainwindow.cpp" line="1207"/>
         <source>Paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1206"/>
+        <location filename="../gui/mainwindow.cpp" line="1211"/>
         <source>Open URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1229"/>
+        <location filename="../gui/mainwindow.cpp" line="1234"/>
         <source>The selection is empty.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -634,18 +634,18 @@ OpenSSL error queue: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/passwordgeneratordialog.cpp" line="133"/>
+        <location filename="../gui/passwordgeneratordialog.cpp" line="126"/>
         <source>Failed to generate password.
 OpenSSL error: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/passwordgeneratordialog.cpp" line="136"/>
+        <location filename="../gui/passwordgeneratordialog.cpp" line="129"/>
         <source>You have to select at least one checkbox.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/passwordgeneratordialog.cpp" line="139"/>
+        <location filename="../gui/passwordgeneratordialog.cpp" line="132"/>
         <source>The length has to be at least one.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -714,37 +714,37 @@ OpenSSL error: %1</source>
 <context>
     <name>undocommands</name>
     <message>
-        <location filename="../gui/undocommands.cpp" line="84"/>
+        <location filename="../gui/undocommands.cpp" line="85"/>
         <source>setting field name to »%1«</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/undocommands.cpp" line="86"/>
+        <location filename="../gui/undocommands.cpp" line="87"/>
         <source>setting field name »%1« to »%2«</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/undocommands.cpp" line="91"/>
+        <location filename="../gui/undocommands.cpp" line="92"/>
         <source>setting value of empty field</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/undocommands.cpp" line="93"/>
+        <location filename="../gui/undocommands.cpp" line="94"/>
         <source>setting value of »%1« field</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/undocommands.cpp" line="99"/>
+        <location filename="../gui/undocommands.cpp" line="100"/>
         <source>setting type of »%1« field</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/undocommands.cpp" line="102"/>
+        <location filename="../gui/undocommands.cpp" line="103"/>
         <source>setting field property in row »%1«</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../gui/undocommands.cpp" line="134"/>
+        <location filename="../gui/undocommands.cpp" line="135"/>
         <source>insertion of %1 row(s) before row %2</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -752,7 +752,7 @@ OpenSSL error: %1</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../gui/undocommands.cpp" line="165"/>
+        <location filename="../gui/undocommands.cpp" line="166"/>
         <source>removal of row %1</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -760,7 +760,7 @@ OpenSSL error: %1</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../gui/undocommands.cpp" line="167"/>
+        <location filename="../gui/undocommands.cpp" line="168"/>
         <source>removal of the rows %1 to %2</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -768,27 +768,27 @@ OpenSSL error: %1</source>
         </translation>
     </message>
     <message>
-        <location filename="../gui/undocommands.cpp" line="247"/>
+        <location filename="../gui/undocommands.cpp" line="248"/>
         <source>setting entry name to »%1«</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/undocommands.cpp" line="249"/>
+        <location filename="../gui/undocommands.cpp" line="251"/>
         <source>setting entry name from »%1« to »%2«</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/undocommands.cpp" line="255"/>
+        <location filename="../gui/undocommands.cpp" line="257"/>
         <source>setting property of an entry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/undocommands.cpp" line="257"/>
+        <location filename="../gui/undocommands.cpp" line="259"/>
         <source>setting property of entry »%1«</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../gui/undocommands.cpp" line="353"/>
+        <location filename="../gui/undocommands.cpp" line="355"/>
         <source>insertion of %1 entry/entries</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -796,7 +796,7 @@ OpenSSL error: %1</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../gui/undocommands.cpp" line="385"/>
+        <location filename="../gui/undocommands.cpp" line="387"/>
         <source>removal of %1 entry/entries</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -804,7 +804,7 @@ OpenSSL error: %1</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../gui/undocommands.cpp" line="415"/>
+        <location filename="../gui/undocommands.cpp" line="418"/>
         <source>move of %1 entry/entries</source>
         <translation type="unfinished">
             <numerusform></numerusform>

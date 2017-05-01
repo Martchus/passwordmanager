@@ -10,8 +10,8 @@ namespace QtGui {
 /*!
  * \brief Constructs a new stack support with the specified \a undoStack.
  */
-StackSupport::StackSupport(QUndoStack *undoStack) :
-    m_undoStack(undoStack)
-{}
-
+StackSupport::StackSupport(QUndoStack *undoStack)
+    : m_undoStack(undoStack)
+{
+}
 }

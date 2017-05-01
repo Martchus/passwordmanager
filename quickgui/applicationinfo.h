@@ -8,8 +8,7 @@
 
 namespace QtGui {
 
-class ApplicationInfo : public QObject
-{
+class ApplicationInfo : public QObject {
     Q_OBJECT
     Q_PROPERTY(int applicationWidth READ applicationWidth WRITE setApplicationWidth NOTIFY applicationWidthChanged)
     Q_PROPERTY(bool isMobile READ isMobile CONSTANT)
@@ -114,7 +113,7 @@ inline const QString &ApplicationInfo::currentFile() const
 
 inline void ApplicationInfo::setCurrentFile(const QString &currentFile)
 {
-    if(m_currentFile != currentFile) {
+    if (m_currentFile != currentFile) {
         m_currentFile = currentFile;
         emit currentFileChanged();
     }
@@ -132,7 +131,7 @@ inline Io::AccountEntry *ApplicationInfo::currentAccountEntry()
 
 inline QString ApplicationInfo::currentAccountName() const
 {
-    if(m_fieldModel->accountEntry()) {
+    if (m_fieldModel->accountEntry()) {
         return QString::fromStdString(m_fieldModel->accountEntry()->label());
     }
     return QString();
@@ -172,7 +171,6 @@ inline qreal ApplicationInfo::sizeWithRatio(const qreal height)
 {
     return ratio() * height;
 }
-
 }
 
 #endif // APPLICATIONINFO_H

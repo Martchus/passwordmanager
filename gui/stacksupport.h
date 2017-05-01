@@ -9,9 +9,9 @@ namespace QtGui {
 
 class StackAbsorper;
 
-class StackSupport
-{
+class StackSupport {
     friend class StackAbsorper;
+
 public:
     StackSupport(QUndoStack *undoStack = nullptr);
 
@@ -37,8 +37,8 @@ inline QUndoStack *StackSupport::undoStack()
  */
 inline bool StackSupport::push(CustomUndoCommand *command)
 {
-    if(m_undoStack) {
-        if(command->isNoop()) {
+    if (m_undoStack) {
+        if (command->isNoop()) {
             return true; // doing nothing can never fail
         } else {
             m_undoStack->push(command);
@@ -53,7 +53,7 @@ inline bool StackSupport::push(CustomUndoCommand *command)
  */
 inline void StackSupport::clearUndoStack()
 {
-    if(m_undoStack) {
+    if (m_undoStack) {
         m_undoStack->clear();
     }
 }
@@ -62,12 +62,12 @@ inline void StackSupport::clearUndoStack()
  * \brief The StackAbsorper class is used by the CustomUndoCommand class to prevent infinite recursion when pushing
  *        a new command to the stack.
  */
-class StackAbsorper
-{
+class StackAbsorper {
 public:
     StackAbsorper(StackSupport *supported);
     ~StackAbsorper();
     QUndoStack *stack();
+
 private:
     StackSupport *m_supported;
     QUndoStack *m_stack;
@@ -76,9 +76,9 @@ private:
 /*!
  * \brief Detaches the undo stack from the specified stack support temporary.
  */
-inline StackAbsorper::StackAbsorper(StackSupport *supported) :
-    m_supported(supported),
-    m_stack(supported->m_undoStack)
+inline StackAbsorper::StackAbsorper(StackSupport *supported)
+    : m_supported(supported)
+    , m_stack(supported->m_undoStack)
 {
     m_supported->m_undoStack = nullptr;
 }
@@ -98,7 +98,6 @@ inline QUndoStack *StackAbsorper::stack()
 {
     return m_stack;
 }
-
 }
 
 #endif // QTGUI_STACKSUPPORT_H

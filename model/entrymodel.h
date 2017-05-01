@@ -2,7 +2,7 @@
 #define ENTRYMODEL_H
 
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
-# include "gui/stacksupport.h"
+#include "gui/stacksupport.h"
 #endif
 
 #include <c++utilities/application/global.h>
@@ -20,15 +20,15 @@ namespace QtGui {
 /*!
  * \brief The EntryModelRoles enum defines custom roles for the EntryModel class.
  */
-enum EntryModelRoles
-{
+enum EntryModelRoles {
     SerializedRole = Qt::UserRole + 1, /**< the entry (including descendants) in serialized from (QByteArray) */
     DefaultExpandedRole = Qt::UserRole + 2 /**< whether the entry should be expanded by default */
 };
 
 class EntryModel : public QAbstractItemModel
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
-        , public StackSupport
+                   ,
+                   public StackSupport
 #endif
 {
     Q_OBJECT
@@ -89,7 +89,7 @@ inline Io::NodeEntry *EntryModel::rootEntry()
  */
 inline void EntryModel::setRootEntry(Io::NodeEntry *entry)
 {
-    if(m_rootEntry != entry) {
+    if (m_rootEntry != entry) {
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
         clearUndoStack();
 #endif
@@ -122,7 +122,6 @@ inline void EntryModel::setInsertType(Io::EntryType type)
 {
     m_insertType = type;
 }
-
 }
 
 #endif // ENTRYMODEL_H

@@ -11,15 +11,15 @@
 #include <qtutilities/resources/resources.h>
 
 #if defined(GUI_QTWIDGETS)
-# include <QApplication>
+#include <QApplication>
 #else
-# include <QGuiApplication>
-#endif
 #include <QGuiApplication>
+#endif
+#include <QDebug>
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
 #include <QTextCodec>
 #include <QtQml>
-#include <QQmlApplicationEngine>
-#include <QDebug>
 
 using namespace ApplicationUtilities;
 
@@ -55,5 +55,4 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs)
     int res = a.exec();
     return res;
 }
-
 }

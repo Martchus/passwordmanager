@@ -4,14 +4,14 @@
 
 #include "resources/config.h"
 
+#include <qtutilities/resources/importplugin.h>
 #include <qtutilities/resources/qtconfigarguments.h>
 #include <qtutilities/resources/resources.h>
-#include <qtutilities/resources/importplugin.h>
 #include <qtutilities/settingsdialog/qtsettings.h>
 
 #include <QApplication>
-#include <QSettings>
 #include <QFile>
+#include <QSettings>
 
 using namespace ApplicationUtilities;
 using namespace Dialogs;
@@ -27,7 +27,8 @@ int runWidgetsGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs,
     QtSettings qtSettings;
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, QStringLiteral(PROJECT_NAME));
     // move old config to new location
-    const QString oldConfig = QSettings(QSettings::IniFormat, QSettings::UserScope, QApplication::organizationName(), QApplication::applicationName()).fileName();
+    const QString oldConfig
+        = QSettings(QSettings::IniFormat, QSettings::UserScope, QApplication::organizationName(), QApplication::applicationName()).fileName();
     QFile::rename(oldConfig, settings.fileName()) || QFile::remove(oldConfig);
     settings.sync();
     qtSettings.restore(settings);
@@ -38,7 +39,7 @@ int runWidgetsGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs,
     // init widgets GUI
     MainWindow w(settings, &qtSettings);
     w.show();
-    if(!file.isEmpty()) {
+    if (!file.isEmpty()) {
         w.openFile(file);
     }
     // start event loop
@@ -47,5 +48,4 @@ int runWidgetsGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs,
     qtSettings.save(settings);
     return res;
 }
-
 }

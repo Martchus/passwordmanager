@@ -3,9 +3,9 @@
 
 #include <passwordfile/io/field.h>
 
+#include <QList>
 #include <QUndoCommand>
 #include <QUndoStack>
-#include <QList>
 #include <QVariant>
 
 QT_FORWARD_DECLARE_CLASS(QModelIndex)
@@ -21,8 +21,7 @@ class FieldModel;
 class EntryModel;
 class StackSupport;
 
-class CustomUndoCommand : public QUndoCommand
-{
+class CustomUndoCommand : public QUndoCommand {
 public:
     explicit CustomUndoCommand(StackSupport *stackSupport);
     bool redoResult() const;
@@ -30,10 +29,12 @@ public:
     bool isNoop() const;
     void redo();
     void undo();
+
 protected:
     void setNoop(bool noop);
     virtual bool internalRedo() = 0;
     virtual bool internalUndo() = 0;
+
 private:
     StackSupport *m_stackSupport;
     bool m_redoResult;
@@ -75,13 +76,14 @@ inline void CustomUndoCommand::setNoop(bool noop)
     m_noop = noop;
 }
 
-class FieldModelSetValueCommand : public CustomUndoCommand
-{
+class FieldModelSetValueCommand : public CustomUndoCommand {
 public:
     explicit FieldModelSetValueCommand(FieldModel *model, const QModelIndex &index, const QVariant &value, int role);
+
 protected:
     bool internalRedo();
     bool internalUndo();
+
 private:
     Io::AccountEntry *m_account;
     FieldModel *m_model;
@@ -92,13 +94,14 @@ private:
     int m_role;
 };
 
-class FieldModelInsertRowsCommand : public CustomUndoCommand
-{
+class FieldModelInsertRowsCommand : public CustomUndoCommand {
 public:
     explicit FieldModelInsertRowsCommand(FieldModel *model, int row, int count);
+
 protected:
     bool internalRedo();
     bool internalUndo();
+
 private:
     Io::AccountEntry *m_account;
     FieldModel *m_model;
@@ -106,13 +109,14 @@ private:
     int m_count;
 };
 
-class FieldModelRemoveRowsCommand : public CustomUndoCommand
-{
+class FieldModelRemoveRowsCommand : public CustomUndoCommand {
 public:
     explicit FieldModelRemoveRowsCommand(FieldModel *model, int row, int count);
+
 protected:
     bool internalRedo();
     bool internalUndo();
+
 private:
     Io::AccountEntry *m_account;
     FieldModel *m_model;
@@ -121,13 +125,14 @@ private:
     QList<Io::Field> m_values;
 };
 
-class EntryModelSetValueCommand : public CustomUndoCommand
-{
+class EntryModelSetValueCommand : public CustomUndoCommand {
 public:
     explicit EntryModelSetValueCommand(EntryModel *model, const QModelIndex &index, const QVariant &value, int role);
+
 protected:
     bool internalRedo();
     bool internalUndo();
+
 private:
     EntryModel *m_model;
     std::list<std::string> m_path;
@@ -136,10 +141,10 @@ private:
     int m_role;
 };
 
-class EntryModelModifyRowsCommand : public CustomUndoCommand
-{
+class EntryModelModifyRowsCommand : public CustomUndoCommand {
 public:
     ~EntryModelModifyRowsCommand();
+
 protected:
     explicit EntryModelModifyRowsCommand(EntryModel *model, int row, int count, const QModelIndex &parent);
     bool internalRedo() = 0;
@@ -153,31 +158,33 @@ protected:
     QList<Io::Entry *> m_values;
 };
 
-class EntryModelInsertRowsCommand : public EntryModelModifyRowsCommand
-{
+class EntryModelInsertRowsCommand : public EntryModelModifyRowsCommand {
 public:
     explicit EntryModelInsertRowsCommand(EntryModel *model, int row, int count, const QModelIndex &parent);
+
 protected:
     bool internalRedo();
     bool internalUndo();
 };
 
-class EntryModelRemoveRowsCommand : public EntryModelModifyRowsCommand
-{
+class EntryModelRemoveRowsCommand : public EntryModelModifyRowsCommand {
 public:
     explicit EntryModelRemoveRowsCommand(EntryModel *model, int row, int count, const QModelIndex &parent);
+
 protected:
     bool internalRedo();
     bool internalUndo();
 };
 
-class EntryModelMoveRowsCommand : public CustomUndoCommand
-{
+class EntryModelMoveRowsCommand : public CustomUndoCommand {
 public:
-    explicit EntryModelMoveRowsCommand(EntryModel *model, const QModelIndex &sourceParent, int sourceRow, int count, const QModelIndex &destinationParent, int destinationChild);
+    explicit EntryModelMoveRowsCommand(
+        EntryModel *model, const QModelIndex &sourceParent, int sourceRow, int count, const QModelIndex &destinationParent, int destinationChild);
+
 protected:
     bool internalRedo();
     bool internalUndo();
+
 private:
     EntryModel *m_model;
     std::list<std::string> m_sourceParentPath;
@@ -186,7 +193,6 @@ private:
     std::list<std::string> m_destParentPath;
     int m_destChild;
 };
-
 }
 
 #endif // UNDOCOMMANDS_H

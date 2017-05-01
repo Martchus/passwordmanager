@@ -10,13 +10,13 @@
 
 #include <openssl/rand.h>
 
-#include <QMessageBox>
 #include <QClipboard>
+#include <QMessageBox>
 
-#include <string>
-#include <sstream>
 #include <algorithm>
 #include <random>
+#include <sstream>
+#include <string>
 
 using namespace std;
 using namespace Io;
@@ -25,20 +25,13 @@ using namespace Dialogs;
 
 namespace QtGui {
 
-const char smallLetters[] = {'a','b','c','d','e','f',
-                             'g','h','i','j','k',
-                             'l','m','n','o','p',
-                             'q','r','s','t','u',
-                             'v','w','x','y','z'};
+const char smallLetters[]
+    = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
 
-const char capitalLetters[] = {'A','B','C','D','E','F',
-                               'G','H','I','J','K',
-                               'L','M','N','O','P',
-                               'Q','R','S','T','U',
-                               'V','W','X','Y','Z'};
+const char capitalLetters[]
+    = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
 
-const char digits[] = {'0','1','2','3','4',
-                       '5','6','7','8','9'};
+const char digits[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
 
 /*!
  * \class PasswordGeneratorDialog
@@ -48,13 +41,14 @@ const char digits[] = {'0','1','2','3','4',
 /*!
  * \brief Constructs a new password generator dialog.
  */
-PasswordGeneratorDialog::PasswordGeneratorDialog(QWidget *parent) :
-    QDialog(parent),
-    m_ui(new Ui::PasswordGeneratorDialog)
+PasswordGeneratorDialog::PasswordGeneratorDialog(QWidget *parent)
+    : QDialog(parent)
+    , m_ui(new Ui::PasswordGeneratorDialog)
 {
     m_ui->setupUi(this);
 #ifdef Q_OS_WIN32
-    setStyleSheet(QStringLiteral("%1 QCommandLinkButton  { font-size: 12pt; color: %2; font-weight: normal; }").arg(dialogStyle(), instructionTextColor().name()));
+    setStyleSheet(QStringLiteral("%1 QCommandLinkButton  { font-size: 12pt; color: %2; font-weight: normal; }")
+                      .arg(dialogStyle(), instructionTextColor().name()));
 #endif
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
 
@@ -85,52 +79,51 @@ PasswordGeneratorDialog::~PasswordGeneratorDialog()
 void PasswordGeneratorDialog::generateNewPassword()
 {
     int length = m_ui->LengthSpinBox->value();
-    if(length > 0) {
-        if(m_charset.empty()) {
+    if (length > 0) {
+        if (m_charset.empty()) {
             bool useSmallLetters = m_ui->useSmallLettersCheckBox->isChecked();
             bool useCapitalLetters = m_ui->useCapitalLettersCheckBox->isChecked();
             bool useDigits = m_ui->useDigitsCheckBox->isChecked();
             QString otherChars = m_ui->otherCharsLineEdit->text();
             int charsetSize = otherChars.length();
-            if(useSmallLetters) {
+            if (useSmallLetters) {
                 charsetSize += sizeof(smallLetters);
             }
-            if(useCapitalLetters) {
+            if (useCapitalLetters) {
                 charsetSize += sizeof(capitalLetters);
             }
-            if(useDigits) {
+            if (useDigits) {
                 charsetSize += sizeof(digits);
             }
             m_charset.reserve(charsetSize);
-            if(useSmallLetters) {
+            if (useSmallLetters) {
                 m_charset.insert(m_charset.end(), std::begin(smallLetters), std::end(smallLetters));
             }
-            if(useCapitalLetters) {
+            if (useCapitalLetters) {
                 m_charset.insert(m_charset.end(), std::begin(capitalLetters), std::end(capitalLetters));
             }
-            if(useDigits) {
+            if (useDigits) {
                 m_charset.insert(m_charset.end(), std::begin(digits), std::end(digits));
             }
             char charval;
-            foreach(QChar qchar, otherChars) {
+            foreach (QChar qchar, otherChars) {
                 charval = qchar.toLatin1();
-                if(charval != '\x00' && charval != ' ' && std::find(m_charset.begin(), m_charset.end(), charval) == m_charset.end()) {
+                if (charval != '\x00' && charval != ' ' && std::find(m_charset.begin(), m_charset.end(), charval) == m_charset.end()) {
                     m_charset.push_back(charval);
                 }
             }
         }
-        if(!m_charset.empty()) {
+        if (!m_charset.empty()) {
             try {
                 default_random_engine rng(m_random());
                 uniform_int_distribution<> dist(0, m_charset.size() - 1);
-                auto randchar = [this, &dist, &rng]() {
-                    return m_charset[dist(rng)];
-                };
+                auto randchar = [this, &dist, &rng]() { return m_charset[dist(rng)]; };
                 string res(length, 0);
                 generate_n(res.begin(), length, randchar);
                 m_ui->passwordLineEdit->setText(QString::fromLatin1(res.c_str()));
-            } catch(const CryptoException &ex) {
-                QMessageBox::warning(this, QApplication::applicationName(), tr("Failed to generate password.\nOpenSSL error: %1").arg(QString::fromLocal8Bit(ex.what())));
+            } catch (const CryptoException &ex) {
+                QMessageBox::warning(this, QApplication::applicationName(),
+                    tr("Failed to generate password.\nOpenSSL error: %1").arg(QString::fromLocal8Bit(ex.what())));
             }
         } else {
             QMessageBox::warning(this, QApplication::applicationName(), tr("You have to select at least one checkbox."));
@@ -145,10 +138,8 @@ void PasswordGeneratorDialog::generateNewPassword()
  */
 void PasswordGeneratorDialog::handleCheckedCategoriesChanged()
 {
-    m_ui->generatePassowordCommandLinkButton->setEnabled(m_ui->useCapitalLettersCheckBox->isChecked()
-                                                        || m_ui->useDigitsCheckBox->isChecked()
-                                                        || m_ui->useSmallLettersCheckBox->isChecked()
-                                                        || !m_ui->otherCharsLineEdit->text().isEmpty());
+    m_ui->generatePassowordCommandLinkButton->setEnabled(m_ui->useCapitalLettersCheckBox->isChecked() || m_ui->useDigitsCheckBox->isChecked()
+        || m_ui->useSmallLettersCheckBox->isChecked() || !m_ui->otherCharsLineEdit->text().isEmpty());
     m_charset.clear();
 }
 
@@ -168,5 +159,4 @@ void PasswordGeneratorDialog::copyPassword()
     QClipboard *cb = QApplication::clipboard();
     cb->setText(m_ui->passwordLineEdit->text());
 }
-
 }

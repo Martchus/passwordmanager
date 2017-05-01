@@ -2,13 +2,13 @@
 
 #include <qmath.h>
 
+#include <QDebug>
 #include <QFile>
+#include <QGuiApplication>
 #include <QRegExp>
+#include <QScreen>
 #include <QUrl>
 #include <QUrlQuery>
-#include <QGuiApplication>
-#include <QScreen>
-#include <QDebug>
 
 using namespace Io;
 
@@ -40,14 +40,14 @@ ApplicationInfo::ApplicationInfo()
     m_sliderHandleHeight = sizeWithRatio(87);
     m_sliderGapWidth = sizeWithRatio(100);
     m_isPortraitMode = isMobile() ? rect.height() > rect.width() : false;
-    m_hMargin =  m_isPortraitMode ? 20 * ratio() : 50 * ratio();
+    m_hMargin = m_isPortraitMode ? 20 * ratio() : 50 * ratio();
     m_applicationWidth = isMobile() ? rect.width() : 1120;
 
     m_constants->insert(QLatin1String("rowDelegateHeight"), QVariant(sizeWithRatio(118)));
 
     m_fieldModel = new FieldModel(this);
 
-    if(isMobile()) {
+    if (isMobile()) {
         connect(QGuiApplication::primaryScreen(), &QScreen::orientationChanged, this, &ApplicationInfo::notifyPortraitMode);
     }
 }
@@ -90,5 +90,4 @@ void ApplicationInfo::setIsPortraitMode(const bool newMode)
         emit hMarginChanged();
     }
 }
-
 }
