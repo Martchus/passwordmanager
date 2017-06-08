@@ -178,7 +178,7 @@ void InteractiveCli::processCommand(const string &cmd)
 
 Entry *InteractiveCli::resolvePath(const string &path)
 {
-    auto parts = splitString<vector<string> >(path, "/", EmptyPartsTreat::Merge);
+    auto parts = splitString<vector<string>>(path, "/", EmptyPartsTreat::Merge);
     bool fromRoot = path.at(0) == '/';
     if (fromRoot && parts.empty()) {
         return m_file.rootEntry();
