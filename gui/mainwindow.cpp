@@ -40,6 +40,7 @@
 
 #include <cassert>
 #include <stdexcept>
+#include <functional>
 
 using namespace std;
 using namespace IoUtilities;
