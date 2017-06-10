@@ -39,8 +39,8 @@
 #include <QUndoView>
 
 #include <cassert>
-#include <stdexcept>
 #include <functional>
+#include <stdexcept>
 
 using namespace std;
 using namespace IoUtilities;

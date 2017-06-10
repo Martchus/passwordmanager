@@ -47,6 +47,7 @@ int main(int argc, char *argv[])
     qtConfigArgs.qtWidgetsGuiArg().addSubArgument(&fileArg);
     // cli argument
     Argument cliArg("interactive-cli", 'i', "starts the interactive command line interface");
+    cliArg.setDenotesOperation(true);
     cliArg.setSubArguments({ &fileArg });
     // help argument
     HelpArgument helpArg(parser);

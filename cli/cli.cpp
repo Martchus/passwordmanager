@@ -31,7 +31,7 @@ InputMuter::InputMuter()
 #if defined(PLATFORM_UNIX)
     tcgetattr(STDIN_FILENO, &m_attr);
     termios newAttr = m_attr;
-    newAttr.c_lflag &= ~ECHO;
+    newAttr.c_lflag &= ~static_cast<unsigned int>(ECHO);
     tcsetattr(STDIN_FILENO, TCSANOW, &newAttr);
 #elif defined(PLATFORM_WINDOWS)
     m_cinHandle = GetStdHandle(STD_INPUT_HANDLE);
@@ -143,7 +143,7 @@ void InteractiveCli::processCommand(const string &cmd)
         pwd();
     } else if (CMD_P("cd")) {
         cd(param);
-    } else if (CMD("ls")) {
+    } else if (CMD2("ls", "l")) {
         ls();
     } else if (CMD2("tree", "t")) {
         tree();
@@ -239,448 +239,443 @@ void InteractiveCli::openFile(const string &file, bool readOnly)
 {
     if (m_file.isOpen()) {
         m_o << "file \"" << m_file.path() << "\" currently open; close first" << endl;
-    } else {
-        m_file.setPath(file);
-        try {
-            try {
-                m_file.open(readOnly);
-                if (m_file.isEncryptionUsed()) {
-                    m_file.setPassword(askForPassphrase());
-                }
-                m_file.load();
-                m_currentEntry = m_file.rootEntry();
-                m_o << "file \"" << file << "\" opened" << endl;
-            } catch (const ParsingException &) {
-                m_o << "error occured when parsing file \"" << file << "\"" << endl;
-                throw;
-            } catch (const CryptoException &) {
-                m_o << "error occured when decrypting file \"" << file << "\"" << endl;
-                throw;
-            } catch (...) {
-                const char *what = catchIoFailure();
-                m_o << "IO error occured when opening file \"" << file << "\"" << endl;
-                throw ios_base::failure(what);
-            }
-        } catch (const std::exception &e) {
-            if (*e.what() != 0) {
-                m_o << e.what() << endl;
-            }
-            m_file.clear();
-            m_currentEntry = nullptr;
-        }
-        m_modified = false;
+        return;
     }
+    m_file.setPath(file);
+    try {
+        try {
+            m_file.open(readOnly);
+            if (m_file.isEncryptionUsed()) {
+                m_file.setPassword(askForPassphrase());
+            }
+            m_file.load();
+            m_currentEntry = m_file.rootEntry();
+            m_o << "file \"" << file << "\" opened" << endl;
+        } catch (const ParsingException &) {
+            m_o << "error occured when parsing file \"" << file << "\"" << endl;
+            throw;
+        } catch (const CryptoException &) {
+            m_o << "error occured when decrypting file \"" << file << "\"" << endl;
+            throw;
+        } catch (...) {
+            const char *what = catchIoFailure();
+            m_o << "IO error occured when opening file \"" << file << "\"" << endl;
+            throw ios_base::failure(what);
+        }
+    } catch (const std::exception &e) {
+        if (*e.what() != 0) {
+            m_o << e.what() << endl;
+        }
+        m_file.clear();
+        m_currentEntry = nullptr;
+    }
+    m_modified = false;
 }
 
 void InteractiveCli::closeFile()
 {
-    if (m_file.isOpen()) {
-        m_file.clear();
-        m_currentEntry = nullptr;
-        m_o << "file closed" << endl;
-    } else {
+    if (!m_file.isOpen()) {
         m_o << "no file was opened" << endl;
+        return;
     }
+    m_file.clear();
+    m_currentEntry = nullptr;
+    m_o << "file closed" << endl;
 }
 
 void InteractiveCli::saveFile()
 {
-    if (m_file.isOpen()) {
-        try {
-            try {
-                m_file.save(*m_file.password());
-                m_o << "file \"" << m_file.path() << "\" saved" << endl;
-            } catch (const ParsingException &) {
-                m_o << "error occured when parsing file \"" << m_file.path() << "\"" << endl;
-                throw;
-            } catch (const CryptoException &) {
-                m_o << "error occured when encrypting file \"" << m_file.path() << "\"" << endl;
-                throw;
-            } catch (...) {
-                const char *what = catchIoFailure();
-                m_o << "IO error occured when saving file \"" << m_file.path() << "\"" << endl;
-                throw ios_base::failure(what);
-            }
-        } catch (const exception &e) {
-            if (*e.what() != 0) {
-                m_o << e.what() << endl;
-            }
-            m_o << "file has been closed; try reopening the file" << endl;
-            m_file.clear();
-        }
-        m_modified = false;
-    } else {
+    if (!m_file.isOpen()) {
         m_o << "nothing to save; no file opened or created" << endl;
+        return;
     }
+    try {
+        try {
+            m_file.save(*m_file.password());
+            m_o << "file \"" << m_file.path() << "\" saved" << endl;
+        } catch (const ParsingException &) {
+            m_o << "error occured when parsing file \"" << m_file.path() << "\"" << endl;
+            throw;
+        } catch (const CryptoException &) {
+            m_o << "error occured when encrypting file \"" << m_file.path() << "\"" << endl;
+            throw;
+        } catch (...) {
+            const char *what = catchIoFailure();
+            m_o << "IO error occured when saving file \"" << m_file.path() << "\"" << endl;
+            throw ios_base::failure(what);
+        }
+    } catch (const exception &e) {
+        if (*e.what() != 0) {
+            m_o << e.what() << endl;
+        }
+        m_o << "file has been closed; try reopening the file" << endl;
+        m_file.clear();
+    }
+    m_modified = false;
 }
 
 void InteractiveCli::createFile(const string &file)
 {
     if (m_file.isOpen()) {
         m_o << "file \"" << m_file.path() << "\" currently open; close first" << endl;
-    } else {
-        m_file.setPath(file);
-        try {
-            try {
-                m_file.create();
-                m_file.generateRootEntry();
-                m_currentEntry = m_file.rootEntry();
-                m_o << "file \"" << file << "\" created and opened" << endl;
-            } catch (...) {
-                const char *what = catchIoFailure();
-                m_o << "IO error occured when creating file \"" << file << "\"" << endl;
-                throw ios_base::failure(what);
-            }
-        } catch (exception &e) {
-            if (*e.what() != 0) {
-                m_o << e.what() << endl;
-            }
-            m_file.clear();
-            m_currentEntry = nullptr;
-        }
-        m_modified = false;
+        return;
     }
+
+    m_file.setPath(file);
+    try {
+        try {
+            m_file.create();
+            m_file.generateRootEntry();
+            m_currentEntry = m_file.rootEntry();
+            m_o << "file \"" << file << "\" created and opened" << endl;
+        } catch (...) {
+            const char *what = catchIoFailure();
+            m_o << "IO error occured when creating file \"" << file << "\"" << endl;
+            throw ios_base::failure(what);
+        }
+    } catch (const exception &e) {
+        if (*e.what() != 0) {
+            m_o << e.what() << endl;
+        }
+        m_file.clear();
+        m_currentEntry = nullptr;
+    }
+    m_modified = false;
 }
 
 void InteractiveCli::changePassphrase()
 {
     if (m_file.isOpen()) {
-        try {
-            m_file.setPassword(askForPassphrase(true));
-            m_modified = true;
-            m_o << "passphrase changed; use save to apply" << endl;
-        } catch (runtime_error &) {
-            m_o << "passphrase has not changed" << endl;
-        }
-    } else {
         m_o << "can not set passphrase; no file opened or created" << endl;
+        return;
+    }
+    try {
+        m_file.setPassword(askForPassphrase(true));
+        m_modified = true;
+        m_o << "passphrase changed; use save to apply" << endl;
+    } catch (const runtime_error &) {
+        m_o << "passphrase has not changed" << endl;
     }
 }
 
 void InteractiveCli::removePassphrase()
 {
-    if (m_file.isOpen()) {
-        if (*m_file.password()) {
-            m_file.clearPassword();
-            m_o << "passphrase removed; use save to apply" << endl;
-            m_modified = true;
-        } else {
-            m_o << "nothing to remove; no passphrase present on current file" << endl;
-        }
-    } else {
+    if (!m_file.isOpen()) {
         m_o << "nothing to remove; no file opened or created" << endl;
+        return;
+    }
+    if (*m_file.password()) {
+        m_file.clearPassword();
+        m_o << "passphrase removed; use save to apply" << endl;
+        m_modified = true;
+    } else {
+        m_o << "nothing to remove; no passphrase present on current file" << endl;
     }
 }
 
 void InteractiveCli::pwd()
 {
-    if (m_file.isOpen()) {
-        auto path = m_currentEntry->path();
-        m_o << path.front() << ": /";
-        path.pop_front();
-        m_o << joinStrings(path, "/") << endl;
-    } else {
+    if (!m_file.isOpen()) {
         m_o << "no file open" << endl;
+        return;
     }
+    auto path = m_currentEntry->path();
+    m_o << path.front() << ": /";
+    path.pop_front();
+    m_o << joinStrings(path, "/") << endl;
 }
 
 void InteractiveCli::cd(const string &path)
 {
-    if (m_file.isOpen()) {
-        if (Entry *entry = resolvePath(path)) {
-            m_currentEntry = entry;
-            m_o << "changed to \"" << entry->label() << "\"" << endl;
-        }
-    } else {
+    if (!m_file.isOpen()) {
         m_o << "can not change directory; no file open" << endl;
+        return;
+    }
+    if (Entry *entry = resolvePath(path)) {
+        m_currentEntry = entry;
+        m_o << "changed to \"" << entry->label() << "\"" << endl;
     }
 }
 
 void InteractiveCli::ls()
 {
-    if (m_file.isOpen()) {
-        switch (m_currentEntry->type()) {
-        case EntryType::Account: {
-            m_o << "fields:";
-            for (const Field &field : static_cast<AccountEntry *>(m_currentEntry)->fields()) {
-                m_o << " " << field.name();
-            }
-            break;
-        }
-        case EntryType::Node: {
-            m_o << "entries:";
-            for (const Entry *entry : static_cast<NodeEntry *>(m_currentEntry)->children()) {
-                m_o << " " << entry->label();
-            }
-            break;
-        }
-        }
-        m_o << endl;
-    } else {
+    if (!m_file.isOpen()) {
         m_o << "can not list any entires; no file open" << endl;
+        return;
     }
+    switch (m_currentEntry->type()) {
+    case EntryType::Account: {
+        m_o << "fields:";
+        for (const Field &field : static_cast<AccountEntry *>(m_currentEntry)->fields()) {
+            m_o << "\n" << field.name();
+        }
+        break;
+    }
+    case EntryType::Node: {
+        m_o << "entries:";
+        for (const Entry *entry : static_cast<NodeEntry *>(m_currentEntry)->children()) {
+            m_o << "\n" << entry->label();
+        }
+        break;
+    }
+    }
+    m_o << endl;
 }
 
 void InteractiveCli::tree()
 {
-    if (m_file.isOpen()) {
-        function<void(const Entry *entry, unsigned char level)> printEntries;
-        printEntries = [&printEntries, this](const Entry *entry, unsigned char level) {
-            for (unsigned char i = 0; i < level; ++i) {
-                m_o << " ";
-            }
-            m_o << entry->label() << endl;
-            if (entry->type() == EntryType::Node) {
-                for (const Entry *child : (static_cast<const NodeEntry *>(entry)->children())) {
-                    printEntries(child, level + 2);
-                }
-            }
-        };
-        printEntries(m_currentEntry, 0);
-    } else {
+    if (!m_file.isOpen()) {
         m_o << "can not print tree; no file open" << endl;
+        return;
     }
+    function<void(const Entry *entry, unsigned char level)> printEntries;
+    printEntries = [&printEntries, this](const Entry *entry, unsigned char level) {
+        for (unsigned char i = 0; i < level; ++i) {
+            m_o << " ";
+        }
+        m_o << entry->label() << endl;
+        if (entry->type() == EntryType::Node) {
+            for (const Entry *child : (static_cast<const NodeEntry *>(entry)->children())) {
+                printEntries(child, level + 2);
+            }
+        }
+    };
+    printEntries(m_currentEntry, 0);
 }
 
 void InteractiveCli::makeEntry(EntryType entryType, const string &label)
 {
-    if (m_file.isOpen()) {
-        switch (m_currentEntry->type()) {
+    if (!m_file.isOpen()) {
+        m_o << "can not make entry; no file open" << endl;
+        return;
+    }
+    switch (m_currentEntry->type()) {
+    case EntryType::Node:
+        switch (entryType) {
         case EntryType::Node:
-            switch (entryType) {
-            case EntryType::Node:
-                m_o << "node entry \"" << (new NodeEntry(label, static_cast<NodeEntry *>(m_currentEntry)))->label() << "\" created" << endl;
-                break;
-            case EntryType::Account:
-                m_o << "account entry \"" << (new AccountEntry(label, static_cast<NodeEntry *>(m_currentEntry)))->label() << "\" created" << endl;
-                break;
-            }
-            m_modified = true;
+            m_o << "node entry \"" << (new NodeEntry(label, static_cast<NodeEntry *>(m_currentEntry)))->label() << "\" created" << endl;
             break;
         case EntryType::Account:
-            m_o << "can not make entry; current entry is no node entry" << endl;
+            m_o << "account entry \"" << (new AccountEntry(label, static_cast<NodeEntry *>(m_currentEntry)))->label() << "\" created" << endl;
+            break;
         }
-    } else {
-        m_o << "can not make entry; no file open" << endl;
+        m_modified = true;
+        break;
+    case EntryType::Account:
+        m_o << "can not make entry; current entry is no node entry" << endl;
     }
 }
 
 void InteractiveCli::removeEntry(const string &path)
 {
-    if (m_file.isOpen()) {
-        if (Entry *entry = resolvePath(path)) {
-            if (entry == m_file.rootEntry()) {
-                m_o << "can not remove root entry" << endl;
-            } else {
-                if (entry == m_currentEntry) {
-                    m_currentEntry = entry->parent();
-                }
-                m_o << "removed entry \"" << entry->label() << "\"" << endl;
-                delete entry;
-                m_modified = true;
-            }
-        }
-    } else {
+    if (!m_file.isOpen()) {
         m_o << "can not remove entry; no file open" << endl;
+        return;
+    }
+    if (Entry *entry = resolvePath(path)) {
+        if (entry == m_file.rootEntry()) {
+            m_o << "can not remove root entry" << endl;
+        } else {
+            if (entry == m_currentEntry) {
+                m_currentEntry = entry->parent();
+            }
+            m_o << "removed entry \"" << entry->label() << "\"" << endl;
+            delete entry;
+            m_modified = true;
+        }
     }
 }
 
 void InteractiveCli::renameEntry(const string &path)
 {
-    if (m_file.isOpen()) {
-        if (Entry *entry = resolvePath(path)) {
-            string label;
-            m_o << "enter new name: " << endl;
-            getline(m_i, label);
-            if (label.empty()) {
-                m_o << "can not rename; new name is empty" << endl;
-            } else {
-                entry->setLabel(label);
-                m_o << "entry renamed to \"" << entry->label() << "\"" << endl;
-                m_modified = true;
-            }
-        }
-    } else {
+    if (!m_file.isOpen()) {
         m_o << "can not rename entry; no file open" << endl;
+        return;
+    }
+    if (Entry *entry = resolvePath(path)) {
+        string label;
+        m_o << "enter new name: " << endl;
+        getline(m_i, label);
+        if (label.empty()) {
+            m_o << "can not rename; new name is empty" << endl;
+        } else {
+            entry->setLabel(label);
+            m_o << "entry renamed to \"" << entry->label() << "\"" << endl;
+            m_modified = true;
+        }
     }
 }
 
 void InteractiveCli::moveEntry(const string &path)
 {
-    if (m_file.isOpen()) {
-        if (Entry *entry = resolvePath(path)) {
-            string newParentPath;
-            m_o << "enter path of new parent: " << endl;
-            getline(m_i, newParentPath);
-            if (newParentPath.empty()) {
-                m_o << "can not move; path of new parent is empty" << endl;
-            } else {
-                if (Entry *newParent = resolvePath(newParentPath)) {
-                    switch (newParent->type()) {
-                    case EntryType::Account:
-                        m_o << "can not move; new parent must be a node entry" << endl;
-                        break;
-                    case EntryType::Node:
-                        if (entry->parent() == entry) {
-                            m_o << "element not moved; parent doesn't change" << endl;
-                        } else if (entry->type() == EntryType::Node && newParent->isIndirectChildOf(static_cast<NodeEntry *>(entry))) {
-                            m_o << "can not move; new parent mustn't be child of the entry to move" << endl;
-                        } else {
-                            entry->setParent(static_cast<NodeEntry *>(newParent));
-                            m_o << "entry moved to \"" << newParent->label() << "\"" << endl;
-                            m_modified = true;
-                        }
+    if (!m_file.isOpen()) {
+        m_o << "can not rename entry; no file open" << endl;
+        return;
+    }
+    if (Entry *entry = resolvePath(path)) {
+        string newParentPath;
+        m_o << "enter path of new parent: " << endl;
+        getline(m_i, newParentPath);
+        if (newParentPath.empty()) {
+            m_o << "can not move; path of new parent is empty" << endl;
+        } else {
+            if (Entry *newParent = resolvePath(newParentPath)) {
+                switch (newParent->type()) {
+                case EntryType::Account:
+                    m_o << "can not move; new parent must be a node entry" << endl;
+                    break;
+                case EntryType::Node:
+                    if (entry->parent() == entry) {
+                        m_o << "element not moved; parent doesn't change" << endl;
+                    } else if (entry->type() == EntryType::Node && newParent->isIndirectChildOf(static_cast<NodeEntry *>(entry))) {
+                        m_o << "can not move; new parent mustn't be child of the entry to move" << endl;
+                    } else {
+                        entry->setParent(static_cast<NodeEntry *>(newParent));
+                        m_o << "entry moved to \"" << newParent->label() << "\"" << endl;
+                        m_modified = true;
                     }
                 }
             }
         }
-    } else {
-        m_o << "can not rename entry; no file open" << endl;
     }
 }
 
 void InteractiveCli::readField(const string &fieldName)
 {
-    if (m_file.isOpen()) {
-        if (m_currentEntry->type() == EntryType::Account) {
-            const vector<Field> &fields = static_cast<AccountEntry *>(m_currentEntry)->fields();
-            bool valuesFound = false;
-            for (const Field &field : fields) {
-                if (field.name() == fieldName) {
-                    m_o << field.value() << endl;
-                    valuesFound = true;
-                }
-            }
-            if (!valuesFound) {
-                m_o << "field \"" << fieldName << "\" does not exist" << endl;
-            }
-        } else {
-            m_o << "can not read field; current entry is no account entry" << endl;
-        }
-    } else {
+    if (!m_file.isOpen()) {
         m_o << "can not read field; no file open" << endl;
+        return;
+    }
+    if (m_currentEntry->type() != EntryType::Account) {
+        m_o << "can not read field; current entry is no account entry" << endl;
+        return;
+    }
+
+    const vector<Field> &fields = static_cast<AccountEntry *>(m_currentEntry)->fields();
+    bool valuesFound = false;
+    for (const Field &field : fields) {
+        if (field.name() == fieldName) {
+            m_o << field.value() << endl;
+            valuesFound = true;
+        }
+    }
+    if (!valuesFound) {
+        m_o << "field \"" << fieldName << "\" does not exist" << endl;
     }
 }
 
 void InteractiveCli::setField(bool useMuter, const string &fieldName)
 {
-    if (m_file.isOpen()) {
-        if (m_currentEntry->type() == EntryType::Account) {
-            vector<Field> &fields = static_cast<AccountEntry *>(m_currentEntry)->fields();
-            unsigned int valuesFound = 0;
-            string value;
-            m_o << "enter new value: ";
-            if (useMuter) {
-                InputMuter m;
-                getline(m_i, value);
-                m_o << endl << "repeat: ";
-                string repeat;
-                getline(m_i, repeat);
-                if (value != repeat) {
-                    m_o << "values do not match; field has not been altered" << endl;
-                    return;
-                }
-            } else {
-                getline(m_i, value);
-            }
-            for (Field &field : fields) {
-                if (field.name() == fieldName) {
-                    ++valuesFound;
-                    if (valuesFound == 1) {
-                        field.setValue(value);
-                    } else {
-                        m_o << "enter new value for " << valuesFound << ". field (with the specified field): ";
-                        value.clear();
-                        if (useMuter) {
-                            InputMuter m;
-                            getline(m_i, value);
-                            m_o << endl << "repeat: ";
-                            string repeat;
-                            getline(m_i, repeat);
-                            if (value == repeat) {
-                                field.setValue(value);
-                            } else {
-                                m_o << "values do not match; field has not been altered" << endl;
-                            }
-                        } else {
-                            getline(m_i, value);
-                            field.setValue(value);
-                        }
-                    }
-                    field.setType(useMuter ? FieldType::Password : FieldType::Normal);
-                }
-            }
-            switch (valuesFound) {
-            case 0:
-                fields.emplace_back(static_cast<AccountEntry *>(m_currentEntry), fieldName, value);
-                if (useMuter) {
-                    fields.back().setType(FieldType::Password);
-                }
-                m_o << "new field with value inserted" << endl;
-                break;
-            case 1:
-                m_o << "value updated" << endl;
-                m_modified = true;
-                break;
-            default:
-                m_o << valuesFound << " values updated" << endl;
-                m_modified = true;
-            }
-        } else {
-            m_o << "can not set field; current entry is no account entry" << endl;
+    if (!m_file.isOpen()) {
+        m_o << "can not set field; no file open" << endl;
+        return;
+    }
+    if (m_currentEntry->type() != EntryType::Account) {
+        m_o << "can not set field; current entry is no account entry" << endl;
+        return;
+    }
+    vector<Field> &fields = static_cast<AccountEntry *>(m_currentEntry)->fields();
+    unsigned int valuesFound = 0;
+    string value;
+    m_o << "enter new value: ";
+    if (useMuter) {
+        InputMuter m;
+        getline(m_i, value);
+        m_o << endl << "repeat: ";
+        string repeat;
+        getline(m_i, repeat);
+        if (value != repeat) {
+            m_o << "values do not match; field has not been altered" << endl;
+            return;
         }
     } else {
-        m_o << "can not set field; no file open" << endl;
+        getline(m_i, value);
+    }
+    for (Field &field : fields) {
+        if (field.name() == fieldName) {
+            ++valuesFound;
+            if (valuesFound == 1) {
+                field.setValue(value);
+            } else {
+                m_o << "enter new value for " << valuesFound << ". field (with the specified field): ";
+                value.clear();
+                if (useMuter) {
+                    InputMuter m;
+                    getline(m_i, value);
+                    m_o << endl << "repeat: ";
+                    string repeat;
+                    getline(m_i, repeat);
+                    if (value == repeat) {
+                        field.setValue(value);
+                    } else {
+                        m_o << "values do not match; field has not been altered" << endl;
+                    }
+                } else {
+                    getline(m_i, value);
+                    field.setValue(value);
+                }
+            }
+            field.setType(useMuter ? FieldType::Password : FieldType::Normal);
+        }
+    }
+    switch (valuesFound) {
+    case 0:
+        fields.emplace_back(static_cast<AccountEntry *>(m_currentEntry), fieldName, value);
+        if (useMuter) {
+            fields.back().setType(FieldType::Password);
+        }
+        m_o << "new field with value inserted" << endl;
+        break;
+    case 1:
+        m_o << "value updated" << endl;
+        m_modified = true;
+        break;
+    default:
+        m_o << valuesFound << " values updated" << endl;
+        m_modified = true;
     }
 }
 
 void InteractiveCli::removeField(const string &fieldName)
 {
-    if (m_file.isOpen()) {
-        if (m_currentEntry->type() == EntryType::Account) {
-            vector<Field> &fields = static_cast<AccountEntry *>(m_currentEntry)->fields();
-            unsigned int valuesFound = 0;
-            for (Field &field : fields) {
-                if (field.name() == fieldName) {
-                    ++valuesFound;
-                }
-            }
-            switch (valuesFound) {
-                valuesFound = 0;
-            case 0:
-                break;
-            case 1:
-                fields.erase(remove_if(fields.begin(), fields.end(), [&fieldName](Field &field) { return field.name() == fieldName; }));
-                break;
-            default:
-                fields.erase(remove_if(fields.begin(), fields.end(), [this, &fieldName, &valuesFound](Field &field) {
-                    if (field.name() == fieldName) {
-                        m_o << "remove " << ++valuesFound << ". occurrence? [y]=yes, different key=no " << endl;
-                        string res;
-                        getline(m_i, res);
-                        return !(res == "y" || res == "yes");
-                    } else {
-                        return false;
-                    }
-                }));
-            }
-            switch (valuesFound) {
-            case 0:
-                m_o << "can not remove field; specified field \"" << fieldName << "\" not found" << endl;
-                break;
-            case 1:
-                m_o << "field removed" << endl;
-                m_modified = true;
-                break;
-            default:
-                m_o << valuesFound << " fields removed" << endl;
-                m_modified = true;
-            }
-        } else {
-            m_o << "can not remove field; current entry is no account entry" << endl;
-        }
-    } else {
+    if (!m_file.isOpen()) {
         m_o << "can not remove field; no file open" << endl;
+        return;
+    }
+    if (m_currentEntry->type() != EntryType::Account) {
+        m_o << "can not remove field; current entry is no account entry" << endl;
+        return;
+    }
+    vector<Field> &fields = static_cast<AccountEntry *>(m_currentEntry)->fields();
+    unsigned int valuesFound = 0;
+    for (const Field &field : fields) {
+        if (field.name() == fieldName) {
+            ++valuesFound;
+        }
+    }
+    switch (valuesFound) {
+    case 0:
+        m_o << "can not remove field; specified field \"" << fieldName << "\" not found" << endl;
+        break;
+    case 1:
+        fields.erase(remove_if(fields.begin(), fields.end(), [&fieldName](Field &field) { return field.name() == fieldName; }));
+        m_o << "field removed" << endl;
+        m_modified = true;
+        break;
+    default:
+        valuesFound = 0;
+        fields.erase(remove_if(fields.begin(), fields.end(), [this, &fieldName, &valuesFound](Field &field) {
+            if (field.name() == fieldName) {
+                m_o << "remove " << ++valuesFound << ". occurrence? [y]=yes, different key=no " << endl;
+                string res;
+                getline(m_i, res);
+                return !(res == "y" || res == "yes");
+            } else {
+                return false;
+            }
+        }));
+        m_o << valuesFound << " fields removed" << endl;
+        m_modified = true;
     }
 }
 
@@ -742,20 +737,20 @@ string InteractiveCli::askForPassphrase(bool confirm)
     m_o << endl;
     if (input1.empty()) {
         m_o << "you did not enter a passphrase" << endl;
-    } else {
-        if (confirm) {
-            m_o << "confirm new passphrase: ";
-            m_o.flush();
-            string input2;
-            {
-                InputMuter m;
-                getline(m_i, input2);
-            }
-            m_o << endl;
-            if (input1 != input2) {
-                m_o << "phrases do not match" << endl;
-                throw runtime_error("confirmation failed");
-            }
+        return input1;
+    }
+    if (confirm) {
+        m_o << "confirm new passphrase: ";
+        m_o.flush();
+        string input2;
+        {
+            InputMuter m;
+            getline(m_i, input2);
+        }
+        m_o << endl;
+        if (input1 != input2) {
+            m_o << "phrases do not match" << endl;
+            throw runtime_error("confirmation failed");
         }
     }
     return input1;
