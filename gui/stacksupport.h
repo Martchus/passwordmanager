@@ -98,6 +98,6 @@ inline QUndoStack *StackAbsorper::stack()
 {
     return m_stack;
 }
-}
+} // namespace QtGui
 
 #endif // QTGUI_STACKSUPPORT_H

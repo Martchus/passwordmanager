@@ -36,6 +36,6 @@ inline QString ApplicationPaths::path(QStandardPaths::StandardLocation location)
         path += "/";
     return path;
 }
-}
+} // namespace QtGui
 
 #endif // APPLICATIONPATHS_H

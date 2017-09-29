@@ -22,7 +22,7 @@ QT_FORWARD_DECLARE_CLASS(QSettings)
 namespace Io {
 DECLARE_ENUM_CLASS(EntryType, int);
 DECLARE_ENUM_CLASS(FieldType, int);
-}
+} // namespace Io
 
 namespace MiscUtils {
 class RecentMenuManager;
@@ -32,7 +32,7 @@ namespace Dialogs {
 class AboutDialog;
 class SettingsDialog;
 class QtSettings;
-}
+} // namespace Dialogs
 
 namespace QtGui {
 
@@ -131,6 +131,6 @@ private:
     Dialogs::QtSettings *m_qtSettings;
     Dialogs::SettingsDialog *m_settingsDlg;
 };
-}
+} // namespace QtGui
 
 #endif // MAINWINDOW_H

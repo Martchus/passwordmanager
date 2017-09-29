@@ -55,4 +55,4 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs)
     int res = a.exec();
     return res;
 }
-}
+} // namespace QtGui

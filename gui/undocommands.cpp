@@ -458,4 +458,4 @@ bool EntryModelMoveRowsCommand::internalUndo()
     }
     return true;
 }
-}
+} // namespace QtGui

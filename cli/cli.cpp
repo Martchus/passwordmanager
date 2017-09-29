@@ -755,4 +755,4 @@ string InteractiveCli::askForPassphrase(bool confirm)
     }
     return input1;
 }
-}
+} // namespace Cli

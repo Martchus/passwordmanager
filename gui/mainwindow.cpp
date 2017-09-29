@@ -1235,4 +1235,4 @@ void MainWindow::copyFieldsForXMilliSeconds(int x)
         QMessageBox::warning(this, QApplication::applicationName(), tr("The selection is empty."));
     }
 }
-}
+} // namespace QtGui

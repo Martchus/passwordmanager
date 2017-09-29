@@ -13,7 +13,7 @@ QT_FORWARD_DECLARE_CLASS(QModelIndex)
 namespace Io {
 class Entry;
 class AccountEntry;
-}
+} // namespace Io
 
 namespace QtGui {
 
@@ -193,6 +193,6 @@ private:
     std::list<std::string> m_destParentPath;
     int m_destChild;
 };
-}
+} // namespace QtGui
 
 #endif // UNDOCOMMANDS_H

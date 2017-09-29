@@ -31,6 +31,6 @@ private:
     std::vector<char> m_charset;
     Util::OpenSslRandomDevice m_random;
 };
-}
+} // namespace QtGui
 
 #endif // PASSWORDGENERATORDIALOG_H

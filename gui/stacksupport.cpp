@@ -14,4 +14,4 @@ StackSupport::StackSupport(QUndoStack *undoStack)
     : m_undoStack(undoStack)
 {
 }
-}
+} // namespace QtGui

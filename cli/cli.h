@@ -21,7 +21,7 @@ typedef std::vector<std::string> StringVector;
 namespace Io {
 class Entry;
 enum class EntryType : int;
-}
+} // namespace Io
 
 namespace Cli {
 
@@ -78,6 +78,6 @@ private:
     bool m_modified;
     bool m_quit;
 };
-}
+} // namespace Cli
 
 #endif // CLI_CLI_H

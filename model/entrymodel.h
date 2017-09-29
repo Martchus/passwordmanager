@@ -13,7 +13,7 @@ namespace Io {
 class Entry;
 class NodeEntry;
 DECLARE_ENUM_CLASS(EntryType, int);
-}
+} // namespace Io
 
 namespace QtGui {
 
@@ -27,7 +27,7 @@ enum EntryModelRoles {
 
 class EntryModel : public QAbstractItemModel
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
-                   ,
+    ,
                    public StackSupport
 #endif
 {
@@ -122,6 +122,6 @@ inline void EntryModel::setInsertType(Io::EntryType type)
 {
     m_insertType = type;
 }
-}
+} // namespace QtGui
 
 #endif // ENTRYMODEL_H

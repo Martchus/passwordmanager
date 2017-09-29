@@ -48,4 +48,4 @@ int runWidgetsGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs,
     qtSettings.save(settings);
     return res;
 }
-}
+} // namespace QtGui

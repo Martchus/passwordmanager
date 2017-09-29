@@ -35,7 +35,7 @@ enum PasswordVisibility {
 
 class FieldModel : public QAbstractTableModel
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
-                   ,
+    ,
                    public StackSupport
 #endif
 {
@@ -131,6 +131,6 @@ inline void FieldModel::setPasswordVisibility(PasswordVisibility passwordVisibil
         emit dataChanged(index(0, 1), index(m_fields->size() - 1, 1), QVector<int>() << Qt::DisplayRole << Qt::EditRole);
     }
 }
-}
+} // namespace QtGui
 
 #endif // FIELDMODEL_H

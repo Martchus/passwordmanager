@@ -159,4 +159,4 @@ void PasswordGeneratorDialog::copyPassword()
     QClipboard *cb = QApplication::clipboard();
     cb->setText(m_ui->passwordLineEdit->text());
 }
-}
+} // namespace QtGui

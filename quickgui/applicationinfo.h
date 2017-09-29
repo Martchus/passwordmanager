@@ -171,6 +171,6 @@ inline qreal ApplicationInfo::sizeWithRatio(const qreal height)
 {
     return ratio() * height;
 }
-}
+} // namespace QtGui
 
 #endif // APPLICATIONINFO_H

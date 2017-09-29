@@ -16,6 +16,6 @@ protected:
 private:
     bool hasAcceptedChildren(const QModelIndex &index) const;
 };
-}
+} // namespace QtGui
 
 #endif // ENTRYFILTERMODEL_H

@@ -90,4 +90,4 @@ void ApplicationInfo::setIsPortraitMode(const bool newMode)
         emit hMarginChanged();
     }
 }
-}
+} // namespace QtGui
