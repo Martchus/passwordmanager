@@ -18,22 +18,28 @@ FieldDelegate::FieldDelegate(QObject *parent)
 
 void FieldDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
-    if (auto *lineEdit = qobject_cast<QLineEdit *>(editor)) {
-        const auto *model = index.model();
-        lineEdit->setText(model->data(index, Qt::EditRole).toString());
-        if (const auto *fieldModel = qobject_cast<const FieldModel *>(model)) {
-            if (fieldModel->passwordVisibility() == PasswordVisibility::Never) {
-                lineEdit->setEchoMode(
-                    fieldModel->field(static_cast<size_t>(index.row()))->type() != FieldType::Password ? QLineEdit::Normal : QLineEdit::Password);
-            } else {
-                lineEdit->setEchoMode(QLineEdit::Normal);
-            }
-        } else {
-            lineEdit->setEchoMode(QLineEdit::Normal);
-        }
-    } else {
+    // fall back to default implementation if editor is not QLineEdit
+    auto *const lineEdit = qobject_cast<QLineEdit *>(editor);
+    if (!lineEdit) {
         QStyledItemDelegate::setEditorData(editor, index);
+        return;
     }
+
+    // set the text
+    const QAbstractItemModel *const model = index.model();
+    lineEdit->setText(model->data(index, Qt::EditRole).toString());
+
+    // set the echo mode
+    if (index.column() > 0) {
+        const auto *const fieldModel = qobject_cast<const FieldModel *>(model);
+        if (fieldModel && fieldModel->passwordVisibility() == PasswordVisibility::Never) {
+            if (const Field *const field = fieldModel->field(static_cast<size_t>(index.row()))) {
+                lineEdit->setEchoMode(field->type() != FieldType::Password ? QLineEdit::Normal : QLineEdit::Password);
+                return;
+            }
+        }
+    }
+    lineEdit->setEchoMode(QLineEdit::Normal);
 }
 
 } // namespace QtGui
