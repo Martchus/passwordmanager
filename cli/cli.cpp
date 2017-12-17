@@ -20,6 +20,7 @@
 
 using namespace std;
 using namespace std::placeholders;
+using namespace ApplicationUtilities;
 using namespace ConversionUtilities;
 using namespace EscapeCodes;
 using namespace IoUtilities;
@@ -243,34 +244,41 @@ void InteractiveCli::openFile(const string &file, bool readOnly)
         return;
     }
     m_file.setPath(file);
-    try {
+    for (;;) {
         try {
-            m_file.open(readOnly);
-            if (m_file.isEncryptionUsed()) {
-                m_file.setPassword(askForPassphrase());
+            try {
+                m_file.open(readOnly);
+                if (m_file.isEncryptionUsed()) {
+                    m_file.setPassword(askForPassphrase());
+                }
+                m_file.load();
+                m_currentEntry = m_file.rootEntry();
+                m_o << "file \"" << file << "\" opened" << endl;
+            } catch (const ParsingException &) {
+                m_o << "error occured when parsing file \"" << file << "\"" << endl;
+                throw;
+            } catch (const CryptoException &) {
+                m_o << "error occured when decrypting file \"" << file << "\"" << endl;
+                throw;
+            } catch (...) {
+                const char *what = catchIoFailure();
+                m_o << "IO error occured when opening file \"" << file << "\"" << endl;
+                throw ios_base::failure(what);
             }
-            m_file.load();
-            m_currentEntry = m_file.rootEntry();
-            m_o << "file \"" << file << "\" opened" << endl;
-        } catch (const ParsingException &) {
-            m_o << "error occured when parsing file \"" << file << "\"" << endl;
-            throw;
-        } catch (const CryptoException &) {
-            m_o << "error occured when decrypting file \"" << file << "\"" << endl;
-            throw;
-        } catch (...) {
-            const char *what = catchIoFailure();
-            m_o << "IO error occured when opening file \"" << file << "\"" << endl;
-            throw ios_base::failure(what);
+        } catch (const std::exception &e) {
+            if (*e.what() != 0) {
+                m_o << e.what() << endl;
+            }
+            if (confirmPrompt("Retry opening?", Response::Yes)) {
+                m_file.close();
+                continue;
+            }
+            m_file.clear();
+            m_currentEntry = nullptr;
         }
-    } catch (const std::exception &e) {
-        if (*e.what() != 0) {
-            m_o << e.what() << endl;
-        }
-        m_file.clear();
-        m_currentEntry = nullptr;
+        m_modified = false;
+        return;
     }
-    m_modified = false;
 }
 
 void InteractiveCli::closeFile()
