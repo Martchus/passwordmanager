@@ -8,10 +8,10 @@
 
 #include <c++utilities/application/commandlineutils.h>
 #include <c++utilities/conversion/stringconversion.h>
+#include <c++utilities/io/ansiescapecodes.h>
 #include <c++utilities/io/catchiofailure.h>
 
 #if defined(PLATFORM_UNIX)
-#include <c++utilities/io/ansiescapecodes.h>
 #include <unistd.h>
 #endif
 
@@ -21,6 +21,7 @@
 using namespace std;
 using namespace std::placeholders;
 using namespace ConversionUtilities;
+using namespace EscapeCodes;
 using namespace IoUtilities;
 using namespace Io;
 
@@ -681,34 +682,36 @@ void InteractiveCli::removeField(const string &fieldName)
 
 void InteractiveCli::printHelp()
 {
-    m_o << "Available commands: \n"
-           "quit,q        quits the application\n"
-           "q!            forces the application to quit\n"
-           "wq            saves the current file and quits the application\n"
-           "clear,c       clears the console\n"
+    m_o << TextAttribute::Bold << "Command:       Description: \n"
+        << TextAttribute::Reset
+        << "quit,q         quits the application\n"
+           "q!             forces the application to quit\n"
+           "wq             saves the current file and quits the application\n"
+           "clear,c        clears the console\n"
            "\n"
-           "create,cr     creates a new file at the specified path\n"
-           "openreadonly  opens the specified file (read-only)\n"
-           "open,o        opens the specified file\n"
-           "close,cl      closes the currently opened file\n"
+           "create,cr      creates a new file at the specified path\n"
+           "openreadonly   opens the specified file (read-only)\n"
+           "open,o         opens the specified file\n"
+           "close,cl       closes the currently opened file\n"
            "\n"
-           "save,w        saves the currently opened file\n"
-           "chpassphrase  changes the passphrase\n"
-           "rmpassphrase  removes the passphrase\n"
+           "save,w         saves the currently opened file\n"
+           "chpassphrase   changes the passphrase\n"
+           "rmpassphrase   removes the passphrase\n"
            "\n"
-           "pwd           prints the path of the current entry\n"
-           "cd            changes the current entry\n"
-           "ls            lists the entries/fields of the current entry\n"
-           "tree,t        shows all child entries of the current entry\n"
-           "mknode,mkn    creates a node entry with the specified label in the current entry\n"
-           "mkaccount,mka creates an account entry with the specified label in the current entry\n"
-           "rmentry,rme   removes the entry specified by its path\n"
-           "rnentry,rne   renames the entry specified by its path\n"
-           "mventry,me    moves the entry specified by its path\n"
-           "readfield,rf  reads the specified field of the current account\n"
-           "setfield,sf   sets the specified field of the current account\n"
-           "setfieldpw,sp sets the specified password field of the current account\n"
-           "rmfield,rf    removes the specified field of the current account\n"
+           "pwd            prints the path of the current entry\n"
+           "cd             changes the current entry\n"
+           "ls             lists the entries/fields of the current entry\n"
+           "tree,t         shows all child entries of the current entry\n"
+           "mknode,mkn     creates a node entry with the specified label in the current entry\n"
+           "mkaccount,mka  creates an account entry with the specified label in the current entry\n"
+           "rmentry,rme    removes the entry specified by its path\n"
+           "rnentry,rne    renames the entry specified by its path\n"
+           "mventry,me     moves the entry specified by its path\n"
+           "\n"
+           "readfield,rf   reads the specified field of the current account\n"
+           "setfield,sf    sets the specified field of the current account\n"
+           "setfieldpw,sp  sets the specified password field of the current account\n"
+           "rmfield,rf     removes the specified field of the current account\n"
         << endl;
 }
 
