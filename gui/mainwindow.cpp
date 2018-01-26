@@ -114,6 +114,7 @@ void MainWindow::setSomethingChanged(bool somethingChanged)
 MainWindow::MainWindow(QSettings &settings, Dialogs::QtSettings *qtSettings, QWidget *parent)
     : QMainWindow(parent)
     , m_ui(new Ui::MainWindow)
+    , m_readOnly(false)
     , m_clearClipboardTimer(0)
     , m_aboutDlg(nullptr)
     , m_settings(settings)
@@ -136,7 +137,8 @@ MainWindow::MainWindow(QSettings &settings, Dialogs::QtSettings *qtSettings, QWi
     // init recent menu manager
     m_recentMgr = new RecentMenuManager(m_ui->menuRecent, this);
     m_recentMgr->restore(settings.value(QStringLiteral("recententries"), QStringList()).toStringList());
-    connect(m_recentMgr, &RecentMenuManager::fileSelected, this, &MainWindow::openFile);
+    connect(m_recentMgr, &RecentMenuManager::fileSelected, this, static_cast<bool (MainWindow::*)(const QString &)>(&MainWindow::openFile));
+
     // set position and size
     restoreGeometry(settings.value(QStringLiteral("geometry")).toByteArray());
     restoreState(settings.value(QStringLiteral("state")).toByteArray());
@@ -402,7 +404,7 @@ void MainWindow::showUndoView()
  * \brief Opens a file with the specified \a path and updates all widgets to show its contents.
  * \returns Returns true on success; otherwise false
  */
-bool MainWindow::openFile(const QString &path)
+bool MainWindow::openFile(const QString &path, bool readOnly)
 {
     using namespace Dialogs;
     // close previous file
@@ -412,10 +414,19 @@ bool MainWindow::openFile(const QString &path)
     // set path and open file
     m_file.setPath(path.toStdString());
     try {
-        m_file.open();
+        m_file.open(m_readOnly = readOnly);
     } catch (...) {
+        // catch std::ios_base::failure
+        const char *const ioError = catchIoFailure();
+
+        // try read-only
+        if (!readOnly) {
+            return openFile(path, true);
+        }
+
+        // show error message
         const QString errmsg
-            = tr("An IO error occured when opening the specified file \"%1\".\n\n(%2)").arg(path, QString::fromLocal8Bit(catchIoFailure()));
+            = tr("An IO error occured when opening the specified file \"%1\".\n\n(%2)").arg(path, QString::fromLocal8Bit(ioError));
         m_ui->statusBar->showMessage(errmsg, 5000);
         QMessageBox::critical(this, QApplication::applicationName(), errmsg);
         return false;
@@ -470,7 +481,7 @@ bool MainWindow::openFile(const QString &path)
         m_file.clear();
         m_ui->statusBar->showMessage(msg, 5000);
         if (QMessageBox::critical(this, QApplication::applicationName(), msg, QMessageBox::Cancel, QMessageBox::Retry) == QMessageBox::Retry) {
-            return openFile(path); // retry
+            return openFile(path, readOnly); // retry
         } else {
             return false;
         }
@@ -518,6 +529,7 @@ void MainWindow::createFile(const QString &path, const QString &password)
     m_file.setPassword(password.toStdString());
     // create the file and show it
     try {
+        m_readOnly = false;
         m_file.create();
     } catch (...) {
         catchIoFailure();
@@ -583,7 +595,11 @@ void MainWindow::updateWindowTitle()
     } else {
         docStatus = Dialogs::DocumentStatus::NoDocument;
     }
-    setWindowTitle(Dialogs::generateWindowTitle(docStatus, QString::fromStdString(m_file.path())));
+    auto documentPath(QString::fromStdString(m_file.path()));
+    if (m_readOnly) {
+        documentPath += tr(" [read-only]");
+    }
+    setWindowTitle(Dialogs::generateWindowTitle(docStatus, documentPath));
 }
 
 void MainWindow::applyDefaultExpanding(const QModelIndex &parent)
@@ -826,7 +842,11 @@ bool MainWindow::saveFile()
         QMessageBox::critical(this, QApplication::applicationName(), msg);
         return false;
     } else {
-        setSomethingChanged(false);
+        if (m_readOnly || m_somethingChanged) {
+            m_readOnly = false;
+            m_somethingChanged = false;
+            updateWindowTitle();
+        }
         m_recentMgr->addEntry(QString::fromStdString(m_file.path()));
         m_ui->statusBar->showMessage(tr("The password list has been saved."), 5000);
         return true;

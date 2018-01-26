@@ -54,6 +54,7 @@ public:
 public slots:
     // file management
     bool openFile(const QString &path);
+    bool openFile(const QString &path, bool readOnly);
     void createFile(const QString &path, const QString &password);
     void createFile(const QString &path);
     bool createFile();
@@ -123,6 +124,7 @@ private:
     QUndoStack *m_undoStack;
     QUndoView *m_undoView;
     bool m_somethingChanged;
+    bool m_readOnly;
     bool m_dontUpdateSelection;
     int m_clearClipboardTimer;
     MiscUtils::RecentMenuManager *m_recentMgr;
@@ -131,6 +133,16 @@ private:
     Dialogs::QtSettings *m_qtSettings;
     Dialogs::SettingsDialog *m_settingsDlg;
 };
+
+/*!
+ * \brief Opens a file with the specified \a path and updates all widgets to show its contents.
+ * \returns Returns true on success; otherwise false
+ */
+inline bool MainWindow::openFile(const QString &path)
+{
+    return openFile(path, false);
+}
+
 } // namespace QtGui
 
 #endif // MAINWINDOW_H
