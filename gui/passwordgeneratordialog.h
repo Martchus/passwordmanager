@@ -17,7 +17,7 @@ class PasswordGeneratorDialog : public QDialog {
     Q_OBJECT
 
 public:
-    explicit PasswordGeneratorDialog(QWidget *parent = 0);
+    explicit PasswordGeneratorDialog(QWidget *parent = nullptr);
     ~PasswordGeneratorDialog();
 
 private Q_SLOTS:

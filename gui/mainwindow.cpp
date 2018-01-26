@@ -132,8 +132,10 @@ MainWindow::MainWindow(QSettings &settings, Dialogs::QtSettings *qtSettings, QWi
     setSomethingChanged(false);
     m_dontUpdateSelection = false;
     updateUiStatus();
+
     // load settings
     settings.beginGroup(QStringLiteral("mainwindow"));
+
     // init recent menu manager
     m_recentMgr = new RecentMenuManager(m_ui->menuRecent, this);
     m_recentMgr->restore(settings.value(QStringLiteral("recententries"), QStringList()).toStringList());
@@ -142,11 +144,13 @@ MainWindow::MainWindow(QSettings &settings, Dialogs::QtSettings *qtSettings, QWi
     // set position and size
     restoreGeometry(settings.value(QStringLiteral("geometry")).toByteArray());
     restoreState(settings.value(QStringLiteral("state")).toByteArray());
+
     // setup undo stack and related actions
     m_undoStack = new QUndoStack(this);
     m_undoView = nullptr;
     m_ui->actionUndo->setShortcuts(QKeySequence::Undo);
     m_ui->actionRedo->setShortcuts(QKeySequence::Redo);
+
     // setup models, tree and table view
     m_ui->treeView->setModel(m_entryFilterModel = new EntryFilterModel(this));
     m_ui->tableView->setModel(m_fieldModel = new FieldModel(m_undoStack, this));
@@ -163,12 +167,13 @@ MainWindow::MainWindow(QSettings &settings, Dialogs::QtSettings *qtSettings, QWi
     m_ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     // splitter sizes
     m_ui->splitter->setSizes(QList<int>() << 100 << 800);
+
     // password visibility group
-    auto *passwordVisibilityGroup = new QActionGroup(this);
+    auto *const passwordVisibilityGroup = new QActionGroup(this);
     passwordVisibilityGroup->addAction(m_ui->actionShowAlways);
     passwordVisibilityGroup->addAction(m_ui->actionShowOnlyWhenEditing);
     passwordVisibilityGroup->addAction(m_ui->actionHideAlways);
-    QString pwVisibility(settings.value(QStringLiteral("pwvisibility")).toString());
+    const QString pwVisibility(settings.value(QStringLiteral("pwvisibility")).toString());
     QAction *pwVisibilityAction;
     if (pwVisibility == QStringLiteral("always")) {
         pwVisibilityAction = m_ui->actionShowAlways;
@@ -179,6 +184,7 @@ MainWindow::MainWindow(QSettings &settings, Dialogs::QtSettings *qtSettings, QWi
     }
     pwVisibilityAction->setChecked(true);
     setPasswordVisibility(pwVisibilityAction);
+
     // connect signals and slots
     // -> file related actions
     connect(m_ui->actionSave, &QAction::triggered, this, &MainWindow::saveFile);
@@ -217,8 +223,8 @@ MainWindow::MainWindow(QSettings &settings, Dialogs::QtSettings *qtSettings, QWi
     connect(m_ui->treeView, &QTableView::customContextMenuRequested, this, &MainWindow::showTreeViewContextMenu);
     connect(m_ui->tableView, &QTableView::customContextMenuRequested, this, &MainWindow::showTableViewContextMenu);
     // -> filter
-    //connect(m_ui->accountFilterLineEdit, &QLineEdit::textChanged, m_entryFilterModel, &QSortFilterProxyModel::setFilterFixedString);
     connect(m_ui->accountFilterLineEdit, &QLineEdit::textChanged, this, &MainWindow::applyFilter);
+
     // setup other controls
     m_ui->actionAlwaysCreateBackup->setChecked(settings.value(QStringLiteral("alwayscreatebackup"), false).toBool());
     m_ui->accountFilterLineEdit->setText(settings.value(QStringLiteral("accountfilter"), QString()).toString());
@@ -246,7 +252,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
         switch (event->type()) {
         case QEvent::DragEnter:
         case QEvent::Drop:
-            if (QDropEvent *dropEvent = static_cast<QDropEvent *>(event)) {
+            if (const QDropEvent *const dropEvent = static_cast<const QDropEvent *>(event)) {
                 QString data;
                 const QMimeData *mimeData = dropEvent->mimeData();
                 if (mimeData->hasUrls()) {
@@ -265,6 +271,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
                 }
                 return true;
             }
+            FALLTHROUGH;
         default:;
         }
     }
@@ -274,11 +281,9 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     // ask if file is opened
-    if (m_file.hasRootEntry()) {
-        if (!closeFile()) {
-            event->ignore();
-            return;
-        }
+    if (m_file.hasRootEntry() && !closeFile()) {
+        event->ignore();
+        return;
     }
     // close undow view
     if (m_undoView) {
@@ -348,7 +353,7 @@ void MainWindow::showAboutDialog()
  */
 void MainWindow::showPassowrdGeneratorDialog()
 {
-    PasswordGeneratorDialog *pwgDialog = new PasswordGeneratorDialog(this);
+    PasswordGeneratorDialog *const pwgDialog = new PasswordGeneratorDialog(this);
     pwgDialog->show();
 }
 
@@ -360,7 +365,7 @@ void MainWindow::showOpenFileDialog()
     if (m_file.hasRootEntry() && !closeFile()) {
         return;
     }
-    QString fileName
+    const QString fileName
         = QFileDialog::getOpenFileName(this, tr("Select a password list"), QString(), tr("Password Manager files (*.pwmgr);;All files (*)"));
     if (!fileName.isEmpty()) {
         openFile(fileName);
@@ -407,10 +412,12 @@ void MainWindow::showUndoView()
 bool MainWindow::openFile(const QString &path, bool readOnly)
 {
     using namespace Dialogs;
+
     // close previous file
     if (m_file.hasRootEntry() && !closeFile()) {
         return false;
     }
+
     // set path and open file
     m_file.setPath(path.toStdString());
     try {
@@ -431,6 +438,7 @@ bool MainWindow::openFile(const QString &path, bool readOnly)
         QMessageBox::critical(this, QApplication::applicationName(), errmsg);
         return false;
     }
+
     // warn before loading a very big file
     if (m_file.size() > 10485760) {
         if (QMessageBox::warning(this, QApplication::applicationName(),
@@ -440,6 +448,7 @@ bool MainWindow::openFile(const QString &path, bool readOnly)
             return false;
         }
     }
+
     // ask for a password if required
     if (m_file.isEncryptionUsed()) {
         EnterPasswordDialog pwDlg(this);
@@ -463,6 +472,7 @@ bool MainWindow::openFile(const QString &path, bool readOnly)
         }
         m_file.setPassword(pwDlg.password().toStdString());
     }
+
     // load the contents of the file
     QString msg;
     try {
@@ -476,6 +486,7 @@ bool MainWindow::openFile(const QString &path, bool readOnly)
             msg = tr("Unable to parse the file. %1").arg(QString::fromLocal8Bit(e.what()));
         }
     }
+
     // show a message in the error case
     if (!msg.isEmpty()) {
         m_file.clear();
@@ -524,9 +535,11 @@ void MainWindow::createFile(const QString &path, const QString &password)
     if (m_file.hasRootEntry() && !closeFile()) {
         return;
     }
+
     // set path and password
     m_file.setPath(path.toStdString());
     m_file.setPassword(password.toStdString());
+
     // create the file and show it
     try {
         m_readOnly = false;
@@ -567,7 +580,7 @@ bool MainWindow::showFile()
  */
 void MainWindow::updateUiStatus()
 {
-    bool fileOpened = m_file.hasRootEntry();
+    const bool fileOpened = m_file.hasRootEntry();
     m_ui->actionCreate->setEnabled(true);
     m_ui->actionOpen->setEnabled(true);
     m_ui->actionSave->setEnabled(fileOpened);
@@ -616,45 +629,45 @@ void MainWindow::applyDefaultExpanding(const QModelIndex &parent)
 
 /*!
  * \brief Returns a string with the values of all selected fields.
- * \remarks Columns are sparated with \t, rows with \n.
+ * \remarks Columns are sparated with \\t, rows with \\n.
  */
 QString MainWindow::selectedFieldsString() const
 {
-    QModelIndexList selectedIndexes = m_ui->tableView->selectionModel()->selectedIndexes();
+    const QModelIndexList selectedIndexes(m_ui->tableView->selectionModel()->selectedIndexes());
+    if (selectedIndexes.isEmpty()) {
+        return QString();
+    }
+    if (selectedIndexes.size() == 1) {
+        return selectedIndexes.front().data(Qt::EditRole).toString();
+    }
     QString text;
-    if (!selectedIndexes.isEmpty()) {
-        if (selectedIndexes.size() > 1) {
-            int maxRow = m_fieldModel->rowCount() - 1;
-            int firstRow = maxRow, lastRow = 0;
-            int maxCol = m_fieldModel->columnCount() - 1;
-            int firstCol = maxCol, lastCol = 0;
-            for (const QModelIndex &index : selectedIndexes) {
-                if (index.row() < firstRow) {
-                    firstRow = index.row();
-                }
-                if (index.row() > lastRow) {
-                    lastRow = index.row();
-                }
-                if (index.column() < firstCol) {
-                    firstCol = index.column();
-                }
-                if (index.column() > lastCol) {
-                    lastCol = index.column();
-                }
-            }
-            for (int row = firstRow; row <= lastRow; ++row) {
-                for (int col = firstCol; col <= lastCol; ++col) {
-                    QModelIndex index = m_fieldModel->index(row, col);
-                    if (selectedIndexes.contains(index)) {
-                        text.append(index.data(Qt::EditRole).toString());
-                    }
-                    text.append('\t');
-                }
-                text.append('\n');
-            }
-        } else {
-            text = selectedIndexes.front().data(Qt::EditRole).toString();
+    int maxRow = m_fieldModel->rowCount() - 1;
+    int firstRow = maxRow, lastRow = 0;
+    int maxCol = m_fieldModel->columnCount() - 1;
+    int firstCol = maxCol, lastCol = 0;
+    for (const QModelIndex &index : selectedIndexes) {
+        if (index.row() < firstRow) {
+            firstRow = index.row();
         }
+        if (index.row() > lastRow) {
+            lastRow = index.row();
+        }
+        if (index.column() < firstCol) {
+            firstCol = index.column();
+        }
+        if (index.column() > lastCol) {
+            lastCol = index.column();
+        }
+    }
+    for (int row = firstRow; row <= lastRow; ++row) {
+        for (int col = firstCol; col <= lastCol; ++col) {
+            const QModelIndex index(m_fieldModel->index(row, col));
+            if (selectedIndexes.contains(index)) {
+                text.append(index.data(Qt::EditRole).toString());
+            }
+            text.append('\t');
+        }
+        text.append('\n');
     }
     return text;
 }
@@ -664,31 +677,32 @@ QString MainWindow::selectedFieldsString() const
  */
 void MainWindow::insertFields(const QString &fieldsString)
 {
-    QModelIndexList selectedIndexes = m_ui->tableView->selectionModel()->selectedIndexes();
-    if (selectedIndexes.size() == 1) {
-        int rows = m_fieldModel->rowCount(), cols = m_fieldModel->columnCount();
-        int row = selectedIndexes.front().row();
-        int initCol = selectedIndexes.front().column();
-        assert(row < rows);
-        QStringList rowValues = fieldsString.split('\n');
-        if (rowValues.back().isEmpty()) {
-            rowValues.pop_back();
-        }
-        m_fieldModel->insertRows(row, rowValues.size(), QModelIndex());
-        for (const QString &rowValue : rowValues) {
-            int col = initCol;
-            for (const QString &cellValue : rowValue.split('\t')) {
-                if (col < cols) {
-                    m_fieldModel->setData(m_fieldModel->index(row, col), cellValue, Qt::EditRole);
-                    ++col;
-                } else {
-                    break;
-                }
-            }
-            ++row;
-        }
-    } else {
+    const QModelIndexList selectedIndexes(m_ui->tableView->selectionModel()->selectedIndexes());
+    if (selectedIndexes.size() != 1) {
         QMessageBox::warning(this, QApplication::applicationName(), tr("Exactly one fields needs to be selected (top-left corner for insertion)."));
+        return;
+    }
+
+    int rows = m_fieldModel->rowCount(), cols = m_fieldModel->columnCount();
+    int row = selectedIndexes.front().row();
+    int initCol = selectedIndexes.front().column();
+    assert(row < rows);
+    QStringList rowValues = fieldsString.split('\n');
+    if (rowValues.back().isEmpty()) {
+        rowValues.pop_back();
+    }
+    m_fieldModel->insertRows(row, rowValues.size(), QModelIndex());
+    for (const QString &rowValue : rowValues) {
+        int col = initCol;
+        for (const QString &cellValue : rowValue.split('\t')) {
+            if (col < cols) {
+                m_fieldModel->setData(m_fieldModel->index(row, col), cellValue, Qt::EditRole);
+                ++col;
+            } else {
+                break;
+            }
+        }
+        ++row;
     }
 }
 
@@ -701,7 +715,7 @@ bool MainWindow::askForCreatingFile()
         return false;
     }
 
-    QString fileName = QFileDialog::getSaveFileName(
+    const QString fileName = QFileDialog::getSaveFileName(
         this, tr("Select where you want to save the password list"), QString(), tr("Password Manager files (*.pwmgr);;All files (*)"));
     if (fileName.isEmpty()) {
         m_ui->statusBar->showMessage(tr("The file was not be saved."), 7000);
@@ -793,13 +807,14 @@ bool MainWindow::saveFile()
     if (showNoFileOpened()) {
         return false;
     }
+
     // create backup
     if (!m_file.path().empty() && QFile::exists(QString::fromStdString(m_file.path()))) {
         if (m_ui->actionAlwaysCreateBackup->isChecked()) {
             try {
                 m_file.doBackup();
             } catch (...) {
-                QString message(
+                const QString message(
                     tr("The backup file couldn't be created because in IO error occured: %1").arg(QString::fromLocal8Bit(catchIoFailure())));
                 QMessageBox::critical(this, QApplication::applicationName(), message);
                 m_ui->statusBar->showMessage(message, 7000);
@@ -811,6 +826,7 @@ bool MainWindow::saveFile()
             return false;
         }
     }
+
     // ask for a password if none is set
     if (m_file.password()[0] == 0) {
         EnterPasswordDialog pwDlg(this);
@@ -827,6 +843,7 @@ bool MainWindow::saveFile()
             return false;
         }
     }
+
     // save the file
     QString msg;
     try {
@@ -861,21 +878,22 @@ void MainWindow::exportFile()
     if (showNoFileOpened()) {
         return;
     }
-    QString targetPath
+    const QString targetPath
         = QFileDialog::getSaveFileName(this, QApplication::applicationName(), QString(), tr("Plain text document (*.txt);;All files (*.*)"));
-    if (!targetPath.isNull()) {
-        QString errmsg;
-        try {
-            m_file.exportToTextfile(targetPath.toStdString());
-        } catch (...) {
-            errmsg = tr("The password list couldn't be exported. %1").arg(QString::fromLocal8Bit(catchIoFailure()));
-        }
-        if (errmsg.isEmpty()) {
-            m_ui->statusBar->showMessage(tr("The password list has been exported."), 5000);
-        } else {
-            m_ui->statusBar->showMessage(errmsg, 5000);
-            QMessageBox::critical(this, QApplication::applicationName(), errmsg);
-        }
+    if (targetPath.isEmpty()) {
+        return;
+    }
+    QString errmsg;
+    try {
+        m_file.exportToTextfile(targetPath.toStdString());
+    } catch (...) {
+        errmsg = tr("The password list couldn't be exported. %1").arg(QString::fromLocal8Bit(catchIoFailure()));
+    }
+    if (errmsg.isEmpty()) {
+        m_ui->statusBar->showMessage(tr("The password list has been exported."), 5000);
+    } else {
+        m_ui->statusBar->showMessage(errmsg, 5000);
+        QMessageBox::critical(this, QApplication::applicationName(), errmsg);
     }
 }
 
@@ -889,7 +907,7 @@ void MainWindow::showContainingDirectory()
     } else if (m_file.path().empty()) {
         QMessageBox::warning(this, QApplication::applicationName(), tr("The currently opened file hasn't been saved yet."));
     } else {
-        QFileInfo file(QString::fromStdString(m_file.path()));
+        const QFileInfo file(QString::fromStdString(m_file.path()));
         if (file.dir().exists()) {
             DesktopUtils::openLocalFileOrDir(file.dir().absolutePath());
         }
@@ -922,9 +940,9 @@ void MainWindow::addEntry(EntryType type)
     if (showNoFileOpened()) {
         return;
     }
-    QModelIndexList selectedIndexes = m_ui->treeView->selectionModel()->selectedRows(0);
+    const QModelIndexList selectedIndexes = m_ui->treeView->selectionModel()->selectedRows(0);
     if (selectedIndexes.size() == 1) {
-        QModelIndex selected = m_entryFilterModel->mapToSource(selectedIndexes.at(0));
+        const QModelIndex selected = m_entryFilterModel->mapToSource(selectedIndexes.at(0));
         if (m_entryModel->isNode(selected)) {
             bool result;
             const QString text = QInputDialog::getText(this, type == EntryType::Account ? tr("Add account") : tr("Add category"),
@@ -957,7 +975,7 @@ void MainWindow::removeEntry()
     if (showNoFileOpened()) {
         return;
     }
-    QModelIndexList selectedIndexes = m_ui->treeView->selectionModel()->selectedRows(0);
+    const QModelIndexList selectedIndexes = m_ui->treeView->selectionModel()->selectedRows(0);
     if (selectedIndexes.size() == 1) {
         const QModelIndex selected = m_entryFilterModel->mapToSource(selectedIndexes.at(0));
         if (!m_entryModel->removeRow(selected.row(), selected.parent())) {
@@ -1004,7 +1022,7 @@ void MainWindow::insertRow()
     if (showNoFileOpened() || showNoAccount()) {
         return;
     }
-    QModelIndexList selectedIndexes = m_ui->tableView->selectionModel()->selectedIndexes();
+    const QModelIndexList selectedIndexes = m_ui->tableView->selectionModel()->selectedIndexes();
     if (selectedIndexes.size()) {
         int row = m_fieldModel->rowCount();
         for (const QModelIndex &index : selectedIndexes) {
@@ -1069,7 +1087,7 @@ void MainWindow::setFieldType(FieldType fieldType)
     if (showNoFileOpened() || showNoAccount()) {
         return;
     }
-    QModelIndexList selectedIndexes = m_ui->tableView->selectionModel()->selectedIndexes();
+    const QModelIndexList selectedIndexes = m_ui->tableView->selectionModel()->selectedIndexes();
     if (!selectedIndexes.isEmpty()) {
         const QVariant typeVariant(static_cast<int>(fieldType));
         for (const QModelIndex &index : selectedIndexes) {
@@ -1135,7 +1153,7 @@ void MainWindow::showTreeViewContextMenu()
     if (!m_file.hasRootEntry()) {
         return;
     }
-    QModelIndexList selectedIndexes = m_ui->treeView->selectionModel()->selectedRows(0);
+    const QModelIndexList selectedIndexes = m_ui->treeView->selectionModel()->selectedRows(0);
     if (selectedIndexes.size() == 1) {
         QMenu contextMenu(this);
         QModelIndex selected = m_entryFilterModel->mapToSource(selectedIndexes.at(0));
@@ -1166,7 +1184,7 @@ void MainWindow::showTreeViewContextMenu()
 void MainWindow::showTableViewContextMenu()
 {
     // check whether there is a selection at all
-    QModelIndexList selectedIndexes = m_ui->tableView->selectionModel()->selectedIndexes();
+    const QModelIndexList selectedIndexes = m_ui->tableView->selectionModel()->selectedIndexes();
     if (!m_file.hasRootEntry() || !m_fieldModel->fields() || selectedIndexes.isEmpty()) {
         return;
     }
@@ -1242,17 +1260,17 @@ void MainWindow::showTableViewContextMenu()
  */
 void MainWindow::copyFieldsForXMilliSeconds(int x)
 {
-    QString text = selectedFieldsString();
-    if (!text.isEmpty()) {
-        if (m_clearClipboardTimer) {
-            killTimer(m_clearClipboardTimer);
-        }
-        QApplication::clipboard()->setText(text);
-        if (x > 0) {
-            m_clearClipboardTimer = startTimer(x, Qt::CoarseTimer);
-        }
-    } else {
+    const QString text(selectedFieldsString());
+    if (text.isEmpty()) {
         QMessageBox::warning(this, QApplication::applicationName(), tr("The selection is empty."));
+        return;
+    }
+    if (m_clearClipboardTimer) {
+        killTimer(m_clearClipboardTimer);
+    }
+    QApplication::clipboard()->setText(text);
+    if (x > 0) {
+        m_clearClipboardTimer = startTimer(x, Qt::CoarseTimer);
     }
 }
 } // namespace QtGui
