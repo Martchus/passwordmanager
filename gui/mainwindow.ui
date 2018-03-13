@@ -183,7 +183,7 @@
      <x>0</x>
      <y>0</y>
      <width>848</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuProgramm">
@@ -231,6 +231,8 @@
     <addaction name="separator"/>
     <addaction name="actionInsertRow"/>
     <addaction name="actionRemoveRows"/>
+    <addaction name="actionCopyFields"/>
+    <addaction name="actionPasteFields"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
@@ -381,6 +383,9 @@
    <property name="toolTip">
     <string>Remove selected entry</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+Del</string>
+   </property>
   </action>
   <action name="actionInsertRow">
    <property name="icon">
@@ -388,7 +393,10 @@
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
-    <string>&amp;Insert field</string>
+    <string>&amp;Insert new field</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
    </property>
   </action>
   <action name="actionRemoveRows">
@@ -399,6 +407,9 @@
    <property name="text">
     <string>Remove selected &amp;field(s)</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Del</string>
+   </property>
   </action>
   <action name="actionPasswordGenerator">
    <property name="icon">
@@ -407,6 +418,9 @@
    </property>
    <property name="text">
     <string>&amp;Password generator</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+G</string>
    </property>
   </action>
   <action name="actionAlwaysCreateBackup">
@@ -431,6 +445,9 @@
    <property name="toolTip">
     <string>Export passwords to plain text files</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
+   </property>
   </action>
   <action name="actionShowContainingDirectory">
    <property name="icon">
@@ -452,6 +469,9 @@
    <property name="text">
     <string>&amp;Undo</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
   </action>
   <action name="actionRedo">
    <property name="enabled">
@@ -464,6 +484,9 @@
    <property name="text">
     <string>&amp;Redo</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+Z</string>
+   </property>
   </action>
   <action name="actionAddCategory">
    <property name="icon">
@@ -473,6 +496,9 @@
    <property name="text">
     <string>Add &amp;new category</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+C</string>
+   </property>
   </action>
   <action name="actionShowUndoStack">
    <property name="checkable">
@@ -480,6 +506,9 @@
    </property>
    <property name="text">
     <string>&amp;Show undo stack</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+U</string>
    </property>
   </action>
   <action name="actionShowAlways">
@@ -513,6 +542,28 @@
    </property>
    <property name="text">
     <string>&amp;Qt settings</string>
+   </property>
+  </action>
+  <action name="actionCopyFields">
+   <property name="icon">
+    <iconset theme="edit-copy"/>
+   </property>
+   <property name="text">
+    <string>Copy selected field(s)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
+  </action>
+  <action name="actionPasteFields">
+   <property name="icon">
+    <iconset theme="edit-paste"/>
+   </property>
+   <property name="text">
+    <string>Paste to selected field(s)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
    </property>
   </action>
  </widget>

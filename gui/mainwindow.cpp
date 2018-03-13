@@ -203,10 +203,12 @@ MainWindow::MainWindow(QSettings &settings, Dialogs::QtSettings *qtSettings, QWi
     // -> add/remove account
     connect(m_ui->actionAddAccount, &QAction::triggered, this, &MainWindow::addAccount);
     connect(m_ui->actionAddCategory, &QAction::triggered, this, &MainWindow::addCategory);
-    connect(m_ui->actionRemoveRows, &QAction::triggered, this, &MainWindow::removeEntry);
+    connect(m_ui->actionRemoveAccount, &QAction::triggered, this, &MainWindow::removeEntry);
     // -> insert/remove fields
     connect(m_ui->actionInsertRow, &QAction::triggered, this, &MainWindow::insertRow);
-    connect(m_ui->actionRemoveAccount, &QAction::triggered, this, &MainWindow::removeRows);
+    connect(m_ui->actionRemoveRows, &QAction::triggered, this, &MainWindow::removeRows);
+    connect(m_ui->actionCopyFields, &QAction::triggered, this, &MainWindow::copyFields);
+    connect(m_ui->actionPasteFields, &QAction::triggered, this, &MainWindow::insertFieldsFromClipboard);
     // -> undo/redo
     connect(m_ui->actionUndo, &QAction::triggered, m_undoStack, &QUndoStack::undo);
     connect(m_ui->actionRedo, &QAction::triggered, m_undoStack, &QUndoStack::redo);
