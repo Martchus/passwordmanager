@@ -1,7 +1,7 @@
 #include "./fieldmodel.h"
 
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
-# include "./gui/undocommands.h"
+#include "./gui/undocommands.h"
 #endif
 
 #include <passwordfile/io/field.h>
@@ -26,12 +26,13 @@ namespace QtGui {
 /*!
  * \brief Constructs a new field model.
  */
-FieldModel::FieldModel(QObject *parent) :
-    QAbstractTableModel(parent),
-    m_accountEntry(nullptr),
-    m_fields(nullptr),
-    m_passwordVisibility(PasswordVisibility::OnlyWhenEditing)
-{}
+FieldModel::FieldModel(QObject *parent)
+    : QAbstractTableModel(parent)
+    , m_accountEntry(nullptr)
+    , m_fields(nullptr)
+    , m_passwordVisibility(PasswordVisibility::OnlyWhenEditing)
+{
+}
 
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
 /*!
@@ -39,12 +40,13 @@ FieldModel::FieldModel(QObject *parent) :
  *
  * This constructor is only available when PASSWORD_MANAGER_GUI_QTWIDGETS is defined.
  */
-FieldModel::FieldModel(QUndoStack *undoStack, QObject *parent) :
-    QAbstractTableModel(parent),
-    StackSupport(undoStack),
-    m_accountEntry(nullptr),
-    m_fields(nullptr)
-{}
+FieldModel::FieldModel(QUndoStack *undoStack, QObject *parent)
+    : QAbstractTableModel(parent)
+    , StackSupport(undoStack)
+    , m_accountEntry(nullptr)
+    , m_fields(nullptr)
+{
+}
 #endif
 
 /*!
@@ -55,11 +57,11 @@ FieldModel::FieldModel(QUndoStack *undoStack, QObject *parent) :
  */
 void FieldModel::setAccountEntry(AccountEntry *entry)
 {
-    if(entry == m_accountEntry) {
+    if (entry == m_accountEntry) {
         return;
     }
     beginResetModel();
-    if((m_accountEntry = entry)) {
+    if ((m_accountEntry = entry)) {
         m_fields = &entry->fields();
     } else {
         m_fields = nullptr;
@@ -69,48 +71,43 @@ void FieldModel::setAccountEntry(AccountEntry *entry)
 
 QVariant FieldModel::data(const QModelIndex &index, int role) const
 {
-    if(!index.isValid() || !m_fields || index.row() < 0) {
+    if (!index.isValid() || !m_fields || index.row() < 0) {
         return QVariant();
     }
     // return data for existent field
-    if(static_cast<size_t>(index.row()) < m_fields->size()) {
-        switch(role) {
+    if (static_cast<size_t>(index.row()) < m_fields->size()) {
+        switch (role) {
         case Qt::DisplayRole:
         case Qt::EditRole:
-            switch(index.column()) {
+            switch (index.column()) {
             case 0:
                 return QString::fromStdString((*m_fields)[static_cast<size_t>(index.row())].name());
             case 1:
-                return (m_passwordVisibility == PasswordVisibility::Always
-                        || role == Qt::EditRole
-                        || (*m_fields)[static_cast<size_t>(index.row())].type() != FieldType::Password)
-                        ? QString::fromStdString((*m_fields)[static_cast<size_t>(index.row())].value())
-                        : QString((*m_fields)[static_cast<size_t>(index.row())].value().size(), QChar(0x2022));
-            default:
-                ;
+                return (m_passwordVisibility == PasswordVisibility::Always || role == Qt::EditRole
+                           || (*m_fields)[static_cast<size_t>(index.row())].type() != FieldType::Password)
+                    ? QString::fromStdString((*m_fields)[static_cast<size_t>(index.row())].value())
+                    : QString((*m_fields)[static_cast<size_t>(index.row())].value().size(), QChar(0x2022));
+            default:;
             }
             break;
         case FieldTypeRole:
             return static_cast<int>((*m_fields)[static_cast<size_t>(index.row())].type());
-        default:
-            ;
+        default:;
         }
-    // return data for empty field at the end which enables the user to append fields
-    } else if(static_cast<size_t>(index.row()) == m_fields->size()) {
-        switch(role) {
+        // return data for empty field at the end which enables the user to append fields
+    } else if (static_cast<size_t>(index.row()) == m_fields->size()) {
+        switch (role) {
         case Qt::DisplayRole:
         case Qt::EditRole:
-            switch(index.column()) {
+            switch (index.column()) {
             case 0:
                 return QString();
             case 1:
                 return QString();
-            default:
-                ;
+            default:;
             }
             break;
-        default:
-            ;
+        default:;
         }
     }
     return QVariant();
@@ -120,7 +117,7 @@ QMap<int, QVariant> FieldModel::itemData(const QModelIndex &index) const
 {
     static const auto roleMap = [this, index] {
         QMap<int, QVariant> roleMap;
-        for(const auto role : initializer_list<int>{Qt::EditRole, FieldTypeRole}) {
+        for (const auto role : initializer_list<int>{ Qt::EditRole, FieldTypeRole }) {
             const auto variantData(data(index, role));
             if (variantData.isValid()) {
                 roleMap.insert(role, variantData);
@@ -134,19 +131,19 @@ QMap<int, QVariant> FieldModel::itemData(const QModelIndex &index) const
 bool FieldModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
 #if PASSWORD_MANAGER_GUI_QTWIDGETS
-    if(undoStack()) {
+    if (undoStack()) {
         return push(new FieldModelSetValueCommand(this, index, value, role));
     }
 #endif
-    if(!index.isValid() || !m_fields || index.row() < 0) {
+    if (!index.isValid() || !m_fields || index.row() < 0) {
         return false;
     }
     QVector<int> roles;
-    if(static_cast<size_t>(index.row()) < m_fields->size()) {
+    if (static_cast<size_t>(index.row()) < m_fields->size()) {
         // set data for existing field
-        switch(role) {
+        switch (role) {
         case Qt::EditRole:
-            switch(index.column()) {
+            switch (index.column()) {
             case 0:
                 m_fields->at(index.row()).setName(value.toString().toStdString());
                 roles << role;
@@ -155,33 +152,32 @@ bool FieldModel::setData(const QModelIndex &index, const QVariant &value, int ro
                 m_fields->at(index.row()).setValue(value.toString().toStdString());
                 roles << role;
                 break;
-            default:
-                ;
+            default:;
             }
             break;
         case FieldTypeRole: {
             bool ok;
             int fieldType = value.toInt(&ok);
-            if(ok && Field::isValidType(fieldType)) {
+            if (ok && Field::isValidType(fieldType)) {
                 roles << role;
                 m_fields->at(index.row()).setType(static_cast<FieldType>(fieldType));
             }
             break;
-        } default:
-            ;
+        }
+        default:;
         }
         // remove last field if empty, showing an empty field at the end to enabled appending new rows is provided by the data method
-        if(!roles.isEmpty() && static_cast<size_t>(index.row()) == m_fields->size() - 1 && m_fields->at(index.row()).isEmpty()) {
+        if (!roles.isEmpty() && static_cast<size_t>(index.row()) == m_fields->size() - 1 && m_fields->at(index.row()).isEmpty()) {
             beginRemoveRows(index.parent(), index.row(), index.row());
             m_fields->pop_back();
             endRemoveRows();
         }
-    } else if(static_cast<size_t>(index.row()) == m_fields->size() && !value.toString().isEmpty()) {
+    } else if (static_cast<size_t>(index.row()) == m_fields->size() && !value.toString().isEmpty()) {
         // set data for a new field emplaced at the end of the field list
-        switch(role) {
+        switch (role) {
         case Qt::DisplayRole:
         case Qt::EditRole:
-            switch(index.column()) {
+            switch (index.column()) {
             case 0:
                 beginInsertRows(index.parent(), rowCount(), rowCount());
                 m_fields->emplace_back(m_accountEntry);
@@ -196,28 +192,25 @@ bool FieldModel::setData(const QModelIndex &index, const QVariant &value, int ro
                 endInsertRows();
                 roles << role;
                 break;
-            default:
-                ;
+            default:;
             }
             break;
-        default:
-            ;
+        default:;
         }
     }
     // return false if nothing could be changed
-    if(roles.isEmpty()) {
+    if (roles.isEmpty()) {
         return false;
     }
     // some roles affect other roles
-    switch(role) {
+    switch (role) {
     case Qt::EditRole:
         roles << Qt::DisplayRole;
         break;
     case FieldTypeRole:
         roles << Qt::DisplayRole << Qt::EditRole;
         break;
-    default:
-        ;
+    default:;
     }
     // emit data changed signal on sucess
     emit dataChanged(index, index, roles);
@@ -231,25 +224,22 @@ Qt::ItemFlags FieldModel::flags(const QModelIndex &index) const
 
 QVariant FieldModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    switch(orientation) {
+    switch (orientation) {
     case Qt::Horizontal:
-        switch(role) {
+        switch (role) {
         case Qt::DisplayRole:
-            switch(section) {
+            switch (section) {
             case 0:
                 return tr("Name");
             case 1:
                 return tr("Value");
-            default:
-                ;
+            default:;
             }
             break;
-        default:
-            ;
+        default:;
         }
         break;
-    default:
-        ;
+    default:;
     }
     return QVariant();
 }
@@ -267,11 +257,11 @@ int FieldModel::columnCount(const QModelIndex &parent) const
 bool FieldModel::insertRows(int row, int count, const QModelIndex &parent)
 {
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
-    if(undoStack()) {
+    if (undoStack()) {
         return push(new FieldModelInsertRowsCommand(this, row, count));
     }
 #endif
-    if(parent.isValid() || row < 0 || count <= 0 || static_cast<size_t>(row + count) > m_fields->size()) {
+    if (parent.isValid() || row < 0 || count <= 0 || static_cast<size_t>(row + count) > m_fields->size()) {
         return false;
     }
     beginInsertRows(parent, row, row + count - 1);
@@ -283,11 +273,11 @@ bool FieldModel::insertRows(int row, int count, const QModelIndex &parent)
 bool FieldModel::removeRows(int row, int count, const QModelIndex &parent)
 {
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
-    if(undoStack()) {
+    if (undoStack()) {
         return push(new FieldModelRemoveRowsCommand(this, row, count));
     }
 #endif
-    if(parent.isValid() || row < 0 || count <= 0 || static_cast<size_t>(row + count) > m_fields->size()) {
+    if (parent.isValid() || row < 0 || count <= 0 || static_cast<size_t>(row + count) > m_fields->size()) {
         return false;
     }
     beginRemoveRows(parent, row, row + count - 1);
@@ -297,7 +287,7 @@ bool FieldModel::removeRows(int row, int count, const QModelIndex &parent)
 
 bool FieldModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
 {
-    if(!QAbstractTableModel::dropMimeData(data, action, row, column, parent) && data->hasText()) {
+    if (!QAbstractTableModel::dropMimeData(data, action, row, column, parent) && data->hasText()) {
         return setData(parent, data->text(), Qt::EditRole);
     }
     return false;
@@ -311,11 +301,11 @@ QStringList FieldModel::mimeTypes() const
 QMimeData *FieldModel::mimeData(const QModelIndexList &indexes) const
 {
     QMimeData *data = QAbstractTableModel::mimeData(indexes);
-    if(indexes.isEmpty()) {
+    if (indexes.isEmpty()) {
         return data;
     }
     QStringList result;
-    for(const QModelIndex &index : indexes) {
+    for (const QModelIndex &index : indexes) {
         result << index.data(Qt::EditRole).toString();
     }
     data->setText(result.join(QChar('\n')));
@@ -329,12 +319,10 @@ QMimeData *FieldModel::mimeData(const QModelIndexList &indexes) const
  */
 const Field *FieldModel::field(size_t row) const
 {
-    if(m_fields && row < m_fields->size()) {
+    if (m_fields && row < m_fields->size()) {
         return &(*m_fields)[row];
     }
     return nullptr;
 }
 
-}
-
-
+} // namespace QtGui

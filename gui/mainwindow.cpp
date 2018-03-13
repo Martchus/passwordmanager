@@ -432,16 +432,16 @@ bool MainWindow::openFile(const QString &path, bool readOnly)
         }
 
         // show error message
-        const QString errmsg
-            = tr("An IO error occured when opening the specified file \"%1\".\n\n(%2)").arg(path, QString::fromLocal8Bit(ioError));
+        const QString errmsg = tr("An IO error occured when opening the specified file \"%1\".\n\n(%2)").arg(path, QString::fromLocal8Bit(ioError));
         m_ui->statusBar->showMessage(errmsg, 5000);
         QMessageBox::critical(this, QApplication::applicationName(), errmsg);
         return false;
     }
 
     // warn before loading a very big file
-    if (m_file.size() > 10485760 && QMessageBox::warning(this, QApplication::applicationName(),
-                tr("The file you want to load seems to be very big. Do you really want to open it?"), QMessageBox::Yes, QMessageBox::No)
+    if (m_file.size() > 10485760
+        && QMessageBox::warning(this, QApplication::applicationName(),
+               tr("The file you want to load seems to be very big. Do you really want to open it?"), QMessageBox::Yes, QMessageBox::No)
             == QMessageBox::No) {
         m_file.clear();
         return false;
@@ -942,8 +942,8 @@ void MainWindow::addEntry(EntryType type)
         return;
     }
     bool result;
-    const QString text = QInputDialog::getText(this, type == EntryType::Account ? tr("Add account") : tr("Add category"),
-        tr("Enter the entry name"), QLineEdit::Normal, tr("new entry"), &result);
+    const QString text = QInputDialog::getText(this, type == EntryType::Account ? tr("Add account") : tr("Add category"), tr("Enter the entry name"),
+        QLineEdit::Normal, tr("new entry"), &result);
     if (!result) {
         return;
     }

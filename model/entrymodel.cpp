@@ -1,17 +1,17 @@
 #include "./entrymodel.h"
 
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
-# include "./gui/undocommands.h"
+#include "./gui/undocommands.h"
 #endif
 
 #include <passwordfile/io/entry.h>
 
 #include <c++utilities/io/catchiofailure.h>
 
-#include <QIcon>
 #include <QBuffer>
-#include <QMimeData>
 #include <QDebug>
+#include <QIcon>
+#include <QMimeData>
 
 #include <sstream>
 
@@ -32,11 +32,12 @@ namespace QtGui {
 /*!
  * \brief Constructs a new entry model.
  */
-EntryModel::EntryModel(QObject *parent) :
-    QAbstractItemModel(parent),
-    m_rootEntry(nullptr),
-    m_insertType(EntryType::Node)
-{}
+EntryModel::EntryModel(QObject *parent)
+    : QAbstractItemModel(parent)
+    , m_rootEntry(nullptr)
+    , m_insertType(EntryType::Node)
+{
+}
 
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
 /*!
@@ -44,12 +45,13 @@ EntryModel::EntryModel(QObject *parent) :
  *
  * This constructor is only available when PASSWORD_MANAGER_GUI_QTWIDGETS is defined.
  */
-EntryModel::EntryModel(QUndoStack *undoStack, QObject *parent) :
-    QAbstractItemModel(parent),
-    StackSupport(undoStack),
-    m_rootEntry(nullptr),
-    m_insertType(EntryType::Node)
-{}
+EntryModel::EntryModel(QUndoStack *undoStack, QObject *parent)
+    : QAbstractItemModel(parent)
+    , StackSupport(undoStack)
+    , m_rootEntry(nullptr)
+    , m_insertType(EntryType::Node)
+{
+}
 #endif
 
 /*!
@@ -75,18 +77,18 @@ Entry *EntryModel::entry(const QModelIndex &index)
 QList<Entry *> EntryModel::takeEntries(int row, int count, const QModelIndex &parent)
 {
     Entry *const parentEntry = entry(parent);
-    if(!parentEntry || parentEntry->type() != EntryType::Node) {
+    if (!parentEntry || parentEntry->type() != EntryType::Node) {
         return QList<Entry *>();
     }
     QList<Entry *> res;
     NodeEntry *const parentNodeEntry = static_cast<NodeEntry *>(parentEntry);
     int lastIndex = row + count - 1;
     const vector<Entry *> &children = parentNodeEntry->children();
-    if(lastIndex < 0 || static_cast<size_t>(lastIndex) >= children.size()) {
+    if (lastIndex < 0 || static_cast<size_t>(lastIndex) >= children.size()) {
         lastIndex = children.size() - 1;
     }
     beginRemoveRows(parent, row, lastIndex);
-    for(int index = lastIndex; index >= row; --index) {
+    for (int index = lastIndex; index >= row; --index) {
         Entry *const child = children[index];
         child->setParent(nullptr);
         res << child;
@@ -104,20 +106,20 @@ QList<Entry *> EntryModel::takeEntries(int row, int count, const QModelIndex &pa
  */
 bool EntryModel::insertEntries(int row, const QModelIndex &parent, const QList<Entry *> &entries)
 {
-    if(entries.isEmpty()) {
+    if (entries.isEmpty()) {
         return true;
     }
     Entry *const parentEntry = entry(parent);
-    if(!parentEntry || parentEntry->type() != EntryType::Node) {
+    if (!parentEntry || parentEntry->type() != EntryType::Node) {
         return false;
     }
     NodeEntry *const parentNodeEntry = static_cast<NodeEntry *>(parentEntry);
     const vector<Entry *> &children = parentNodeEntry->children();
-    if(row < 0 || static_cast<size_t>(row) > children.size()) {
+    if (row < 0 || static_cast<size_t>(row) > children.size()) {
         row = children.size();
     }
     beginInsertRows(parent, row, row + entries.size() - 1);
-    for(Entry *const entry : entries) {
+    for (Entry *const entry : entries) {
         entry->setParent(parentNodeEntry, row);
         ++row;
     }
@@ -127,25 +129,25 @@ bool EntryModel::insertEntries(int row, const QModelIndex &parent, const QList<E
 
 QModelIndex EntryModel::index(int row, int column, const QModelIndex &parent) const
 {
-    if(!parent.isValid()) {
-        if(m_rootEntry && row == 0) {
+    if (!parent.isValid()) {
+        if (m_rootEntry && row == 0) {
             return createIndex(row, column, m_rootEntry);
         }
         return QModelIndex();
     }
     const auto *const parentEntry = static_cast<const Entry *>(parent.internalPointer());
-    if(!parentEntry) {
+    if (!parentEntry) {
         return QModelIndex();
     }
-    switch(parentEntry->type()) {
+    switch (parentEntry->type()) {
     case EntryType::Node: {
         const std::vector<Entry *> &children = static_cast<const NodeEntry *>(parentEntry)->children();
-        if(row >= 0 && static_cast<size_t>(row) < children.size()) {
+        if (row >= 0 && static_cast<size_t>(row) < children.size()) {
             return createIndex(row, column, children[static_cast<size_t>(row)]);
         }
         break;
-    } case EntryType::Account:
-        ;
+    }
+    case EntryType::Account:;
     }
     return QModelIndex();
 }
@@ -156,7 +158,7 @@ QModelIndex EntryModel::index(int row, int column, const QModelIndex &parent) co
  */
 QModelIndex EntryModel::index(Entry *entry) const
 {
-    if(entry->parent()) {
+    if (entry->parent()) {
         return createIndex(entry->index(), 0, entry);
     } else {
         return createIndex(0, 0, m_rootEntry);
@@ -165,15 +167,15 @@ QModelIndex EntryModel::index(Entry *entry) const
 
 QModelIndex EntryModel::parent(const QModelIndex &child) const
 {
-    if(!child.isValid()) {
+    if (!child.isValid()) {
         return QModelIndex();
     }
     const auto *const entry = static_cast<Entry *>(child.internalPointer());
-    if(!entry) {
+    if (!entry) {
         return QModelIndex();
     }
     NodeEntry *const parent = entry->parent();
-    if(parent && (child.row() >= 0 && static_cast<size_t>(child.row()) < parent->children().size())) {
+    if (parent && (child.row() >= 0 && static_cast<size_t>(child.row()) < parent->children().size())) {
         return createIndex(parent->index() > 0 ? parent->index() : 0, 0, parent);
     }
     return QModelIndex();
@@ -181,7 +183,7 @@ QModelIndex EntryModel::parent(const QModelIndex &child) const
 
 bool EntryModel::hasChildren(const QModelIndex &parent) const
 {
-    if(!parent.isValid()) {
+    if (!parent.isValid()) {
         return true;
     }
     const auto *const entry = static_cast<Entry *>(parent.internalPointer());
@@ -194,7 +196,7 @@ bool EntryModel::hasChildren(const QModelIndex &parent) const
  */
 bool EntryModel::isNode(const QModelIndex &parent) const
 {
-    if(!parent.isValid()) {
+    if (!parent.isValid()) {
         return false;
     }
     const auto *const entry = static_cast<const Entry *>(parent.internalPointer());
@@ -203,46 +205,43 @@ bool EntryModel::isNode(const QModelIndex &parent) const
 
 QVariant EntryModel::data(const QModelIndex &index, int role) const
 {
-    if(!index.isValid()) {
+    if (!index.isValid()) {
         return QVariant();
     }
     const auto *const entry = static_cast<const Entry *>(index.internalPointer());
-    if(!entry) {
+    if (!entry) {
         return QVariant();
     }
-    switch(role) {
+    switch (role) {
     case Qt::DisplayRole:
     case Qt::EditRole:
-        switch(index.column()) {
+        switch (index.column()) {
         case 0:
             return QString::fromStdString(entry->label());
-        default:
-            ;
+        default:;
         }
         break;
     case Qt::DecorationRole:
-        if(index.column() == 0 && entry->type() == EntryType::Node) {
+        if (index.column() == 0 && entry->type() == EntryType::Node) {
             static const QVariant folderIcon = QIcon::fromTheme(QStringLiteral("folder"));
             return folderIcon;
         }
         break;
     case SerializedRole: {
-            stringstream ss(stringstream::in | stringstream::out | stringstream::binary);
-            ss.exceptions(std::stringstream::failbit | std::stringstream::badbit);
-            try {
-                entry->make(ss);
-                const auto str(ss.str());
-                return QByteArray(str.data(), str.size());
-            } catch(...) {
-                IoUtilities::catchIoFailure();
-                return false;
-            }
+        stringstream ss(stringstream::in | stringstream::out | stringstream::binary);
+        ss.exceptions(std::stringstream::failbit | std::stringstream::badbit);
+        try {
+            entry->make(ss);
+            const auto str(ss.str());
+            return QByteArray(str.data(), str.size());
+        } catch (...) {
+            IoUtilities::catchIoFailure();
+            return false;
         }
-        break;
+    } break;
     case DefaultExpandedRole:
         return entry->type() == EntryType::Node && static_cast<const NodeEntry *>(entry)->isExpandedByDefault();
-    default:
-        ;
+    default:;
     }
     return QVariant();
 }
@@ -250,67 +249,65 @@ QVariant EntryModel::data(const QModelIndex &index, int role) const
 QMap<int, QVariant> EntryModel::itemData(const QModelIndex &index) const
 {
     return QMap<int, QVariant>{
-        {Qt::DisplayRole, data(index, Qt::DisplayRole)},
-        {SerializedRole, data(index, SerializedRole)},
+        { Qt::DisplayRole, data(index, Qt::DisplayRole) },
+        { SerializedRole, data(index, SerializedRole) },
     };
 }
 
 bool EntryModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
-    if(undoStack()) {
+    if (undoStack()) {
         return push(new EntryModelSetValueCommand(this, index, value, role));
     }
 #endif
-    if(!index.isValid()) {
+    if (!index.isValid()) {
         return false;
     }
     auto *const entry = static_cast<Entry *>(index.internalPointer());
-    if(!entry) {
+    if (!entry) {
         return false;
     }
-    switch(role) {
+    switch (role) {
     case Qt::DisplayRole:
     case Qt::EditRole:
-        switch(index.column()) {
+        switch (index.column()) {
         case 0:
             entry->setLabel(value.toString().toStdString());
             emit dataChanged(index, index, QVector<int>() << role);
             return true;
-        default:
-            ;
+        default:;
         }
         break;
     case SerializedRole: {
-            NodeEntry *parent = entry->parent();
-            QModelIndex parentIndex = index.parent();
-            if(!parent || !parentIndex.isValid()) {
-                break;
-            }
-            stringstream ss(stringstream::in | stringstream::out | stringstream::binary);
-            ss.exceptions(std::stringstream::failbit | std::stringstream::badbit);
-            QByteArray array = value.toByteArray();
-            if(array.isEmpty()) {
-                break;
-            }
-            try {
-                ss.write(array.data(), array.size());
-                Entry *newEntry = Entry::parse(ss);
-                int row = entry->index();
-                beginRemoveRows(parentIndex, row, row);
-                delete entry;
-                endRemoveRows();
-                beginInsertRows(parentIndex, row, row);
-                newEntry->setParent(parent, row);
-                endInsertRows();
-                return true;
-            } catch(...) {
-                IoUtilities::catchIoFailure();
-            }
+        NodeEntry *parent = entry->parent();
+        QModelIndex parentIndex = index.parent();
+        if (!parent || !parentIndex.isValid()) {
+            break;
         }
-        break;
+        stringstream ss(stringstream::in | stringstream::out | stringstream::binary);
+        ss.exceptions(std::stringstream::failbit | std::stringstream::badbit);
+        QByteArray array = value.toByteArray();
+        if (array.isEmpty()) {
+            break;
+        }
+        try {
+            ss.write(array.data(), array.size());
+            Entry *newEntry = Entry::parse(ss);
+            int row = entry->index();
+            beginRemoveRows(parentIndex, row, row);
+            delete entry;
+            endRemoveRows();
+            beginInsertRows(parentIndex, row, row);
+            newEntry->setParent(parent, row);
+            endInsertRows();
+            return true;
+        } catch (...) {
+            IoUtilities::catchIoFailure();
+        }
+    } break;
     case DefaultExpandedRole:
-        switch(entry->type()) {
+        switch (entry->type()) {
         case EntryType::Account:
             return false;
         case EntryType::Node:
@@ -319,15 +316,14 @@ bool EntryModel::setData(const QModelIndex &index, const QVariant &value, int ro
             return true;
         }
         break;
-    default:
-        ;
+    default:;
     }
     return false;
 }
 
 bool EntryModel::setItemData(const QModelIndex &index, const QMap<int, QVariant> &roles)
 {
-    for(QMap<int, QVariant>::ConstIterator it = roles.constBegin(); it != roles.constEnd(); ++it) {
+    for (QMap<int, QVariant>::ConstIterator it = roles.constBegin(); it != roles.constEnd(); ++it) {
         setData(index, it.value(), it.key());
     }
     return true;
@@ -335,46 +331,41 @@ bool EntryModel::setItemData(const QModelIndex &index, const QMap<int, QVariant>
 
 Qt::ItemFlags EntryModel::flags(const QModelIndex &index) const
 {
-    return isNode(index)
-            ? QAbstractItemModel::flags(index) | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled
-            : QAbstractItemModel::flags(index) | Qt::ItemIsEditable | Qt::ItemIsDragEnabled;
+    return isNode(index) ? QAbstractItemModel::flags(index) | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled
+                         : QAbstractItemModel::flags(index) | Qt::ItemIsEditable | Qt::ItemIsDragEnabled;
 }
 
 QVariant EntryModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    switch(orientation) {
+    switch (orientation) {
     case Qt::Horizontal:
-        switch(role) {
+        switch (role) {
         case Qt::DisplayRole:
-            switch(section) {
+            switch (section) {
             case 0:
                 return tr("Name");
-            default:
-                ;
+            default:;
             }
             break;
-        default:
-            ;
+        default:;
         }
         break;
-    default:
-        ;
+    default:;
     }
     return QVariant();
 }
 
 int EntryModel::rowCount(const QModelIndex &parent) const
 {
-    if(parent.isValid()) {
-        if(Entry *parentEntry = static_cast<Entry *>(parent.internalPointer())) {
-            switch(parentEntry->type()) {
+    if (parent.isValid()) {
+        if (Entry *parentEntry = static_cast<Entry *>(parent.internalPointer())) {
+            switch (parentEntry->type()) {
             case EntryType::Node:
                 return static_cast<NodeEntry *>(parentEntry)->children().size();
-            case EntryType::Account:
-                ;
+            case EntryType::Account:;
             }
         }
-    } else if(m_rootEntry) {
+    } else if (m_rootEntry) {
         return 1;
     }
     return 0;
@@ -388,21 +379,21 @@ int EntryModel::columnCount(const QModelIndex &) const
 bool EntryModel::insertRows(int row, int count, const QModelIndex &parent)
 {
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
-    if(undoStack()) {
+    if (undoStack()) {
         return push(new EntryModelInsertRowsCommand(this, row, count, parent));
     }
 #endif
-    if(!parent.isValid()) {
+    if (!parent.isValid()) {
         return false;
     }
     auto *const parentEntry = static_cast<Entry *>(parent.internalPointer());
-    if(!parentEntry || parentEntry->type() != EntryType::Node) {
+    if (!parentEntry || parentEntry->type() != EntryType::Node) {
         return false;
     }
     beginInsertRows(parent, row, row + count - 1);
-    for(int end = row + count; row < end; ++row) {
+    for (int end = row + count; row < end; ++row) {
         Entry *newEntry;
-        switch(m_insertType) {
+        switch (m_insertType) {
         case EntryType::Node:
             newEntry = new NodeEntry;
             break;
@@ -421,15 +412,15 @@ bool EntryModel::insertRows(int row, int count, const QModelIndex &parent)
 bool EntryModel::removeRows(int row, int count, const QModelIndex &parent)
 {
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
-    if(undoStack()) {
+    if (undoStack()) {
         return push(new EntryModelRemoveRowsCommand(this, row, count, parent));
     }
 #endif
-    if(!parent.isValid() || count <= 0) {
+    if (!parent.isValid() || count <= 0) {
         return false;
     }
     auto *const parentEntry = static_cast<Entry *>(parent.internalPointer());
-    if(!parentEntry || parentEntry->type() != EntryType::Node) {
+    if (!parentEntry || parentEntry->type() != EntryType::Node) {
         return false;
     }
     beginRemoveRows(parent, row, row + count - 1);
@@ -441,40 +432,39 @@ bool EntryModel::removeRows(int row, int count, const QModelIndex &parent)
 bool EntryModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int count, const QModelIndex &destinationParent, int destinationChild)
 {
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
-    if(undoStack()) {
+    if (undoStack()) {
         return push(new EntryModelMoveRowsCommand(this, sourceParent, sourceRow, count, destinationParent, destinationChild));
     }
 #endif
     // check validation of specified arguments
-    if(!sourceParent.isValid() || !destinationParent.isValid()
-            || sourceRow < 0 || count <= 0
-            || entry(sourceParent)->type() != EntryType::Node // source and destination parent entries
-            || entry(destinationParent)->type() != EntryType::Node) { // need to be node entries
+    if (!sourceParent.isValid() || !destinationParent.isValid() || sourceRow < 0 || count <= 0
+        || entry(sourceParent)->type() != EntryType::Node // source and destination parent entries
+        || entry(destinationParent)->type() != EntryType::Node) { // need to be node entries
         return false;
     }
     // determine the source parent entry and dest parent entry as node entries
     auto *const srcParentEntry = static_cast<NodeEntry *>(sourceParent.internalPointer());
     auto *const destParentEntry = static_cast<NodeEntry *>(destinationParent.internalPointer());
     // source rows must be within the valid range
-    if(static_cast<size_t>(sourceRow + count) > srcParentEntry->children().size()
-            // if source and destination parent are the same the destination child mustn't be in the source range
-            || !(srcParentEntry != destParentEntry || (destinationChild < sourceRow || (sourceRow + count) < destinationChild))) {
+    if (static_cast<size_t>(sourceRow + count) > srcParentEntry->children().size()
+        // if source and destination parent are the same the destination child mustn't be in the source range
+        || !(srcParentEntry != destParentEntry || (destinationChild < sourceRow || (sourceRow + count) < destinationChild))) {
         return false;
     }
     // do not move a row to one of its own children! -> check before
-    for(int index = 0; index < count; ++index) {
+    for (int index = 0; index < count; ++index) {
         Entry *toMove = srcParentEntry->children()[static_cast<size_t>(sourceRow + index)];
-        if(toMove->type() == EntryType::Node) {
-            if(destParentEntry->isIndirectChildOf(static_cast<NodeEntry *>(toMove))) {
+        if (toMove->type() == EntryType::Node) {
+            if (destParentEntry->isIndirectChildOf(static_cast<NodeEntry *>(toMove))) {
                 return false;
             }
         }
     }
     // actually perform the move operation
     beginMoveRows(sourceParent, sourceRow, sourceRow + count - 1, destinationParent, destinationChild);
-    for(int index = 0; index < count; ++index) {
+    for (int index = 0; index < count; ++index) {
         Entry *toMove = srcParentEntry->children()[static_cast<size_t>(sourceRow + index)];
-        if(srcParentEntry == destParentEntry && sourceRow < destinationChild) {
+        if (srcParentEntry == destParentEntry && sourceRow < destinationChild) {
             toMove->setParent(destParentEntry, destinationChild + index - 1);
         } else {
             toMove->setParent(destParentEntry, destinationChild + index);
@@ -491,25 +481,25 @@ QStringList EntryModel::mimeTypes() const
 
 QMimeData *EntryModel::mimeData(const QModelIndexList &indexes) const
 {
-    if(indexes.count() <= 0) {
+    if (indexes.count() <= 0) {
         return nullptr;
     }
     QStringList types = mimeTypes();
-    if(types.isEmpty()) {
+    if (types.isEmpty()) {
         return nullptr;
     }
     QMimeData *data = new QMimeData();
     QStringList plainTextParts;
     QByteArray encoded;
     QDataStream dataStream(&encoded, QIODevice::WriteOnly);
-    for(const QModelIndex &index : indexes) {
-        if(!index.isValid()) {
+    for (const QModelIndex &index : indexes) {
+        if (!index.isValid()) {
             continue;
         }
         const auto *const entry = static_cast<const Entry *>(index.internalPointer());
         const auto path(entry->path());
         dataStream << static_cast<quint32>(path.size());
-        for(const string &part : path) {
+        for (const string &part : path) {
             dataStream << QString::fromStdString(part);
         }
         plainTextParts << QString::fromStdString(entry->label());
@@ -521,42 +511,42 @@ QMimeData *EntryModel::mimeData(const QModelIndexList &indexes) const
 
 bool EntryModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
 {
-    if(!m_rootEntry || !data || action != Qt::MoveAction) {
+    if (!m_rootEntry || !data || action != Qt::MoveAction) {
         return false;
     }
     QStringList types = mimeTypes();
-    if(types.isEmpty()) {
+    if (types.isEmpty()) {
         return false;
     }
     QString format = types.at(0);
-    if(!data->hasFormat(format)) {
+    if (!data->hasFormat(format)) {
         return false;
     }
-    if(row > rowCount(parent) || row < 0) {
+    if (row > rowCount(parent) || row < 0) {
         row = rowCount(parent);
     }
-    if(column > columnCount(parent) || column < 0) {
+    if (column > columnCount(parent) || column < 0) {
         column = 0;
     }
     // decode and insert
     QByteArray encoded(data->data(format));
     QDataStream stream(&encoded, QIODevice::ReadOnly);
     int moved = 0;
-    while(!stream.atEnd()) {
+    while (!stream.atEnd()) {
         quint32 size;
         stream >> size;
         list<string> path;
-        for(quint32 i = 0; i < size; ++i) {
+        for (quint32 i = 0; i < size; ++i) {
             QString part;
             stream >> part;
             path.push_back(part.toStdString());
         }
         auto *const entry = m_rootEntry->entryByPath(path, true);
-        if(!entry) {
+        if (!entry) {
             continue;
         }
         auto *const srcParentEntry = entry->parent();
-        if(srcParentEntry && moveRows(index(srcParentEntry), entry->index(), 1, parent, row)) {
+        if (srcParentEntry && moveRows(index(srcParentEntry), entry->index(), 1, parent, row)) {
             ++moved;
         }
     }
@@ -568,4 +558,4 @@ Qt::DropActions EntryModel::supportedDropActions() const
     return Qt::MoveAction;
 }
 
-}
+} // namespace QtGui

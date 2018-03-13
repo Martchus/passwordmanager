@@ -13,19 +13,20 @@ namespace QtGui {
 /*!
  * \brief Constructs a new filter entry model.
  */
-EntryFilterModel::EntryFilterModel(QObject *parent) :
-    QSortFilterProxyModel(parent)
-{}
+EntryFilterModel::EntryFilterModel(QObject *parent)
+    : QSortFilterProxyModel(parent)
+{
+}
 
 bool EntryFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
     // just use default implementation
-    if(QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent)) {
+    if (QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent)) {
         return true;
     }
 
     // also accept rows where the direct parent is accepted
-    if(sourceParent.isValid() && QSortFilterProxyModel::filterAcceptsRow(sourceParent.row(), sourceParent.parent())) {
+    if (sourceParent.isValid() && QSortFilterProxyModel::filterAcceptsRow(sourceParent.row(), sourceParent.parent())) {
         return true;
     }
 
@@ -35,12 +36,12 @@ bool EntryFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex &source
 
 bool EntryFilterModel::hasAcceptedChildren(const QModelIndex &index) const
 {
-    for(int i = 0, rowCount = sourceModel()->rowCount(index); i < rowCount; ++i) {
-        if(filterAcceptsRow(i, index)) {
+    for (int i = 0, rowCount = sourceModel()->rowCount(index); i < rowCount; ++i) {
+        if (filterAcceptsRow(i, index)) {
             return true;
         }
     }
     return false;
 }
 
-}
+} // namespace QtGui
