@@ -283,6 +283,7 @@ bool FieldModel::removeRows(int row, int count, const QModelIndex &parent)
     beginRemoveRows(parent, row, row + count - 1);
     m_fields->erase(m_fields->begin() + row, m_fields->begin() + row + count);
     endRemoveRows();
+    return true;
 }
 
 bool FieldModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
