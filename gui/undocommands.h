@@ -27,8 +27,8 @@ public:
     bool redoResult() const;
     bool undoResult() const;
     bool isNoop() const;
-    void redo();
-    void undo();
+    void redo() override;
+    void undo() override;
 
 protected:
     void setNoop(bool noop);
@@ -81,8 +81,8 @@ public:
     explicit FieldModelSetValueCommand(FieldModel *model, const QModelIndex &index, const QVariant &value, int role);
 
 protected:
-    bool internalRedo();
-    bool internalUndo();
+    bool internalRedo() override;
+    bool internalUndo() override;
 
 private:
     Io::AccountEntry *m_account;
@@ -99,8 +99,8 @@ public:
     explicit FieldModelInsertRowsCommand(FieldModel *model, int row, int count);
 
 protected:
-    bool internalRedo();
-    bool internalUndo();
+    bool internalRedo() override;
+    bool internalUndo() override;
 
 private:
     Io::AccountEntry *m_account;
@@ -114,8 +114,8 @@ public:
     explicit FieldModelRemoveRowsCommand(FieldModel *model, int row, int count);
 
 protected:
-    bool internalRedo();
-    bool internalUndo();
+    bool internalRedo() override;
+    bool internalUndo() override;
 
 private:
     Io::AccountEntry *m_account;
@@ -130,8 +130,8 @@ public:
     explicit EntryModelSetValueCommand(EntryModel *model, const QModelIndex &index, const QVariant &value, int role);
 
 protected:
-    bool internalRedo();
-    bool internalUndo();
+    bool internalRedo() override;
+    bool internalUndo() override;
 
 private:
     EntryModel *m_model;
@@ -143,12 +143,10 @@ private:
 
 class EntryModelModifyRowsCommand : public CustomUndoCommand {
 public:
-    ~EntryModelModifyRowsCommand();
+    ~EntryModelModifyRowsCommand() override;
 
 protected:
     explicit EntryModelModifyRowsCommand(EntryModel *model, int row, int count, const QModelIndex &parent);
-    bool internalRedo() = 0;
-    bool internalUndo() = 0;
     bool insert();
     bool remove();
     EntryModel *m_model;
@@ -163,8 +161,8 @@ public:
     explicit EntryModelInsertRowsCommand(EntryModel *model, int row, int count, const QModelIndex &parent);
 
 protected:
-    bool internalRedo();
-    bool internalUndo();
+    bool internalRedo() override;
+    bool internalUndo() override;
 };
 
 class EntryModelRemoveRowsCommand : public EntryModelModifyRowsCommand {
@@ -172,8 +170,8 @@ public:
     explicit EntryModelRemoveRowsCommand(EntryModel *model, int row, int count, const QModelIndex &parent);
 
 protected:
-    bool internalRedo();
-    bool internalUndo();
+    bool internalRedo() override;
+    bool internalUndo() override;
 };
 
 class EntryModelMoveRowsCommand : public CustomUndoCommand {
@@ -182,8 +180,8 @@ public:
         EntryModel *model, const QModelIndex &sourceParent, int sourceRow, int count, const QModelIndex &destinationParent, int destinationChild);
 
 protected:
-    bool internalRedo();
-    bool internalUndo();
+    bool internalRedo() override;
+    bool internalUndo() override;
 
 private:
     EntryModel *m_model;

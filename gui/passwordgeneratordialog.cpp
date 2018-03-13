@@ -70,7 +70,6 @@ PasswordGeneratorDialog::PasswordGeneratorDialog(QWidget *parent)
  */
 PasswordGeneratorDialog::~PasswordGeneratorDialog()
 {
-    delete m_ui;
 }
 
 /*!

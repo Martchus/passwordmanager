@@ -132,7 +132,7 @@ FieldModelInsertRowsCommand::FieldModelInsertRowsCommand(FieldModel *model, int 
     , m_row(row)
     , m_count(count)
 {
-    setText(QApplication::translate("undocommands", "insertion of %1 row(s) before row %2", 0, count).arg(count).arg(row + 1));
+    setText(QApplication::translate("undocommands", "insertion of %1 row(s) before row %2", nullptr, count).arg(count).arg(row + 1));
 }
 
 bool FieldModelInsertRowsCommand::internalRedo()
@@ -163,9 +163,9 @@ FieldModelRemoveRowsCommand::FieldModelRemoveRowsCommand(FieldModel *model, int 
     , m_count(count)
 {
     if (count == 1) {
-        setText(QApplication::translate("undocommands", "removal of row %1", 0, count).arg(row + 1));
+        setText(QApplication::translate("undocommands", "removal of row %1", nullptr, count).arg(row + 1));
     } else {
-        setText(QApplication::translate("undocommands", "removal of the rows %1 to %2", 0, count).arg(row + 1).arg(row + count));
+        setText(QApplication::translate("undocommands", "removal of the rows %1 to %2", nullptr, count).arg(row + 1).arg(row + count));
     }
 }
 

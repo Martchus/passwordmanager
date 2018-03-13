@@ -49,7 +49,7 @@ class MainWindow : public QMainWindow {
 
 public:
     explicit MainWindow(QSettings &settings, Dialogs::QtSettings *qtSettings = nullptr, QWidget *parent = nullptr);
-    ~MainWindow();
+    ~MainWindow() override;
 
 public slots:
     // file management
@@ -71,9 +71,9 @@ public slots:
     void showUndoView();
 
 protected:
-    bool eventFilter(QObject *obj, QEvent *event);
-    void closeEvent(QCloseEvent *event);
-    void timerEvent(QTimerEvent *event);
+    bool eventFilter(QObject *obj, QEvent *event) override;
+    void closeEvent(QCloseEvent *event) override;
+    void timerEvent(QTimerEvent *event) override;
 
 private slots:
     // file management

@@ -440,13 +440,11 @@ bool MainWindow::openFile(const QString &path, bool readOnly)
     }
 
     // warn before loading a very big file
-    if (m_file.size() > 10485760) {
-        if (QMessageBox::warning(this, QApplication::applicationName(),
+    if (m_file.size() > 10485760 && QMessageBox::warning(this, QApplication::applicationName(),
                 tr("The file you want to load seems to be very big. Do you really want to open it?"), QMessageBox::Yes, QMessageBox::No)
             == QMessageBox::No) {
-            m_file.clear();
-            return false;
-        }
+        m_file.clear();
+        return false;
     }
 
     // ask for a password if required
@@ -488,17 +486,16 @@ bool MainWindow::openFile(const QString &path, bool readOnly)
     }
 
     // show a message in the error case
-    if (!msg.isEmpty()) {
-        m_file.clear();
-        m_ui->statusBar->showMessage(msg, 5000);
-        if (QMessageBox::critical(this, QApplication::applicationName(), msg, QMessageBox::Cancel, QMessageBox::Retry) == QMessageBox::Retry) {
-            return openFile(path, readOnly); // retry
-        } else {
-            return false;
-        }
-    } else {
+    if (msg.isEmpty()) {
         // show contents
         return showFile();
+    }
+    m_file.clear();
+    m_ui->statusBar->showMessage(msg, 5000);
+    if (QMessageBox::critical(this, QApplication::applicationName(), msg, QMessageBox::Cancel, QMessageBox::Retry) == QMessageBox::Retry) {
+        return openFile(path, readOnly); // retry
+    } else {
+        return false;
     }
 }
 
@@ -618,7 +615,7 @@ void MainWindow::updateWindowTitle()
 void MainWindow::applyDefaultExpanding(const QModelIndex &parent)
 {
     for (int row = 0, rows = m_entryFilterModel->rowCount(parent); row < rows; ++row) {
-        QModelIndex index = m_entryFilterModel->index(row, 0, parent);
+        const QModelIndex index = m_entryFilterModel->index(row, 0, parent);
         if (!index.isValid()) {
             return;
         }
@@ -735,7 +732,7 @@ bool MainWindow::askForCreatingFile()
 
 /*!
  * \brief Shows an warning if no file is opened.
- * \retruns Returns whether the warning has been shown.
+ * \returns Returns whether the warning has been shown.
  */
 bool MainWindow::showNoFileOpened()
 {
@@ -748,7 +745,7 @@ bool MainWindow::showNoFileOpened()
 
 /*!
  * \brief Shows an warning if no account is selected.
- * \retruns Returns whether the warning has been shown.
+ * \returns Returns whether the warning has been shown.
  */
 bool MainWindow::showNoAccount()
 {
@@ -821,10 +818,8 @@ bool MainWindow::saveFile()
                 return false;
             }
         }
-    } else {
-        if (!askForCreatingFile()) {
-            return false;
-        }
+    } else if (!askForCreatingFile()) {
+        return false;
     }
 
     // ask for a password if none is set
@@ -858,16 +853,15 @@ bool MainWindow::saveFile()
         m_ui->statusBar->showMessage(msg, 5000);
         QMessageBox::critical(this, QApplication::applicationName(), msg);
         return false;
-    } else {
-        if (m_readOnly || m_somethingChanged) {
-            m_readOnly = false;
-            m_somethingChanged = false;
-            updateWindowTitle();
-        }
-        m_recentMgr->addEntry(QString::fromStdString(m_file.path()));
-        m_ui->statusBar->showMessage(tr("The password list has been saved."), 5000);
-        return true;
     }
+    if (m_readOnly || m_somethingChanged) {
+        m_readOnly = false;
+        m_somethingChanged = false;
+        updateWindowTitle();
+    }
+    m_recentMgr->addEntry(QString::fromStdString(m_file.path()));
+    m_ui->statusBar->showMessage(tr("The password list has been saved."), 5000);
+    return true;
 }
 
 /*!
@@ -904,13 +898,14 @@ void MainWindow::showContainingDirectory()
 {
     if (showNoFileOpened()) {
         return;
-    } else if (m_file.path().empty()) {
+    }
+    if (m_file.path().empty()) {
         QMessageBox::warning(this, QApplication::applicationName(), tr("The currently opened file hasn't been saved yet."));
-    } else {
-        const QFileInfo file(QString::fromStdString(m_file.path()));
-        if (file.dir().exists()) {
-            DesktopUtils::openLocalFileOrDir(file.dir().absolutePath());
-        }
+        return;
+    }
+    const QFileInfo file(QString::fromStdString(m_file.path()));
+    if (file.dir().exists()) {
+        DesktopUtils::openLocalFileOrDir(file.dir().absolutePath());
     }
 }
 
@@ -941,30 +936,29 @@ void MainWindow::addEntry(EntryType type)
         return;
     }
     const QModelIndexList selectedIndexes = m_ui->treeView->selectionModel()->selectedRows(0);
-    if (selectedIndexes.size() == 1) {
-        const QModelIndex selected = m_entryFilterModel->mapToSource(selectedIndexes.at(0));
-        if (m_entryModel->isNode(selected)) {
-            bool result;
-            const QString text = QInputDialog::getText(this, type == EntryType::Account ? tr("Add account") : tr("Add category"),
-                tr("Enter the entry name"), QLineEdit::Normal, tr("new entry"), &result);
-            if (result) {
-                if (!text.isEmpty()) {
-                    int row = m_entryModel->rowCount(selected);
-                    m_entryModel->setInsertType(type);
-                    if (m_entryModel->insertRow(row, selected)) {
-                        m_entryModel->setData(m_entryModel->index(row, 0, selected), text, Qt::DisplayRole);
-                        setSomethingChanged(true);
-                    } else {
-                        QMessageBox::warning(this, QApplication::applicationName(), tr("Unable to create new entry."));
-                    }
-                } else {
-                    QMessageBox::warning(this, QApplication::applicationName(), tr("You didn't enter text."));
-                }
-            }
-            return;
-        }
+    const QModelIndex selected = selectedIndexes.size() == 1 ? m_entryFilterModel->mapToSource(selectedIndexes.at(0)) : QModelIndex();
+    if (!selected.isValid() || !m_entryModel->isNode(selected)) {
+        QMessageBox::warning(this, QApplication::applicationName(), tr("No node element selected."));
+        return;
     }
-    QMessageBox::warning(this, QApplication::applicationName(), tr("No node element selected."));
+    bool result;
+    const QString text = QInputDialog::getText(this, type == EntryType::Account ? tr("Add account") : tr("Add category"),
+        tr("Enter the entry name"), QLineEdit::Normal, tr("new entry"), &result);
+    if (!result) {
+        return;
+    }
+    if (text.isEmpty()) {
+        QMessageBox::warning(this, QApplication::applicationName(), tr("You didn't enter text."));
+        return;
+    }
+    int row = m_entryModel->rowCount(selected);
+    m_entryModel->setInsertType(type);
+    if (!m_entryModel->insertRow(row, selected)) {
+        QMessageBox::warning(this, QApplication::applicationName(), tr("Unable to create new entry."));
+        return;
+    }
+    m_entryModel->setData(m_entryModel->index(row, 0, selected), text, Qt::DisplayRole);
+    setSomethingChanged(true);
 }
 
 /*!
@@ -976,13 +970,13 @@ void MainWindow::removeEntry()
         return;
     }
     const QModelIndexList selectedIndexes = m_ui->treeView->selectionModel()->selectedRows(0);
-    if (selectedIndexes.size() == 1) {
-        const QModelIndex selected = m_entryFilterModel->mapToSource(selectedIndexes.at(0));
-        if (!m_entryModel->removeRow(selected.row(), selected.parent())) {
-            QMessageBox::warning(this, QApplication::applicationName(), tr("Unable to remove the entry."));
-        }
-    } else {
+    if (selectedIndexes.size() != 1) {
         QMessageBox::warning(this, QApplication::applicationName(), tr("No entry selected."));
+        return;
+    }
+    const QModelIndex selected = m_entryFilterModel->mapToSource(selectedIndexes.at(0));
+    if (!m_entryModel->removeRow(selected.row(), selected.parent())) {
+        QMessageBox::warning(this, QApplication::applicationName(), tr("Unable to remove the entry."));
     }
 }
 
@@ -1023,19 +1017,19 @@ void MainWindow::insertRow()
         return;
     }
     const QModelIndexList selectedIndexes = m_ui->tableView->selectionModel()->selectedIndexes();
-    if (selectedIndexes.size()) {
-        int row = m_fieldModel->rowCount();
-        for (const QModelIndex &index : selectedIndexes) {
-            if (index.row() < row) {
-                row = index.row();
-            }
-        }
-        if (row < m_fieldModel->rowCount() - 1) {
-            m_fieldModel->insertRow(row);
-        }
-    } else {
+    if (selectedIndexes.empty()) {
         QMessageBox::warning(
             this, windowTitle(), tr("A field has to be selected since new fields are always inserted before the currently selected field."));
+        return;
+    }
+    int row = m_fieldModel->rowCount();
+    for (const QModelIndex &index : selectedIndexes) {
+        if (index.row() < row) {
+            row = index.row();
+        }
+    }
+    if (row < m_fieldModel->rowCount() - 1) {
+        m_fieldModel->insertRow(row);
     }
 }
 
@@ -1052,14 +1046,14 @@ void MainWindow::removeRows()
     for (const QModelIndex &index : selectedIndexes) {
         rows << index.row();
     }
-    if (rows.size()) {
-        for (int i = m_fieldModel->rowCount() - 1; i >= 0; --i) {
-            if (rows.contains(i)) {
-                m_fieldModel->removeRow(i);
-            }
-        }
-    } else {
+    if (rows.empty()) {
         QMessageBox::warning(this, windowTitle(), tr("No fields have been removed since there are currently no fields selected."));
+        return;
+    }
+    for (int i = m_fieldModel->rowCount() - 1; i >= 0; --i) {
+        if (rows.contains(i)) {
+            m_fieldModel->removeRow(i);
+        }
     }
 }
 
@@ -1088,13 +1082,13 @@ void MainWindow::setFieldType(FieldType fieldType)
         return;
     }
     const QModelIndexList selectedIndexes = m_ui->tableView->selectionModel()->selectedIndexes();
-    if (!selectedIndexes.isEmpty()) {
-        const QVariant typeVariant(static_cast<int>(fieldType));
-        for (const QModelIndex &index : selectedIndexes) {
-            m_fieldModel->setData(index, typeVariant, FieldTypeRole);
-        }
-    } else {
+    if (selectedIndexes.isEmpty()) {
         QMessageBox::warning(this, windowTitle(), tr("No fields have been changed since there are currently no fields selected."));
+        return;
+    }
+    const QVariant typeVariant(static_cast<int>(fieldType));
+    for (const QModelIndex &index : selectedIndexes) {
+        m_fieldModel->setData(index, typeVariant, FieldTypeRole);
     }
 }
 
@@ -1154,28 +1148,29 @@ void MainWindow::showTreeViewContextMenu()
         return;
     }
     const QModelIndexList selectedIndexes = m_ui->treeView->selectionModel()->selectedRows(0);
-    if (selectedIndexes.size() == 1) {
-        QMenu contextMenu(this);
-        QModelIndex selected = m_entryFilterModel->mapToSource(selectedIndexes.at(0));
-        Entry *entry = m_entryModel->entry(selected);
-        if (entry->type() == EntryType::Node) {
-            contextMenu.addAction(QIcon::fromTheme(QStringLiteral("list-add")), tr("Add account"), this, &MainWindow::addAccount);
-            contextMenu.addAction(QIcon::fromTheme(QStringLiteral("list-add")), tr("Add category"), this, &MainWindow::addCategory);
-        }
-        contextMenu.addAction(QIcon::fromTheme(QStringLiteral("list-remove")), tr("Remove entry"), this, &MainWindow::removeEntry);
-        if (entry->type() == EntryType::Node) {
-            auto *nodeEntry = static_cast<NodeEntry *>(entry);
-            contextMenu.addSeparator();
-            auto *action = new QAction(&contextMenu);
-            action->setCheckable(true);
-            action->setText(tr("Expanded by default"));
-            action->setChecked(nodeEntry->isExpandedByDefault());
-            connect(action, &QAction::triggered,
-                std::bind(&EntryModel::setData, m_entryModel, std::cref(selected), QVariant(!nodeEntry->isExpandedByDefault()), DefaultExpandedRole));
-            contextMenu.addAction(action);
-        }
-        contextMenu.exec(QCursor::pos());
+    if (selectedIndexes.size() != 1) {
+        return;
     }
+    QMenu contextMenu(this);
+    const QModelIndex selected(m_entryFilterModel->mapToSource(selectedIndexes.at(0)));
+    const Entry *const entry = m_entryModel->entry(selected);
+    if (entry->type() == EntryType::Node) {
+        contextMenu.addAction(QIcon::fromTheme(QStringLiteral("list-add")), tr("Add account"), this, &MainWindow::addAccount);
+        contextMenu.addAction(QIcon::fromTheme(QStringLiteral("list-add")), tr("Add category"), this, &MainWindow::addCategory);
+    }
+    contextMenu.addAction(QIcon::fromTheme(QStringLiteral("list-remove")), tr("Remove entry"), this, &MainWindow::removeEntry);
+    if (entry->type() == EntryType::Node) {
+        const auto *const nodeEntry = static_cast<const NodeEntry *>(entry);
+        contextMenu.addSeparator();
+        auto *const action = new QAction(&contextMenu);
+        action->setCheckable(true);
+        action->setText(tr("Expanded by default"));
+        action->setChecked(nodeEntry->isExpandedByDefault());
+        connect(action, &QAction::triggered,
+            std::bind(&EntryModel::setData, m_entryModel, std::cref(selected), QVariant(!nodeEntry->isExpandedByDefault()), DefaultExpandedRole));
+        contextMenu.addAction(action);
+    }
+    contextMenu.exec(QCursor::pos());
 }
 
 /*!

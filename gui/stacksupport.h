@@ -37,15 +37,14 @@ inline QUndoStack *StackSupport::undoStack()
  */
 inline bool StackSupport::push(CustomUndoCommand *command)
 {
-    if (m_undoStack) {
-        if (command->isNoop()) {
-            return true; // doing nothing can never fail
-        } else {
-            m_undoStack->push(command);
-            return command->redoResult();
-        }
+    if (!m_undoStack) {
+        return false;
     }
-    return false;
+    if (command->isNoop()) {
+        return true; // doing nothing can never fail
+    }
+    m_undoStack->push(command);
+    return command->redoResult();
 }
 
 /*!

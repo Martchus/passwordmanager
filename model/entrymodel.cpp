@@ -61,11 +61,7 @@ EntryModel::EntryModel(QUndoStack *undoStack, QObject *parent) :
  */
 Entry *EntryModel::entry(const QModelIndex &index)
 {
-    if(index.isValid()) {
-        return static_cast<Entry *>(index.internalPointer());
-    } else {
-        return nullptr;
-    }
+    return index.isValid() ? static_cast<Entry *>(index.internalPointer()) : nullptr;
 }
 
 /*!
@@ -78,24 +74,24 @@ Entry *EntryModel::entry(const QModelIndex &index)
  */
 QList<Entry *> EntryModel::takeEntries(int row, int count, const QModelIndex &parent)
 {
-    QList<Entry *> res;
-    if(Entry *parentEntry = entry(parent)) {
-        if(parentEntry->type() == EntryType::Node) {
-            NodeEntry *parentNodeEntry = static_cast<NodeEntry *>(parentEntry);
-            int lastIndex = row + count - 1;
-            const vector<Entry *> &children = parentNodeEntry->children();
-            if(lastIndex < 0 || static_cast<size_t>(lastIndex) >= children.size()) {
-                lastIndex = children.size() - 1;
-            }
-            beginRemoveRows(parent, row, lastIndex);
-            for(int index = lastIndex; index >= row; --index) {
-                Entry *child = children.at(index);
-                child->setParent(nullptr);
-                res << child;
-            }
-            endRemoveRows();
-        }
+    Entry *const parentEntry = entry(parent);
+    if(!parentEntry || parentEntry->type() != EntryType::Node) {
+        return QList<Entry *>();
     }
+    QList<Entry *> res;
+    NodeEntry *const parentNodeEntry = static_cast<NodeEntry *>(parentEntry);
+    int lastIndex = row + count - 1;
+    const vector<Entry *> &children = parentNodeEntry->children();
+    if(lastIndex < 0 || static_cast<size_t>(lastIndex) >= children.size()) {
+        lastIndex = children.size() - 1;
+    }
+    beginRemoveRows(parent, row, lastIndex);
+    for(int index = lastIndex; index >= row; --index) {
+        Entry *const child = children[index];
+        child->setParent(nullptr);
+        res << child;
+    }
+    endRemoveRows();
     return res;
 }
 
@@ -111,42 +107,45 @@ bool EntryModel::insertEntries(int row, const QModelIndex &parent, const QList<E
     if(entries.isEmpty()) {
         return true;
     }
-    if(Entry *parentEntry = entry(parent)) {
-        if(parentEntry->type() == EntryType::Node) {
-            NodeEntry *parentNodeEntry = static_cast<NodeEntry *>(parentEntry);
-            const vector<Entry *> &children = parentNodeEntry->children();
-            if(row < 0 || static_cast<size_t>(row) > children.size()) {
-                row = children.size();
-            }
-            beginInsertRows(parent, row, row + entries.size() - 1);
-            foreach(Entry *entry, entries) {
-                entry->setParent(parentNodeEntry, row);
-                ++row;
-            }
-            endInsertRows();
-            return true;
-        }
+    Entry *const parentEntry = entry(parent);
+    if(!parentEntry || parentEntry->type() != EntryType::Node) {
+        return false;
     }
-    return false;
+    NodeEntry *const parentNodeEntry = static_cast<NodeEntry *>(parentEntry);
+    const vector<Entry *> &children = parentNodeEntry->children();
+    if(row < 0 || static_cast<size_t>(row) > children.size()) {
+        row = children.size();
+    }
+    beginInsertRows(parent, row, row + entries.size() - 1);
+    for(Entry *const entry : entries) {
+        entry->setParent(parentNodeEntry, row);
+        ++row;
+    }
+    endInsertRows();
+    return true;
 }
 
 QModelIndex EntryModel::index(int row, int column, const QModelIndex &parent) const
 {
-    if(parent.isValid()) {
-        if(Entry *parentEntry = static_cast<Entry *>(parent.internalPointer())) {
-            switch(parentEntry->type()) {
-            case EntryType::Node: {
-                const std::vector<Entry *> &children = static_cast<NodeEntry *>(parentEntry)->children();
-                if(row >= 0 && static_cast<size_t>(row) < children.size()) {
-                    return createIndex(row, column, children.at(row));
-                }
-                break;
-            } case EntryType::Account:
-                ;
-            }
+    if(!parent.isValid()) {
+        if(m_rootEntry && row == 0) {
+            return createIndex(row, column, m_rootEntry);
         }
-    } else if(m_rootEntry && row == 0) {
-        return createIndex(row, column, m_rootEntry);
+        return QModelIndex();
+    }
+    const auto *const parentEntry = static_cast<const Entry *>(parent.internalPointer());
+    if(!parentEntry) {
+        return QModelIndex();
+    }
+    switch(parentEntry->type()) {
+    case EntryType::Node: {
+        const std::vector<Entry *> &children = static_cast<const NodeEntry *>(parentEntry)->children();
+        if(row >= 0 && static_cast<size_t>(row) < children.size()) {
+            return createIndex(row, column, children[static_cast<size_t>(row)]);
+        }
+        break;
+    } case EntryType::Account:
+        ;
     }
     return QModelIndex();
 }
@@ -166,29 +165,27 @@ QModelIndex EntryModel::index(Entry *entry) const
 
 QModelIndex EntryModel::parent(const QModelIndex &child) const
 {
-    if(child.isValid()) {
-        if(Entry *entry = static_cast<Entry *>(child.internalPointer())) {
-            NodeEntry *parent = entry->parent();
-            if(parent && (child.row() >= 0 && static_cast<size_t>(child.row()) < parent->children().size())) {
-                return createIndex(parent->index() > 0 ? parent->index() : 0, 0, parent);
-            }
-        }
+    if(!child.isValid()) {
+        return QModelIndex();
+    }
+    const auto *const entry = static_cast<Entry *>(child.internalPointer());
+    if(!entry) {
+        return QModelIndex();
+    }
+    NodeEntry *const parent = entry->parent();
+    if(parent && (child.row() >= 0 && static_cast<size_t>(child.row()) < parent->children().size())) {
+        return createIndex(parent->index() > 0 ? parent->index() : 0, 0, parent);
     }
     return QModelIndex();
 }
 
 bool EntryModel::hasChildren(const QModelIndex &parent) const
 {
-    if(parent.isValid()) {
-        if(Entry *entry = static_cast<Entry *>(parent.internalPointer())) {
-            if(entry->type() == EntryType::Node) {
-                return static_cast<NodeEntry *>(entry)->children().size();
-            }
-        }
-    } else {
+    if(!parent.isValid()) {
         return true;
     }
-    return false;
+    const auto *const entry = static_cast<Entry *>(parent.internalPointer());
+    return entry && entry->type() == EntryType::Node && !static_cast<const NodeEntry *>(entry)->children().empty();
 }
 
 /*!
@@ -197,63 +194,65 @@ bool EntryModel::hasChildren(const QModelIndex &parent) const
  */
 bool EntryModel::isNode(const QModelIndex &parent) const
 {
-    if(parent.isValid()) {
-        if(Entry *entry = static_cast<Entry *>(parent.internalPointer())) {
-            return entry->type() == EntryType::Node;
-        }
+    if(!parent.isValid()) {
+        return false;
     }
-    return false;
+    const auto *const entry = static_cast<const Entry *>(parent.internalPointer());
+    return entry && entry->type() == EntryType::Node;
 }
 
 QVariant EntryModel::data(const QModelIndex &index, int role) const
 {
-    if(index.isValid()) {
-        if(Entry *entry = static_cast<Entry *>(index.internalPointer())) {
-            switch(role) {
-            case Qt::DisplayRole:
-            case Qt::EditRole:
-                switch(index.column()) {
-                case 0:
-                    return QString::fromStdString(entry->label());
-                default:
-                    ;
-                }
-                break;
-            case Qt::DecorationRole:
-                if(index.column() == 0 && entry->type() == EntryType::Node) {
-                    static const QVariant folderIcon = QIcon::fromTheme(QStringLiteral("folder"));
-                    return folderIcon;
-                }
-                break;
-            case SerializedRole: {
-                    stringstream ss(stringstream::in | stringstream::out | stringstream::binary);
-                    ss.exceptions(std::stringstream::failbit | std::stringstream::badbit);
-                    try {
-                        entry->make(ss);
-                        string string = ss.str();
-                        return QByteArray(string.data(), string.size());
-                    } catch(...) {
-                        IoUtilities::catchIoFailure();
-                        return false;
-                    }
-                }
-                break;
-            case DefaultExpandedRole:
-                return entry->type() == EntryType::Node && static_cast<NodeEntry *>(entry)->isExpandedByDefault();
-            default:
-                ;
+    if(!index.isValid()) {
+        return QVariant();
+    }
+    const auto *const entry = static_cast<const Entry *>(index.internalPointer());
+    if(!entry) {
+        return QVariant();
+    }
+    switch(role) {
+    case Qt::DisplayRole:
+    case Qt::EditRole:
+        switch(index.column()) {
+        case 0:
+            return QString::fromStdString(entry->label());
+        default:
+            ;
+        }
+        break;
+    case Qt::DecorationRole:
+        if(index.column() == 0 && entry->type() == EntryType::Node) {
+            static const QVariant folderIcon = QIcon::fromTheme(QStringLiteral("folder"));
+            return folderIcon;
+        }
+        break;
+    case SerializedRole: {
+            stringstream ss(stringstream::in | stringstream::out | stringstream::binary);
+            ss.exceptions(std::stringstream::failbit | std::stringstream::badbit);
+            try {
+                entry->make(ss);
+                const auto str(ss.str());
+                return QByteArray(str.data(), str.size());
+            } catch(...) {
+                IoUtilities::catchIoFailure();
+                return false;
             }
         }
+        break;
+    case DefaultExpandedRole:
+        return entry->type() == EntryType::Node && static_cast<const NodeEntry *>(entry)->isExpandedByDefault();
+    default:
+        ;
     }
     return QVariant();
 }
 
 QMap<int, QVariant> EntryModel::itemData(const QModelIndex &index) const
 {
-    QMap<int, QVariant> roles;
-    roles.insert(Qt::DisplayRole, data(index, Qt::DisplayRole));
-    roles.insert(SerializedRole, data(index, SerializedRole));
-    return roles;
+    return QMap<int, QVariant>{
+        {Qt::DisplayRole, data(index, Qt::DisplayRole)},
+        {SerializedRole, data(index, SerializedRole)},
+    };
 }
 
 bool EntryModel::setData(const QModelIndex &index, const QVariant &value, int role)
@@ -263,60 +262,65 @@ bool EntryModel::setData(const QModelIndex &index, const QVariant &value, int ro
         return push(new EntryModelSetValueCommand(this, index, value, role));
     }
 #endif
-    if(index.isValid()) {
-        if(Entry *entry = static_cast<Entry *>(index.internalPointer())) {
-            switch(role) {
-            case Qt::DisplayRole:
-            case Qt::EditRole:
-                switch(index.column()) {
-                case 0:
-                    entry->setLabel(value.toString().toStdString());
-                    emit dataChanged(index, index, QVector<int>() << role);
-                    return true;
-                default:
-                    ;
-                }
+    if(!index.isValid()) {
+        return false;
+    }
+    auto *const entry = static_cast<Entry *>(index.internalPointer());
+    if(!entry) {
+        return false;
+    }
+    switch(role) {
+    case Qt::DisplayRole:
+    case Qt::EditRole:
+        switch(index.column()) {
+        case 0:
+            entry->setLabel(value.toString().toStdString());
+            emit dataChanged(index, index, QVector<int>() << role);
+            return true;
+        default:
+            ;
+        }
+        break;
+    case SerializedRole: {
+            NodeEntry *parent = entry->parent();
+            QModelIndex parentIndex = index.parent();
+            if(!parent || !parentIndex.isValid()) {
                 break;
-            case SerializedRole: {
-                    NodeEntry *parent = entry->parent();
-                    QModelIndex parentIndex = index.parent();
-                    if(parent && parentIndex.isValid()) {
-                        stringstream ss(stringstream::in | stringstream::out | stringstream::binary);
-                        ss.exceptions(std::stringstream::failbit | std::stringstream::badbit);
-                        QByteArray array = value.toByteArray();
-                        if(array.size()) {
-                            try {
-                                ss.write(array.data(), array.size());
-                                Entry *newEntry = Entry::parse(ss);
-                                int row = entry->index();
-                                beginRemoveRows(parentIndex, row, row);
-                                delete entry;
-                                endRemoveRows();
-                                beginInsertRows(parentIndex, row, row);
-                                newEntry->setParent(parent, row);
-                                endInsertRows();
-                                return true;
-                            } catch(...) {
-                                IoUtilities::catchIoFailure();
-                            }
-                        }
-                    }
-                }
+            }
+            stringstream ss(stringstream::in | stringstream::out | stringstream::binary);
+            ss.exceptions(std::stringstream::failbit | std::stringstream::badbit);
+            QByteArray array = value.toByteArray();
+            if(array.isEmpty()) {
                 break;
-            case DefaultExpandedRole:
-                switch(entry->type()) {
-                case EntryType::Account:
-                    return false;
-                case EntryType::Node:
-                    static_cast<NodeEntry *>(entry)->setExpandedByDefault(value.toBool());
-                    emit dataChanged(index, index, QVector<int>() << role);
-                    return true;
-                }
-                break;
-            default:
-                ;
+            }
+            try {
+                ss.write(array.data(), array.size());
+                Entry *newEntry = Entry::parse(ss);
+                int row = entry->index();
+                beginRemoveRows(parentIndex, row, row);
+                delete entry;
+                endRemoveRows();
+                beginInsertRows(parentIndex, row, row);
+                newEntry->setParent(parent, row);
+                endInsertRows();
+                return true;
+            } catch(...) {
+                IoUtilities::catchIoFailure();
             }
         }
+        break;
+    case DefaultExpandedRole:
+        switch(entry->type()) {
+        case EntryType::Account:
+            return false;
+        case EntryType::Node:
+            static_cast<NodeEntry *>(entry)->setExpandedByDefault(value.toBool());
+            emit dataChanged(index, index, QVector<int>() << role);
+            return true;
+        }
+        break;
+    default:
+        ;
     }
     return false;
 }
@@ -388,30 +392,30 @@ bool EntryModel::insertRows(int row, int count, const QModelIndex &parent)
         return push(new EntryModelInsertRowsCommand(this, row, count, parent));
     }
 #endif
-    if(parent.isValid()) {
-        if(Entry *parentEntry = static_cast<Entry *>(parent.internalPointer())) {
-            if(parentEntry->type() == EntryType::Node) {
-                beginInsertRows(parent, row, row + count - 1);
-                for(int end = row + count; row < end; ++row) {
-                    Entry *newEntry;
-                    switch(m_insertType) {
-                    case EntryType::Node:
-                        newEntry = new NodeEntry;
-                        break;
-                    case EntryType::Account:
-                        newEntry = new AccountEntry;
-                        break;
-                    default:
-                        return false; // should never be reached, just to suppress compiler warning
-                    }
-                    newEntry->setParent(static_cast<NodeEntry *>(parentEntry), row);
-                }
-                endInsertRows();
-                return true;
-            }
-        }
+    if(!parent.isValid()) {
+        return false;
     }
-    return false;
+    auto *const parentEntry = static_cast<Entry *>(parent.internalPointer());
+    if(!parentEntry || parentEntry->type() != EntryType::Node) {
+        return false;
+    }
+    beginInsertRows(parent, row, row + count - 1);
+    for(int end = row + count; row < end; ++row) {
+        Entry *newEntry;
+        switch(m_insertType) {
+        case EntryType::Node:
+            newEntry = new NodeEntry;
+            break;
+        case EntryType::Account:
+            newEntry = new AccountEntry;
+            break;
+        default:
+            return false; // should never be reached, just to suppress compiler warning
+        }
+        newEntry->setParent(static_cast<NodeEntry *>(parentEntry), row);
+    }
+    endInsertRows();
+    return true;
 }
 
 bool EntryModel::removeRows(int row, int count, const QModelIndex &parent)
@@ -421,17 +425,17 @@ bool EntryModel::removeRows(int row, int count, const QModelIndex &parent)
         return push(new EntryModelRemoveRowsCommand(this, row, count, parent));
     }
 #endif
-    if(parent.isValid() && count > 0) {
-        if(Entry *parentEntry = static_cast<Entry *>(parent.internalPointer())) {
-            if(parentEntry->type() == EntryType::Node) {
-                beginRemoveRows(parent, row, row + count - 1);
-                static_cast<NodeEntry *>(parentEntry)->deleteChildren(row, row + count);
-                endRemoveRows();
-                return true;
-            }
-        }
+    if(!parent.isValid() || count <= 0) {
+        return false;
     }
-    return false;
+    auto *const parentEntry = static_cast<Entry *>(parent.internalPointer());
+    if(!parentEntry || parentEntry->type() != EntryType::Node) {
+        return false;
+    }
+    beginRemoveRows(parent, row, row + count - 1);
+    static_cast<NodeEntry *>(parentEntry)->deleteChildren(row, row + count);
+    endRemoveRows();
+    return true;
 }
 
 bool EntryModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int count, const QModelIndex &destinationParent, int destinationChild)
@@ -442,41 +446,42 @@ bool EntryModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int co
     }
 #endif
     // check validation of specified arguments
-    if(sourceParent.isValid() && destinationParent.isValid()
-            && sourceRow >= 0 && count > 0
-            && entry(sourceParent)->type() == EntryType::Node // source and destination parent entries
-            && entry(destinationParent)->type() == EntryType::Node) { // need to be node entries
-        // determine the source parent entry and dest parent entry as node entries
-        NodeEntry *srcParentEntry = static_cast<NodeEntry *>(sourceParent.internalPointer());
-        NodeEntry *destParentEntry = static_cast<NodeEntry *>(destinationParent.internalPointer());
-        // source rows must be within the valid range
-        if(static_cast<size_t>(sourceRow + count) <= srcParentEntry->children().size()
-                // if source and destination parent are the same the destination child mustn't be in the source range
-                && (srcParentEntry != destParentEntry || (destinationChild < sourceRow || (sourceRow + count) < destinationChild))) {
-            // do not move a row to one of its own children! -> check before
-            for(int index = 0; index < count; ++index) {
-                Entry *toMove = srcParentEntry->children().at(sourceRow + index);
-                if(toMove->type() == EntryType::Node) {
-                    if(destParentEntry->isIndirectChildOf(static_cast<NodeEntry *>(toMove))) {
-                        return false;
-                    }
-                }
+    if(!sourceParent.isValid() || !destinationParent.isValid()
+            || sourceRow < 0 || count <= 0
+            || entry(sourceParent)->type() != EntryType::Node // source and destination parent entries
+            || entry(destinationParent)->type() != EntryType::Node) { // need to be node entries
+        return false;
+    }
+    // determine the source parent entry and dest parent entry as node entries
+    auto *const srcParentEntry = static_cast<NodeEntry *>(sourceParent.internalPointer());
+    auto *const destParentEntry = static_cast<NodeEntry *>(destinationParent.internalPointer());
+    // source rows must be within the valid range
+    if(static_cast<size_t>(sourceRow + count) > srcParentEntry->children().size()
+            // if source and destination parent are the same the destination child mustn't be in the source range
+            || !(srcParentEntry != destParentEntry || (destinationChild < sourceRow || (sourceRow + count) < destinationChild))) {
+        return false;
+    }
+    // do not move a row to one of its own children! -> check before
+    for(int index = 0; index < count; ++index) {
+        Entry *toMove = srcParentEntry->children()[static_cast<size_t>(sourceRow + index)];
+        if(toMove->type() == EntryType::Node) {
+            if(destParentEntry->isIndirectChildOf(static_cast<NodeEntry *>(toMove))) {
+                return false;
             }
-            // actually perform the move operation
-            beginMoveRows(sourceParent, sourceRow, sourceRow + count - 1, destinationParent, destinationChild);
-            for(int index = 0; index < count; ++index) {
-                Entry *toMove = srcParentEntry->children().at(sourceRow + index);
-                if(srcParentEntry == destParentEntry && sourceRow < destinationChild) {
-                    toMove->setParent(destParentEntry, destinationChild + index - 1);
-                } else {
-                    toMove->setParent(destParentEntry, destinationChild + index);
-                }
-            }
-            endMoveRows();
-            return true;
         }
     }
-    return false;
+    // actually perform the move operation
+    beginMoveRows(sourceParent, sourceRow, sourceRow + count - 1, destinationParent, destinationChild);
+    for(int index = 0; index < count; ++index) {
+        Entry *toMove = srcParentEntry->children()[static_cast<size_t>(sourceRow + index)];
+        if(srcParentEntry == destParentEntry && sourceRow < destinationChild) {
+            toMove->setParent(destParentEntry, destinationChild + index - 1);
+        } else {
+            toMove->setParent(destParentEntry, destinationChild + index);
+        }
+    }
+    endMoveRows();
+    return true;
 }
 
 QStringList EntryModel::mimeTypes() const
@@ -497,16 +502,17 @@ QMimeData *EntryModel::mimeData(const QModelIndexList &indexes) const
     QStringList plainTextParts;
     QByteArray encoded;
     QDataStream dataStream(&encoded, QIODevice::WriteOnly);
-    foreach(const QModelIndex &index, indexes) {
-        if(index.isValid()) {
-            Entry *entry = static_cast<Entry *>(index.internalPointer());
-            list<string> path = entry->path();
-            dataStream << static_cast<quint32>(path.size());
-            for(const string &part : path) {
-                dataStream << QString::fromStdString(part);
-            }
-            plainTextParts << QString::fromStdString(entry->label());
+    for(const QModelIndex &index : indexes) {
+        if(!index.isValid()) {
+            continue;
         }
+        const auto *const entry = static_cast<const Entry *>(index.internalPointer());
+        const auto path(entry->path());
+        dataStream << static_cast<quint32>(path.size());
+        for(const string &part : path) {
+            dataStream << QString::fromStdString(part);
+        }
+        plainTextParts << QString::fromStdString(entry->label());
     }
     data->setData(types.at(0), encoded);
     data->setText(plainTextParts.join(QStringLiteral(", ")));
@@ -533,7 +539,7 @@ bool EntryModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int 
         column = 0;
     }
     // decode and insert
-    QByteArray encoded = data->data(format);
+    QByteArray encoded(data->data(format));
     QDataStream stream(&encoded, QIODevice::ReadOnly);
     int moved = 0;
     while(!stream.atEnd()) {
@@ -545,12 +551,13 @@ bool EntryModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int 
             stream >> part;
             path.push_back(part.toStdString());
         }
-        if(Entry *entry = m_rootEntry->entryByPath(path, true)) {
-            if(NodeEntry *srcParentEntry = entry->parent()) {
-                if(moveRows(index(srcParentEntry), entry->index(), 1, parent, row)) {
-                    ++moved;
-                }
-            }
+        auto *const entry = m_rootEntry->entryByPath(path, true);
+        if(!entry) {
+            continue;
+        }
+        auto *const srcParentEntry = entry->parent();
+        if(srcParentEntry && moveRows(index(srcParentEntry), entry->index(), 1, parent, row)) {
+            ++moved;
         }
     }
     return false;

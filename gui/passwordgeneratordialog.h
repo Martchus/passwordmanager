@@ -6,6 +6,7 @@
 #include <QDialog>
 
 #include <vector>
+#include <memory>
 
 namespace QtGui {
 
@@ -18,7 +19,7 @@ class PasswordGeneratorDialog : public QDialog {
 
 public:
     explicit PasswordGeneratorDialog(QWidget *parent = nullptr);
-    ~PasswordGeneratorDialog();
+    ~PasswordGeneratorDialog() override;
 
 private Q_SLOTS:
     void generateNewPassword();
@@ -27,7 +28,7 @@ private Q_SLOTS:
     void copyPassword();
 
 private:
-    Ui::PasswordGeneratorDialog *m_ui;
+    std::unique_ptr<Ui::PasswordGeneratorDialog> m_ui;
     std::vector<char> m_charset;
     Util::OpenSslRandomDevice m_random;
 };
