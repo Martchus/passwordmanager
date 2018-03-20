@@ -816,9 +816,9 @@ OpenSSL error: %1</source>
     <message numerus="yes">
         <location filename="../gui/undocommands.cpp" line="135"/>
         <source>insertion of %1 row(s) before row %2</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>insertion of %1 row before row %2</numerusform>
+            <numerusform>insertion of %1 rows before row %2</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -860,25 +860,25 @@ OpenSSL error: %1</source>
     <message numerus="yes">
         <location filename="../gui/undocommands.cpp" line="355"/>
         <source>insertion of %1 entry/entries</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>insertion of %1 entry</numerusform>
+            <numerusform>insertion of %1 entries</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../gui/undocommands.cpp" line="387"/>
         <source>removal of %1 entry/entries</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>removal of %1 entry</numerusform>
+            <numerusform>removal of %1 entries</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../gui/undocommands.cpp" line="418"/>
         <source>move of %1 entry/entries</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>move of %1 entry</numerusform>
+            <numerusform>move of %1 entries</numerusform>
         </translation>
     </message>
 </context>
