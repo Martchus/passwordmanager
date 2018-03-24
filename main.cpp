@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
             cli.run();
         }
     } else if (qtConfigArgs.areQtGuiArgsPresent()) {
-    // run Qt gui if no arguments, --qt-gui or --qt-quick-gui specified, a file might be specified
+        // run Qt gui if no arguments, --qt-gui or --qt-quick-gui specified, a file might be specified
 #if defined(PASSWORD_MANAGER_GUI_QTWIDGETS) || defined(PASSWORD_MANAGER_GUI_QTQUICK)
         QString file;
         if (fileArg.isPresent()) {
