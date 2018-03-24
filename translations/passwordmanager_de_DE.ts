@@ -19,7 +19,7 @@
     <message>
         <location filename="../qml/pages/BasicPage.qml" line="164"/>
         <source>filter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Filter</translation>
     </message>
 </context>
 <context>
@@ -750,7 +750,7 @@ OpenSSL-Fehler: %1</translation>
     <message>
         <location filename="../qml/pages/StartPage.qml" line="47"/>
         <source>Recently opened files</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zuletzt geöffnete Dateien</translation>
     </message>
     <message>
         <location filename="../qml/pages/StartPage.qml" line="51"/>
