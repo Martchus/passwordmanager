@@ -611,7 +611,7 @@ OpenSSL-Fehler: %1</translation>
         <source>Remove field(s)</source>
         <translation>
             <numerusform>Feld löschen</numerusform>
-            <numerusform></numerusform>
+            <numerusform>Felder löschen</numerusform>
         </translation>
     </message>
     <message>

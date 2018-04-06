@@ -606,8 +606,8 @@ OpenSSL error queue: %1</source>
         <location filename="../gui/mainwindow.cpp" line="1225"/>
         <source>Remove field(s)</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>Remove field</numerusform>
+            <numerusform>Remove fields</numerusform>
         </translation>
     </message>
     <message>
