@@ -43,6 +43,7 @@ int main(int argc, char *argv[])
     // Qt configuration arguments
     QT_CONFIG_ARGUMENTS qtConfigArgs;
     qtConfigArgs.qtWidgetsGuiArg().addSubArgument(&fileArg);
+    qtConfigArgs.qtQuickGuiArg().addSubArgument(&fileArg);
     // cli argument
     Argument cliArg("interactive-cli", 'i', "starts the interactive command line interface");
     cliArg.setDenotesOperation(true);
@@ -60,17 +61,14 @@ int main(int argc, char *argv[])
     if (cliArg.isPresent()) {
         Cli::InteractiveCli cli;
         if (fileArg.isPresent()) {
-            cli.run(fileArg.values().front());
+            cli.run(fileArg.firstValue());
         } else {
             cli.run();
         }
     } else if (qtConfigArgs.areQtGuiArgsPresent()) {
         // run Qt gui if no arguments, --qt-gui or --qt-quick-gui specified, a file might be specified
 #if defined(PASSWORD_MANAGER_GUI_QTWIDGETS) || defined(PASSWORD_MANAGER_GUI_QTQUICK)
-        QString file;
-        if (fileArg.isPresent()) {
-            file = QString::fromLocal8Bit(fileArg.values().front());
-        }
+        const auto file(fileArg.isPresent() ? QString::fromLocal8Bit(fileArg.firstValue()) : QString());
 #endif
         if (qtConfigArgs.qtWidgetsGuiArg().isPresent()) {
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
@@ -81,14 +79,14 @@ int main(int argc, char *argv[])
 #endif
         } else if (qtConfigArgs.qtQuickGuiArg().isPresent()) {
 #ifdef PASSWORD_MANAGER_GUI_QTQUICK
-            res = QtGui::runQuickGui(argc, argv, qtConfigArgs);
+            res = QtGui::runQuickGui(argc, argv, qtConfigArgs, file);
 #else
             CMD_UTILS_START_CONSOLE;
             cerr << "The application has not been built with Qt quick support." << endl;
 #endif
         } else {
 #if defined(PASSWORD_MANAGER_GUI_QTQUICK)
-            res = QtGui::runQuickGui(argc, argv, qtConfigArgs);
+            res = QtGui::runQuickGui(argc, argv, qtConfigArgs, file);
 #elif defined(PASSWORD_MANAGER_GUI_QTWIDGETS)
             res = QtGui::runWidgetsGui(argc, argv, qtConfigArgs, file);
 #else

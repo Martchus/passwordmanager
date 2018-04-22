@@ -11,7 +11,7 @@ class QtConfigArguments;
 
 namespace QtGui {
 
-int runQuickGui(int argc, char *argv[], const ApplicationUtilities::QtConfigArguments &qtConfigArgs);
+int runQuickGui(int argc, char *argv[], const ApplicationUtilities::QtConfigArguments &qtConfigArgs, const QString &file);
 }
 
 #endif // QT_QUICK_GUI_INITIATE_H
