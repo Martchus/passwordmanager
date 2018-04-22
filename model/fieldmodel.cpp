@@ -49,6 +49,17 @@ FieldModel::FieldModel(QUndoStack *undoStack, QObject *parent)
 }
 #endif
 
+QHash<int, QByteArray> FieldModel::roleNames() const
+{
+    static const QHash<int, QByteArray> roles{
+        { FieldModelRoles::FieldTypeRole, "key" },
+        { FieldModelRoles::Key, "key" },
+        { FieldModelRoles::Value, "key" },
+        { FieldModelRoles::IsPassword, "isPassword" },
+    };
+    return roles;
+}
+
 /*!
  * \brief Sets the account entry. Causes a model reset.
  *
@@ -92,10 +103,20 @@ QVariant FieldModel::data(const QModelIndex &index, int role) const
             break;
         case FieldTypeRole:
             return static_cast<int>((*m_fields)[static_cast<size_t>(index.row())].type());
+        case Key:
+            return QString::fromStdString((*m_fields)[static_cast<size_t>(index.row())].name());
+        case Value:
+            return (m_passwordVisibility == PasswordVisibility::Always || role == Qt::EditRole
+                       || (*m_fields)[static_cast<size_t>(index.row())].type() != FieldType::Password)
+                ? QString::fromStdString((*m_fields)[static_cast<size_t>(index.row())].value())
+                : QString((*m_fields)[static_cast<size_t>(index.row())].value().size(), QChar(0x2022));
+        case IsPassword:
+            return (*m_fields)[static_cast<size_t>(index.row())].type() == FieldType::Password;
         default:;
         }
-        // return data for empty field at the end which enables the user to append fields
+
     } else if (static_cast<size_t>(index.row()) == m_fields->size()) {
+        // return data for empty field at the end which enables the user to append fields
         switch (role) {
         case Qt::DisplayRole:
         case Qt::EditRole:
@@ -146,11 +167,11 @@ bool FieldModel::setData(const QModelIndex &index, const QVariant &value, int ro
             switch (index.column()) {
             case 0:
                 m_fields->at(index.row()).setName(value.toString().toStdString());
-                roles << role;
+                roles << Qt::EditRole << Key;
                 break;
             case 1:
                 m_fields->at(index.row()).setValue(value.toString().toStdString());
-                roles << role;
+                roles << Qt::EditRole << Value;
                 break;
             default:;
             }
@@ -159,11 +180,23 @@ bool FieldModel::setData(const QModelIndex &index, const QVariant &value, int ro
             bool ok;
             int fieldType = value.toInt(&ok);
             if (ok && Field::isValidType(fieldType)) {
-                roles << role;
                 m_fields->at(index.row()).setType(static_cast<FieldType>(fieldType));
+                roles << FieldTypeRole << IsPassword;
             }
             break;
         }
+        case Key:
+            m_fields->at(index.row()).setName(value.toString().toStdString());
+            roles << Qt::EditRole << Key;
+            break;
+        case Value:
+            m_fields->at(index.row()).setValue(value.toString().toStdString());
+            roles << Qt::EditRole << Value;
+            break;
+        case IsPassword:
+            m_fields->at(index.row()).setType(value.toBool() ? FieldType::Password : FieldType::Normal);
+            roles << FieldTypeRole << IsPassword;
+            break;
         default:;
         }
         // remove last field if empty, showing an empty field at the end to enabled appending new rows is provided by the data method
@@ -205,10 +238,13 @@ bool FieldModel::setData(const QModelIndex &index, const QVariant &value, int ro
     // some roles affect other roles
     switch (role) {
     case Qt::EditRole:
+    case Key:
+    case Value:
         roles << Qt::DisplayRole;
         break;
     case FieldTypeRole:
-        roles << Qt::DisplayRole << Qt::EditRole;
+    case IsPassword:
+        roles << Qt::DisplayRole << Qt::EditRole << Key;
         break;
     default:;
     }

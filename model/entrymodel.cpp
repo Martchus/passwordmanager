@@ -54,6 +54,15 @@ EntryModel::EntryModel(QUndoStack *undoStack, QObject *parent)
 }
 #endif
 
+QHash<int, QByteArray> EntryModel::roleNames() const
+{
+    static const QHash<int, QByteArray> roles{
+        { Qt::DisplayRole, "name" },
+        { EntryModelRoles::DefaultExpandedRole, "isDefaultExpanded" },
+    };
+    return roles;
+}
+
 /*!
  * \brief Returns the Entry for the specified \a index of nullptr if the \a index is invalid.
  *

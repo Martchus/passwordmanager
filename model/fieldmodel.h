@@ -21,7 +21,10 @@ namespace QtGui {
  * \brief The FieldModelRoles enum defines custom roles for the FieldModel class.
  */
 enum FieldModelRoles {
-    FieldTypeRole = Qt::UserRole + 1 /**< the field type */
+    FieldTypeRole = Qt::UserRole + 1, /**< the field type */
+    Key,
+    Value,
+    IsPassword,
 };
 
 /*!
@@ -46,6 +49,7 @@ public:
     explicit FieldModel(QUndoStack *undoStack, QObject *parent = nullptr);
 #endif
 
+    QHash<int, QByteArray> roleNames() const;
     Io::AccountEntry *accountEntry();
     const Io::AccountEntry *accountEntry() const;
     void setAccountEntry(Io::AccountEntry *entry);

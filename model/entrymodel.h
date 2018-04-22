@@ -22,7 +22,7 @@ namespace QtGui {
  */
 enum EntryModelRoles {
     SerializedRole = Qt::UserRole + 1, /**< the entry (including descendants) in serialized from (QByteArray) */
-    DefaultExpandedRole = Qt::UserRole + 2 /**< whether the entry should be expanded by default */
+    DefaultExpandedRole, /**< whether the entry should be expanded by default */
 };
 
 class EntryModel : public QAbstractItemModel
@@ -38,6 +38,7 @@ public:
     explicit EntryModel(QUndoStack *undoStack, QObject *parent = nullptr);
 #endif
 
+    QHash<int, QByteArray> roleNames() const;
     Io::NodeEntry *rootEntry();
     void setRootEntry(Io::NodeEntry *entry);
     Io::Entry *entry(const QModelIndex &index);
@@ -45,7 +46,6 @@ public:
     bool insertEntries(int row, const QModelIndex &parent, const QList<Io::Entry *> &entries);
     Io::EntryType insertType() const;
     void setInsertType(Io::EntryType type);
-    bool hidePasswords() const;
     QModelIndex index(int row, int column, const QModelIndex &parent) const;
     QModelIndex index(Io::Entry *entry) const;
     QModelIndex parent(const QModelIndex &child) const;
