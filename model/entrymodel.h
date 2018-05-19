@@ -2,7 +2,7 @@
 #define ENTRYMODEL_H
 
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
-#include "gui/stacksupport.h"
+#include "../gui/stacksupport.h"
 #endif
 
 #include <c++utilities/application/global.h>
@@ -12,7 +12,7 @@
 namespace Io {
 class Entry;
 class NodeEntry;
-DECLARE_ENUM_CLASS(EntryType, int);
+enum class EntryType;
 } // namespace Io
 
 namespace QtGui {
@@ -32,6 +32,9 @@ class EntryModel : public QAbstractItemModel
 #endif
 {
     Q_OBJECT
+    Q_PROPERTY(Io::NodeEntry *rootEntry READ rootEntry WRITE setRootEntry)
+    Q_PROPERTY(Io::EntryType insertType READ insertType WRITE setInsertType)
+
 public:
     explicit EntryModel(QObject *parent = nullptr);
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
@@ -41,31 +44,33 @@ public:
     QHash<int, QByteArray> roleNames() const;
     Io::NodeEntry *rootEntry();
     void setRootEntry(Io::NodeEntry *entry);
-    Io::Entry *entry(const QModelIndex &index);
-    QList<Io::Entry *> takeEntries(int row, int count, const QModelIndex &parent);
-    bool insertEntries(int row, const QModelIndex &parent, const QList<Io::Entry *> &entries);
+    Q_INVOKABLE Io::Entry *entry(const QModelIndex &index);
+    Q_INVOKABLE QList<Io::Entry *> takeEntries(int row, int count, const QModelIndex &parent);
+    Q_INVOKABLE bool insertEntries(int row, const QModelIndex &parent, const QList<Io::Entry *> &entries);
     Io::EntryType insertType() const;
     void setInsertType(Io::EntryType type);
     QModelIndex index(int row, int column, const QModelIndex &parent) const;
     QModelIndex index(Io::Entry *entry) const;
     QModelIndex parent(const QModelIndex &child) const;
     bool hasChildren(const QModelIndex &parent) const;
-    bool isNode(const QModelIndex &parent) const;
+    Q_INVOKABLE bool isNode(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
     QMap<int, QVariant> itemData(const QModelIndex &index) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role);
     bool setItemData(const QModelIndex &index, const QMap<int, QVariant> &roles);
     Qt::ItemFlags flags(const QModelIndex &index) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-    int rowCount(const QModelIndex &parent) const;
-    int columnCount(const QModelIndex &parent) const;
-    bool insertRows(int row, int count, const QModelIndex &parent);
-    bool removeRows(int row, int count, const QModelIndex &parent);
-    bool moveRows(const QModelIndex &sourceParent, int sourceRow, int count, const QModelIndex &destinationParent, int destinationChild);
+    Q_INVOKABLE int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    Q_INVOKABLE int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    Q_INVOKABLE bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
+    Q_INVOKABLE bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
+    Q_INVOKABLE bool moveRows(const QModelIndex &sourceParent, int sourceRow, int count, const QModelIndex &destinationParent, int destinationChild);
     QStringList mimeTypes() const;
     QMimeData *mimeData(const QModelIndexList &indexes) const;
     bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
     Qt::DropActions supportedDropActions() const;
+    Q_INVOKABLE void setInsertTypeToNode();
+    Q_INVOKABLE void setInsertTypeToAccount();
 
 public Q_SLOTS:
     void reset();
@@ -122,6 +127,7 @@ inline void EntryModel::setInsertType(Io::EntryType type)
 {
     m_insertType = type;
 }
+
 } // namespace QtGui
 
 #endif // ENTRYMODEL_H

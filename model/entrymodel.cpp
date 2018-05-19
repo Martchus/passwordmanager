@@ -1,7 +1,7 @@
 #include "./entrymodel.h"
 
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
-#include "./gui/undocommands.h"
+#include "../gui/undocommands.h"
 #endif
 
 #include <passwordfile/io/entry.h>
@@ -19,7 +19,6 @@ using namespace std;
 using namespace Io;
 
 namespace QtGui {
-
 /*!
  * \class EntryModel
  * \brief The EntryModel class provides a model interface for a hierarchy of Entry instances.
@@ -565,6 +564,24 @@ bool EntryModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int 
 Qt::DropActions EntryModel::supportedDropActions() const
 {
     return Qt::MoveAction;
+}
+
+/*!
+ * \brief Sets the insert type to node.
+ * \remarks Intended to prevent the offort of exposing EntryType to QML.
+ */
+void EntryModel::setInsertTypeToNode()
+{
+    setInsertType(Io::EntryType::Node);
+}
+
+/*!
+ * \brief Sets the insert type to account.
+ * \remarks Intended to prevent the offort of exposing EntryType to QML.
+ */
+void EntryModel::setInsertTypeToAccount()
+{
+    setInsertType(Io::EntryType::Account);
 }
 
 } // namespace QtGui

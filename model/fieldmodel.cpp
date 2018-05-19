@@ -1,7 +1,7 @@
 #include "./fieldmodel.h"
 
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
-#include "./gui/undocommands.h"
+#include "../gui/undocommands.h"
 #endif
 
 #include <passwordfile/io/field.h>
@@ -52,9 +52,9 @@ FieldModel::FieldModel(QUndoStack *undoStack, QObject *parent)
 QHash<int, QByteArray> FieldModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles{
-        { FieldModelRoles::FieldTypeRole, "key" },
+        { FieldModelRoles::FieldTypeRole, "fieldType" },
         { FieldModelRoles::Key, "key" },
-        { FieldModelRoles::Value, "key" },
+        { FieldModelRoles::Value, "value" },
         { FieldModelRoles::IsPassword, "isPassword" },
     };
     return roles;
@@ -297,7 +297,7 @@ bool FieldModel::insertRows(int row, int count, const QModelIndex &parent)
         return push(new FieldModelInsertRowsCommand(this, row, count));
     }
 #endif
-    if (parent.isValid() || row < 0 || count <= 0 || static_cast<size_t>(row + count) > m_fields->size()) {
+    if (parent.isValid() || row < 0 || count <= 0 || static_cast<size_t>(row) > m_fields->size()) {
         return false;
     }
     beginInsertRows(parent, row, row + count - 1);

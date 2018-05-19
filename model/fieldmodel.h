@@ -2,7 +2,7 @@
 #define FIELDMODEL_H
 
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
-#include "gui/stacksupport.h"
+#include "../gui/stacksupport.h"
 #endif
 
 #include <passwordfile/io/entry.h>
@@ -43,6 +43,9 @@ class FieldModel : public QAbstractTableModel
 #endif
 {
     Q_OBJECT
+    Q_PROPERTY(Io::AccountEntry *accountEntry READ accountEntry WRITE setAccountEntry)
+    Q_PROPERTY(PasswordVisibility passwordVisibility READ passwordVisibility WRITE setPasswordVisibility)
+
 public:
     explicit FieldModel(QObject *parent = nullptr);
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
@@ -60,14 +63,14 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value, int role);
     Qt::ItemFlags flags(const QModelIndex &index) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const;
-    bool insertRows(int row, int count, const QModelIndex &parent);
-    bool removeRows(int row, int count, const QModelIndex &parent);
+    Q_INVOKABLE int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    Q_INVOKABLE int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    Q_INVOKABLE bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
+    Q_INVOKABLE bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
     bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
     QStringList mimeTypes() const;
     QMimeData *mimeData(const QModelIndexList &indexes) const;
-    const Io::Field *field(std::size_t row) const;
+    Q_INVOKABLE const Io::Field *field(std::size_t row) const;
 
 public Q_SLOTS:
     void setPasswordVisibility(PasswordVisibility passwordVisibility);
