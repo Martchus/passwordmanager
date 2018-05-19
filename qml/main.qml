@@ -1,176 +1,154 @@
-import QtQuick 2.2
-import QtQuick.Controls 1.2
-import QtQuick.Controls.Styles 1.2
-import martchus.passwordmanager 2.0
+import QtQuick 2.7
+import QtQuick.Controls 2.1 as Controls
+import QtQuick.Layouts 1.2
+import QtQuick.Dialogs 1.3
+import org.kde.kirigami 2.4 as Kirigami
 
-import "./pages" as Pages
-import "./touch" as Touch
-
-ApplicationWindow {
+Kirigami.ApplicationWindow {
     id: root
-    width: 700
-    height: 800
-    title: qsTr("Password Manager")
-    visible: true
 
-    property string statusBarMessage
-
-    property Component startPage: Pages.StartPage {
-        onUpdateStatusBar: statusBarMessage = message
-        onNextPage: if (!isLocked) {
-                        pageView.push(accountsPage)
-                        clearSearchBox()
-                    }
-    }
-    property Component accountsPage: Pages.AccountsPage {
-        onUpdateStatusBar: statusBarMessage = message
-        onNextPage: if (!isLocked) {
-                        pageView.push(fieldsPage)
-                    }
-        onPreviousPage: {
-            pageView.pop()
-        }
-    }
-    property Component fieldsPage: Pages.FieldsPage {
-        onUpdateStatusBar: statusBarMessage = message
-        onNextPage: if (!isLocked) {
-                        pageView.pop()
-                    }
-        onPreviousPage: {
-            pageView.pop()
-        }
+    function clearStack() {
+        pageStack.pop(root.pageStack.initialPage, Controls.StackView.Immediate)
     }
 
-    StackView {
-        id: pageView
-        anchors.fill: parent
-        focus: true
-        Keys.onReleased: {
-            if (event.key === Qt.Key_Back ||
-                    (event.key === Qt.Key_Left && (event.modifiers & Qt.AltModifier))) {
-                if (pageView.depth > 1) {
-                    event.accepted = true
-                    if (!currentItem.isLocked)
-                        currentItem.previousPage()
-                } else {
-                    if (!currentItem.hasNoSearchText) {
-                        event.accepted = true
-                        currentItem.clearSearchBox()
-                    }
-                }
-            }
+    function pushStackEntry(entryModel, rootIndex) {
+        var title = entryModel.data(rootIndex)
+        var entriesComponent = Qt.createComponent("EntriesPage.qml")
+        if (entriesComponent.status !== Component.Ready) {
+            var errorMessage = "Unable to load EntriesPage.qml: " + entriesComponent.errorString()
+            showPassiveNotification(errorMessage)
+            console.error(errorMessage)
+            return
         }
-        initialItem: startPage
-        delegate: StackViewDelegate {
-            pushTransition: StackViewTransition {
-                function transitionFinished(properties) {
-                    properties.exitItem.opacity = 1
-                }
-                PropertyAnimation {
-                    target: enterItem
-                    property: "x"
-                    from: target.width
-                    to: 0
-                    duration: 500
-                    easing.type: Easing.OutSine
-                }
-                PropertyAnimation {
-                    target: exitItem
-                    property: "x"
-                    from: 0
-                    to: -target.width
-                    duration: 500
-                    easing.type: Easing.OutSine
-                }
-            }
-            popTransition: StackViewTransition {
-                function transitionFinished(properties)
-                {
-                    properties.exitItem.opacity = 1
-                }
-                PropertyAnimation {
-                    target: enterItem
-                    property: "x"
-                    from: -target.width
-                    to: 0
-                    duration: 500
-                    easing.type: Easing.OutSine
-                }
-                PropertyAnimation {
-                    target: exitItem
-                    property: "x"
-                    from: 0
-                    to: target.width
-                    duration: 500
-                    easing.type: Easing.OutSine
-                }
-            }
-            property Component replaceTransition: pushTransition
-        }
+        var entriesPage = entriesComponent.createObject(root, {
+                                                            model: entryModel,
+                                                            rootIndex: rootIndex,
+                                                            title: title
+                                                        })
+        pageStack.push(entriesPage)
     }
-    statusBar: StatusBar {
-        id: statusbar
-        width: parent.width
-        opacity: label.text !== "" ? 1 : 0
-        property real statusBarHeight: 65 * ApplicationInfo.ratio
-        height: label.text !== "" ? statusBarHeight : 0
-        Behavior on height { NumberAnimation {easing.type: Easing.OutSine}}
-        Behavior on opacity { NumberAnimation {}}
-        style: StatusBarStyle {
-            padding { left: 0; right: 0 ; top: 0 ; bottom: 0}
-            property Component background: Rectangle {
-                implicitHeight: 65 * ApplicationInfo.ratio
-                implicitWidth: root.width
-                color: ApplicationInfo.colors.smokeGray
-                Rectangle {
-                    width: parent.width
-                    height: 1
-                    color: Qt.darker(parent.color, 1.5)
-                }
-                Rectangle {
-                    y: 1
-                    width: parent.width
-                    height: 1
-                    color: "white"
-                }
+
+    PasswordDialog {
+        id: enterPasswordDialog
+    }
+
+    FileDialog {
+        id: fileDialog
+        title: selectExisting ? qsTr("Select an existing file") : qsTr(
+                                    "Select path for new file")
+        onAccepted: {
+            if (fileUrls.length < 1) {
+                return
+            }
+            nativeInterface.filePath = fileUrls[0]
+            if (selectExisting) {
+                nativeInterface.load()
+            } else {
+                nativeInterface.create()
             }
         }
-        Touch.TouchLabel {
-            id: label
-            y: 32 * ApplicationInfo.ratio - height / 2
-            width: parent.width // The text will only wrap if an explicit width has been set
-            text: statusBarMessage
-            textFormat: Text.RichText
-            onLinkActivated: Qt.openUrlExternally(link)
-            wrapMode: Text.Wrap
-            pixelSize: 18
-            letterSpacing: -0.15
-            color: ApplicationInfo.colors.mediumGray
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            function decreaseFontSizeOnNarrowScreen() {
-                if (label.implicitHeight > statusbar.statusBarHeight) {
-                    pixelSize = Math.floor(pixelSize * statusbar.statusBarHeight / label.implicitHeight)
-                }
-            }
-            onTextChanged: {
-                if (text === "") {
-                    pixelSize = 18
-                } else {
-                    decreaseFontSizeOnNarrowScreen()
-                }
-            }
-            onWidthChanged: decreaseFontSizeOnNarrowScreen()
+        onRejected: {
+            showPassiveNotification("Canceled file selection")
+        }
+
+        function openExisting() {
+            this.selectExisting = true
+            this.open()
+        }
+        function createNew() {
+            this.selectExisting = false
+            this.open()
         }
     }
 
-    menuBar: MenuBar {
-        Menu {
-            title: qsTr("Application")
-            MenuItem {
-                text: qsTr("Exit")
-                onTriggered: Qt.quit();
+    Connections {
+        target: nativeInterface
+        onFileError: {
+            showPassiveNotification(errorMessage)
+        }
+        onPasswordRequired: {
+            enterPasswordDialog.askForExistingPassword(
+                        qsTr("Password required to open ") + filePath)
+            leftMenu.resetMenu()
+        }
+        onFileOpenChanged: {
+            clearStack()
+            if (!fileOpen) {
+                return
             }
+            var entryModel = nativeInterface.entryModel
+            var rootIndex = entryModel.index(0, 0)
+            pushStackEntry(entryModel, rootIndex)
+        }
+    }
+
+    header: Kirigami.ApplicationHeader {
+    }
+    globalDrawer: Kirigami.GlobalDrawer {
+        id: leftMenu
+        title: qsTr("Password manager")
+        titleIcon: "passwordmanager"
+        bannerImageSource: "banner.png"
+        actions: [
+            Kirigami.Action {
+                text: qsTr("Create new file")
+                iconName: "document-new"
+                onTriggered: fileDialog.createNew()
+            },
+            Kirigami.Action {
+                text: qsTr("Open existing file")
+                iconName: "document-open"
+                onTriggered: fileDialog.openExisting()
+            },
+            Kirigami.Action {
+                text: "Save modifications"
+                enabled: nativeInterface.fileOpen
+                iconName: "document-save"
+                onTriggered: nativeInterface.save()
+            },
+            Kirigami.Action {
+                text: "Change password"
+                enabled: nativeInterface.fileOpen
+                iconName: "dialog-password"
+                onTriggered: enterPasswordDialog.askForNewPassword(
+                                 "Change password for " + nativeInterface.filePath)
+            },
+            Kirigami.Action {
+                text: "Close file"
+                enabled: nativeInterface.fileOpen
+                iconName: "document-close"
+                onTriggered: nativeInterface.close()
+            }
+        ]
+    }
+    contextDrawer: Kirigami.ContextDrawer {
+        id: contextDrawer
+    }
+    pageStack.initialPage: mainPageComponent
+
+    // main app content
+    Component {
+        id: mainPageComponent
+
+        RowLayout {
+            spacing: 5
+
+            Controls.Label {
+                text: {
+                    if (nativeInterface.fileOpen) {
+                        return qsTr("The file %1 has been opened.").arg(
+                                    nativeInterface.filePath)
+                    } else {
+                        return qsTr("No file has been opened.")
+                    }
+                }
+            }
+        }
+    }
+    Component.onCompleted: {
+        // load file if one has been specified via CLI argument
+        if (nativeInterface.filePath.length) {
+            nativeInterface.load()
         }
     }
 }

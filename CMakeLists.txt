@@ -61,12 +61,11 @@ set(WIDGETS_UI_FILES
 )
 
 set(QML_HEADER_FILES
-    quickgui/applicationinfo.h
-    quickgui/applicationpaths.h
+    quickgui/controller.h
     quickgui/initiatequick.h
 )
 set(QML_SRC_FILES
-    quickgui/applicationinfo.cpp
+    quickgui/controller.cpp
     quickgui/initiatequick.cpp
     resources/icons.qrc
     resources/qml.qrc

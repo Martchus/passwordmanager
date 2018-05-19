@@ -1,36 +1,24 @@
 #include "./initiatequick.h"
-#include "./applicationinfo.h"
-
-#include "../model/entryfiltermodel.h"
-#include "../model/entrymodel.h"
-#include "../model/fieldmodel.h"
+#include "./controller.h"
 
 #include "resources/config.h"
 
 #include <qtutilities/resources/qtconfigarguments.h>
 #include <qtutilities/resources/resources.h>
 
-#if defined(GUI_QTWIDGETS)
-#include <QApplication>
-#else
-#include <QGuiApplication>
-#endif
 #include <QDebug>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QTextCodec>
 #include <QtQml>
 
+#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
+#include <QApplication>
+#endif
+
 using namespace ApplicationUtilities;
 
 namespace QtGui {
-
-static QObject *applicationInfo(QQmlEngine *engine, QJSEngine *scriptEngine)
-{
-    Q_UNUSED(engine)
-    Q_UNUSED(scriptEngine)
-    return new ApplicationInfo();
-}
 
 int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, const QString &file)
 {
@@ -40,7 +28,7 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
 #endif
     SET_QT_APPLICATION_INFO;
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-#if defined(GUI_QTWIDGETS)
+#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
     QApplication a(argc, argv);
 #else
     QGuiApplication a(argc, argv);
@@ -64,16 +52,19 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
     };
 
     // init Quick GUI
-    qmlRegisterSingletonType<QtGui::ApplicationInfo>("martchus.passwordmanager", 2, 0, "ApplicationInfo", applicationInfo);
-    qmlRegisterType<QtGui::EntryFilterModel>("martchus.passwordmanager", 2, 0, "EntryFilterModel");
-    qmlRegisterType<QtGui::EntryModel>("martchus.passwordmanager", 2, 0, "EntryModel");
-    qmlRegisterType<QtGui::FieldModel>("martchus.passwordmanager", 2, 0, "FieldModel");
-    QQmlApplicationEngine engine(QUrl("qrc:/qml/main.qml"));
-    engine.rootContext()->setContextProperty(QStringLiteral("userPaths"), userPaths);
-    engine.rootContext()->setContextProperty(QStringLiteral("file"), file);
+    //qmlRegisterType<QtGui::EntryFilterModel>("martchus.passwordmanager", 2, 0, "EntryFilterModel");
+    //qmlRegisterType<QtGui::EntryModel>("martchus.passwordmanager", 2, 0, "EntryModel");
+    //qmlRegisterType<QtGui::FieldModel>("martchus.passwordmanager", 2, 0, "FieldModel");
+    //qmlRegisterType<Io::AccountEntry>("martchus.passwordmanager", 2, 1, "AccountEntry");
 
-    // start event loop
-    int res = a.exec();
-    return res;
+    QQmlApplicationEngine engine;
+    Controller controller(file);
+    QQmlContext *const context(engine.rootContext());
+    context->setContextProperty(QStringLiteral("userPaths"), userPaths);
+    context->setContextProperty(QStringLiteral("nativeInterface"), &controller);
+    engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
+
+    // run event loop
+    return a.exec();
 }
 } // namespace QtGui
