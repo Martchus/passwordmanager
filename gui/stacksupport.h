@@ -5,6 +5,8 @@
 
 #include <QUndoStack>
 
+#include <memory>
+
 namespace QtGui {
 
 class StackAbsorper;
@@ -17,7 +19,7 @@ public:
 
 protected:
     QUndoStack *undoStack();
-    bool push(CustomUndoCommand *command);
+    bool push(std::unique_ptr<CustomUndoCommand> command);
     void clearUndoStack();
 
 private:
@@ -35,7 +37,7 @@ inline QUndoStack *StackSupport::undoStack()
 /*!
  * \brief Pushes the specified custom undo \a command to the undo stack and returns whether the redo action was successful.
  */
-inline bool StackSupport::push(CustomUndoCommand *command)
+inline bool StackSupport::push(std::unique_ptr<CustomUndoCommand> command)
 {
     if (!m_undoStack) {
         return false;
@@ -43,7 +45,7 @@ inline bool StackSupport::push(CustomUndoCommand *command)
     if (command->isNoop()) {
         return true; // doing nothing can never fail
     }
-    m_undoStack->push(command);
+    m_undoStack->push(command.release());
     return command->redoResult();
 }
 

@@ -9,6 +9,8 @@
 #include <QMimeData>
 #include <QStringList>
 
+#include <memory>
+
 using namespace std;
 using namespace Io;
 
@@ -153,7 +155,7 @@ bool FieldModel::setData(const QModelIndex &index, const QVariant &value, int ro
 {
 #if PASSWORD_MANAGER_GUI_QTWIDGETS
     if (undoStack()) {
-        return push(new FieldModelSetValueCommand(this, index, value, role));
+        return push(make_unique<FieldModelSetValueCommand>(this, index, value, role));
     }
 #endif
     if (!index.isValid() || !m_fields || index.row() < 0) {
@@ -294,7 +296,7 @@ bool FieldModel::insertRows(int row, int count, const QModelIndex &parent)
 {
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
     if (undoStack()) {
-        return push(new FieldModelInsertRowsCommand(this, row, count));
+        return push(make_unique<FieldModelInsertRowsCommand>(this, row, count));
     }
 #endif
     if (parent.isValid() || row < 0 || count <= 0 || static_cast<size_t>(row) > m_fields->size()) {
@@ -310,7 +312,7 @@ bool FieldModel::removeRows(int row, int count, const QModelIndex &parent)
 {
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
     if (undoStack()) {
-        return push(new FieldModelRemoveRowsCommand(this, row, count));
+        return push(make_unique<FieldModelRemoveRowsCommand>(this, row, count));
     }
 #endif
     if (parent.isValid() || row < 0 || count <= 0 || static_cast<size_t>(row + count) > m_fields->size()) {

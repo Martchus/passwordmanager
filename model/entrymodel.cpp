@@ -13,6 +13,7 @@
 #include <QIcon>
 #include <QMimeData>
 
+#include <memory>
 #include <sstream>
 
 using namespace std;
@@ -266,7 +267,7 @@ bool EntryModel::setData(const QModelIndex &index, const QVariant &value, int ro
 {
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
     if (undoStack()) {
-        return push(new EntryModelSetValueCommand(this, index, value, role));
+        return push(make_unique<EntryModelSetValueCommand>(this, index, value, role));
     }
 #endif
     if (!index.isValid()) {
@@ -388,7 +389,7 @@ bool EntryModel::insertRows(int row, int count, const QModelIndex &parent)
 {
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
     if (undoStack()) {
-        return push(new EntryModelInsertRowsCommand(this, row, count, parent));
+        return push(make_unique<EntryModelInsertRowsCommand>(this, row, count, parent));
     }
 #endif
     if (!parent.isValid()) {
@@ -421,7 +422,7 @@ bool EntryModel::removeRows(int row, int count, const QModelIndex &parent)
 {
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
     if (undoStack()) {
-        return push(new EntryModelRemoveRowsCommand(this, row, count, parent));
+        return push(make_unique<EntryModelRemoveRowsCommand>(this, row, count, parent));
     }
 #endif
     if (!parent.isValid() || count <= 0) {
@@ -441,7 +442,7 @@ bool EntryModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int co
 {
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
     if (undoStack()) {
-        return push(new EntryModelMoveRowsCommand(this, sourceParent, sourceRow, count, destinationParent, destinationChild));
+        return push(make_unique<EntryModelMoveRowsCommand>(this, sourceParent, sourceRow, count, destinationParent, destinationChild));
     }
 #endif
     // check validation of specified arguments
