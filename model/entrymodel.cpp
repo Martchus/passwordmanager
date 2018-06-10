@@ -282,7 +282,7 @@ bool EntryModel::setData(const QModelIndex &index, const QVariant &value, int ro
         switch (index.column()) {
         case 0:
             entry->setLabel(value.toString().toStdString());
-            emit dataChanged(index, index, QVector<int>() << role);
+            emit dataChanged(index, index, QVector<int>({ Qt::DisplayRole, Qt::EditRole }));
             return true;
         default:;
         }
