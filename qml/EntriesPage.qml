@@ -1,7 +1,7 @@
 import QtQuick 2.4
 import QtQuick.Layouts 1.2
 import QtQml.Models 2.2
-import QtQuick.Controls 2.0 as Controls
+import QtQuick.Controls 2.1 as Controls
 import org.kde.kirigami 2.4 as Kirigami
 
 Kirigami.ScrollablePage {
@@ -47,6 +47,56 @@ Kirigami.ScrollablePage {
     }
     background: Rectangle {
         color: Kirigami.Theme.backgroundColor
+    }
+
+    BasicDialog {
+        id: confirmDeletionDialog
+        property string entryDesc: "?"
+        property int entryIndex: -1
+        standardButtons: Controls.Dialog.Ok | Controls.Dialog.Cancel
+        title: qsTr("Delete %1?").arg(entryDesc)
+
+        function confirmDeletion(entryName, entryIndex) {
+            var isNode = model.isNode(entryIndex)
+            var entryType = isNode ? qsTr("category ") : qsTr("account ")
+
+            this.entryIndex = entryIndex
+            this.entryDesc = entryType + entryName
+            this.open()
+        }
+
+        onAccepted: model.removeRows(this.entryIndex, 1, rootIndex)
+    }
+
+    BasicDialog {
+        id: renameDialog
+        property string entryDesc: "?"
+        property int entryIndex: -1
+        property alias newEntryName: entryNameTextField.text
+        standardButtons: newEntryName.length
+                         > 0 ? Controls.Dialog.Ok | Controls.Dialog.Cancel : Controls.Dialog.Cancel
+        title: qsTr("Rename ") + entryDesc
+
+        ColumnLayout {
+            Controls.TextField {
+                id: entryNameTextField
+                Layout.preferredWidth: renameDialog.availableWidth
+                placeholderText: qsTr("enter new name here")
+            }
+        }
+
+        function renameEntry(entryName, entryIndex) {
+            var isNode = model.isNode(entryIndex)
+            var entryType = isNode ? qsTr("category ") : qsTr("account ")
+
+            this.entryIndex = entryIndex
+            this.entryDesc = entryType + entryName
+            this.newEntryName = entryName
+            this.open()
+        }
+
+        onAccepted: model.setData(model.index(this.entryIndex, 0, rootIndex),
+                                  newEntryName)
     }
 
     // "sheet" to display field model
@@ -113,7 +163,7 @@ Kirigami.ScrollablePage {
                         Layout.fillHeight: true
                         height: Math.max(implicitHeight,
                                          Kirigami.Units.iconSizes.smallMedium)
-                        anchors.verticalCenter: parent.verticalCenter
+                        Layout.alignment: verticalCenter
                         text: name
 
                         MouseArea {
@@ -132,12 +182,13 @@ Kirigami.ScrollablePage {
                     Kirigami.Action {
                         iconName: "edit-delete"
                         text: qsTr("Delete")
-                        onTriggered: showPassiveNotification(text + " " + name)
+                        onTriggered: confirmDeletionDialog.confirmDeletion(
+                                         name, index)
                     },
                     Kirigami.Action {
                         iconName: "edit-rename"
                         text: qsTr("Rename")
-                        onTriggered: showPassiveNotification(text + " " + name)
+                        onTriggered: renameDialog.renameEntry(name, index)
                     }
                 ]
             }

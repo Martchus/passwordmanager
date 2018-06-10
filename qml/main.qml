@@ -73,7 +73,7 @@ Kirigami.ApplicationWindow {
         }
         onFileOpenChanged: {
             clearStack()
-            if (!fileOpen) {
+            if (!nativeInterface.fileOpen) {
                 return
             }
             var entryModel = nativeInterface.entryModel
