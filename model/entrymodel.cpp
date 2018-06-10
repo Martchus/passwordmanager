@@ -5,6 +5,7 @@
 #endif
 
 #include <passwordfile/io/entry.h>
+#include <passwordfile/io/parsingexception.h>
 
 #include <c++utilities/io/catchiofailure.h>
 
@@ -13,6 +14,7 @@
 #include <QIcon>
 #include <QMimeData>
 
+#include <iostream>
 #include <memory>
 #include <sstream>
 
@@ -289,21 +291,22 @@ bool EntryModel::setData(const QModelIndex &index, const QVariant &value, int ro
         }
         break;
     case SerializedRole: {
-        NodeEntry *parent = entry->parent();
-        QModelIndex parentIndex = index.parent();
+        NodeEntry *const parent = entry->parent();
+        const QModelIndex parentIndex = index.parent();
         if (!parent || !parentIndex.isValid()) {
-            break;
+            return false;
         }
-        stringstream ss(stringstream::in | stringstream::out | stringstream::binary);
-        ss.exceptions(std::stringstream::failbit | std::stringstream::badbit);
-        QByteArray array = value.toByteArray();
+        QByteArray array(value.toByteArray());
         if (array.isEmpty()) {
-            break;
+            return false;
         }
         try {
-            ss.write(array.data(), array.size());
-            Entry *newEntry = Entry::parse(ss);
-            int row = entry->index();
+            stringstream ss(stringstream::in | stringstream::out | stringstream::binary);
+            ss.exceptions(std::stringstream::failbit | std::stringstream::badbit);
+            ss.rdbuf()->pubsetbuf(array.data(), array.size());
+
+            Entry *const newEntry = Entry::parse(ss);
+            const int row = entry->index();
             beginRemoveRows(parentIndex, row, row);
             delete entry;
             endRemoveRows();
@@ -311,10 +314,15 @@ bool EntryModel::setData(const QModelIndex &index, const QVariant &value, int ro
             newEntry->setParent(parent, row);
             endInsertRows();
             return true;
+        } catch (const Io::ParsingException &parsingError) {
+            cerr << "EntryModel::setData: parsing exception: " << parsingError.what() << endl;
+            return false;
         } catch (...) {
-            IoUtilities::catchIoFailure();
+            const char *const errorMessage(IoUtilities::catchIoFailure());
+            cerr << "EntryModel::setData: IO exception: " << errorMessage << endl;
+            return false;
         }
-    } break;
+    }
     case DefaultExpandedRole:
         switch (entry->type()) {
         case EntryType::Account:
