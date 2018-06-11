@@ -16,27 +16,18 @@ Kirigami.ScrollablePage {
         main: Kirigami.Action {
             iconName: "list-add"
             text: qsTr("Add account")
-            onTriggered: {
-                model.setInsertTypeToAccount()
-                model.insertRows(model.rowCount(rootIndex), 1, rootIndex)
-            }
+            onTriggered: insertEntry("Account")
         }
         left: Kirigami.Action {
             iconName: "edit-paste"
             text: qsTr("Paste account")
-            onTriggered: {
-
-
-                // TODO
-            }
+            enabled: nativeInterface.canPaste
+            onTriggered: nativeInterface.pasteEntries(rootIndex)
         }
         right: Kirigami.Action {
             iconName: "folder-add"
             text: qsTr("Add category")
-            onTriggered: {
-                model.setInsertTypeToNode()
-                model.insertRows(model.rowCount(rootIndex), 1, rootIndex)
-            }
+            onTriggered: insertEntry("Node")
         }
     }
     onBackRequested: {
@@ -51,31 +42,44 @@ Kirigami.ScrollablePage {
 
     BasicDialog {
         id: confirmDeletionDialog
+
         property string entryDesc: "?"
         property int entryIndex: -1
+
         standardButtons: Controls.Dialog.Ok | Controls.Dialog.Cancel
         title: qsTr("Delete %1?").arg(entryDesc)
+        onAccepted: model.removeRows(this.entryIndex, 1, rootIndex)
 
         function confirmDeletion(entryName, entryIndex) {
-            var isNode = model.isNode(entryIndex)
+            var isNode = model.isNode(model.index(entryIndex, 0, rootIndex))
             var entryType = isNode ? qsTr("category ") : qsTr("account ")
 
             this.entryIndex = entryIndex
             this.entryDesc = entryType + entryName
             this.open()
         }
-
-        onAccepted: model.removeRows(this.entryIndex, 1, rootIndex)
     }
 
     BasicDialog {
         id: renameDialog
+
         property string entryDesc: "?"
         property int entryIndex: -1
         property alias newEntryName: entryNameTextField.text
+        property bool entryNew: false
+
         standardButtons: newEntryName.length
                          > 0 ? Controls.Dialog.Ok | Controls.Dialog.Cancel : Controls.Dialog.Cancel
-        title: qsTr("Rename ") + entryDesc
+        title: (entryNew ? qsTr("Name for new ") : qsTr("Rename ")) + entryDesc
+        onAccepted: {
+            model.setData(model.index(this.entryIndex, 0, rootIndex),
+                          newEntryName)
+        }
+        onRejected: {
+            if (this.entryNew) {
+                model.removeRows(this.entryIndex, 1, rootIndex)
+            }
+        }
 
         ColumnLayout {
             Controls.TextField {
@@ -86,17 +90,20 @@ Kirigami.ScrollablePage {
         }
 
         function renameEntry(entryName, entryIndex) {
-            var isNode = model.isNode(entryIndex)
+            var isNode = model.isNode(model.index(entryIndex, 0, rootIndex))
             var entryType = isNode ? qsTr("category ") : qsTr("account ")
 
             this.entryIndex = entryIndex
-            this.entryDesc = entryType + entryName
-            this.newEntryName = entryName
+            this.entryNew = entryName === null
+            if (this.entryNew) {
+                this.entryDesc = entryType
+                this.newEntryName = ""
+            } else {
+                this.entryDesc = entryType + entryName
+                this.newEntryName = entryName
+            }
             this.open()
         }
-
-        onAccepted: model.setData(model.index(this.entryIndex, 0, rootIndex),
-                                  newEntryName)
     }
 
     // "sheet" to display field model
@@ -163,7 +170,6 @@ Kirigami.ScrollablePage {
                         Layout.fillHeight: true
                         height: Math.max(implicitHeight,
                                          Kirigami.Units.iconSizes.smallMedium)
-                        Layout.alignment: verticalCenter
                         text: name
 
                         MouseArea {
@@ -177,7 +183,11 @@ Kirigami.ScrollablePage {
                     Kirigami.Action {
                         iconName: "edit-cut"
                         text: qsTr("Cut")
-                        onTriggered: showPassiveNotification(text + " " + name)
+                        onTriggered: {
+                            nativeInterface.cutEntry(delegateModel.model.index(
+                                                         index, 0, rootIndex))
+                            showPassiveNotification(text + " " + name)
+                        }
                     },
                     Kirigami.Action {
                         iconName: "edit-delete"
@@ -193,5 +203,12 @@ Kirigami.ScrollablePage {
                 ]
             }
         }
+    }
+
+    function insertEntry(entryType) {
+        var newIndex = model.rowCount(rootIndex)
+        model["setInsertTypeTo" + entryType]()
+        model.insertRows(newIndex, 1, rootIndex)
+        renameDialog.renameEntry(null, newIndex)
     }
 }

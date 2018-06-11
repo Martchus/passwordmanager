@@ -8,6 +8,7 @@
 #include <passwordfile/io/passwordfile.h>
 
 #include <QObject>
+#include <QPersistentModelIndex>
 
 namespace QtGui {
 
@@ -22,6 +23,8 @@ class Controller : public QObject {
     Q_PROPERTY(FieldModel *fieldModel READ fieldModel NOTIFY fieldModelChanged)
     Q_PROPERTY(QModelIndex currentAccountIndex READ currentAccountIndex WRITE setCurrentAccountIndex NOTIFY currentAccountChanged)
     Q_PROPERTY(QString currentAccountName READ currentAccountName NOTIFY currentAccountChanged)
+    Q_PROPERTY(QList<QPersistentModelIndex> cutEntries READ cutEntries WRITE setCutEntries NOTIFY cutEntriesChanged)
+    Q_PROPERTY(bool canPaste READ canPaste NOTIFY cutEntriesChanged)
 
 public:
     explicit Controller(const QString &filePath = QString(), QObject *parent = nullptr);
@@ -37,7 +40,12 @@ public:
     FieldModel *fieldModel();
     QModelIndex currentAccountIndex() const;
     void setCurrentAccountIndex(const QModelIndex &accountIndex);
+    const QList<QPersistentModelIndex> &cutEntries() const;
+    void setCutEntries(const QList<QPersistentModelIndex> &cutEntries);
     QString currentAccountName() const;
+    Q_INVOKABLE void cutEntry(const QModelIndex &entryIndex);
+    Q_INVOKABLE bool pasteEntries(const QModelIndex &destinationParent, int row = -1);
+    bool canPaste() const;
 
 public slots:
     void load();
@@ -56,6 +64,7 @@ signals:
     void entryFilterModelChanged();
     void fieldModelChanged();
     void currentAccountChanged();
+    void cutEntriesChanged(const QList<QPersistentModelIndex> &cutEntries);
 
 private:
     void resetFileStatus();
@@ -70,6 +79,7 @@ private:
     EntryModel m_entryModel;
     EntryFilterModel m_entryFilterModel;
     FieldModel m_fieldModel;
+    QList<QPersistentModelIndex> m_cutEntries;
     bool m_fileOpen;
     bool m_fileModified;
 };
@@ -120,9 +130,29 @@ inline void Controller::setCurrentAccountIndex(const QModelIndex &accountIndex)
     emit currentAccountChanged();
 }
 
+inline const QList<QPersistentModelIndex> &Controller::cutEntries() const
+{
+    return m_cutEntries;
+}
+
+inline void Controller::setCutEntries(const QList<QPersistentModelIndex> &cutEntries)
+{
+    cutEntriesChanged(m_cutEntries = cutEntries);
+}
+
 inline QString Controller::currentAccountName() const
 {
     return m_fieldModel.accountEntry() ? QString::fromStdString(m_fieldModel.accountEntry()->label()) : QStringLiteral("?");
+}
+
+inline void Controller::cutEntry(const QModelIndex &entryIndex)
+{
+    cutEntriesChanged(m_cutEntries << QPersistentModelIndex(entryIndex));
+}
+
+inline bool Controller::canPaste() const
+{
+    return !m_cutEntries.isEmpty();
 }
 
 } // namespace QtGui
