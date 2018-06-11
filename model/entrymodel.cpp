@@ -493,7 +493,7 @@ bool EntryModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int co
 
 QStringList EntryModel::mimeTypes() const
 {
-    return QStringList() << QStringLiteral("application/x-entrymodelpathlistmove") << QStringLiteral("text/plain");
+    return QStringList({ QStringLiteral("application/x-entrymodelpathlistmove"), QStringLiteral("text/plain") });
 }
 
 QMimeData *EntryModel::mimeData(const QModelIndexList &indexes) const
@@ -501,12 +501,13 @@ QMimeData *EntryModel::mimeData(const QModelIndexList &indexes) const
     if (indexes.count() <= 0) {
         return nullptr;
     }
-    QStringList types = mimeTypes();
+    const QStringList types = mimeTypes();
     if (types.isEmpty()) {
         return nullptr;
     }
-    QMimeData *data = new QMimeData();
+    QMimeData *const data = new QMimeData();
     QStringList plainTextParts;
+    plainTextParts.reserve(indexes.size());
     QByteArray encoded;
     QDataStream dataStream(&encoded, QIODevice::WriteOnly);
     for (const QModelIndex &index : indexes) {
@@ -531,11 +532,11 @@ bool EntryModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int 
     if (!m_rootEntry || !data || action != Qt::MoveAction) {
         return false;
     }
-    QStringList types = mimeTypes();
+    const QStringList types = mimeTypes();
     if (types.isEmpty()) {
         return false;
     }
-    QString format = types.at(0);
+    const QString format = types.at(0);
     if (!data->hasFormat(format)) {
         return false;
     }
