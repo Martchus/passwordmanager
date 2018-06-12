@@ -119,6 +119,64 @@ Kirigami.ScrollablePage {
         }
     }
 
+    // component representing a field
+    Component {
+        id: fieldsListDelegateComponent
+        RowLayout {
+            id: fieldsListItem
+
+            width: fieldsSheet.width
+
+            Kirigami.ListItemDragHandle {
+                listItem: fieldsListItem
+                listView: fieldsListView
+                onMoveRequested: fieldsListView.model.moveRows(
+                                     fieldsListView.model.index(-1, 0),
+                                     oldIndex, 1,
+                                     fieldsListView.model.index(-1,
+                                                                0), newIndex)
+            }
+            Controls.TextField {
+                text: model.key ? model.key : ""
+                onEditingFinished: fieldsListView.model.setData(
+                                       fieldsListView.model.index(index, 0),
+                                       text)
+                Layout.fillWidth: true
+            }
+            Controls.TextField {
+                text: model.actualValue ? model.actualValue : ""
+                echoMode: model.isPassword ? TextInput.PasswordEchoOnEdit : TextInput.Normal
+                onEditingFinished: fieldsListView.model.setData(
+                                       fieldsListView.model.index(index, 1),
+                                       text)
+                Layout.fillWidth: true
+            }
+            Controls.Button {
+                flat: true
+                icon.name: model.isPassword ? "password-show-off" : "password-show-on"
+                onClicked: fieldsListView.model.setData(
+                               fieldsListView.model.index(index, 0),
+                               model.isPassword ? 0 : 1, 0x0100 + 1)
+                Layout.maximumWidth: Kirigami.Units.iconSizes.large
+                Layout.maximumHeight: Kirigami.Units.iconSizes.large
+            }
+            Controls.Button {
+                flat: true
+                icon.name: "edit-delete"
+                onClicked: fieldsListView.model.removeRows(index, 1)
+                Layout.maximumWidth: Kirigami.Units.iconSizes.large
+                Layout.maximumHeight: Kirigami.Units.iconSizes.large
+            }
+            Controls.Button {
+                flat: true
+                icon.name: "list-add"
+                onClicked: fieldsListView.model.insertRows(index + 1, 1)
+                Layout.maximumWidth: Kirigami.Units.iconSizes.large
+                Layout.maximumHeight: Kirigami.Units.iconSizes.large
+            }
+        }
+    }
+
     // "sheet" to display field model
     Kirigami.OverlaySheet {
         id: fieldsSheet
@@ -130,20 +188,15 @@ Kirigami.ScrollablePage {
             id: fieldsListView
             implicitWidth: Kirigami.Units.gridUnit * 30
             model: nativeInterface.fieldModel
-            delegate: RowLayout {
-                Controls.TextField {
-                    text: key ? key : ""
-                    onEditingFinished: fieldsListView.model.setData(
-                                           fieldsListView.model.index(index,
-                                                                      0), text)
+            moveDisplaced: Transition {
+                YAnimator {
+                    duration: Kirigami.Units.longDuration
+                    easing.type: Easing.InOutQuad
                 }
-                Controls.TextField {
-                    text: value ? value : ""
-                    echoMode: isPassword ? TextInput.PasswordEchoOnEdit : TextInput.Normal
-                    onEditingFinished: fieldsListView.model.setData(
-                                           fieldsListView.model.index(index,
-                                                                      1), text)
-                }
+            }
+            delegate: Kirigami.DelegateRecycler {
+                width: parent ? parent.width : implicitWidth
+                sourceComponent: fieldsListDelegateComponent
             }
         }
     }
@@ -158,10 +211,8 @@ Kirigami.ScrollablePage {
                 Kirigami.ListItemDragHandle {
                     listItem: listItem
                     listView: entriesListView
-                    onMoveRequested: {
-                        entryModel.moveRows(rootIndex, oldIndex, 1,
-                                            rootIndex, newIndex)
-                    }
+                    onMoveRequested: entryModel.moveRows(rootIndex, oldIndex,
+                                                         1, rootIndex, newIndex)
                 }
                 Kirigami.Icon {
                     width: Kirigami.Units.iconSizes.smallMedium

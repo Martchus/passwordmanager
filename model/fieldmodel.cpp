@@ -58,6 +58,7 @@ QHash<int, QByteArray> FieldModel::roleNames() const
         { FieldModelRoles::Key, "key" },
         { FieldModelRoles::Value, "value" },
         { FieldModelRoles::IsPassword, "isPassword" },
+        { FieldModelRoles::AlwaysActualValue, "actualValue" },
     };
     return roles;
 }
@@ -112,6 +113,8 @@ QVariant FieldModel::data(const QModelIndex &index, int role) const
                        || (*m_fields)[static_cast<size_t>(index.row())].type() != FieldType::Password)
                 ? QString::fromStdString((*m_fields)[static_cast<size_t>(index.row())].value())
                 : QString((*m_fields)[static_cast<size_t>(index.row())].value().size(), QChar(0x2022));
+        case AlwaysActualValue:
+            return QString::fromStdString((*m_fields)[static_cast<size_t>(index.row())].value());
         case IsPassword:
             return (*m_fields)[static_cast<size_t>(index.row())].type() == FieldType::Password;
         default:;
@@ -169,11 +172,11 @@ bool FieldModel::setData(const QModelIndex &index, const QVariant &value, int ro
             switch (index.column()) {
             case 0:
                 m_fields->at(index.row()).setName(value.toString().toStdString());
-                roles << Qt::EditRole << Key;
+                roles << Qt::DisplayRole << Qt::EditRole << Key;
                 break;
             case 1:
                 m_fields->at(index.row()).setValue(value.toString().toStdString());
-                roles << Qt::EditRole << Value;
+                roles << Qt::DisplayRole << Qt::EditRole << Value << AlwaysActualValue;
                 break;
             default:;
             }
@@ -189,15 +192,16 @@ bool FieldModel::setData(const QModelIndex &index, const QVariant &value, int ro
         }
         case Key:
             m_fields->at(index.row()).setName(value.toString().toStdString());
-            roles << Qt::EditRole << Key;
+            roles << Qt::DisplayRole << Qt::EditRole << Key;
             break;
         case Value:
+        case AlwaysActualValue:
             m_fields->at(index.row()).setValue(value.toString().toStdString());
-            roles << Qt::EditRole << Value;
+            roles << Qt::DisplayRole << Qt::EditRole << Value << AlwaysActualValue;
             break;
         case IsPassword:
             m_fields->at(index.row()).setType(value.toBool() ? FieldType::Password : FieldType::Normal);
-            roles << FieldTypeRole << IsPassword;
+            roles << Qt::DisplayRole << FieldTypeRole << IsPassword;
             break;
         default:;
         }
@@ -218,14 +222,14 @@ bool FieldModel::setData(const QModelIndex &index, const QVariant &value, int ro
                 m_fields->emplace_back(m_accountEntry);
                 m_fields->back().setName(value.toString().toStdString());
                 endInsertRows();
-                roles << role;
+                roles << Qt::DisplayRole << Qt::EditRole;
                 break;
             case 1:
                 beginInsertRows(index.parent(), rowCount(), rowCount());
                 m_fields->emplace_back(m_accountEntry);
                 m_fields->back().setValue(value.toString().toStdString());
                 endInsertRows();
-                roles << role;
+                roles << Qt::DisplayRole << Qt::EditRole;
                 break;
             default:;
             }
@@ -236,19 +240,6 @@ bool FieldModel::setData(const QModelIndex &index, const QVariant &value, int ro
     // return false if nothing could be changed
     if (roles.isEmpty()) {
         return false;
-    }
-    // some roles affect other roles
-    switch (role) {
-    case Qt::EditRole:
-    case Key:
-    case Value:
-        roles << Qt::DisplayRole;
-        break;
-    case FieldTypeRole:
-    case IsPassword:
-        roles << Qt::DisplayRole << Qt::EditRole << Key;
-        break;
-    default:;
     }
     // emit data changed signal on sucess
     emit dataChanged(index, index, roles);
@@ -324,6 +315,40 @@ bool FieldModel::removeRows(int row, int count, const QModelIndex &parent)
     return true;
 }
 
+bool FieldModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int count, const QModelIndex &destinationParent, int destinationChild)
+{
+    // FIXME: implement an undo/redo command
+
+    // validate input parameter
+    if (sourceParent.isValid() || destinationParent.isValid() || sourceRow < 0 || count <= 0 || destinationChild < 0
+        || static_cast<size_t>(sourceRow + count) > m_fields->size() || static_cast<size_t>(destinationChild) >= m_fields->size()
+        || (destinationChild >= sourceRow && destinationChild < (sourceRow + count))) {
+        return false;
+    }
+
+    // begin the move
+    if (destinationChild > sourceRow) {
+        // move rows down: the third param is still counted in the initial array!
+        beginMoveRows(sourceParent, sourceRow, sourceRow + count - 1, destinationParent, destinationChild + count);
+    } else {
+        // move rows up
+        beginMoveRows(sourceParent, sourceRow, sourceRow + count - 1, destinationParent, destinationChild);
+    }
+
+    // reserve space for temporary copies (FIXME: possible to avoid this?)
+    m_fields->reserve(m_fields->size() + static_cast<size_t>(count));
+    vector<Io::Field> tmp(static_cast<size_t>(count));
+    // move rows to temporary array
+    move(m_fields->begin() + sourceRow, m_fields->begin() + sourceRow + count, tmp.begin());
+    // erase slots of rows to be moved
+    m_fields->erase(m_fields->begin() + sourceRow, m_fields->begin() + sourceRow + count);
+    // insert rows again at their new position
+    m_fields->insert(m_fields->begin() + destinationChild, tmp.begin(), tmp.end());
+
+    endMoveRows();
+    return true;
+}
+
 bool FieldModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
 {
     if (!QAbstractTableModel::dropMimeData(data, action, row, column, parent) && data->hasText()) {
@@ -337,14 +362,15 @@ QStringList FieldModel::mimeTypes() const
     return QAbstractTableModel::mimeTypes() << QStringLiteral("text/plain");
 }
 
-QMimeData *FieldModel::mimeData(const QModelIndexList &indexes) const
+QMimeData *FieldModel::mimeData(const QModelIndexList &indices) const
 {
-    QMimeData *data = QAbstractTableModel::mimeData(indexes);
-    if (indexes.isEmpty()) {
+    QMimeData *const data = QAbstractTableModel::mimeData(indices);
+    if (indices.isEmpty()) {
         return data;
     }
     QStringList result;
-    for (const QModelIndex &index : indexes) {
+    result.reserve(indices.size());
+    for (const QModelIndex &index : indices) {
         result << index.data(Qt::EditRole).toString();
     }
     data->setText(result.join(QChar('\n')));

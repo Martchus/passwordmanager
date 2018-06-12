@@ -25,6 +25,7 @@ enum FieldModelRoles {
     Key,
     Value,
     IsPassword,
+    AlwaysActualValue,
 };
 
 /*!
@@ -67,9 +68,10 @@ public:
     Q_INVOKABLE int columnCount(const QModelIndex &parent = QModelIndex()) const;
     Q_INVOKABLE bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
     Q_INVOKABLE bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
+    Q_INVOKABLE bool moveRows(const QModelIndex &sourceParent, int sourceRow, int count, const QModelIndex &destinationParent, int destinationChild);
     bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
     QStringList mimeTypes() const;
-    QMimeData *mimeData(const QModelIndexList &indexes) const;
+    QMimeData *mimeData(const QModelIndexList &indices) const;
     Q_INVOKABLE const Io::Field *field(std::size_t row) const;
 
 public Q_SLOTS:
