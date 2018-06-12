@@ -21,7 +21,7 @@ Kirigami.ApplicationWindow {
             return
         }
         var entriesPage = entriesComponent.createObject(root, {
-                                                            model: entryModel,
+                                                            entryModel: entryModel,
                                                             rootIndex: rootIndex,
                                                             title: title
                                                         })

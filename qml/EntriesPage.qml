@@ -2,12 +2,12 @@ import QtQuick 2.4
 import QtQuick.Layouts 1.2
 import QtQml.Models 2.2
 import QtQuick.Controls 2.1 as Controls
-import org.kde.kirigami 2.4 as Kirigami
+import org.kde.kirigami 2.5 as Kirigami
 
 Kirigami.ScrollablePage {
     id: page
 
-    property alias model: delegateModel.model
+    property alias entryModel: delegateModel.model
     property alias rootIndex: delegateModel.rootIndex
 
     Layout.fillWidth: true
@@ -48,10 +48,11 @@ Kirigami.ScrollablePage {
 
         standardButtons: Controls.Dialog.Ok | Controls.Dialog.Cancel
         title: qsTr("Delete %1?").arg(entryDesc)
-        onAccepted: model.removeRows(this.entryIndex, 1, rootIndex)
+        onAccepted: entryModel.removeRows(this.entryIndex, 1, rootIndex)
 
         function confirmDeletion(entryName, entryIndex) {
-            var isNode = model.isNode(model.index(entryIndex, 0, rootIndex))
+            var isNode = entryModel.isNode(entryModel.index(entryIndex, 0,
+                                                            rootIndex))
             var entryType = isNode ? qsTr("category ") : qsTr("account ")
 
             this.entryIndex = entryIndex
@@ -72,12 +73,12 @@ Kirigami.ScrollablePage {
                          > 0 ? Controls.Dialog.Ok | Controls.Dialog.Cancel : Controls.Dialog.Cancel
         title: (entryNew ? qsTr("Name for new ") : qsTr("Rename ")) + entryDesc
         onAccepted: {
-            model.setData(model.index(this.entryIndex, 0, rootIndex),
-                          newEntryName)
+            entryModel.setData(entryModel.index(this.entryIndex, 0, rootIndex),
+                               newEntryName)
         }
         onRejected: {
             if (this.entryNew) {
-                model.removeRows(this.entryIndex, 1, rootIndex)
+                entryModel.removeRows(this.entryIndex, 1, rootIndex)
             }
         }
 
@@ -90,7 +91,8 @@ Kirigami.ScrollablePage {
         }
 
         function renameEntry(entryName, entryIndex) {
-            var isNode = model.isNode(model.index(entryIndex, 0, rootIndex))
+            var isNode = entryModel.isNode(entryModel.index(entryIndex, 0,
+                                                            rootIndex))
             var entryType = isNode ? qsTr("category ") : qsTr("account ")
 
             this.entryIndex = entryIndex
@@ -135,80 +137,109 @@ Kirigami.ScrollablePage {
         }
     }
 
+    Component {
+        id: listDelegateComponent
+
+        Kirigami.SwipeListItem {
+            id: listItem
+
+            contentItem: RowLayout {
+                Kirigami.ListItemDragHandle {
+                    listItem: listItem
+                    listView: entriesListView
+                    onMoveRequested: {
+                        entryModel.moveRows(rootIndex, oldIndex, 1,
+                                            rootIndex, newIndex)
+                    }
+                }
+
+                Kirigami.Icon {
+                    width: Kirigami.Units.iconSizes.smallMedium
+                    height: Kirigami.Units.iconSizes.smallMedium
+                    Layout.fillHeight: true
+                    source: delegateModel.isNode(
+                                index) ? "folder-symbolic" : "story-editor"
+                }
+
+                Controls.Label {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    height: Math.max(implicitHeight,
+                                     Kirigami.Units.iconSizes.smallMedium)
+                    text: model.name
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: delegateModel.handleEntryClicked(index,
+                                                                    model.name)
+                    }
+                }
+            }
+
+            actions: [
+                Kirigami.Action {
+                    iconName: "edit-cut"
+                    text: qsTr("Cut")
+                    onTriggered: {
+                        nativeInterface.cutEntry(entryModel.index(index, 0,
+                                                                  rootIndex))
+                        showPassiveNotification(text + " " + name)
+                    }
+                },
+                Kirigami.Action {
+                    iconName: "edit-delete"
+                    text: qsTr("Delete")
+                    onTriggered: confirmDeletionDialog.confirmDeletion(name,
+                                                                       index)
+                },
+                Kirigami.Action {
+                    iconName: "edit-rename"
+                    text: qsTr("Rename")
+                    onTriggered: renameDialog.renameEntry(name, index)
+                }
+            ]
+        }
+    }
+
     // list view to display one hierarchy level of entry model
     ListView {
-        id: listView
+        id: entriesListView
         model: DelegateModel {
             id: delegateModel
 
             function isNode(rowNumber) {
-                return model.isNode(model.index(rowNumber, 0, rootIndex))
+                return entryModel.isNode(entryModel.index(rowNumber, 0,
+                                                          rootIndex))
             }
 
             function handleEntryClicked(rowNumber, entryName) {
-                var modelIndex = model.index(rowNumber, 0, rootIndex)
-                if (model.isNode(modelIndex)) {
-                    root.pushStackEntry(model, modelIndex)
+                var modelIndex = entryModel.index(rowNumber, 0, rootIndex)
+                if (entryModel.isNode(modelIndex)) {
+                    root.pushStackEntry(entryModel, modelIndex)
                 } else {
                     nativeInterface.currentAccountIndex = modelIndex
                     fieldsSheet.open()
                 }
             }
 
-            delegate: Kirigami.SwipeListItem {
-                id: listItem
-                contentItem: RowLayout {
-                    Kirigami.Icon {
-                        width: Kirigami.Units.iconSizes.smallMedium
-                        height: Kirigami.Units.iconSizes.smallMedium
-                        Layout.fillHeight: true
-                        source: delegateModel.isNode(
-                                    index) ? "folder-symbolic" : "story-editor"
-                    }
-                    Controls.Label {
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                        height: Math.max(implicitHeight,
-                                         Kirigami.Units.iconSizes.smallMedium)
-                        text: name
+            delegate: Kirigami.DelegateRecycler {
+                width: parent ? parent.width : implicitWidth
+                sourceComponent: listDelegateComponent
+            }
+        }
 
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: delegateModel.handleEntryClicked(index,
-                                                                        name)
-                        }
-                    }
-                }
-                actions: [
-                    Kirigami.Action {
-                        iconName: "edit-cut"
-                        text: qsTr("Cut")
-                        onTriggered: {
-                            nativeInterface.cutEntry(delegateModel.model.index(
-                                                         index, 0, rootIndex))
-                            showPassiveNotification(text + " " + name)
-                        }
-                    },
-                    Kirigami.Action {
-                        iconName: "edit-delete"
-                        text: qsTr("Delete")
-                        onTriggered: confirmDeletionDialog.confirmDeletion(
-                                         name, index)
-                    },
-                    Kirigami.Action {
-                        iconName: "edit-rename"
-                        text: qsTr("Rename")
-                        onTriggered: renameDialog.renameEntry(name, index)
-                    }
-                ]
+        moveDisplaced: Transition {
+            YAnimator {
+                duration: Kirigami.Units.longDuration
+                easing.type: Easing.InOutQuad
             }
         }
     }
 
     function insertEntry(entryType) {
-        var newIndex = model.rowCount(rootIndex)
-        model["setInsertTypeTo" + entryType]()
-        model.insertRows(newIndex, 1, rootIndex)
+        var newIndex = entryModel.rowCount(rootIndex)
+        entryModel["setInsertTypeTo" + entryType]()
+        entryModel.insertRows(newIndex, 1, rootIndex)
         renameDialog.renameEntry(null, newIndex)
     }
 }
