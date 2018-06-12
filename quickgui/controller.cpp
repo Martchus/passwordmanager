@@ -113,28 +113,29 @@ void Controller::save()
     }
 }
 
-bool Controller::pasteEntries(const QModelIndex &destinationParent, int row)
+QStringList Controller::pasteEntries(const QModelIndex &destinationParent, int row)
 {
     if (m_cutEntries.isEmpty() || !m_entryModel.isNode(destinationParent)) {
-        return false;
+        return QStringList();
     }
 
     if (row < 0) {
         row = m_entryModel.rowCount(destinationParent);
     }
-    bool result = true;
+
+    QStringList successfullyMovedEntries;
+    successfullyMovedEntries.reserve(m_cutEntries.size());
     for (const QPersistentModelIndex &cutIndex : m_cutEntries) {
         if (m_entryModel.moveRows(cutIndex.parent(), cutIndex.row(), 1, destinationParent, row)) {
+            successfullyMovedEntries << m_entryModel.data(m_entryModel.index(row, 0, destinationParent)).toString();
             ++row;
-        } else {
-            result = false;
         }
     }
 
     // clear the cut entries
     m_cutEntries.clear();
     emit cutEntriesChanged(m_cutEntries);
-    return true;
+    return successfullyMovedEntries;
 }
 
 void Controller::resetFileStatus()

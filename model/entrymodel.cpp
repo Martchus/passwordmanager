@@ -453,10 +453,9 @@ bool EntryModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int co
         return push(make_unique<EntryModelMoveRowsCommand>(this, sourceParent, sourceRow, count, destinationParent, destinationChild));
     }
 #endif
-    // check validation of specified arguments
-    if (!sourceParent.isValid() || !destinationParent.isValid() || sourceRow < 0 || count <= 0
-        || entry(sourceParent)->type() != EntryType::Node // source and destination parent entries
-        || entry(destinationParent)->type() != EntryType::Node) { // need to be node entries
+    // check validation of specified arguments: source and destination parent entries need to be node entries
+    if (!sourceParent.isValid() || !destinationParent.isValid() || sourceRow < 0 || count <= 0 || entry(sourceParent)->type() != EntryType::Node //
+        || entry(destinationParent)->type() != EntryType::Node) {
         return false;
     }
     // determine the source parent entry and dest parent entry as node entries
@@ -470,11 +469,12 @@ bool EntryModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int co
     }
     // do not move a row to one of its own children! -> check before
     for (int index = 0; index < count; ++index) {
-        Entry *toMove = srcParentEntry->children()[static_cast<size_t>(sourceRow + index)];
-        if (toMove->type() == EntryType::Node) {
-            if (destParentEntry->isIndirectChildOf(static_cast<NodeEntry *>(toMove))) {
-                return false;
-            }
+        Entry *const toMove = srcParentEntry->children()[static_cast<size_t>(sourceRow + index)];
+        if (toMove->type() != EntryType::Node) {
+            continue;
+        }
+        if (toMove == destParentEntry || destParentEntry->isIndirectChildOf(static_cast<NodeEntry *>(toMove))) {
+            return false;
         }
     }
     // actually perform the move operation

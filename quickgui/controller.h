@@ -44,7 +44,7 @@ public:
     void setCutEntries(const QList<QPersistentModelIndex> &cutEntries);
     QString currentAccountName() const;
     Q_INVOKABLE void cutEntry(const QModelIndex &entryIndex);
-    Q_INVOKABLE bool pasteEntries(const QModelIndex &destinationParent, int row = -1);
+    Q_INVOKABLE QStringList pasteEntries(const QModelIndex &destinationParent, int row = -1);
     bool canPaste() const;
 
 public slots:

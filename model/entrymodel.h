@@ -54,7 +54,7 @@ public:
     QModelIndex parent(const QModelIndex &child) const;
     bool hasChildren(const QModelIndex &parent) const;
     Q_INVOKABLE bool isNode(const QModelIndex &parent) const;
-    QVariant data(const QModelIndex &index, int role) const;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     QMap<int, QVariant> itemData(const QModelIndex &index) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role);
     bool setItemData(const QModelIndex &index, const QMap<int, QVariant> &roles);

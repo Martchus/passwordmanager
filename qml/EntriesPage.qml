@@ -22,7 +22,16 @@ Kirigami.ScrollablePage {
             iconName: "edit-paste"
             text: qsTr("Paste account")
             enabled: nativeInterface.canPaste
-            onTriggered: nativeInterface.pasteEntries(rootIndex)
+            onTriggered: {
+                var pastedEntries = nativeInterface.pasteEntries(rootIndex)
+                if (pastedEntries.length < 1) {
+                    showPassiveNotification(
+                                qsTr("Unable to paste the entries here"))
+                    return
+                }
+                var joinedEntryNames = pastedEntries.join(", ")
+                showPassiveNotification(qsTr("Pasted ") + joinedEntryNames)
+            }
         }
         right: Kirigami.Action {
             iconName: "folder-add"
