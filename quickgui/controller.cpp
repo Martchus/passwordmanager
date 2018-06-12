@@ -103,6 +103,7 @@ void Controller::save()
             m_file.clearPassword();
         }
         m_file.save(!m_password.isEmpty());
+        emit fileSaved();
     } catch (const CryptoException &e) {
         emit fileError(tr("A crypto error occured when saving the file: ") + QString::fromLocal8Bit(e.what()));
     } catch (const runtime_error &e) {

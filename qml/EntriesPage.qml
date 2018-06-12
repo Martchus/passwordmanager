@@ -40,6 +40,7 @@ Kirigami.ScrollablePage {
         color: Kirigami.Theme.backgroundColor
     }
 
+    // dialog to confirm deletion of an entry
     BasicDialog {
         id: confirmDeletionDialog
 
@@ -61,6 +62,7 @@ Kirigami.ScrollablePage {
         }
     }
 
+    // dialog to rename an entry
     BasicDialog {
         id: renameDialog
 
@@ -137,12 +139,12 @@ Kirigami.ScrollablePage {
         }
     }
 
+    // component representing an entry
     Component {
         id: listDelegateComponent
 
         Kirigami.SwipeListItem {
             id: listItem
-
             contentItem: RowLayout {
                 Kirigami.ListItemDragHandle {
                     listItem: listItem
@@ -152,7 +154,6 @@ Kirigami.ScrollablePage {
                                             rootIndex, newIndex)
                     }
                 }
-
                 Kirigami.Icon {
                     width: Kirigami.Units.iconSizes.smallMedium
                     height: Kirigami.Units.iconSizes.smallMedium
@@ -160,7 +161,6 @@ Kirigami.ScrollablePage {
                     source: delegateModel.isNode(
                                 index) ? "folder-symbolic" : "story-editor"
                 }
-
                 Controls.Label {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
@@ -175,7 +175,6 @@ Kirigami.ScrollablePage {
                     }
                 }
             }
-
             actions: [
                 Kirigami.Action {
                     iconName: "edit-cut"
@@ -183,19 +182,19 @@ Kirigami.ScrollablePage {
                     onTriggered: {
                         nativeInterface.cutEntry(entryModel.index(index, 0,
                                                                   rootIndex))
-                        showPassiveNotification(text + " " + name)
+                        showPassiveNotification(text + " " + model.name)
                     }
                 },
                 Kirigami.Action {
                     iconName: "edit-delete"
                     text: qsTr("Delete")
-                    onTriggered: confirmDeletionDialog.confirmDeletion(name,
-                                                                       index)
+                    onTriggered: confirmDeletionDialog.confirmDeletion(
+                                     model.name, index)
                 },
                 Kirigami.Action {
                     iconName: "edit-rename"
                     text: qsTr("Rename")
-                    onTriggered: renameDialog.renameEntry(name, index)
+                    onTriggered: renameDialog.renameEntry(model.name, index)
                 }
             ]
         }
@@ -204,6 +203,9 @@ Kirigami.ScrollablePage {
     // list view to display one hierarchy level of entry model
     ListView {
         id: entriesListView
+
+        anchors.fill: parent
+
         model: DelegateModel {
             id: delegateModel
 

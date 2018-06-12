@@ -73,12 +73,17 @@ Kirigami.ApplicationWindow {
         }
         onFileOpenChanged: {
             clearStack()
-            if (!nativeInterface.fileOpen) {
-                return
+            if (nativeInterface.fileOpen) {
+                var entryModel = nativeInterface.entryModel
+                var rootIndex = entryModel.index(0, 0)
+                pushStackEntry(entryModel, rootIndex)
+                showPassiveNotification(qsTr("File opened"))
+            } else {
+                showPassiveNotification(qsTr("File closed"))
             }
-            var entryModel = nativeInterface.entryModel
-            var rootIndex = entryModel.index(0, 0)
-            pushStackEntry(entryModel, rootIndex)
+        }
+        onFileSaved: {
+            showPassiveNotification(qsTr("File saved"))
         }
     }
 
@@ -120,31 +125,23 @@ Kirigami.ApplicationWindow {
                 onTriggered: nativeInterface.close()
             }
         ]
-    }
-    contextDrawer: Kirigami.ContextDrawer {
-        id: contextDrawer
-    }
-    pageStack.initialPage: mainPageComponent
 
-    // main app content
-    Component {
-        id: mainPageComponent
-
-        RowLayout {
-            spacing: 5
-
-            Controls.Label {
-                text: {
-                    if (nativeInterface.fileOpen) {
-                        return qsTr("The file %1 has been opened.").arg(
-                                    nativeInterface.filePath)
-                    } else {
-                        return qsTr("No file has been opened.")
-                    }
+        Controls.Label {
+            wrapMode: Controls.Label.Wrap
+            Layout.fillWidth: true
+            text: {
+                if (nativeInterface.fileOpen) {
+                    return nativeInterface.filePath
+                } else {
+                    return qsTr("no file opened")
                 }
             }
         }
     }
+    contextDrawer: Kirigami.ContextDrawer {
+        id: contextDrawer
+    }
+
     Component.onCompleted: {
         // load file if one has been specified via CLI argument
         if (nativeInterface.filePath.length) {

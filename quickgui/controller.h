@@ -60,6 +60,7 @@ signals:
     void windowTitleChanged(const QString &windowTitle);
     void fileOpenChanged(bool fileOpen);
     void fileError(const QString &errorMessage);
+    void fileSaved();
     void entryModelChanged();
     void entryFilterModelChanged();
     void fieldModelChanged();
