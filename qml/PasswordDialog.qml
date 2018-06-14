@@ -15,6 +15,21 @@ BasicDialog {
     standardButtons: canAccept ? Controls.Dialog.Ok
                                  | Controls.Dialog.Cancel : Controls.Dialog.Cancel
     title: qsTr("Enter password")
+    onAccepted: {
+        nativeInterface.password = password
+        if (newPassword) {
+            showPassiveNotification(
+                        qsTr("The new password will be used when saving next time."))
+        } else {
+            nativeInterface.load()
+        }
+    }
+    onRejected: {
+        if (newPassword) {
+            showPassiveNotification(
+                        qsTr("You aborted. The password has not been altered."))
+        }
+    }
 
     ColumnLayout {
         Controls.Label {
@@ -50,40 +65,24 @@ BasicDialog {
         }
     }
 
-    onAccepted: {
-        nativeInterface.password = password
-        if (newPassword) {
-            showPassiveNotification(
-                        qsTr("The new password will be used when saving next time."))
-        } else {
-            nativeInterface.load()
-        }
-    }
-
-    onRejected: {
-        if (newPassword) {
-            showPassiveNotification(
-                        qsTr("You aborted. The password has not been altered."))
-        }
-    }
-
     function clear() {
         passwordTextField.text = ""
         repeatPasswordTextField.text = ""
     }
 
-    function askForPassword(instruction, newPassword) {
-        this.newPassword = newPassword
+    function askForPassword(instruction) {
         this.instruction = instruction
-        this.clear()
-        this.open()
+        clear()
+        open()
     }
 
     function askForExistingPassword(instruction) {
-        this.askForPassword(instruction, false)
+        newPassword = false
+        askForPassword(instruction)
     }
 
     function askForNewPassword(instruction) {
-        this.askForPassword(instruction, true)
+        newPassword = true
+        askForPassword(instruction)
     }
 }

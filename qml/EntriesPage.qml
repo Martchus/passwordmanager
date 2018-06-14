@@ -6,7 +6,6 @@ import org.kde.kirigami 2.5 as Kirigami
 
 Kirigami.ScrollablePage {
     id: page
-
     property var main: undefined
     property alias entryModel: delegateModel.model
     property alias rootIndex: delegateModel.rootIndex
@@ -30,8 +29,8 @@ Kirigami.ScrollablePage {
                                 qsTr("Unable to paste the entries here"))
                     return
                 }
-                var joinedEntryNames = pastedEntries.join(", ")
-                showPassiveNotification(qsTr("Pasted ") + joinedEntryNames)
+                showPassiveNotification(
+                            qsTr("Pasted ") + pastedEntries.join(", "))
             }
         }
         right: Kirigami.Action {
@@ -75,7 +74,6 @@ Kirigami.ScrollablePage {
     // dialog to rename an entry
     BasicDialog {
         id: renameDialog
-
         property string entryDesc: "?"
         property int entryIndex: -1
         property alias newEntryName: entryNameTextField.text
@@ -123,9 +121,9 @@ Kirigami.ScrollablePage {
     // component representing a field
     Component {
         id: fieldsListDelegateComponent
+
         RowLayout {
             id: fieldsListItem
-
             width: fieldsSheet.width
 
             Kirigami.ListItemDragHandle {
@@ -196,6 +194,7 @@ Kirigami.ScrollablePage {
         header: Kirigami.Heading {
             text: qsTr("Edit account ") + nativeInterface.currentAccountName
         }
+
         ListView {
             id: fieldsListView
             implicitWidth: Kirigami.Units.gridUnit * 30
@@ -275,11 +274,20 @@ Kirigami.ScrollablePage {
     // list view to display one hierarchy level of entry model
     ListView {
         id: entriesListView
-
         anchors.fill: parent
-
+        moveDisplaced: Transition {
+            YAnimator {
+                duration: Kirigami.Units.longDuration
+                easing.type: Easing.InOutQuad
+            }
+        }
         model: DelegateModel {
             id: delegateModel
+
+            delegate: Kirigami.DelegateRecycler {
+                width: parent ? parent.width : implicitWidth
+                sourceComponent: listDelegateComponent
+            }
 
             function isNode(rowNumber) {
                 return entryModel.isNode(entryModel.index(rowNumber, 0,
@@ -294,18 +302,6 @@ Kirigami.ScrollablePage {
                     nativeInterface.currentAccountIndex = modelIndex
                     fieldsSheet.open()
                 }
-            }
-
-            delegate: Kirigami.DelegateRecycler {
-                width: parent ? parent.width : implicitWidth
-                sourceComponent: listDelegateComponent
-            }
-        }
-
-        moveDisplaced: Transition {
-            YAnimator {
-                duration: Kirigami.Units.longDuration
-                easing.type: Easing.InOutQuad
             }
         }
     }
