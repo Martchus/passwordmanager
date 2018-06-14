@@ -15,6 +15,7 @@ namespace QtGui {
 class Controller : public QObject {
     Q_OBJECT
     Q_PROPERTY(QString filePath READ filePath WRITE setFilePath NOTIFY filePathChanged)
+    Q_PROPERTY(QString fileName READ fileName NOTIFY filePathChanged)
     Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
     Q_PROPERTY(QString windowTitle READ windowTitle NOTIFY windowTitleChanged)
     Q_PROPERTY(bool fileOpen READ isFileOpen NOTIFY fileOpenChanged)
@@ -30,6 +31,7 @@ public:
     explicit Controller(const QString &filePath = QString(), QObject *parent = nullptr);
 
     const QString &filePath() const;
+    const QString &fileName() const;
     void setFilePath(const QString &filePath);
     const QString &password() const;
     void setPassword(const QString &password);
@@ -74,6 +76,7 @@ private:
     void emitIoError(const QString &when);
 
     QString m_filePath;
+    QString m_fileName;
     QString m_password;
     QString m_windowTitle;
     Io::PasswordFile m_file;
@@ -88,6 +91,11 @@ private:
 inline const QString &Controller::filePath() const
 {
     return m_filePath;
+}
+
+inline const QString &Controller::fileName() const
+{
+    return m_fileName;
 }
 
 inline const QString &Controller::password() const

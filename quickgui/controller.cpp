@@ -6,6 +6,7 @@
 #include <qtutilities/misc/dialogutils.h>
 
 #include <c++utilities/io/catchiofailure.h>
+#include <c++utilities/io/path.h>
 
 #include <QDir>
 #include <QFileInfo>
@@ -37,6 +38,7 @@ void Controller::setFilePath(const QString &filePath)
     }
     m_file.clear();
     m_file.setPath(filePath.toLocal8Bit().data());
+    m_fileName = QString::fromLocal8Bit(IoUtilities::fileName(m_file.path()).data());
     emit filePathChanged(m_filePath = filePath);
 }
 

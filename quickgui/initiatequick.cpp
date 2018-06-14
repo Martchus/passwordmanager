@@ -52,11 +52,6 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
     };
 
     // init Quick GUI
-    //qmlRegisterType<QtGui::EntryFilterModel>("martchus.passwordmanager", 2, 0, "EntryFilterModel");
-    //qmlRegisterType<QtGui::EntryModel>("martchus.passwordmanager", 2, 0, "EntryModel");
-    //qmlRegisterType<QtGui::FieldModel>("martchus.passwordmanager", 2, 0, "FieldModel");
-    //qmlRegisterType<Io::AccountEntry>("martchus.passwordmanager", 2, 1, "AccountEntry");
-
     QQmlApplicationEngine engine;
     Controller controller(file);
     QQmlContext *const context(engine.rootContext());

@@ -7,6 +7,8 @@ import org.kde.kirigami 2.4 as Kirigami
 Kirigami.ApplicationWindow {
     id: root
 
+    property alias showPasswordsOnFocus: showPasswordsOnFocusSwitch.checked
+
     function clearStack() {
         pageStack.pop(root.pageStack.initialPage, Controls.StackView.Immediate)
     }
@@ -21,6 +23,7 @@ Kirigami.ApplicationWindow {
             return
         }
         var entriesPage = entriesComponent.createObject(root, {
+                                                            main: root,
                                                             entryModel: entryModel,
                                                             rootIndex: rootIndex,
                                                             title: title
@@ -48,7 +51,7 @@ Kirigami.ApplicationWindow {
             }
         }
         onRejected: {
-            showPassiveNotification("Canceled file selection")
+            showPassiveNotification(qsTr("Canceled file selection"))
         }
 
         function openExisting() {
@@ -68,7 +71,8 @@ Kirigami.ApplicationWindow {
         }
         onPasswordRequired: {
             enterPasswordDialog.askForExistingPassword(
-                        qsTr("Password required to open ") + filePath)
+                        qsTr("Password required to open %1").arg(
+                            nativeInterface.filePath))
             leftMenu.resetMenu()
         }
         onFileOpenChanged: {
@@ -77,13 +81,16 @@ Kirigami.ApplicationWindow {
                 var entryModel = nativeInterface.entryModel
                 var rootIndex = entryModel.index(0, 0)
                 pushStackEntry(entryModel, rootIndex)
-                showPassiveNotification(qsTr("File opened"))
+                showPassiveNotification(qsTr("%1 opened").arg(
+                                            nativeInterface.fileName))
             } else {
-                showPassiveNotification(qsTr("File closed"))
+                showPassiveNotification(qsTr("%1 closed").arg(
+                                            nativeInterface.fileName))
             }
         }
         onFileSaved: {
-            showPassiveNotification(qsTr("File saved"))
+            showPassiveNotification(qsTr("%1 saved").arg(
+                                        nativeInterface.fileName))
         }
     }
 
@@ -93,7 +100,32 @@ Kirigami.ApplicationWindow {
         id: leftMenu
         title: qsTr("Password manager")
         titleIcon: "passwordmanager"
-        bannerImageSource: "banner.png"
+
+        topContent: ColumnLayout {
+            Layout.fillWidth: true
+
+            Controls.MenuSeparator {
+                padding: 0
+                topPadding: 8
+                bottomPadding: 0
+                Layout.fillWidth: true
+            }
+            Controls.Label {
+                padding: 8
+                wrapMode: Controls.Label.Wrap
+                fontSizeMode: Text.HorizontalFit
+                minimumPixelSize: 10
+                font.pixelSize: 20
+                Layout.fillWidth: true
+                text: {
+                    if (nativeInterface.fileOpen) {
+                        return nativeInterface.fileName
+                    } else {
+                        return qsTr("No file opened")
+                    }
+                }
+            }
+        }
         actions: [
             Kirigami.Action {
                 text: qsTr("Create new file")
@@ -126,6 +158,12 @@ Kirigami.ApplicationWindow {
             }
         ]
 
+        Controls.Switch {
+            id: showPasswordsOnFocusSwitch
+            text: qsTr("Show passwords on focus")
+            checked: true
+        }
+
         Controls.Label {
             wrapMode: Controls.Label.Wrap
             Layout.fillWidth: true
@@ -133,7 +171,7 @@ Kirigami.ApplicationWindow {
                 if (nativeInterface.fileOpen) {
                     return nativeInterface.filePath
                 } else {
-                    return qsTr("no file opened")
+                    return qsTr("No file opened")
                 }
             }
         }
