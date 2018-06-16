@@ -3,6 +3,7 @@
 
 #include "resources/config.h"
 
+#define QT_UTILITIES_GUI_QTQUICK
 #include <qtutilities/resources/qtconfigarguments.h>
 #include <qtutilities/resources/resources.h>
 
@@ -23,9 +24,6 @@ namespace QtGui {
 int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, const QString &file)
 {
     // init application
-#ifdef __ANDROID__
-    qputenv("QT_QUICK_CONTROLS_STYLE", "material");
-#endif
     SET_QT_APPLICATION_INFO;
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
@@ -36,6 +34,7 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
 
     // apply settings specified via command line args
     qtConfigArgs.applySettings();
+    qtConfigArgs.applySettingsForQuickGui();
 
     // load translations and enforce UTF-8 locale
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
