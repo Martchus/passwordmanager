@@ -47,6 +47,11 @@ Kirigami.ApplicationWindow {
                 onTriggered: fileDialog.openExisting()
             },
             Kirigami.Action {
+                text: qsTr("Recently opened ...")
+                iconName: "document-open-recent"
+                children: createRecentFileActions()
+            },
+            Kirigami.Action {
                 text: "Save modifications"
                 enabled: nativeInterface.fileOpen
                 iconName: "document-save"
@@ -110,11 +115,10 @@ Kirigami.ApplicationWindow {
             if (fileUrls.length < 1) {
                 return
             }
-            nativeInterface.filePath = fileUrls[0]
             if (selectExisting) {
-                nativeInterface.load()
+                nativeInterface.load(fileUrls[0])
             } else {
-                nativeInterface.create()
+                nativeInterface.create(fileUrls[0])
             }
         }
         onRejected: {
@@ -161,6 +165,15 @@ Kirigami.ApplicationWindow {
         }
     }
 
+    Component {
+        id: recentFileActionComponent
+        Kirigami.Action {
+            property string filePath
+            text: filePath.substring(filePath.lastIndexOf('/') + 1)
+            onTriggered: nativeInterface.load(filePath)
+        }
+    }
+
     function clearStack() {
         pageStack.pop(root.pageStack.initialPage, Controls.StackView.Immediate)
     }
@@ -173,5 +186,16 @@ Kirigami.ApplicationWindow {
                                                          title: entryModel.data(
                                                                     rootIndex)
                                                      }))
+    }
+
+    function createRecentFileActions() {
+        var recentFiles = nativeInterface.recentFiles
+        var actions = []
+        for (var i = 0, count = recentFiles.length; i !== count; ++i) {
+            actions.push(recentFileActionComponent.createObject(root, {
+                                                                    filePath: recentFiles[i]
+                                                                }))
+        }
+        return actions
     }
 }

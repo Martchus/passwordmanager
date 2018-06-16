@@ -7,9 +7,9 @@
 #include <qtutilities/resources/qtconfigarguments.h>
 #include <qtutilities/resources/resources.h>
 
-#include <QDebug>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QSettings>
 #include <QTextCodec>
 #include <QtQml>
 
@@ -36,8 +36,10 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
     qtConfigArgs.applySettings();
     qtConfigArgs.applySettingsForQuickGui();
 
-    // load translations and enforce UTF-8 locale
-    QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
+    // load settings from configuration file
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, QStringLiteral(PROJECT_NAME));
+
+    // load translations
     LOAD_QT_TRANSLATIONS;
 
     // determine user paths
@@ -52,7 +54,7 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
 
     // init Quick GUI
     QQmlApplicationEngine engine;
-    Controller controller(file);
+    Controller controller(settings, file);
     QQmlContext *const context(engine.rootContext());
     context->setContextProperty(QStringLiteral("userPaths"), userPaths);
     context->setContextProperty(QStringLiteral("nativeInterface"), &controller);

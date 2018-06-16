@@ -10,6 +10,8 @@
 #include <QObject>
 #include <QPersistentModelIndex>
 
+QT_FORWARD_DECLARE_CLASS(QSettings)
+
 namespace QtGui {
 
 class Controller : public QObject {
@@ -26,9 +28,10 @@ class Controller : public QObject {
     Q_PROPERTY(QString currentAccountName READ currentAccountName NOTIFY currentAccountChanged)
     Q_PROPERTY(QList<QPersistentModelIndex> cutEntries READ cutEntries WRITE setCutEntries NOTIFY cutEntriesChanged)
     Q_PROPERTY(bool canPaste READ canPaste NOTIFY cutEntriesChanged)
+    Q_PROPERTY(QStringList recentFiles READ recentFiles NOTIFY recentFilesChanged)
 
 public:
-    explicit Controller(const QString &filePath = QString(), QObject *parent = nullptr);
+    explicit Controller(QSettings &settings, const QString &filePath = QString(), QObject *parent = nullptr);
 
     const QString &filePath() const;
     const QString &fileName() const;
@@ -48,10 +51,11 @@ public:
     Q_INVOKABLE void cutEntry(const QModelIndex &entryIndex);
     Q_INVOKABLE QStringList pasteEntries(const QModelIndex &destinationParent, int row = -1);
     bool canPaste() const;
+    const QStringList &recentFiles() const;
 
 public slots:
-    void load();
-    void create();
+    void load(const QString &filePath = QString());
+    void create(const QString &filePath = QString());
     void close();
     void save();
 
@@ -68,6 +72,7 @@ signals:
     void fieldModelChanged();
     void currentAccountChanged();
     void cutEntriesChanged(const QList<QPersistentModelIndex> &cutEntries);
+    void recentFilesChanged(const QStringList &recentFiles);
 
 private:
     void resetFileStatus();
@@ -75,6 +80,7 @@ private:
     void setFileOpen(bool fileOpen);
     void emitIoError(const QString &when);
 
+    QSettings &m_settings;
     QString m_filePath;
     QString m_fileName;
     QString m_password;
@@ -84,6 +90,7 @@ private:
     EntryFilterModel m_entryFilterModel;
     FieldModel m_fieldModel;
     QList<QPersistentModelIndex> m_cutEntries;
+    QStringList m_recentFiles;
     bool m_fileOpen;
     bool m_fileModified;
 };
@@ -162,6 +169,11 @@ inline void Controller::cutEntry(const QModelIndex &entryIndex)
 inline bool Controller::canPaste() const
 {
     return !m_cutEntries.isEmpty();
+}
+
+inline const QStringList &Controller::recentFiles() const
+{
+    return m_recentFiles;
 }
 
 } // namespace QtGui

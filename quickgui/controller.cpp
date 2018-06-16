@@ -11,6 +11,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QIcon>
+#include <QSettings>
 #include <QStringBuilder>
 
 #include <stdexcept>
@@ -22,24 +23,59 @@ using namespace Dialogs;
 
 namespace QtGui {
 
-Controller::Controller(const QString &filePath, QObject *parent)
+Controller::Controller(QSettings &settings, const QString &filePath, QObject *parent)
     : QObject(parent)
+    , m_settings(settings)
     , m_fileOpen(false)
     , m_fileModified(false)
 {
-    setFilePath(filePath);
     m_entryFilterModel.setSourceModel(&m_entryModel);
+
+    // share settings with main window
+    m_settings.beginGroup(QStringLiteral("mainwindow"));
+    m_recentFiles = m_settings.value(QStringLiteral("recententries")).toStringList();
+
+    // set initial file path
+    setFilePath(filePath);
 }
 
 void Controller::setFilePath(const QString &filePath)
 {
-    if (m_filePath == filePath) {
+    // get rid of file:// prefix
+    QStringRef actualFilePath(&filePath);
+    if (filePath.startsWith(QLatin1String("file:"))) {
+        actualFilePath = filePath.midRef(5);
+    }
+    while (filePath.startsWith(QLatin1String("//"))) {
+        actualFilePath = actualFilePath.mid(1);
+    }
+
+    // skip if this path is already set
+    if (m_filePath == actualFilePath) {
         return;
     }
+
+    // assign full file path and file name
     m_file.clear();
     m_file.setPath(filePath.toLocal8Bit().data());
     m_fileName = QString::fromLocal8Bit(IoUtilities::fileName(m_file.path()).data());
     emit filePathChanged(m_filePath = filePath);
+
+    // handle recent files
+    auto index = m_recentFiles.indexOf(m_filePath);
+    if (!index) {
+        return;
+    }
+    if (index < 0) {
+        m_recentFiles.prepend(m_filePath);
+    } else if (index > 0) {
+        m_recentFiles[index].swap(m_recentFiles.first());
+    }
+    while (m_recentFiles.size() > 10) {
+        m_recentFiles.removeLast();
+    }
+    m_settings.setValue(QStringLiteral("recententries"), m_recentFiles);
+    emit recentFilesChanged(m_recentFiles);
 }
 
 void Controller::setPassword(const QString &password)
@@ -51,8 +87,12 @@ void Controller::setPassword(const QString &password)
     emit passwordChanged(m_password = password);
 }
 
-void Controller::load()
+void Controller::load(const QString &filePath)
 {
+    if (!filePath.isEmpty()) {
+        setFilePath(filePath);
+    }
+
     resetFileStatus();
     try {
         m_file.load();
@@ -72,8 +112,12 @@ void Controller::load()
     }
 }
 
-void Controller::create()
+void Controller::create(const QString &filePath)
 {
+    if (!filePath.isEmpty()) {
+        setFilePath(filePath);
+    }
+
     resetFileStatus();
     try {
         m_file.create();
