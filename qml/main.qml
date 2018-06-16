@@ -48,7 +48,7 @@ Kirigami.ApplicationWindow {
             Kirigami.Action {
                 text: qsTr("Recently opened ...")
                 iconName: "document-open-recent"
-                children: createRecentFileActions()
+                children: createFileActions(nativeInterface.recentFiles)
             },
             Kirigami.Action {
                 text: "Save modifications"
@@ -151,7 +151,7 @@ Kirigami.ApplicationWindow {
     }
 
     Component {
-        id: recentFileActionComponent
+        id: fileActionComponent
         Kirigami.Action {
             property string filePath
             text: filePath.substring(filePath.lastIndexOf('/') + 1)
@@ -179,14 +179,11 @@ Kirigami.ApplicationWindow {
                                                      }))
     }
 
-    function createRecentFileActions() {
-        var recentFiles = nativeInterface.recentFiles
-        var actions = []
-        for (var i = 0, count = recentFiles.length; i !== count; ++i) {
-            actions.push(recentFileActionComponent.createObject(root, {
-                                                                    filePath: recentFiles[i]
-                                                                }))
-        }
-        return actions
+    function createFileActions(files) {
+        return files.map(function (filePath) {
+            return this.createObject(root, {
+                                         filePath: filePath
+                                     })
+        }, fileActionComponent)
     }
 }
