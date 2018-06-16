@@ -54,6 +54,7 @@ public:
     const QStringList &recentFiles() const;
 
 public slots:
+    void init();
     void load(const QString &filePath = QString());
     void create(const QString &filePath = QString());
     void close();

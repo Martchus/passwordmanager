@@ -7,7 +7,6 @@ import org.kde.kirigami 2.4 as Kirigami
 Kirigami.ApplicationWindow {
     id: root
     property alias showPasswordsOnFocus: showPasswordsOnFocusSwitch.checked
-    property var entriesComponent: undefined
 
     header: Kirigami.ApplicationHeader {
     }
@@ -87,21 +86,7 @@ Kirigami.ApplicationWindow {
     contextDrawer: Kirigami.ContextDrawer {
         id: contextDrawer
     }
-    Component.onCompleted: {
-        // load the entries component
-        entriesComponent = Qt.createComponent("EntriesPage.qml")
-        if (entriesComponent.status !== Component.Ready) {
-            var errorMessage = "Unable to load EntriesPage.qml: " + entriesComponent.errorString()
-            showPassiveNotification(errorMessage)
-            console.error(errorMessage)
-            return
-        }
-
-        // load file if one has been specified via CLI argument
-        if (nativeInterface.filePath.length) {
-            nativeInterface.load()
-        }
-    }
+    Component.onCompleted: nativeInterface.init()
 
     PasswordDialog {
         id: enterPasswordDialog
@@ -174,13 +159,19 @@ Kirigami.ApplicationWindow {
         }
     }
 
+    Component {
+        id: entriesComponent
+        EntriesPage {
+            main: root
+        }
+    }
+
     function clearStack() {
         pageStack.pop(root.pageStack.initialPage, Controls.StackView.Immediate)
     }
 
     function pushStackEntry(entryModel, rootIndex) {
         pageStack.push(entriesComponent.createObject(root, {
-                                                         main: root,
                                                          entryModel: entryModel,
                                                          rootIndex: rootIndex,
                                                          title: entryModel.data(

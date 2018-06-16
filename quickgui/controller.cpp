@@ -87,6 +87,13 @@ void Controller::setPassword(const QString &password)
     emit passwordChanged(m_password = password);
 }
 
+void Controller::init()
+{
+    if (!m_filePath.isEmpty()) {
+        load();
+    }
+}
+
 void Controller::load(const QString &filePath)
 {
     if (!filePath.isEmpty()) {
