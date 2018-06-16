@@ -8,8 +8,12 @@
 #include <c++utilities/io/catchiofailure.h>
 #include <c++utilities/io/path.h>
 
+#ifndef QT_NO_CLIPBOARD
+#include <QClipboard>
+#endif
 #include <QDir>
 #include <QFileInfo>
+#include <QGuiApplication>
 #include <QIcon>
 #include <QSettings>
 #include <QStringBuilder>
@@ -189,6 +193,20 @@ QStringList Controller::pasteEntries(const QModelIndex &destinationParent, int r
     m_cutEntries.clear();
     emit cutEntriesChanged(m_cutEntries);
     return successfullyMovedEntries;
+}
+
+bool Controller::copyToClipboard(const QString &text) const
+{
+#ifndef QT_NO_CLIPBOARD
+    auto *clipboard(QGuiApplication::clipboard());
+    if (!clipboard) {
+        return false;
+    }
+    clipboard->setText(text);
+    return true;
+#else
+    return false;
+#endif
 }
 
 void Controller::resetFileStatus()

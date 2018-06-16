@@ -50,6 +50,7 @@ public:
     QString currentAccountName() const;
     Q_INVOKABLE void cutEntry(const QModelIndex &entryIndex);
     Q_INVOKABLE QStringList pasteEntries(const QModelIndex &destinationParent, int row = -1);
+    Q_INVOKABLE bool copyToClipboard(const QString &text) const;
     bool canPaste() const;
     const QStringList &recentFiles() const;
 

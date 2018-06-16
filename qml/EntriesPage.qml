@@ -173,6 +173,14 @@ Kirigami.ScrollablePage {
                                        model.isPassword ? 0 : 1, 0x0100 + 1)
                     }
                     Controls.MenuItem {
+                        icon.name: "edit-copy"
+                        text: qsTr("Copy password")
+                        onClicked: showPassiveNotification(
+                                       nativeInterface.copyToClipboard(
+                                           model.actualValue) ? qsTr("Copied") : qsTr(
+                                                                    "Unable to access clipboard"))
+                    }
+                    Controls.MenuItem {
                         icon.name: "edit-delete"
                         text: qsTr("Delete field")
                         onClicked: fieldsListView.model.removeRows(index, 1)
