@@ -45,8 +45,9 @@ inline bool StackSupport::push(std::unique_ptr<CustomUndoCommand> command)
     if (command->isNoop()) {
         return true; // doing nothing can never fail
     }
-    m_undoStack->push(command.release());
-    return command->redoResult();
+    auto *const rawCommand(command.release());
+    m_undoStack->push(rawCommand);
+    return rawCommand->redoResult();
 }
 
 /*!
