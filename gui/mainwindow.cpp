@@ -676,24 +676,28 @@ QString MainWindow::selectedFieldsString() const
  */
 void MainWindow::insertFields(const QString &fieldsString)
 {
-    const QModelIndexList selectedIndexes(m_ui->tableView->selectionModel()->selectedIndexes());
+    const auto selectedIndexes(m_ui->tableView->selectionModel()->selectedIndexes());
     if (selectedIndexes.size() != 1) {
-        QMessageBox::warning(this, QApplication::applicationName(), tr("Exactly one fields needs to be selected (top-left corner for insertion)."));
+        QMessageBox::warning(this, QApplication::applicationName(), tr("Exactly one field needs to be selected (top-left corner for insertion)."));
         return;
     }
 
-    int rows = m_fieldModel->rowCount(), cols = m_fieldModel->columnCount();
-    int row = selectedIndexes.front().row();
-    int initCol = selectedIndexes.front().column();
-    assert(row < rows);
-    QStringList rowValues = fieldsString.split('\n');
-    if (rowValues.back().isEmpty()) {
-        rowValues.pop_back();
-    }
+    const auto cols = m_fieldModel->columnCount();
+    const auto initCol = selectedIndexes.front().column();
+    const auto rowValues = [&] {
+        QStringList lines = fieldsString.split('\n');
+        if (lines.back().isEmpty()) {
+            lines.pop_back();
+        }
+        return lines;
+    }();
+
+    auto row = selectedIndexes.front().row();
     m_fieldModel->insertRows(row, rowValues.size(), QModelIndex());
-    for (const QString &rowValue : rowValues) {
+
+    for (const auto &rowValue : rowValues) {
         int col = initCol;
-        for (const QString &cellValue : rowValue.split('\t')) {
+        for (const auto &cellValue : rowValue.split('\t')) {
             if (col < cols) {
                 m_fieldModel->setData(m_fieldModel->index(row, col), cellValue, Qt::EditRole);
                 ++col;
