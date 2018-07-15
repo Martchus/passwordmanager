@@ -8,8 +8,6 @@
 
 #include <c++utilities/conversion/binaryconversion.h>
 
-#include <openssl/rand.h>
-
 #include <QClipboard>
 #include <QMessageBox>
 
@@ -77,58 +75,67 @@ PasswordGeneratorDialog::~PasswordGeneratorDialog()
  */
 void PasswordGeneratorDialog::generateNewPassword()
 {
-    int length = m_ui->LengthSpinBox->value();
-    if (length > 0) {
-        if (m_charset.empty()) {
-            bool useSmallLetters = m_ui->useSmallLettersCheckBox->isChecked();
-            bool useCapitalLetters = m_ui->useCapitalLettersCheckBox->isChecked();
-            bool useDigits = m_ui->useDigitsCheckBox->isChecked();
-            QString otherChars = m_ui->otherCharsLineEdit->text();
-            int charsetSize = otherChars.length();
-            if (useSmallLetters) {
-                charsetSize += sizeof(smallLetters);
-            }
-            if (useCapitalLetters) {
-                charsetSize += sizeof(capitalLetters);
-            }
-            if (useDigits) {
-                charsetSize += sizeof(digits);
-            }
-            m_charset.reserve(charsetSize);
-            if (useSmallLetters) {
-                m_charset.insert(m_charset.end(), std::begin(smallLetters), std::end(smallLetters));
-            }
-            if (useCapitalLetters) {
-                m_charset.insert(m_charset.end(), std::begin(capitalLetters), std::end(capitalLetters));
-            }
-            if (useDigits) {
-                m_charset.insert(m_charset.end(), std::begin(digits), std::end(digits));
-            }
-            char charval;
-            foreach (QChar qchar, otherChars) {
-                charval = qchar.toLatin1();
-                if (charval != '\x00' && charval != ' ' && std::find(m_charset.begin(), m_charset.end(), charval) == m_charset.end()) {
-                    m_charset.push_back(charval);
-                }
-            }
-        }
-        if (!m_charset.empty()) {
-            try {
-                default_random_engine rng(m_random());
-                uniform_int_distribution<> dist(0, m_charset.size() - 1);
-                auto randchar = [this, &dist, &rng]() { return m_charset[dist(rng)]; };
-                string res(length, 0);
-                generate_n(res.begin(), length, randchar);
-                m_ui->passwordLineEdit->setText(QString::fromLatin1(res.c_str()));
-            } catch (const CryptoException &ex) {
-                QMessageBox::warning(this, QApplication::applicationName(),
-                    tr("Failed to generate password.\nOpenSSL error: %1").arg(QString::fromLocal8Bit(ex.what())));
-            }
-        } else {
-            QMessageBox::warning(this, QApplication::applicationName(), tr("You have to select at least one checkbox."));
-        }
-    } else {
+    // check length
+    const auto length = m_ui->LengthSpinBox->value();
+    if (length <= 0) {
         QMessageBox::warning(this, QApplication::applicationName(), tr("The length has to be at least one."));
+        return;
+    }
+
+    // make list of characters to be used
+    if (m_charset.empty()) {
+        const auto useSmallLetters = m_ui->useSmallLettersCheckBox->isChecked();
+        const auto useCapitalLetters = m_ui->useCapitalLettersCheckBox->isChecked();
+        const auto useDigits = m_ui->useDigitsCheckBox->isChecked();
+        const auto otherChars = m_ui->otherCharsLineEdit->text();
+        const auto charsetSize = [&] {
+            auto size = static_cast<size_t>(otherChars.size());
+            if (useSmallLetters) {
+                size += sizeof(smallLetters);
+            }
+            if (useCapitalLetters) {
+                size += sizeof(capitalLetters);
+            }
+            if (useDigits) {
+                size += sizeof(digits);
+            }
+            return size;
+        }();
+
+        m_charset.reserve(charsetSize);
+        if (useSmallLetters) {
+            m_charset.insert(m_charset.end(), std::begin(smallLetters), std::end(smallLetters));
+        }
+        if (useCapitalLetters) {
+            m_charset.insert(m_charset.end(), std::begin(capitalLetters), std::end(capitalLetters));
+        }
+        if (useDigits) {
+            m_charset.insert(m_charset.end(), std::begin(digits), std::end(digits));
+        }
+        char charval;
+        for (const auto &qchar : otherChars) {
+            charval = qchar.toLatin1();
+            if (charval != '\x00' && charval != ' ' && std::find(m_charset.begin(), m_charset.end(), charval) == m_charset.end()) {
+                m_charset.push_back(charval);
+            }
+        }
+    }
+    if (m_charset.empty()) {
+        QMessageBox::warning(this, QApplication::applicationName(), tr("You have to select at least one checkbox."));
+        return;
+    }
+
+    // create random string
+    try {
+        default_random_engine rng(m_random());
+        uniform_int_distribution<size_t> dist(0, m_charset.size() - 1);
+        const auto getRandomCharacter = [this, &dist, &rng]() { return m_charset[dist(rng)]; };
+        string res(length, 0);
+        generate_n(res.begin(), length, getRandomCharacter);
+        m_ui->passwordLineEdit->setText(QString::fromLatin1(res.data(), length));
+    } catch (const CryptoException &ex) {
+        QMessageBox::warning(this, QApplication::applicationName(),
+            tr("Failed to generate password.\nOpenSSL error: %1").arg(QString::fromLocal8Bit(ex.what())));
     }
 }
 
