@@ -2,38 +2,215 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="en_US">
 <context>
-    <name>AccountsPage</name>
+    <name>EntriesPage</name>
     <message>
-        <location filename="../qml/pages/AccountsPage.qml" line="8"/>
-        <source>Accounts</source>
+        <location filename="../qml/EntriesPage.qml" line="18"/>
+        <source>Add account</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EntriesPage.qml" line="23"/>
+        <source>Paste account</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EntriesPage.qml" line="29"/>
+        <source>Unable to paste the entries here</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EntriesPage.qml" line="33"/>
+        <source>Pasted </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EntriesPage.qml" line="38"/>
+        <source>Add category</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EntriesPage.qml" line="60"/>
+        <source>Delete %1?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EntriesPage.qml" line="66"/>
+        <location filename="../qml/EntriesPage.qml" line="106"/>
+        <source>category </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EntriesPage.qml" line="66"/>
+        <location filename="../qml/EntriesPage.qml" line="106"/>
+        <source>account </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EntriesPage.qml" line="84"/>
+        <source>Name for new </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EntriesPage.qml" line="84"/>
+        <source>Rename </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EntriesPage.qml" line="99"/>
+        <source>enter new name here</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EntriesPage.qml" line="157"/>
+        <source>⋮</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EntriesPage.qml" line="169"/>
+        <source>Mark as normal field</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EntriesPage.qml" line="169"/>
+        <source>Mark as password field</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EntriesPage.qml" line="177"/>
+        <source>Copy password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EntriesPage.qml" line="180"/>
+        <source>Copied</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EntriesPage.qml" line="180"/>
+        <source>Unable to access clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EntriesPage.qml" line="185"/>
+        <source>Delete field</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EntriesPage.qml" line="190"/>
+        <source>Insert empty field after this</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EntriesPage.qml" line="203"/>
+        <source>Edit account </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EntriesPage.qml" line="260"/>
+        <source>Cut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EntriesPage.qml" line="269"/>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EntriesPage.qml" line="275"/>
+        <source>Rename</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>BasicPage</name>
+    <name>PasswordDialog</name>
     <message>
-        <location filename="../qml/pages/BasicPage.qml" line="84"/>
-        <source>Back</source>
+        <location filename="../qml/PasswordDialog.qml" line="17"/>
+        <source>Enter password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/BasicPage.qml" line="164"/>
-        <source>filter</source>
+        <location filename="../qml/PasswordDialog.qml" line="22"/>
+        <source>The new password will be used when saving next time.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PasswordDialog.qml" line="30"/>
+        <source>You aborted. The password has not been altered.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PasswordDialog.qml" line="45"/>
+        <source>enter password here, leave empty for no encryption</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PasswordDialog.qml" line="56"/>
+        <source>repeat password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PasswordDialog.qml" line="63"/>
+        <source>Show characters</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>FieldsPage</name>
+    <name>QtGui::Controller</name>
     <message>
-        <location filename="../qml/pages/FieldsPage.qml" line="9"/>
-        <source>Fields</source>
+        <location filename="../quickgui/controller.cpp" line="117"/>
+        <source>A crypto error occured when opening the file: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../quickgui/controller.cpp" line="120"/>
+        <source>A parsing error occured when opening the file: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../quickgui/controller.cpp" line="122"/>
+        <source>loading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../quickgui/controller.cpp" line="139"/>
+        <source>creating</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../quickgui/controller.cpp" line="149"/>
+        <source>closing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../quickgui/controller.cpp" line="165"/>
+        <source>A crypto error occured when saving the file: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../quickgui/controller.cpp" line="167"/>
+        <source>An internal error occured when saving the file: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../quickgui/controller.cpp" line="169"/>
+        <source>saving</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../quickgui/controller.cpp" line="225"/>
+        <source>No file opened.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../quickgui/controller.cpp" line="239"/>
+        <source>An IO error occured when %1 the file: </source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>QtGui::EntryModel</name>
     <message>
-        <location filename="../model/entrymodel.cpp" line="346"/>
+        <location filename="../model/entrymodel.cpp" line="363"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -41,12 +218,12 @@
 <context>
     <name>QtGui::FieldModel</name>
     <message>
-        <location filename="../model/fieldmodel.cpp" line="233"/>
+        <location filename="../model/fieldmodel.cpp" line="262"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../model/fieldmodel.cpp" line="235"/>
+        <location filename="../model/fieldmodel.cpp" line="264"/>
         <source>Value</source>
         <translation type="unfinished"></translation>
     </message>
@@ -346,7 +523,7 @@
     </message>
     <message>
         <location filename="../gui/mainwindow.cpp" line="371"/>
-        <location filename="../gui/mainwindow.cpp" line="718"/>
+        <location filename="../gui/mainwindow.cpp" line="722"/>
         <source>Password Manager files (*.pwmgr);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -415,195 +592,195 @@ OpenSSL error queue: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="681"/>
-        <source>Exactly one fields needs to be selected (top-left corner for insertion).</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gui/mainwindow.cpp" line="718"/>
+        <location filename="../gui/mainwindow.cpp" line="722"/>
         <source>Select where you want to save the password list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="720"/>
+        <location filename="../gui/mainwindow.cpp" line="724"/>
         <source>The file was not be saved.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="742"/>
+        <location filename="../gui/mainwindow.cpp" line="746"/>
         <source>There is no password list opened.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="755"/>
+        <location filename="../gui/mainwindow.cpp" line="759"/>
         <source>There&apos;s no account selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="772"/>
+        <location filename="../gui/mainwindow.cpp" line="776"/>
         <source>The password file has been modified.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="773"/>
+        <location filename="../gui/mainwindow.cpp" line="777"/>
         <source>Do you want to save the changes before closing?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="792"/>
+        <location filename="../gui/mainwindow.cpp" line="796"/>
         <source>The password list has been closed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="817"/>
+        <location filename="../gui/mainwindow.cpp" line="821"/>
         <source>The backup file couldn&apos;t be created because in IO error occured: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="830"/>
+        <location filename="../gui/mainwindow.cpp" line="834"/>
         <source>Saving file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="831"/>
+        <location filename="../gui/mainwindow.cpp" line="835"/>
         <source>Enter a password to save the file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="839"/>
+        <location filename="../gui/mainwindow.cpp" line="843"/>
         <source>The file hasn&apos;t been saved.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="849"/>
+        <location filename="../gui/mainwindow.cpp" line="853"/>
         <source>The password list couldn&apos;t be saved due to encryption failure.
 OpenSSL error queue: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="865"/>
+        <location filename="../gui/mainwindow.cpp" line="869"/>
         <source>The password list has been saved.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="878"/>
+        <location filename="../gui/mainwindow.cpp" line="882"/>
         <source>Plain text document (*.txt);;All files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="886"/>
+        <location filename="../gui/mainwindow.cpp" line="890"/>
         <source>The password list couldn&apos;t be exported. %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="889"/>
+        <location filename="../gui/mainwindow.cpp" line="893"/>
         <source>The password list has been exported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="905"/>
+        <location filename="../gui/mainwindow.cpp" line="909"/>
         <source>The currently opened file hasn&apos;t been saved yet.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="947"/>
-        <location filename="../gui/mainwindow.cpp" line="1160"/>
+        <location filename="../gui/mainwindow.cpp" line="951"/>
+        <location filename="../gui/mainwindow.cpp" line="1164"/>
         <source>Add account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="947"/>
-        <location filename="../gui/mainwindow.cpp" line="1161"/>
+        <location filename="../gui/mainwindow.cpp" line="951"/>
+        <location filename="../gui/mainwindow.cpp" line="1165"/>
         <source>Add category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="947"/>
+        <location filename="../gui/mainwindow.cpp" line="951"/>
         <source>Enter the entry name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="948"/>
+        <location filename="../gui/mainwindow.cpp" line="952"/>
         <source>new entry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="959"/>
+        <location filename="../gui/mainwindow.cpp" line="963"/>
         <source>Unable to create new entry.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="953"/>
+        <location filename="../gui/mainwindow.cpp" line="957"/>
         <source>You didn&apos;t enter text.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="943"/>
+        <location filename="../gui/mainwindow.cpp" line="947"/>
         <source>No node element selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="981"/>
+        <location filename="../gui/mainwindow.cpp" line="985"/>
         <source>Unable to remove the entry.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="976"/>
+        <location filename="../gui/mainwindow.cpp" line="980"/>
         <source>No entry selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1024"/>
+        <location filename="../gui/mainwindow.cpp" line="681"/>
+        <source>Exactly one field needs to be selected (top-left corner for insertion).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/mainwindow.cpp" line="1028"/>
         <source>A field has to be selected since new fields are always inserted before the currently selected field.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1052"/>
+        <location filename="../gui/mainwindow.cpp" line="1056"/>
         <source>No fields have been removed since there are currently no fields selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1088"/>
+        <location filename="../gui/mainwindow.cpp" line="1092"/>
         <source>No fields have been changed since there are currently no fields selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1123"/>
+        <location filename="../gui/mainwindow.cpp" line="1127"/>
         <source>Changing password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1131"/>
+        <location filename="../gui/mainwindow.cpp" line="1135"/>
         <source>You didn&apos;t enter a password. &lt;strong&gt;No encryption&lt;/strong&gt; will be used when saving the file next time.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1135"/>
+        <location filename="../gui/mainwindow.cpp" line="1139"/>
         <source>The new password will be used next time you save the file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1140"/>
+        <location filename="../gui/mainwindow.cpp" line="1144"/>
         <source>You aborted. The old password will still be used when saving the file next time.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1163"/>
+        <location filename="../gui/mainwindow.cpp" line="1167"/>
         <source>Remove entry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1169"/>
+        <location filename="../gui/mainwindow.cpp" line="1173"/>
         <source>Expanded by default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1224"/>
+        <location filename="../gui/mainwindow.cpp" line="1228"/>
         <source>Insert field</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../gui/mainwindow.cpp" line="1225"/>
+        <location filename="../gui/mainwindow.cpp" line="1229"/>
         <source>Remove field(s)</source>
         <translation type="unfinished">
             <numerusform>Remove field</numerusform>
@@ -611,37 +788,37 @@ OpenSSL error queue: %1</source>
         </translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1231"/>
+        <location filename="../gui/mainwindow.cpp" line="1235"/>
         <source>Mark as password field</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1234"/>
+        <location filename="../gui/mainwindow.cpp" line="1238"/>
         <source>Mark as normal field</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1240"/>
+        <location filename="../gui/mainwindow.cpp" line="1244"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1241"/>
+        <location filename="../gui/mainwindow.cpp" line="1245"/>
         <source>Copy for 5 seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1243"/>
+        <location filename="../gui/mainwindow.cpp" line="1247"/>
         <source>Paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1247"/>
+        <location filename="../gui/mainwindow.cpp" line="1251"/>
         <source>Open URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1262"/>
+        <location filename="../gui/mainwindow.cpp" line="1266"/>
         <source>The selection is empty.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -704,80 +881,88 @@ OpenSSL error queue: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/passwordgeneratordialog.cpp" line="125"/>
+        <location filename="../gui/passwordgeneratordialog.cpp" line="138"/>
         <source>Failed to generate password.
 OpenSSL error: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/passwordgeneratordialog.cpp" line="128"/>
+        <location filename="../gui/passwordgeneratordialog.cpp" line="124"/>
         <source>You have to select at least one checkbox.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/passwordgeneratordialog.cpp" line="131"/>
+        <location filename="../gui/passwordgeneratordialog.cpp" line="81"/>
         <source>The length has to be at least one.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>StartPage</name>
-    <message>
-        <location filename="../qml/pages/StartPage.qml" line="12"/>
-        <source>Password Manager</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/StartPage.qml" line="18"/>
-        <source>Select a password file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/StartPage.qml" line="33"/>
-        <source>Create a new password file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/StartPage.qml" line="38"/>
-        <source>Open an existing password file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/StartPage.qml" line="47"/>
-        <source>Recently opened files</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/StartPage.qml" line="51"/>
-        <source>Test 1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/StartPage.qml" line="56"/>
-        <source>Test 2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/StartPage.qml" line="61"/>
-        <source>Test 3</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="13"/>
-        <source>Password Manager</source>
+        <location filename="../qml/main.qml" line="15"/>
+        <source>Password manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="169"/>
-        <source>Application</source>
+        <location filename="../qml/main.qml" line="33"/>
+        <location filename="../qml/main.qml" line="82"/>
+        <source>No file opened</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="171"/>
-        <source>Exit</source>
+        <location filename="../qml/main.qml" line="39"/>
+        <source>Create new file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="44"/>
+        <source>Open existing file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="49"/>
+        <source>Recently opened ...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="75"/>
+        <source>Show passwords on focus</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="97"/>
+        <source>Select an existing file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="97"/>
+        <source>Select path for new file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="110"/>
+        <source>Canceled file selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="130"/>
+        <source>Password required to open %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="137"/>
+        <source>%1 closed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="144"/>
+        <source>%1 opened</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="148"/>
+        <source>%1 saved</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
