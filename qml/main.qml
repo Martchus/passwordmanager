@@ -13,7 +13,7 @@ Kirigami.ApplicationWindow {
     globalDrawer: Kirigami.GlobalDrawer {
         id: leftMenu
         title: qsTr("Password manager")
-        titleIcon: "passwordmanager"
+        titleIcon: "qrc://icons/hicolor/128x128/apps/passwordmanager.png"
         topContent: ColumnLayout {
             Layout.fillWidth: true
 

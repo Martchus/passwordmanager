@@ -86,38 +86,49 @@ set(DOC_FILES
 )
 
 set(REQUIRED_ICONS
-    edit-paste
-    window-close
-    document-save-as
-    document-open
-    insert-text
-    edit-copy
-    document-open-recent
-    list-remove
+    application-exit
+    applications-internet
     dialog-cancel
     dialog-ok
     dialog-ok-apply
-    flag-black
     dialog-password
-    edit-clear
-    list-add
-    help-about
-    application-exit
-    flag-blue
-    edit-undo
-    folder
-    system-file-manager
-    document-new
-    document-save
-    applications-internet
-    edit-redo
-    system-run
-    go-next
+    document-close
     document-export
+    document-new
+    document-open
+    document-open-recent
+    document-save
+    document-save-as
+    edit-clear
+    edit-copy
+    edit-cut
+    edit-delete
+    edit-paste
+    edit-redo
+    edit-rename
+    edit-undo
+    flag-black
+    flag-blue
+    folder
+    folder-symbolic
+    go-next
+    help-about
+    insert-text
+    list-add
+    list-remove
     password-generate
+    password-show-off
+    password-show-on
+    passwordmanager
     preferences-desktop-icons
     preferences-desktop-locale
+    qtcreator
+    sheet
+    story-editor
+    system-file-manager
+    system-run
     system-search
+    window-close
 )
 
 # find c++utilities

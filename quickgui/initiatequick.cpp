@@ -11,6 +11,7 @@
 #include <QQmlApplicationEngine>
 #include <QSettings>
 #include <QTextCodec>
+#include <QIcon>
 #include <QtQml>
 
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
@@ -35,6 +36,13 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
     // apply settings specified via command line args
     qtConfigArgs.applySettings();
     qtConfigArgs.applySettingsForQuickGui();
+
+#ifdef Q_OS_ANDROID
+    // assume we're bundling breeze icons under Android
+    if (QIcon::themeName().isEmpty()) {
+        QIcon::setThemeName(QStringLiteral("breeze"));
+    }
+#endif
 
     // load settings from configuration file
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, QStringLiteral(PROJECT_NAME));

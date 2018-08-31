@@ -40,13 +40,16 @@ The Password Manager depends on c++utilities and passwordfile. Checkout the READ
 Build c++utilities, passwordfile, qtutilities and passwordmanager in one step to create an Android APK for arm64-v8a:
 
 ```
+# specify Android platform
 _android_arch=arm64-v8a
 _android_toolchain=aarch64-linux-android
 _android_api_level=21
 
+# set project name
 _reponame=passwordmanager
 _pkgname=passwordmanager
 
+# locate SDK, NDK and further libraries
 android_sdk_root=${ANDROID_SDK_ROOT:-/opt/android-sdk}
 android_ndk_root=${ANDROID_NDK_ROOT:-/opt/android-ndk}
 qt_version=$(pacman -Q "android-qt5-$_android_arch" | sed 's/.* \(.*\)-.*/\1/')
@@ -54,6 +57,9 @@ build_tools_version=$(pacman -Q android-sdk-build-tools | sed 's/.* r\(.*\)-.*/\
 qt_root=/opt/android-qt5/$qt_version/$_android_arch
 other_libs_root=/opt/android-libs/$_android_arch
 root="$android_ndk_root/sysroot;$other_libs_root;$qt_root"
+
+# use Breeze icons from 'breeze-icons' package
+ln -s /usr/share/icons/breeze icons
 
 cmake \
     -DCMAKE_BUILD_TYPE=Debug \
@@ -88,6 +94,8 @@ cmake \
     -DNO_DOXYGEN=ON \
     -DWIDGETS_GUI=OFF \
     -DQUICK_GUI=ON \
+    -DBUILTIN_ICON_THEMES=breeze \
+    -DBREEZEICONS_DIR="$PWD" \
     $SOURCES/subdirs/$_reponame
 
 make create-apk -j$(nproc)
