@@ -134,8 +134,8 @@ void PasswordGeneratorDialog::generateNewPassword()
         generate_n(res.begin(), length, getRandomCharacter);
         m_ui->passwordLineEdit->setText(QString::fromLatin1(res.data(), length));
     } catch (const CryptoException &ex) {
-        QMessageBox::warning(this, QApplication::applicationName(),
-            tr("Failed to generate password.\nOpenSSL error: %1").arg(QString::fromLocal8Bit(ex.what())));
+        QMessageBox::warning(
+            this, QApplication::applicationName(), tr("Failed to generate password.\nOpenSSL error: %1").arg(QString::fromLocal8Bit(ex.what())));
     }
 }
 
