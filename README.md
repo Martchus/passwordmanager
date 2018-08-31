@@ -3,16 +3,16 @@ A simple password manager with Qt 5 GUI using AES-256-CBC encryption via OpenSSL
 
 ## Download / binary repository
 I currently provide packages for Arch Linux and Windows. Sources for those packages can be found in a
-separate [repository](https://github.com/Martchus/PKGBUILDs). For binaries checkout my
-[website](http://martchus.no-ip.biz/website/page.php?name=programming).
+separate [repository](https://github.com/Martchus/PKGBUILDs). For binaries checkout the release section
+on GitHub or my [website](http://martchus.no-ip.biz/website/page.php?name=programming).
 
 ## Build instructions
-The Password Manager depends on c++utilities and passwordfile. So checkout the README of c++utilities for more details. Note that this project is not built differently than any other CMake project.
+The Password Manager depends on c++utilities and passwordfile. Checkout the README of c++utilities for more details. Note that this project is not built differently than any other CMake project.
 
 ### Optional dependencies
 * When building any Qt GUI, the library qtutilities is required.
 * When building with Qt Widgets GUI support, the following Qt modules are required: core gui widgets
-* When building with Qt Quick GUI support, the following Qt/KDE modules are required: core gui declarative quickcontrols2 kirigami
+* When building with support for the experimental Qt Quick GUI, the following Qt/KDE modules are required: core gui qml quick quickcontrols2 kirigami
 
 ### Building this straight
 1. Install (preferably the latest version of) g++ or clang, the required Qt 5 modules and CMake. OpenSSL, iconv and
@@ -40,18 +40,19 @@ The Password Manager depends on c++utilities and passwordfile. So checkout the R
 Build c++utilities, passwordfile, qtutilities and passwordmanager in one step to create an Android APK for arm64-v8a:
 
 ```
-_reponame=passwordmanager
-_pkgname=passwordmanager
 _android_arch=arm64-v8a
 _android_toolchain=aarch64-linux-android
 _android_api_level=21
+
+_reponame=passwordmanager
+_pkgname=passwordmanager
+
 android_sdk_root=${ANDROID_SDK_ROOT:-/opt/android-sdk}
 android_ndk_root=${ANDROID_NDK_ROOT:-/opt/android-ndk}
 qt_version=$(pacman -Q "android-qt5-$_android_arch" | sed 's/.* \(.*\)-.*/\1/')
 build_tools_version=$(pacman -Q android-sdk-build-tools | sed 's/.* r\(.*\)-.*/\1/')
 qt_root=/opt/android-qt5/$qt_version/$_android_arch
 other_libs_root=/opt/android-libs/$_android_arch
-openssl_root=$other_libs_root
 root="$android_ndk_root/sysroot;$other_libs_root;$qt_root"
 
 cmake \
@@ -66,28 +67,28 @@ cmake \
     -DCMAKE_INSTALL_PREFIX=$other_libs_root \
     -DCMAKE_PREFIX_PATH="$root" \
     -DCMAKE_FIND_ROOT_PATH="$root" \
-    -DNO_DOXYGEN=ON \
-    -DWIDGETS_GUI=OFF \
-    -DQUICK_GUI=ON \
     -DANDROID_API_LEVEL=$_android_api_level \
     -DANDROID_ABI=$_android_arch \
     -DANDROID_ARCHITECTURE=${_android_arch%-*} \
     -DANDROID_SDK_ROOT="$android_sdk_root" \
-    -DANDROID_APK_DIR=$SOURCES/passwordmanager/android \
+    -DANDROID_APK_DIR=$SOURCES/$_reponame/android \
     -DANDROID_TOOLCHAIN=$_android_toolchain \
     -DANDROID_COMPILER_PREFIX=$_android_toolchain \
     -DANDROID_SDK_BUILD_TOOLS_REVISION="$build_tools_version" \
-    -DQTANDROID_EXPORTED_TARGET=passwordmanager \
+    -DQTANDROID_EXPORTED_TARGET=$_pkgname \
     -Diconv_DYNAMIC_INCLUDE_DIR="$other_libs_root/include" \
     -Diconv_STATIC_INCLUDE_DIR="$other_libs_root/include" \
-    -Dcrypto_DYNAMIC_INCLUDE_DIR="$openssl_root/include" \
-    -Dcrypto_STATIC_INCLUDE_DIR="$openssl_root/include" \
-    -Dcrypto_DYNAMIC_LIB="$openssl_root/lib/libcrypto.so" \
-    -Dcrypto_STATIC_LIB="$openssl_root/lib/libcrypto.a" \
+    -Dcrypto_DYNAMIC_INCLUDE_DIR="$other_libs_root/include" \
+    -Dcrypto_STATIC_INCLUDE_DIR="$other_libs_root/include" \
+    -Dcrypto_DYNAMIC_LIB="$other_libs_root/lib/libcrypto.so" \
+    -Dcrypto_STATIC_LIB="$other_libs_root/lib/libcrypto.a" \
     -DQt5Core_DIR="$qt_root/lib/cmake/Qt5Core" \
-    -DECM_ADDITIONAL_FIND_ROOT_PATH="$PWD/c++utilities;$PWD/passwordfile;$PWD/qtutilities;$root;$other_libs_root/lib;$openssl_root/lib" \
-    -DANDROID_EXTRA_LIBS="$openssl_root/lib/libcrypto.so;$openssl_root/lib/libssl.so;$other_libs_root/lib/libiconv.so;$other_libs_root/lib/libKF5Kirigami2.so" \
-    $SOURCES/subdirs/passwordmanager
+    -DECM_ADDITIONAL_FIND_ROOT_PATH="$PWD/c++utilities;$PWD/passwordfile;$PWD/qtutilities;$root;$other_libs_root/lib;$other_libs_root/lib" \
+    -DANDROID_EXTRA_LIBS="$other_libs_root/lib/libcrypto.so;$other_libs_root/lib/libssl.so;$other_libs_root/lib/libiconv.so;$other_libs_root/lib/libKF5Kirigami2.so" \
+    -DNO_DOXYGEN=ON \
+    -DWIDGETS_GUI=OFF \
+    -DQUICK_GUI=ON \
+    $SOURCES/subdirs/$_reponame
 
 make create-apk -j$(nproc)
 ```
@@ -95,3 +96,8 @@ make create-apk -j$(nproc)
 ##### Notes
 * The Android packages for the dependencies Qt 5, iconv and OpenSSL are provided in my PKGBUILDs repo.
 * The lastest Java I was able to use was version 8 (`jdk8-openjdk` package).
+
+### Deployment of Android APK file
+1. Find device ID: `adb devices`
+2. Install App on phone: `adb -s <DEVICE_ID> install -r $BUILD_DIR/passwordmanager_build_apk/build/outputs/apk/passwordmanager_build_apk-debug.apk`
+3. View log: `adb -s <DEVICE_ID> logcat`
