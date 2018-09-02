@@ -230,8 +230,10 @@ Kirigami.ScrollablePage {
                 Kirigami.ListItemDragHandle {
                     listItem: listItem
                     listView: entriesListView
-                    onMoveRequested: entryModel.moveRows(rootIndex, oldIndex,
-                                                         1, rootIndex, newIndex)
+                    // FIXME: not sure why newIndex + 1 is required to be able to move a row at the end
+                    onMoveRequested: entryModel.moveRows(
+                                         rootIndex, oldIndex, 1, rootIndex,
+                                         oldIndex < newIndex ? newIndex + 1 : newIndex)
                 }
                 Kirigami.Icon {
                     width: Kirigami.Units.iconSizes.smallMedium
