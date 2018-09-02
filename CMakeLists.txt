@@ -149,6 +149,11 @@ endif()
 find_package(passwordfile 3.1.0 REQUIRED)
 use_password_file()
 
+# require Qt AndroidExtras
+if(ANDROID AND QUICK_GUI)
+    list(APPEND ADDITIONAL_QT_MODULES AndroidExtras)
+endif()
+
 # include modules to apply configuration
 if(WIDGETS_GUI OR QUICK_GUI)
     include(QtGuiConfig)

@@ -9,6 +9,7 @@
 
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
 #include <QSettings>
 #include <QTextCodec>
 #include <QIcon>
@@ -18,9 +19,26 @@
 #include <QApplication>
 #endif
 
+#ifdef Q_OS_ANDROID
+#include <QtAndroid>
+#endif
+
 using namespace ApplicationUtilities;
 
 namespace QtGui {
+
+#ifdef Q_OS_ANDROID
+namespace Android {
+namespace WindowManager {
+namespace LayoutParams {
+enum RelevantFlags {
+    TranslucentStatus = 0x04000000,
+    DrawsSystemBarBackgrounds = 0x80000000,
+};
+}
+}
+}
+#endif
 
 int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, const QString &file)
 {
@@ -63,10 +81,20 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
     // init Quick GUI
     QQmlApplicationEngine engine;
     Controller controller(settings, file);
-    QQmlContext *const context(engine.rootContext());
+    auto *const context(engine.rootContext());
     context->setContextProperty(QStringLiteral("userPaths"), userPaths);
     context->setContextProperty(QStringLiteral("nativeInterface"), &controller);
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
+
+#ifdef Q_OS_ANDROID
+    QtAndroid::runOnAndroidThread([=]() {
+        QAndroidJniObject window = QtAndroid::androidActivity().callObjectMethod("getWindow", "()Landroid/view/Window;");
+        window.callMethod<void>("addFlags", "(I)V", Android::WindowManager::LayoutParams::DrawsSystemBarBackgrounds);
+        window.callMethod<void>("clearFlags", "(I)V", Android::WindowManager::LayoutParams::TranslucentStatus);
+        window.callMethod<void>("setStatusBarColor", "(I)V", QColor("#2196f3").rgba());
+        window.callMethod<void>("setNavigationBarColor", "(I)V", QColor("#2196f3").rgba());
+    });
+#endif
 
     // run event loop
     return a.exec();
