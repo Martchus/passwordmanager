@@ -1,4 +1,5 @@
 #include "./controller.h"
+#include "./android.h"
 
 #include <passwordfile/io/cryptoexception.h>
 #include <passwordfile/io/parsingexception.h>
@@ -6,6 +7,7 @@
 #include <qtutilities/misc/dialogutils.h>
 
 #include <c++utilities/io/catchiofailure.h>
+#include <c++utilities/io/nativefilestream.h>
 #include <c++utilities/io/path.h>
 
 #ifndef QT_NO_CLIPBOARD
@@ -32,12 +34,14 @@ Controller::Controller(QSettings &settings, const QString &filePath, QObject *pa
     , m_settings(settings)
     , m_fileOpen(false)
     , m_fileModified(false)
+    , m_useNativeFileDialog(false)
 {
     m_entryFilterModel.setSourceModel(&m_entryModel);
 
     // share settings with main window
     m_settings.beginGroup(QStringLiteral("mainwindow"));
     m_recentFiles = m_settings.value(QStringLiteral("recententries")).toStringList();
+    m_useNativeFileDialog = m_settings.value(QStringLiteral("usenativefiledialog"), m_useNativeFileDialog).toBool();
 
     // set initial file path
     setFilePath(filePath);
@@ -66,6 +70,11 @@ void Controller::setFilePath(const QString &filePath)
     emit filePathChanged(m_filePath = filePath);
 
     // handle recent files
+#ifdef Q_OS_ANDROID
+    if (m_useNativeFileDialog) {
+        return; // native file dialog under Android makes it impossible to store URIs persistently
+    }
+#endif
     auto index = m_recentFiles.indexOf(m_filePath);
     if (!index) {
         return;
@@ -131,7 +140,10 @@ void Controller::create(const QString &filePath)
 
     resetFileStatus();
     try {
-        m_file.create();
+        if (!m_file.isOpen()) {
+            m_file.create();
+        }
+        m_file.generateRootEntry();
         m_entryModel.setRootEntry(m_file.rootEntry());
         setFileOpen(true);
         updateWindowTitle();
@@ -168,6 +180,56 @@ void Controller::save()
     } catch (...) {
         emitIoError(tr("saving"));
     }
+}
+
+/*!
+ * \brief Shows a native file dialog if supported; otherwise returns false.
+ * \remarks If supported, this method will load/create the selected file (according to \a existing).
+ */
+bool Controller::showNativeFileDialog(bool existing)
+{
+#if defined(Q_OS_ANDROID) && defined(CPP_UTILITIES_USE_NATIVE_FILE_BUFFER)
+    if (!m_useNativeFileDialog) {
+        return false;
+    }
+    return showAndroidFileDialog(existing);
+#else
+    Q_UNUSED(existing)
+    return false;
+#endif
+}
+
+void Controller::handleFileSelectionAccepted(const QString &filePath, bool existing)
+{
+    if (existing) {
+        load(filePath);
+    } else {
+        create(filePath);
+    }
+}
+
+#if defined(Q_OS_ANDROID) && defined(CPP_UTILITIES_USE_NATIVE_FILE_BUFFER)
+void Controller::handleFileSelectionAcceptedDescriptor(const QString &filePath, int fileDescriptor, bool existing)
+{
+    try {
+        m_file.setPath(filePath.toStdString());
+        m_file.fileStream().openFromFileDescriptor(fileDescriptor, ios_base::in | ios_base::binary);
+        m_file.fileStream().seekg(0);
+        emitIoError("seeked to begin");
+        char buf[4];
+        m_file.fileStream().read(buf, 4);
+        emitIoError("first 4 byte: " + QString::fromLocal8Bit(buf, 4));
+        m_file.opened();
+    } catch (...) {
+        emitIoError(tr("opening from native file descriptor"));
+    }
+    handleFileSelectionAccepted(filePath, existing);
+}
+#endif
+
+void Controller::handleFileSelectionCanceled()
+{
+    emit newNotification(tr("Canceled file selection"));
 }
 
 QStringList Controller::pasteEntries(const QModelIndex &destinationParent, int row)
@@ -236,7 +298,7 @@ void Controller::setFileOpen(bool fileOpen)
 void Controller::emitIoError(const QString &when)
 {
     const auto *const msg = catchIoFailure();
-    emit fileError(tr("An IO error occured when %1 the file: ").arg(when) + QString::fromLocal8Bit(msg));
+    emit fileError(tr("An IO error occured when %1 the file %2: ").arg(when, m_filePath) + QString::fromLocal8Bit(msg));
 }
 
 } // namespace QtGui

@@ -1,5 +1,8 @@
 #include "./initiatequick.h"
 #include "./controller.h"
+#ifdef Q_OS_ANDROID
+#include "./android.h"
+#endif
 
 #include "resources/config.h"
 
@@ -8,11 +11,11 @@
 #include <qtutilities/resources/resources.h>
 
 #include <QGuiApplication>
+#include <QIcon>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QSettings>
 #include <QTextCodec>
-#include <QIcon>
 #include <QtQml>
 
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
@@ -36,8 +39,8 @@ enum RelevantFlags {
     DrawsSystemBarBackgrounds = 0x80000000,
 };
 }
-}
-}
+} // namespace WindowManager
+} // namespace Android
 #endif
 
 int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, const QString &file)
@@ -81,6 +84,9 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
     // init Quick GUI
     QQmlApplicationEngine engine;
     Controller controller(settings, file);
+#ifdef Q_OS_ANDROID
+    registerControllerForAndroid(&controller);
+#endif
     auto *const context(engine.rootContext());
     context->setContextProperty(QStringLiteral("userPaths"), userPaths);
     context->setContextProperty(QStringLiteral("nativeInterface"), &controller);
