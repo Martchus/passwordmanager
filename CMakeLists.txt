@@ -71,6 +71,14 @@ set(QML_SRC_FILES
     resources/icons.qrc
     resources/qml.qrc
 )
+if(ANDROID)
+    list(APPEND QML_HEADER_FILES
+        quickgui/android.h
+    )
+    list(APPEND QML_SRC_FILES
+        quickgui/android.cpp
+    )
+endif()
 
 set(TS_FILES
     translations/${META_PROJECT_NAME}_de_DE.ts

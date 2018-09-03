@@ -72,6 +72,12 @@ Kirigami.ApplicationWindow {
             }
         ]
         Controls.Switch {
+            text: qsTr("Use native file dialog")
+            checked: nativeInterface.useNativeFileDialog
+            visible: nativeInterface.supportsNativeFileDialog
+            onCheckedChanged: nativeInterface.useNativeFileDialog = checked
+        }
+        Controls.Switch {
             id: showPasswordsOnFocusSwitch
             text: qsTr("Show passwords on focus")
             checked: true
@@ -97,27 +103,31 @@ Kirigami.ApplicationWindow {
         id: fileDialog
         title: selectExisting ? qsTr("Select an existing file") : qsTr(
                                     "Select path for new file")
+        property bool selectExisting: true
+
         onAccepted: {
             if (fileUrls.length < 1) {
                 return
             }
-            if (selectExisting) {
-                nativeInterface.load(fileUrls[0])
-            } else {
-                nativeInterface.create(fileUrls[0])
-            }
+            nativeInterface.handleFileSelectionAccepted(fileUrls[0],
+                                                        this.selectExisting)
         }
-        onRejected: {
-            showPassiveNotification(qsTr("Canceled file selection"))
-        }
+        onRejected: nativeInterface.handleFileSelectionCanceled()
 
+        function show() {
+            if (nativeInterface.showNativeFileDialog(this.selectExisting)) {
+                return
+            }
+            // fallback to the Qt Quick file dialog if a native implementation is not available
+            this.open()
+        }
         function openExisting() {
             this.selectExisting = true
-            this.open()
+            this.show()
         }
         function createNew() {
             this.selectExisting = false
-            this.open()
+            this.show()
         }
     }
 
@@ -149,6 +159,9 @@ Kirigami.ApplicationWindow {
             showPassiveNotification(qsTr("%1 saved").arg(
                                         nativeInterface.fileName))
         }
+        onNewNotification: {
+            showPassiveNotification(message)
+        }
     }
 
     Component {
@@ -173,17 +186,17 @@ Kirigami.ApplicationWindow {
 
     function pushStackEntry(entryModel, rootIndex) {
         pageStack.push(entriesComponent.createObject(root, {
-                                                         entryModel: entryModel,
-                                                         rootIndex: rootIndex,
-                                                         title: entryModel.data(
-                                                                    rootIndex)
+                                                         "entryModel": entryModel,
+                                                         "rootIndex": rootIndex,
+                                                         "title": entryModel.data(
+                                                                      rootIndex)
                                                      }))
     }
 
     function createFileActions(files) {
         return files.map(function (filePath) {
             return this.createObject(root, {
-                                         filePath: filePath
+                                         "filePath": filePath
                                      })
         }, fileActionComponent)
     }

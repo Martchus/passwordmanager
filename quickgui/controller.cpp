@@ -1,4 +1,5 @@
 #include "./controller.h"
+#include "./android.h"
 
 #include <passwordfile/io/cryptoexception.h>
 #include <passwordfile/io/parsingexception.h>
@@ -6,6 +7,7 @@
 #include <qtutilities/misc/dialogutils.h>
 
 #include <c++utilities/io/catchiofailure.h>
+#include <c++utilities/io/nativefilestream.h>
 #include <c++utilities/io/path.h>
 
 #ifndef QT_NO_CLIPBOARD
@@ -17,6 +19,8 @@
 #include <QIcon>
 #include <QSettings>
 #include <QStringBuilder>
+
+#include <QDebug>
 
 #include <stdexcept>
 
@@ -32,12 +36,14 @@ Controller::Controller(QSettings &settings, const QString &filePath, QObject *pa
     , m_settings(settings)
     , m_fileOpen(false)
     , m_fileModified(false)
+    , m_useNativeFileDialog(false)
 {
     m_entryFilterModel.setSourceModel(&m_entryModel);
 
     // share settings with main window
     m_settings.beginGroup(QStringLiteral("mainwindow"));
     m_recentFiles = m_settings.value(QStringLiteral("recententries")).toStringList();
+    m_useNativeFileDialog = m_settings.value(QStringLiteral("usenativefiledialog"), m_useNativeFileDialog).toBool();
 
     // set initial file path
     setFilePath(filePath);
@@ -66,7 +72,7 @@ void Controller::setFilePath(const QString &filePath)
     emit filePathChanged(m_filePath = filePath);
 
     // handle recent files
-    auto index = m_recentFiles.indexOf(m_filePath);
+    const auto index = m_recentFiles.indexOf(m_filePath);
     if (!index) {
         return;
     }
@@ -131,13 +137,18 @@ void Controller::create(const QString &filePath)
 
     resetFileStatus();
     try {
+        if (filePath.isEmpty()) {
+            m_file.clear();
+        }
         m_file.create();
-        m_entryModel.setRootEntry(m_file.rootEntry());
-        setFileOpen(true);
-        updateWindowTitle();
     } catch (...) {
         emitIoError(tr("creating"));
     }
+
+    m_file.generateRootEntry();
+    m_entryModel.setRootEntry(m_file.rootEntry());
+    setFileOpen(true);
+    updateWindowTitle();
 }
 
 void Controller::close()
@@ -153,13 +164,39 @@ void Controller::close()
 void Controller::save()
 {
     try {
-        if (!m_password.isEmpty()) {
+        const auto useEncryption = !m_password.isEmpty();
+        if (useEncryption) {
             const auto passwordUtf8(m_password.toUtf8());
             m_file.setPassword(string(passwordUtf8.data(), static_cast<size_t>(passwordUtf8.size())));
         } else {
             m_file.clearPassword();
         }
-        m_file.save(!m_password.isEmpty());
+
+#if defined(Q_OS_ANDROID) && defined(CPP_UTILITIES_USE_NATIVE_FILE_BUFFER)
+        if (!m_nativeUrl.isEmpty()) {
+            // ensure file is closed
+            m_file.close();
+
+            // open new file descriptor to replace existing file and allow writing
+            qDebug() << "opening new fd for saving, native url: " << m_nativeUrl;
+            const auto newFileDescriptor = openFileDescriptorFromAndroidContentUrl(m_nativeUrl, QStringLiteral("wt"));
+            if (newFileDescriptor < 0) {
+                emit fileError(tr("Unable to open file descriptor for saving the file."));
+                return;
+            }
+
+            m_file.fileStream().openFromFileDescriptor(newFileDescriptor, ios_base::out | ios_base::trunc | ios_base::binary);
+            qDebug() << "file re-opened for saving";
+
+            m_file.write(useEncryption);
+        } else {
+#endif
+            // let libpasswordfile handle everything
+            qDebug() << "let libpasswordfile handle saving";
+            m_file.save(useEncryption);
+#if defined(Q_OS_ANDROID) && defined(CPP_UTILITIES_USE_NATIVE_FILE_BUFFER)
+        }
+#endif
         emit fileSaved();
     } catch (const CryptoException &e) {
         emit fileError(tr("A crypto error occured when saving the file: ") + QString::fromLocal8Bit(e.what()));
@@ -170,12 +207,59 @@ void Controller::save()
     }
 }
 
+/*!
+ * \brief Shows a native file dialog if supported; otherwise returns false.
+ * \remarks If supported, this method will load/create the selected file (according to \a existing).
+ */
+bool Controller::showNativeFileDialog(bool existing)
+{
+#if defined(Q_OS_ANDROID) && defined(CPP_UTILITIES_USE_NATIVE_FILE_BUFFER)
+    if (!m_useNativeFileDialog) {
+        return false;
+    }
+    return showAndroidFileDialog(existing);
+#else
+    Q_UNUSED(existing)
+    return false;
+#endif
+}
+
+void Controller::handleFileSelectionAccepted(const QString &filePath, bool existing)
+{
+    m_nativeUrl.clear();
+    if (existing) {
+        load(filePath);
+    } else {
+        create(filePath);
+    }
+}
+
+#if defined(Q_OS_ANDROID) && defined(CPP_UTILITIES_USE_NATIVE_FILE_BUFFER)
+void Controller::handleFileSelectionAcceptedDescriptor(const QString &nativeUrl, const QString &fileName, int fileDescriptor, bool existing)
+{
+    try {
+        m_file.setPath(fileName.toStdString());
+        m_file.fileStream().openFromFileDescriptor(fileDescriptor, ios_base::in | ios_base::binary);
+        m_file.opened();
+    } catch (...) {
+        emitIoError(tr("opening from native file descriptor"));
+    }
+    emit filePathChanged(m_filePath = m_fileName = fileName);
+    handleFileSelectionAccepted(QString(), existing);
+    m_nativeUrl = nativeUrl;
+}
+#endif
+
+void Controller::handleFileSelectionCanceled()
+{
+    emit newNotification(tr("Canceled file selection"));
+}
+
 QStringList Controller::pasteEntries(const QModelIndex &destinationParent, int row)
 {
     if (m_cutEntries.isEmpty() || !m_entryModel.isNode(destinationParent)) {
         return QStringList();
     }
-
     if (row < 0) {
         row = m_entryModel.rowCount(destinationParent);
     }
@@ -198,7 +282,7 @@ QStringList Controller::pasteEntries(const QModelIndex &destinationParent, int r
 bool Controller::copyToClipboard(const QString &text) const
 {
 #ifndef QT_NO_CLIPBOARD
-    auto *clipboard(QGuiApplication::clipboard());
+    auto *const clipboard(QGuiApplication::clipboard());
     if (!clipboard) {
         return false;
     }
@@ -235,8 +319,23 @@ void Controller::setFileOpen(bool fileOpen)
 
 void Controller::emitIoError(const QString &when)
 {
-    const auto *const msg = catchIoFailure();
-    emit fileError(tr("An IO error occured when %1 the file: ").arg(when) + QString::fromLocal8Bit(msg));
+    try {
+        const auto *const msg = catchIoFailure();
+        emit fileError(tr("An IO error occured when %1 the file %2: ").arg(when, m_filePath) + QString::fromLocal8Bit(msg));
+    } catch (const exception &e) {
+        emit fileError(tr("An unknown exception occured when %1 the file %2: ").arg(when, m_filePath) + QString::fromLocal8Bit(e.what()));
+    } catch (...) {
+        emit fileError(tr("An unknown error occured when %1 the file %2.").arg(when, m_filePath));
+    }
+}
+
+void Controller::setUseNativeFileDialog(bool useNativeFileDialog)
+{
+    if (m_useNativeFileDialog == useNativeFileDialog) {
+        return;
+    }
+    emit useNativeFileDialogChanged(m_useNativeFileDialog = useNativeFileDialog);
+    m_settings.setValue(QStringLiteral("usenativefiledialog"), m_useNativeFileDialog);
 }
 
 } // namespace QtGui

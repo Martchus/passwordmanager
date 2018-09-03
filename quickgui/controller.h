@@ -29,6 +29,8 @@ class Controller : public QObject {
     Q_PROPERTY(QList<QPersistentModelIndex> cutEntries READ cutEntries WRITE setCutEntries NOTIFY cutEntriesChanged)
     Q_PROPERTY(bool canPaste READ canPaste NOTIFY cutEntriesChanged)
     Q_PROPERTY(QStringList recentFiles READ recentFiles NOTIFY recentFilesChanged)
+    Q_PROPERTY(bool useNativeFileDialog READ useNativeFileDialog WRITE setUseNativeFileDialog NOTIFY useNativeFileDialogChanged)
+    Q_PROPERTY(bool supportsNativeFileDialog READ supportsNativeFileDialog NOTIFY supportsNativeFileDialogChanged)
 
 public:
     explicit Controller(QSettings &settings, const QString &filePath = QString(), QObject *parent = nullptr);
@@ -53,6 +55,9 @@ public:
     Q_INVOKABLE bool copyToClipboard(const QString &text) const;
     bool canPaste() const;
     const QStringList &recentFiles() const;
+    bool useNativeFileDialog() const;
+    void setUseNativeFileDialog(bool useNativeFileDialog);
+    bool supportsNativeFileDialog() const;
 
 public slots:
     void init();
@@ -60,6 +65,12 @@ public slots:
     void create(const QString &filePath = QString());
     void close();
     void save();
+    bool showNativeFileDialog(bool existing);
+    void handleFileSelectionAccepted(const QString &filePath, bool existing);
+#if defined(Q_OS_ANDROID) && defined(CPP_UTILITIES_USE_NATIVE_FILE_BUFFER)
+    void handleFileSelectionAcceptedDescriptor(const QString &nativeUrl, const QString &fileName, int fileDescriptor, bool existing);
+#endif
+    void handleFileSelectionCanceled();
 
 signals:
     void filePathChanged(const QString &newFilePath);
@@ -75,6 +86,9 @@ signals:
     void currentAccountChanged();
     void cutEntriesChanged(const QList<QPersistentModelIndex> &cutEntries);
     void recentFilesChanged(const QStringList &recentFiles);
+    void newNotification(const QString &message);
+    void useNativeFileDialogChanged(bool useNativeFileDialog);
+    void supportsNativeFileDialogChanged();
 
 private:
     void resetFileStatus();
@@ -93,8 +107,10 @@ private:
     FieldModel m_fieldModel;
     QList<QPersistentModelIndex> m_cutEntries;
     QStringList m_recentFiles;
+    QString m_nativeUrl;
     bool m_fileOpen;
     bool m_fileModified;
+    bool m_useNativeFileDialog;
 };
 
 inline const QString &Controller::filePath() const
@@ -176,6 +192,20 @@ inline bool Controller::canPaste() const
 inline const QStringList &Controller::recentFiles() const
 {
     return m_recentFiles;
+}
+
+inline bool Controller::useNativeFileDialog() const
+{
+    return m_useNativeFileDialog;
+}
+
+inline bool Controller::supportsNativeFileDialog() const
+{
+#if defined(Q_OS_ANDROID) && defined(CPP_UTILITIES_USE_NATIVE_FILE_BUFFER)
+    return true;
+#else
+    return false;
+#endif
 }
 
 } // namespace QtGui
