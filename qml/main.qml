@@ -103,7 +103,6 @@ Kirigami.ApplicationWindow {
         id: fileDialog
         title: selectExisting ? qsTr("Select an existing file") : qsTr(
                                     "Select path for new file")
-        property bool selectExisting: true
 
         onAccepted: {
             if (fileUrls.length < 1) {
