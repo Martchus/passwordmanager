@@ -201,6 +201,13 @@ Kirigami.ApplicationWindow {
         }
     }
 
+    Component {
+        id: fieldsComponent
+        FieldsPage {
+            main: root
+        }
+    }
+
     function clearStack() {
         pageStack.pop(root.pageStack.initialPage, Controls.StackView.Immediate)
     }
@@ -212,6 +219,10 @@ Kirigami.ApplicationWindow {
                                                          "title": entryModel.data(
                                                                       rootIndex)
                                                      }))
+    }
+
+    function pushAccountEdit() {
+        pageStack.push(fieldsComponent.createObject(root))
     }
 
     function createFileActions(files) {

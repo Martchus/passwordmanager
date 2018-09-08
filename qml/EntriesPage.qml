@@ -39,12 +39,6 @@ Kirigami.ScrollablePage {
             onTriggered: insertEntry("Node")
         }
     }
-    onBackRequested: {
-        if (fieldsSheet.sheetOpen) {
-            event.accepted = true
-            fieldsSheet.close()
-        }
-    }
     background: Rectangle {
         color: Kirigami.Theme.backgroundColor
     }
@@ -118,108 +112,6 @@ Kirigami.ScrollablePage {
         }
     }
 
-    // component representing a field
-    Component {
-        id: fieldsListDelegateComponent
-
-        RowLayout {
-            id: fieldsListItem
-            width: fieldsSheet.width
-
-            Kirigami.ListItemDragHandle {
-                listItem: fieldsListItem
-                listView: fieldsListView
-                onMoveRequested: fieldsListView.model.moveRows(
-                                     fieldsListView.model.index(-1, 0),
-                                     oldIndex, 1,
-                                     fieldsListView.model.index(-1,
-                                                                0), newIndex)
-            }
-            Controls.TextField {
-                text: model.key ? model.key : ""
-                onEditingFinished: fieldsListView.model.setData(
-                                       fieldsListView.model.index(index, 0),
-                                       text)
-                Layout.fillWidth: true
-            }
-            Controls.TextField {
-                text: model.actualValue ? model.actualValue : ""
-                echoMode: model.isPassword
-                          && (!activeFocus
-                              || !main.showPasswordsOnFocus) ? TextInput.PasswordEchoOnEdit : TextInput.Normal
-                onEditingFinished: fieldsListView.model.setData(
-                                       fieldsListView.model.index(index, 1),
-                                       text)
-                Layout.fillWidth: true
-            }
-            Controls.Button {
-                id: fieldsListItemToolButton
-                text: qsTr("⋮")
-                flat: true
-                onClicked: fieldsListItemMenu.open()
-                Layout.maximumWidth: Kirigami.Units.iconSizes.medium
-                Layout.maximumHeight: Kirigami.Units.iconSizes.large
-
-                Controls.Menu {
-                    id: fieldsListItemMenu
-                    y: fieldsListItemToolButton.height
-
-                    Controls.MenuItem {
-                        icon.name: model.isPassword ? "password-show-off" : "password-show-on"
-                        text: model.isPassword ? qsTr("Mark as normal field") : qsTr(
-                                                     "Mark as password field")
-                        onClicked: fieldsListView.model.setData(
-                                       fieldsListView.model.index(index, 0),
-                                       model.isPassword ? 0 : 1, 0x0100 + 1)
-                    }
-                    Controls.MenuItem {
-                        icon.name: "edit-copy"
-                        text: qsTr("Copy password")
-                        onClicked: showPassiveNotification(
-                                       nativeInterface.copyToClipboard(
-                                           model.actualValue) ? qsTr("Copied") : qsTr(
-                                                                    "Unable to access clipboard"))
-                    }
-                    Controls.MenuItem {
-                        icon.name: "edit-delete"
-                        text: qsTr("Delete field")
-                        onClicked: fieldsListView.model.removeRows(index, 1)
-                    }
-                    Controls.MenuItem {
-                        icon.name: "list-add"
-                        text: qsTr("Insert empty field after this")
-                        onClicked: fieldsListView.model.insertRows(index + 1, 1)
-                    }
-                }
-            }
-        }
-    }
-
-    // "sheet" to display field model
-    Kirigami.OverlaySheet {
-        id: fieldsSheet
-        parent: applicationWindow().overlay
-        header: Kirigami.Heading {
-            text: qsTr("Edit account ") + nativeInterface.currentAccountName
-        }
-
-        ListView {
-            id: fieldsListView
-            implicitWidth: Kirigami.Units.gridUnit * 30
-            model: nativeInterface.fieldModel
-            moveDisplaced: Transition {
-                YAnimator {
-                    duration: Kirigami.Units.longDuration
-                    easing.type: Easing.InOutQuad
-                }
-            }
-            delegate: Kirigami.DelegateRecycler {
-                width: parent ? parent.width : implicitWidth
-                sourceComponent: fieldsListDelegateComponent
-            }
-        }
-    }
-
     // component representing an entry
     Component {
         id: listDelegateComponent
@@ -250,9 +142,6 @@ Kirigami.ScrollablePage {
                         Controls.Label {
                             Layout.fillWidth: true
                             Layout.fillHeight: true
-                            height: Math.max(
-                                        implicitHeight,
-                                        Kirigami.Units.iconSizes.smallMedium)
                             text: model.name
                         }
                     }
@@ -349,7 +238,7 @@ Kirigami.ScrollablePage {
                     root.pushStackEntry(entryModel, modelIndex)
                 } else {
                     nativeInterface.currentAccountIndex = modelIndex
-                    fieldsSheet.open()
+                    root.pushAccountEdit()
                 }
             }
         }
