@@ -122,6 +122,10 @@ set(REQUIRED_ICONS
     folder-add
     folder-symbolic
     go-next
+    handle-right
+    handle-sort
+    overflow-menu-right
+    overflow-menu-left
     help-about
     insert-text
     list-add
@@ -152,6 +156,8 @@ set(REQUIRED_ICONS_FOR_KIRIGAMI
     go-up
     handle-sort
     overflow-menu
+    overflow-menu-right
+    overflow-menu-left
     view-left-close
     view-left-new
     view-list-icons
