@@ -9,6 +9,17 @@ Kirigami.ApplicationWindow {
     property alias showPasswordsOnFocus: showPasswordsOnFocusSwitch.checked
 
     header: Kirigami.ApplicationHeader {
+        backButtonEnabled: true
+        minimumHeight: 0
+        preferredHeight: Kirigami.Units.gridUnit * 2.3
+        maximumHeight: Kirigami.Units.gridUnit * 3
+
+        Controls.TextField {
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            placeholderText: qsTr("Filter")
+            width: Kirigami.Units.gridUnit * 8
+        }
     }
     globalDrawer: Kirigami.GlobalDrawer {
         id: leftMenu
@@ -25,6 +36,7 @@ Kirigami.ApplicationWindow {
                 Layout.fillWidth: true
             }
             Controls.Label {
+                id: fileNameLabel
                 padding: 8
                 wrapMode: Controls.Label.Wrap
                 fontSizeMode: Text.HorizontalFit
@@ -33,6 +45,21 @@ Kirigami.ApplicationWindow {
                 Layout.fillWidth: true
                 text: nativeInterface.fileOpen ? nativeInterface.fileName : qsTr(
                                                      "No file opened")
+                MouseArea {
+                    id: fileNameMouseArea
+                    anchors.fill: parent
+                    hoverEnabled: true
+                }
+                Controls.ToolTip {
+                    z: 1000
+                    text: nativeInterface.filePath
+                    visible: text ? fileNameMouseArea.containsMouse : false
+                    delay: Qt.styleHints.mousePressAndHoldInterval
+                    onAboutToShow: {
+                        x = fileNameMouseArea.mouseX + 10
+                        y = fileNameMouseArea.mouseY + 10
+                    }
+                }
             }
         }
         actions: [
@@ -81,13 +108,6 @@ Kirigami.ApplicationWindow {
             id: showPasswordsOnFocusSwitch
             text: qsTr("Show passwords on focus")
             checked: true
-        }
-
-        Controls.Label {
-            wrapMode: Controls.Label.Wrap
-            Layout.fillWidth: true
-            text: nativeInterface.fileOpen ? nativeInterface.filePath : qsTr(
-                                                 "No file opened")
         }
     }
     contextDrawer: Kirigami.ContextDrawer {
