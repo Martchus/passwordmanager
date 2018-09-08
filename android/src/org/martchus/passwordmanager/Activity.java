@@ -3,7 +3,10 @@ package org.martchus.passwordmanager;
 import android.content.Intent;
 import android.content.ActivityNotFoundException;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
+import android.view.Window;
+import android.view.WindowManager.LayoutParams;
 import android.support.v4.provider.DocumentFile;
 import java.io.FileNotFoundException;
 import org.qtproject.qt5.android.bindings.QtActivity;
@@ -43,6 +46,14 @@ public class Activity extends QtActivity {
         } catch (FileNotFoundException e) {
             return -1;
         }
+    }
+
+    public void applyTheming() {
+        Window window = getWindow();
+        window.addFlags(LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.setStatusBarColor(0x000000FF);
+        window.setNavigationBarColor(0x000000FF);
     }
 
     @Override

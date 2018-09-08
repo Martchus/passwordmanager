@@ -98,13 +98,7 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
 
 #ifdef Q_OS_ANDROID
-    QtAndroid::runOnAndroidThread([=]() {
-        QAndroidJniObject window = QtAndroid::androidActivity().callObjectMethod("getWindow", "()Landroid/view/Window;");
-        window.callMethod<void>("addFlags", "(I)V", Android::WindowManager::LayoutParams::DrawsSystemBarBackgrounds);
-        window.callMethod<void>("clearFlags", "(I)V", Android::WindowManager::LayoutParams::TranslucentStatus);
-        window.callMethod<void>("setStatusBarColor", "(I)V", QColor("#2196f3").rgba());
-        window.callMethod<void>("setNavigationBarColor", "(I)V", QColor("#2196f3").rgba());
-    });
+    applyThemingForAndroid();
 #endif
 
     // run event loop

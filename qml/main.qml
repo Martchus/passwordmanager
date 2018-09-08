@@ -9,22 +9,24 @@ Kirigami.ApplicationWindow {
     property alias showPasswordsOnFocus: showPasswordsOnFocusSwitch.checked
 
     header: Kirigami.ApplicationHeader {
-        backButtonEnabled: true
+        backButtonEnabled: false
         minimumHeight: 0
         preferredHeight: Kirigami.Units.gridUnit * 2.3
         maximumHeight: Kirigami.Units.gridUnit * 3
 
+        /*
         Controls.TextField {
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
             placeholderText: qsTr("Filter")
             width: Kirigami.Units.gridUnit * 8
         }
+        */
     }
     globalDrawer: Kirigami.GlobalDrawer {
         id: leftMenu
         title: qsTr("Password Manager")
-        titleIcon: "qrc://icons/hicolor/scalable/apps/passwordmanager.svg"
+        titleIcon: "qrc://icons/hicolor/scalable/apps/passwordmanager-black.svg"
         visible: !nativeInterface.fileOpen
         topContent: ColumnLayout {
             Layout.fillWidth: true
@@ -87,7 +89,7 @@ Kirigami.ApplicationWindow {
             Kirigami.Action {
                 text: "Change password"
                 enabled: nativeInterface.fileOpen
-                iconName: "dialog-password"
+                iconName: "document-encrypt"
                 onTriggered: enterPasswordDialog.askForNewPassword(
                                  "Change password for " + nativeInterface.filePath)
             },

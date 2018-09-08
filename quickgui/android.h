@@ -11,6 +11,8 @@ QT_END_NAMESPACE
 namespace QtGui {
 
 class Controller;
+
+void applyThemingForAndroid();
 void registerControllerForAndroid(Controller *controller);
 bool showAndroidFileDialog(bool existing);
 int openFileDescriptorFromAndroidContentUrl(const QString &url, const QString &mode);

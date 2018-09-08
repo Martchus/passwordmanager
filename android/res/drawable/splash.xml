@@ -6,7 +6,6 @@
         </shape>
     </item>
     <item>
-         <bitmap android:src="@drawable/icon"
-        android:gravity="center"/>
+        <bitmap android:src="@drawable/passwordmanager_black" android:gravity="center"/>
     </item>
 </layer-list>

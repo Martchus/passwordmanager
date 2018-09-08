@@ -21,6 +21,11 @@ namespace QtGui {
 
 static Controller *controllerForAndroid = nullptr;
 
+void applyThemingForAndroid()
+{
+    QtAndroid::androidActivity().callObjectMethod("applyTheming", "()");
+}
+
 void registerControllerForAndroid(Controller *controller)
 {
     controllerForAndroid = controller;

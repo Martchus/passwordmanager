@@ -101,6 +101,7 @@ set(REQUIRED_ICONS
     dialog-ok-apply
     dialog-password
     document-close
+    document-encrypt
     document-export
     document-new
     document-open
@@ -118,6 +119,7 @@ set(REQUIRED_ICONS
     flag-black
     flag-blue
     folder
+    folder-add
     folder-symbolic
     go-next
     help-about
@@ -127,16 +129,36 @@ set(REQUIRED_ICONS
     password-generate
     password-show-off
     password-show-on
-    passwordmanager
     preferences-desktop-icons
     preferences-desktop-locale
     qtcreator
-    sheet
     story-editor
     system-file-manager
     system-run
     system-search
     window-close
+)
+set(REQUIRED_ICONS_FOR_KIRIGAMI
+    application-menu
+    arrow-down
+    dialog-close
+    document-decrypt
+    edit
+    folder-sync
+    go-next-symbolic
+    go-next-symbolic-rtl
+    go-previous-symbolic
+    go-previous-symbolic-rtl
+    go-up
+    handle-sort
+    overflow-menu
+    view-left-close
+    view-left-new
+    view-list-icons
+    view-right-close
+    view-right-new
+    window-close
+    window-close-symbolic
 )
 
 # find c++utilities
@@ -156,6 +178,12 @@ endif()
 # find passwordfile
 find_package(passwordfile 3.1.0 REQUIRED)
 use_password_file()
+
+# require additional icons when using Kirigami
+if(QUICK_QUI)
+    list(APPEND REQUIRED_ICONS ${REQUIRED_ICONS_FOR_KIRIGAMI})
+    list(REMOVE_DUPLICATES REQUIRED_ICONS)
+endif()
 
 # require Qt AndroidExtras
 if(ANDROID AND QUICK_GUI)

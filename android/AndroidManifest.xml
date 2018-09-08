@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <manifest package="org.martchus.passwordmanager" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="2.1.5" android:versionCode="2" android:installLocation="auto">
-    <application android:icon="@drawable/icon" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="@string/app_name">
+    <application android:icon="@drawable/passwordmanager_circle" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="@string/app_name">
         <activity
             android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation"
             android:name="org.martchus.passwordmanager.Activity"
