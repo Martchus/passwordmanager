@@ -13,14 +13,15 @@
 #ifndef QT_NO_CLIPBOARD
 #include <QClipboard>
 #endif
+#if DEBUG_BUILD
+#include <QDebug>
+#endif
 #include <QDir>
 #include <QFileInfo>
 #include <QGuiApplication>
 #include <QIcon>
 #include <QSettings>
 #include <QStringBuilder>
-
-#include <QDebug>
 
 #include <stdexcept>
 
@@ -178,7 +179,7 @@ void Controller::save()
             m_file.close();
 
             // open new file descriptor to replace existing file and allow writing
-            qDebug() << "opening new fd for saving, native url: " << m_nativeUrl;
+            IF_DEBUG_BUILD(qDebug() << "Opening new fd for saving, native url: " << m_nativeUrl;)
             const auto newFileDescriptor = openFileDescriptorFromAndroidContentUrl(m_nativeUrl, QStringLiteral("wt"));
             if (newFileDescriptor < 0) {
                 emit fileError(tr("Unable to open file descriptor for saving the file."));
@@ -186,13 +187,10 @@ void Controller::save()
             }
 
             m_file.fileStream().openFromFileDescriptor(newFileDescriptor, ios_base::out | ios_base::trunc | ios_base::binary);
-            qDebug() << "file re-opened for saving";
-
             m_file.write(useEncryption);
         } else {
 #endif
             // let libpasswordfile handle everything
-            qDebug() << "let libpasswordfile handle saving";
             m_file.save(useEncryption);
 #if defined(Q_OS_ANDROID) && defined(CPP_UTILITIES_USE_NATIVE_FILE_BUFFER)
         }
