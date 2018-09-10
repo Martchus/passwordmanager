@@ -7,6 +7,8 @@ import org.kde.kirigami 2.4 as Kirigami
 Kirigami.ApplicationWindow {
     id: root
     property alias showPasswordsOnFocus: showPasswordsOnFocusSwitch.checked
+    property var fieldsPage: undefined
+    property var lastEntriesPage: undefined
 
     header: Kirigami.ApplicationHeader {
         backButtonEnabled: false
@@ -220,6 +222,25 @@ Kirigami.ApplicationWindow {
         onNewNotification: {
             showPassiveNotification(message)
         }
+        onCurrentAccountChanged: {
+            // remove the fields page if the current account has been removed
+            if (!nativeInterface.hasCurrentAccount) {
+                pageStack.pop(lastEntriesPage)
+            }
+        }
+        onEntryAboutToBeRemoved: {
+            // remove all possibly open stack pages of the removed entry and its children
+            for (var i = pageStack.depth - 1; i >= 0; --i) {
+                var stackPage = pageStack.get(i)
+                if (!stackPage) {
+                    continue
+                }
+                if (stackPage.rootIndex === removedIndex) {
+                    pageStack.pop(lastEntriesPage = pageStack.get(i - 1))
+                    return
+                }
+            }
+        }
     }
 
     Component {
@@ -251,20 +272,27 @@ Kirigami.ApplicationWindow {
     }
 
     function clearStack() {
-        pageStack.pop(root.pageStack.initialPage, Controls.StackView.Immediate)
+        pageStack.pop(lastEntriesPage = root.pageStack.initialPage,
+                      Controls.StackView.Immediate)
     }
 
     function pushStackEntry(entryModel, rootIndex) {
-        pageStack.push(entriesComponent.createObject(root, {
-                                                         "entryModel": entryModel,
-                                                         "rootIndex": rootIndex,
-                                                         "title": entryModel.data(
-                                                                      rootIndex)
-                                                     }))
+        pageStack.push(lastEntriesPage = entriesComponent.createObject(root, {
+                                                                           "entryModel": entryModel,
+                                                                           "rootIndex": rootIndex
+                                                                       }))
     }
 
     function pushAccountEdit() {
-        pageStack.push(fieldsComponent.createObject(root))
+        // lazy-initialize fieldsPage
+        if (!fieldsPage) {
+            fieldsPage = fieldsComponent.createObject(root)
+        }
+        // remove fieldsPage if already shown to prevent warning
+        if (pageStack.get(pageStack.depth - 1) === fieldsPage) {
+            pageStack.pop(lastEntriesPage)
+        }
+        pageStack.push(fieldsPage)
     }
 
     function createFileActions(files) {

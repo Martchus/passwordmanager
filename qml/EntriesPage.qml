@@ -11,7 +11,7 @@ Kirigami.ScrollablePage {
     property alias rootIndex: delegateModel.rootIndex
 
     Layout.fillWidth: true
-    title: "?"
+    title: entryModel.data(rootIndex)
     actions {
         main: Kirigami.Action {
             iconName: "list-add"

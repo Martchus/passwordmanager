@@ -23,6 +23,7 @@
 #include <QSettings>
 #include <QStringBuilder>
 
+#include <cassert>
 #include <stdexcept>
 
 using namespace std;
@@ -40,6 +41,7 @@ Controller::Controller(QSettings &settings, const QString &filePath, QObject *pa
     , m_useNativeFileDialog(false)
 {
     m_entryFilterModel.setSourceModel(&m_entryModel);
+    connect(&m_entryModel, &QAbstractItemModel::rowsAboutToBeRemoved, this, &Controller::handleEntriesRemoved);
 
     // share settings with main window
     m_settings.beginGroup(QStringLiteral("mainwindow"));
@@ -256,6 +258,50 @@ void Controller::handleFileSelectionAcceptedDescriptor(const QString &nativeUrl,
 void Controller::handleFileSelectionCanceled()
 {
     emit newNotification(tr("Canceled file selection"));
+}
+
+void Controller::handleEntriesRemoved(const QModelIndex &parentIndex, int first, int last)
+{
+    // handle deletion of root (currently the view doesn't allow this)
+    const auto *const parentEntry = m_entryModel.entry(parentIndex);
+    if (!parentEntry) {
+        emit entryAboutToBeRemoved(m_entryModel.index(0, 0, QModelIndex()));
+        setCurrentAccount(nullptr);
+        return;
+    }
+
+    // assert arguments
+    assert(parentEntry->type() == EntryType::Node);
+    const auto &childEntries = static_cast<const NodeEntry *>(parentEntry)->children();
+    assert(first >= 0 && static_cast<size_t>(first) < childEntries.size());
+    assert(last >= 0 && static_cast<size_t>(last) < childEntries.size());
+
+    // iterate from first to last of the deleted entries
+    const auto *const currentAccount = this->currentAccount();
+    for (; first <= last; ++first) {
+        // inform view about deletion
+        emit entryAboutToBeRemoved(m_entryModel.index(first, 0, parentIndex));
+
+        // unset current account if it is under the deleted node
+        if (!currentAccount) {
+            continue;
+        }
+        const auto *const childEntry = childEntries[static_cast<size_t>(first)];
+        switch (childEntry->type()) {
+        case EntryType::Account:
+            if (currentAccount == static_cast<const AccountEntry *>(childEntry)) {
+                setCurrentAccount(nullptr);
+            }
+            break;
+        case EntryType::Node:
+            // FIXME: remove const_cast in passwordfile v4
+            if (currentAccount->isIndirectChildOf(static_cast<NodeEntry *>(const_cast<Entry *>(childEntry)))) {
+                setCurrentAccount(nullptr);
+            }
+            break;
+        default:;
+        }
+    }
 }
 
 QStringList Controller::pasteEntries(const QModelIndex &destinationParent, int row)

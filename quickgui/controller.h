@@ -25,8 +25,10 @@ class Controller : public QObject {
     Q_PROPERTY(EntryModel *entryModel READ entryModel NOTIFY entryModelChanged)
     Q_PROPERTY(EntryFilterModel *entryFilterModel READ entryFilterModel NOTIFY entryFilterModelChanged)
     Q_PROPERTY(FieldModel *fieldModel READ fieldModel NOTIFY fieldModelChanged)
+    Q_PROPERTY(Io::AccountEntry *currentAccount READ currentAccount WRITE setCurrentAccount NOTIFY currentAccountChanged)
     Q_PROPERTY(QModelIndex currentAccountIndex READ currentAccountIndex WRITE setCurrentAccountIndex NOTIFY currentAccountChanged)
     Q_PROPERTY(QString currentAccountName READ currentAccountName NOTIFY currentAccountChanged)
+    Q_PROPERTY(bool hasCurrentAccount READ hasCurrentAccount NOTIFY currentAccountChanged)
     Q_PROPERTY(QList<QPersistentModelIndex> cutEntries READ cutEntries WRITE setCutEntries NOTIFY cutEntriesChanged)
     Q_PROPERTY(bool canPaste READ canPaste NOTIFY cutEntriesChanged)
     Q_PROPERTY(QStringList recentFiles READ recentFiles NOTIFY recentFilesChanged)
@@ -48,8 +50,11 @@ public:
     EntryModel *entryModel();
     EntryFilterModel *entryFilterModel();
     FieldModel *fieldModel();
+    Io::AccountEntry *currentAccount();
+    void setCurrentAccount(Io::AccountEntry *entry);
     QModelIndex currentAccountIndex() const;
     void setCurrentAccountIndex(const QModelIndex &accountIndex);
+    bool hasCurrentAccount() const;
     const QList<QPersistentModelIndex> &cutEntries() const;
     void setCutEntries(const QList<QPersistentModelIndex> &cutEntries);
     QString currentAccountName() const;
@@ -92,6 +97,10 @@ signals:
     void newNotification(const QString &message);
     void useNativeFileDialogChanged(bool useNativeFileDialog);
     void supportsNativeFileDialogChanged();
+    void entryAboutToBeRemoved(const QModelIndex &removedIndex);
+
+private slots:
+    void handleEntriesRemoved(const QModelIndex &parentIndex, int first, int last);
 
 private:
     void resetFileStatus();
@@ -166,6 +175,17 @@ inline FieldModel *Controller::fieldModel()
     return &m_fieldModel;
 }
 
+inline Io::AccountEntry *Controller::currentAccount()
+{
+    return m_fieldModel.accountEntry();
+}
+
+inline void Controller::setCurrentAccount(Io::AccountEntry *entry)
+{
+    m_fieldModel.setAccountEntry(entry);
+    emit currentAccountChanged();
+}
+
 inline QModelIndex Controller::currentAccountIndex() const
 {
     return m_fieldModel.accountEntry() ? m_entryModel.index(const_cast<Io::AccountEntry *>(m_fieldModel.accountEntry())) : QModelIndex();
@@ -175,6 +195,11 @@ inline void Controller::setCurrentAccountIndex(const QModelIndex &accountIndex)
 {
     m_fieldModel.setAccountEntry(m_entryModel.isNode(accountIndex) ? nullptr : static_cast<Io::AccountEntry *>(m_entryModel.entry(accountIndex)));
     emit currentAccountChanged();
+}
+
+inline bool Controller::hasCurrentAccount() const
+{
+    return m_fieldModel.accountEntry() != nullptr;
 }
 
 inline const QList<QPersistentModelIndex> &Controller::cutEntries() const
