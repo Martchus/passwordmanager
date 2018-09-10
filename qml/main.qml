@@ -30,7 +30,7 @@ Kirigami.ApplicationWindow {
 
         title: qsTr("Password Manager")
         titleIcon: "qrc://icons/hicolor/scalable/apps/passwordmanager-black.svg"
-        visible: !nativeInterface.fileOpen
+        visible: true
         topContent: ColumnLayout {
             Layout.fillWidth: true
 
@@ -104,13 +104,14 @@ Kirigami.ApplicationWindow {
                 children: createFileActions(nativeInterface.recentFiles)
             },
             Kirigami.Action {
-                text: "Save modifications"
+                text: qsTr("Save modifications")
                 enabled: nativeInterface.fileOpen
                 iconName: "document-save"
                 onTriggered: nativeInterface.save()
             },
             Kirigami.Action {
-                text: "Change password"
+                text: nativeInterface.passwordSet ? qsTr("Change password") : qsTr(
+                                                        "Add password")
                 enabled: nativeInterface.fileOpen
                 iconName: "document-encrypt"
                 onTriggered: enterPasswordDialog.askForNewPassword(
@@ -142,13 +143,18 @@ Kirigami.ApplicationWindow {
 
     PasswordDialog {
         id: enterPasswordDialog
+        onAboutToShow: leftMenu.close()
+        onRejected: {
+            if (!nativeInterface.fileOpen) {
+                leftMenu.open()
+            }
+        }
     }
 
     FileDialog {
         id: fileDialog
         title: selectExisting ? qsTr("Select an existing file") : qsTr(
                                     "Select path for new file")
-
         onAccepted: {
             if (fileUrls.length < 1) {
                 return
@@ -198,6 +204,7 @@ Kirigami.ApplicationWindow {
             pushStackEntry(entryModel, rootIndex)
             showPassiveNotification(qsTr("%1 opened").arg(
                                         nativeInterface.fileName))
+            leftMenu.close()
         }
         onFileSaved: {
             showPassiveNotification(qsTr("%1 saved").arg(
