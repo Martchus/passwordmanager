@@ -74,6 +74,7 @@ BasicDialog {
         this.instruction = instruction
         clear()
         open()
+        passwordTextField.forceActiveFocus()
     }
 
     function askForExistingPassword(instruction) {

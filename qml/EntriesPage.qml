@@ -108,6 +108,7 @@ Kirigami.ScrollablePage {
                 this.entryDesc = entryType + entryName
                 this.newEntryName = entryName
             }
+            entryNameTextField.forceActiveFocus()
             this.open()
         }
     }
