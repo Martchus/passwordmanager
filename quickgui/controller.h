@@ -21,6 +21,7 @@ class Controller : public QObject {
     Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
     Q_PROPERTY(QString windowTitle READ windowTitle NOTIFY windowTitleChanged)
     Q_PROPERTY(bool fileOpen READ isFileOpen NOTIFY fileOpenChanged)
+    Q_PROPERTY(bool passwordSet READ isPasswordSet NOTIFY passwordChanged)
     Q_PROPERTY(EntryModel *entryModel READ entryModel NOTIFY entryModelChanged)
     Q_PROPERTY(EntryFilterModel *entryFilterModel READ entryFilterModel NOTIFY entryFilterModelChanged)
     Q_PROPERTY(FieldModel *fieldModel READ fieldModel NOTIFY fieldModelChanged)
@@ -42,6 +43,7 @@ public:
     void setPassword(const QString &password);
     const QString &windowTitle() const;
     bool isFileOpen() const;
+    bool isPasswordSet() const;
     EntryModel *entryModel();
     EntryFilterModel *entryFilterModel();
     FieldModel *fieldModel();
@@ -136,6 +138,11 @@ inline const QString &Controller::windowTitle() const
 inline bool Controller::isFileOpen() const
 {
     return m_fileOpen;
+}
+
+inline bool Controller::isPasswordSet() const
+{
+    return !m_password.isEmpty();
 }
 
 inline EntryModel *Controller::entryModel()

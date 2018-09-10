@@ -25,6 +25,9 @@ Kirigami.ApplicationWindow {
     }
     globalDrawer: Kirigami.GlobalDrawer {
         id: leftMenu
+        property bool showNoPasswordWarning: nativeInterface.fileOpen
+                                             && !nativeInterface.passwordSet
+
         title: qsTr("Password Manager")
         titleIcon: "qrc://icons/hicolor/scalable/apps/passwordmanager-black.svg"
         visible: !nativeInterface.fileOpen
@@ -62,6 +65,26 @@ Kirigami.ApplicationWindow {
                         y = fileNameMouseArea.mouseY + 10
                     }
                 }
+            }
+            RowLayout {
+                visible: leftMenu.showNoPasswordWarning
+
+                Item {
+                    Layout.preferredWidth: 2
+                }
+                Kirigami.Icon {
+                    source: "emblem-warning"
+                    width: Kirigami.Units.iconSizes.small
+                    height: Kirigami.Units.iconSizes.small
+                }
+                Controls.Label {
+                    text: qsTr("No password set\nFile will be saved unencrypted!")
+                    font.bold: true
+                }
+            }
+            Item {
+                visible: leftMenu.showNoPasswordWarning
+                height: 4
             }
         }
         actions: [
