@@ -31,6 +31,7 @@ Kirigami.ApplicationWindow {
         title: qsTr("Password Manager")
         titleIcon: "qrc://icons/hicolor/scalable/apps/passwordmanager-black.svg"
         visible: true
+        resetMenuOnTriggered: false
         topContent: ColumnLayout {
             Layout.fillWidth: true
 
