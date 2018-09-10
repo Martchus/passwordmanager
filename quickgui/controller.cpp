@@ -161,7 +161,6 @@ void Controller::close()
 {
     try {
         m_file.close();
-        m_password.clear();
         resetFileStatus();
     } catch (...) {
         emitIoError(tr("closing"));

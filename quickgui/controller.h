@@ -133,8 +133,7 @@ inline const QString &Controller::password() const
 
 inline void Controller::clearPassword()
 {
-    m_password.clear();
-    emit passwordChanged(QString());
+    setPassword(QString());
 }
 
 inline const QString &Controller::windowTitle() const
