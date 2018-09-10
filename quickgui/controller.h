@@ -18,7 +18,7 @@ class Controller : public QObject {
     Q_OBJECT
     Q_PROPERTY(QString filePath READ filePath WRITE setFilePath NOTIFY filePathChanged)
     Q_PROPERTY(QString fileName READ fileName NOTIFY filePathChanged)
-    Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
+    Q_PROPERTY(QString password READ password WRITE setPassword RESET clearPassword NOTIFY passwordChanged)
     Q_PROPERTY(QString windowTitle READ windowTitle NOTIFY windowTitleChanged)
     Q_PROPERTY(bool fileOpen READ isFileOpen NOTIFY fileOpenChanged)
     Q_PROPERTY(bool passwordSet READ isPasswordSet NOTIFY passwordChanged)
@@ -41,6 +41,7 @@ public:
     void setFilePath(const QString &filePath);
     const QString &password() const;
     void setPassword(const QString &password);
+    Q_INVOKABLE void clearPassword();
     const QString &windowTitle() const;
     bool isFileOpen() const;
     bool isPasswordSet() const;
@@ -128,6 +129,12 @@ inline const QString &Controller::fileName() const
 inline const QString &Controller::password() const
 {
     return m_password;
+}
+
+inline void Controller::clearPassword()
+{
+    m_password.clear();
+    emit passwordChanged(QString());
 }
 
 inline const QString &Controller::windowTitle() const

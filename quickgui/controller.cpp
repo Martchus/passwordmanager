@@ -72,6 +72,9 @@ void Controller::setFilePath(const QString &filePath)
     m_fileName = QString::fromLocal8Bit(IoUtilities::fileName(m_file.path()).data());
     emit filePathChanged(m_filePath = filePath);
 
+    // clear password so we don't use the password from the previous file
+    m_password.clear();
+
     // handle recent files
     const auto index = m_recentFiles.indexOf(m_filePath);
     if (!index) {
@@ -121,6 +124,8 @@ void Controller::load(const QString &filePath)
         if (m_file.isEncryptionUsed() && m_password.isEmpty()) {
             emit passwordRequired(m_filePath);
         } else {
+            // clear password since the password which has been provided likely wasn't correct
+            clearPassword();
             emit fileError(tr("A crypto error occured when opening the file: ") + QString::fromLocal8Bit(e.what()));
         }
     } catch (const runtime_error &e) {
@@ -156,6 +161,7 @@ void Controller::close()
 {
     try {
         m_file.close();
+        m_password.clear();
         resetFileStatus();
     } catch (...) {
         emitIoError(tr("closing"));
@@ -293,9 +299,9 @@ bool Controller::copyToClipboard(const QString &text) const
 
 void Controller::resetFileStatus()
 {
-    setFileOpen(false);
     m_entryModel.reset();
     m_fieldModel.reset();
+    setFileOpen(false);
 }
 
 void Controller::updateWindowTitle()
