@@ -93,22 +93,26 @@ Kirigami.ApplicationWindow {
                 text: qsTr("Create new file")
                 iconName: "document-new"
                 onTriggered: fileDialog.createNew()
+                shortcut: StandardKey.New
             },
             Kirigami.Action {
                 text: qsTr("Open existing file")
                 iconName: "document-open"
                 onTriggered: fileDialog.openExisting()
+                shortcut: StandardKey.Open
             },
             Kirigami.Action {
                 text: qsTr("Recently opened ...")
                 iconName: "document-open-recent"
                 children: createFileActions(nativeInterface.recentFiles)
+                shortcut: "Ctrl+R"
             },
             Kirigami.Action {
                 text: qsTr("Save modifications")
                 enabled: nativeInterface.fileOpen
                 iconName: "document-save"
                 onTriggered: nativeInterface.save()
+                shortcut: StandardKey.Save
             },
             Kirigami.Action {
                 text: nativeInterface.passwordSet ? qsTr("Change password") : qsTr(
@@ -117,12 +121,14 @@ Kirigami.ApplicationWindow {
                 iconName: "document-encrypt"
                 onTriggered: enterPasswordDialog.askForNewPassword(
                                  "Change password for " + nativeInterface.filePath)
+                shortcut: "Ctrl+P"
             },
             Kirigami.Action {
                 text: "Close file"
                 enabled: nativeInterface.fileOpen
                 iconName: "document-close"
                 onTriggered: nativeInterface.close()
+                shortcut: StandardKey.Close
             }
         ]
         Controls.Switch {
@@ -237,6 +243,11 @@ Kirigami.ApplicationWindow {
         FieldsPage {
             main: root
         }
+    }
+
+    Shortcut {
+        sequence: "Ctrl+M"
+        onActivated: leftMenu.visible = !leftMenu.visible
     }
 
     function clearStack() {

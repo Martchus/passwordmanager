@@ -9,4 +9,10 @@ Controls.Dialog {
     x: (parent.width - width) / 2
     y: (parent.height - height) / 2
     width: Math.min(parent.width, Kirigami.Units.gridUnit * 30)
+
+    function acceptOnReturn(event) {
+        if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+            this.accept()
+        }
+    }
 }

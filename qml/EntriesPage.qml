@@ -17,6 +17,7 @@ Kirigami.ScrollablePage {
             iconName: "list-add"
             text: qsTr("Add account")
             onTriggered: insertEntry("Account")
+            shortcut: "Ctrl+A"
         }
         left: Kirigami.Action {
             iconName: "edit-paste"
@@ -32,11 +33,13 @@ Kirigami.ScrollablePage {
                 showPassiveNotification(
                             qsTr("Pasted ") + pastedEntries.join(", "))
             }
+            shortcut: StandardKey.Paste
         }
         right: Kirigami.Action {
             iconName: "folder-add"
             text: qsTr("Add category")
             onTriggered: insertEntry("Node")
+            shortcut: "Ctrl+Shift+A"
         }
     }
     background: Rectangle {
@@ -91,6 +94,7 @@ Kirigami.ScrollablePage {
                 id: entryNameTextField
                 Layout.preferredWidth: renameDialog.availableWidth
                 placeholderText: qsTr("enter new name here")
+                Keys.onPressed: renameDialog.acceptOnReturn(event)
             }
         }
 
@@ -194,17 +198,20 @@ Kirigami.ScrollablePage {
                                                                   rootIndex))
                         showPassiveNotification(text + " " + model.name)
                     }
+                    shortcut: StandardKey.Cut
                 },
                 Kirigami.Action {
                     iconName: "edit-delete"
                     text: qsTr("Delete")
                     onTriggered: confirmDeletionDialog.confirmDeletion(
                                      model.name, index)
+                    shortcut: StandardKey.Delete
                 },
                 Kirigami.Action {
                     iconName: "edit-rename"
                     text: qsTr("Rename")
                     onTriggered: renameDialog.renameEntry(model.name, index)
+                    shortcut: "F2"
                 }
             ]
         }

@@ -46,6 +46,7 @@ BasicDialog {
             background: Rectangle {
                 border.color: "#5d5e6d"
             }
+            Keys.onPressed: passwordDialog.acceptOnReturn(event)
         }
         Controls.TextField {
             id: repeatPasswordTextField
@@ -57,6 +58,7 @@ BasicDialog {
             background: Rectangle {
                 border.color: passwordDialog.canAccept ? "#089900" : "#ff0000"
             }
+            Keys.onPressed: passwordDialog.acceptOnReturn(event)
         }
         Controls.CheckBox {
             id: showCharactersCheckBox
