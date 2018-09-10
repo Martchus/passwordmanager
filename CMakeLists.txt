@@ -116,12 +116,18 @@ set(REQUIRED_ICONS
     edit-redo
     edit-rename
     edit-undo
+    emblem-warning
     flag-black
     flag-blue
     folder
     folder-add
     folder-symbolic
     go-next
+    go-next-symbolic
+    go-next-symbolic-rtl
+    go-previous
+    go-previous-symbolic
+    go-previous-symbolic-rtl
     handle-right
     handle-sort
     overflow-menu-right
@@ -156,8 +162,8 @@ set(REQUIRED_ICONS_FOR_KIRIGAMI
     go-up
     handle-sort
     overflow-menu
-    overflow-menu-right
     overflow-menu-left
+    overflow-menu-right
     view-left-close
     view-left-new
     view-list-icons
