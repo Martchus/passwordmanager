@@ -148,30 +148,6 @@ set(REQUIRED_ICONS
     system-search
     window-close
 )
-set(REQUIRED_ICONS_FOR_KIRIGAMI
-    application-menu
-    arrow-down
-    dialog-close
-    document-decrypt
-    edit
-    folder-sync
-    go-next-symbolic
-    go-next-symbolic-rtl
-    go-previous-symbolic
-    go-previous-symbolic-rtl
-    go-up
-    handle-sort
-    overflow-menu
-    overflow-menu-left
-    overflow-menu-right
-    view-left-close
-    view-left-new
-    view-list-icons
-    view-right-close
-    view-right-new
-    window-close
-    window-close-symbolic
-)
 
 # find c++utilities
 find_package(c++utilities 4.10.0 REQUIRED)
@@ -179,27 +155,17 @@ use_cpp_utilities()
 include(BasicConfig)
 
 # find qtutilities
-if(QUICK_GUI)
-    find_package(qtutilities 5.11.0 REQUIRED)
-    use_qt_utilities()
-elseif(WIDGETS_GUI)
-    find_package(qtutilities 5.7.0 REQUIRED)
-    use_qt_utilities()
-endif()
+find_package(qtutilities 5.11.0 REQUIRED)
+use_qt_utilities()
 
 # find passwordfile
 find_package(passwordfile 3.1.0 REQUIRED)
 use_password_file()
 
-# require additional icons when using Kirigami
-if(QUICK_QUI)
-    list(APPEND REQUIRED_ICONS ${REQUIRED_ICONS_FOR_KIRIGAMI})
-    list(REMOVE_DUPLICATES REQUIRED_ICONS)
-endif()
-
 # require Qt AndroidExtras
 if(ANDROID AND QUICK_GUI)
     list(APPEND ADDITIONAL_QT_MODULES AndroidExtras)
+    list(APPEND ADDITIONAL_KF_MODULES Kirigami2)
 endif()
 
 # include modules to apply configuration
@@ -210,6 +176,7 @@ endif()
 
 include(WindowsResources)
 include(AppTarget)
+include(AndroidApk)
 include(ShellCompletion)
 include(ConfigHeader)
 

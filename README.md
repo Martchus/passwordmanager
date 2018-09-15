@@ -42,7 +42,6 @@ Build c++utilities, passwordfile, qtutilities and passwordmanager in one step to
 ```
 # specify Android platform
 _android_arch=arm64-v8a
-_android_toolchain=aarch64-linux-android
 _android_api_level=21
 
 # set project name
@@ -58,12 +57,8 @@ qt_root=/opt/android-qt5/$qt_version/$_android_arch
 other_libs_root=/opt/android-libs/$_android_arch
 root="$android_ndk_root/sysroot;$other_libs_root;$qt_root"
 
-# use Breeze icons from 'breeze-icons' package
-ln -s /usr/share/icons/breeze icons
-
 cmake \
     -DCMAKE_BUILD_TYPE=Debug \
-    -DCMAKE_TOOLCHAIN_FILE=/usr/share/ECM/toolchain/Android.cmake \
     -DCMAKE_SYSTEM_NAME=Android \
     -DCMAKE_SYSTEM_VERSION=$_android_api_level \
     -DCMAKE_ANDROID_ARCH_ABI=$_android_arch \
@@ -73,32 +68,20 @@ cmake \
     -DCMAKE_INSTALL_PREFIX=$other_libs_root \
     -DCMAKE_PREFIX_PATH="$root" \
     -DCMAKE_FIND_ROOT_PATH="$root" \
-    -DANDROID_API_LEVEL=$_android_api_level \
-    -DANDROID_ABI=$_android_arch \
-    -DANDROID_ARCHITECTURE=${_android_arch%-*} \
-    -DANDROID_SDK_ROOT="$android_sdk_root" \
-    -DANDROID_APK_DIR=$SOURCES/$_reponame/android \
-    -DANDROID_TOOLCHAIN=$_android_toolchain \
-    -DANDROID_COMPILER_PREFIX=$_android_toolchain \
-    -DANDROID_SDK_BUILD_TOOLS_REVISION="$build_tools_version" \
-    -DQTANDROID_EXPORTED_TARGET=$_pkgname \
     -Diconv_DYNAMIC_INCLUDE_DIR="$other_libs_root/include" \
     -Diconv_STATIC_INCLUDE_DIR="$other_libs_root/include" \
     -Dcrypto_DYNAMIC_INCLUDE_DIR="$other_libs_root/include" \
     -Dcrypto_STATIC_INCLUDE_DIR="$other_libs_root/include" \
     -Dcrypto_DYNAMIC_LIB="$other_libs_root/lib/libcrypto.so" \
     -Dcrypto_STATIC_LIB="$other_libs_root/lib/libcrypto.a" \
-    -DQt5Core_DIR="$qt_root/lib/cmake/Qt5Core" \
-    -DECM_ADDITIONAL_FIND_ROOT_PATH="$PWD/c++utilities;$PWD/passwordfile;$PWD/qtutilities;$root;$other_libs_root/lib;$other_libs_root/lib" \
-    -DANDROID_EXTRA_LIBS="$other_libs_root/lib/libcrypto.so;$other_libs_root/lib/libssl.so;$other_libs_root/lib/libiconv.so;$other_libs_root/lib/libKF5Kirigami2.so" \
+    -DUSE_NATIVE_FILE_BUFFER=ON \
     -DNO_DOXYGEN=ON \
     -DWIDGETS_GUI=OFF \
     -DQUICK_GUI=ON \
     -DBUILTIN_ICON_THEMES=breeze \
-    -DBREEZEICONS_DIR="$PWD" \
     $SOURCES/subdirs/$_reponame
 
-make create-apk -j$(nproc)
+make apk -j$(nproc)
 ```
 
 ##### Notes
