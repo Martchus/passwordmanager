@@ -11,18 +11,24 @@ Kirigami.ScrollablePage {
     property alias rootIndex: delegateModel.rootIndex
 
     Layout.fillWidth: true
-    title: entryModel.data(rootIndex)
+    title: {
+        var currentEntryName = entryModel.data(rootIndex)
+        return currentEntryName ? currentEntryName : ""
+    }
     actions {
         main: Kirigami.Action {
             iconName: "list-add"
             text: qsTr("Add account")
+            visible: !nativeInterface.hasEntryFilter
+            enabled: !nativeInterface.hasEntryFilter
             onTriggered: insertEntry("Account")
             shortcut: "Ctrl+A"
         }
         left: Kirigami.Action {
             iconName: "edit-paste"
             text: qsTr("Paste account")
-            enabled: nativeInterface.canPaste
+            visible: !nativeInterface.hasEntryFilter
+            enabled: nativeInterface.canPaste && !nativeInterface.hasEntryFilter
             onTriggered: {
                 var pastedEntries = nativeInterface.pasteEntries(rootIndex)
                 if (pastedEntries.length < 1) {
@@ -38,6 +44,8 @@ Kirigami.ScrollablePage {
         right: Kirigami.Action {
             iconName: "folder-add"
             text: qsTr("Add category")
+            visible: !nativeInterface.hasEntryFilter
+            enabled: !nativeInterface.hasEntryFilter
             onTriggered: insertEntry("Node")
             shortcut: "Ctrl+Shift+A"
         }
@@ -127,6 +135,7 @@ Kirigami.ScrollablePage {
                 Kirigami.ListItemDragHandle {
                     listItem: listItem
                     listView: entriesListView
+                    enabled: !nativeInterface.hasEntryFilter
                     // FIXME: not sure why newIndex + 1 is required to be able to move a row at the end
                     onMoveRequested: entryModel.moveRows(
                                          rootIndex, oldIndex, 1, rootIndex,
@@ -167,6 +176,7 @@ Kirigami.ScrollablePage {
                         Controls.MenuItem {
                             icon.name: "edit-cut"
                             text: qsTr("Cut")
+                            enabled: !nativeInterface.hasEntryFilter
                             onTriggered: {
                                 nativeInterface.cutEntry(
                                             entryModel.index(index, 0,
@@ -177,12 +187,14 @@ Kirigami.ScrollablePage {
                         Controls.MenuItem {
                             icon.name: "edit-delete"
                             text: qsTr("Delete")
+                            enabled: !nativeInterface.hasEntryFilter
                             onTriggered: confirmDeletionDialog.confirmDeletion(
                                              model.name, index)
                         }
                         Controls.MenuItem {
                             icon.name: "edit-rename"
                             text: qsTr("Rename")
+                            enabled: !nativeInterface.hasEntryFilter
                             onTriggered: renameDialog.renameEntry(model.name,
                                                                   index)
                         }
@@ -193,6 +205,7 @@ Kirigami.ScrollablePage {
                 Kirigami.Action {
                     iconName: "edit-cut"
                     text: qsTr("Cut")
+                    enabled: !nativeInterface.hasEntryFilter
                     onTriggered: {
                         nativeInterface.cutEntry(entryModel.index(index, 0,
                                                                   rootIndex))
@@ -203,6 +216,7 @@ Kirigami.ScrollablePage {
                 Kirigami.Action {
                     iconName: "edit-delete"
                     text: qsTr("Delete")
+                    enabled: !nativeInterface.hasEntryFilter
                     onTriggered: confirmDeletionDialog.confirmDeletion(
                                      model.name, index)
                     shortcut: StandardKey.Delete
@@ -210,6 +224,7 @@ Kirigami.ScrollablePage {
                 Kirigami.Action {
                     iconName: "edit-rename"
                     text: qsTr("Rename")
+                    enabled: !nativeInterface.hasEntryFilter
                     onTriggered: renameDialog.renameEntry(model.name, index)
                     shortcut: "F2"
                 }

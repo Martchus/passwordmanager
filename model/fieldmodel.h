@@ -53,25 +53,26 @@ public:
     explicit FieldModel(QUndoStack *undoStack, QObject *parent = nullptr);
 #endif
 
-    QHash<int, QByteArray> roleNames() const;
+    QHash<int, QByteArray> roleNames() const override;
     Io::AccountEntry *accountEntry();
     const Io::AccountEntry *accountEntry() const;
     void setAccountEntry(Io::AccountEntry *entry);
     std::vector<Io::Field> *fields();
     PasswordVisibility passwordVisibility() const;
-    QVariant data(const QModelIndex &index, int role) const;
-    QMap<int, QVariant> itemData(const QModelIndex &index) const;
-    bool setData(const QModelIndex &index, const QVariant &value, int role);
-    Qt::ItemFlags flags(const QModelIndex &index) const;
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-    Q_INVOKABLE int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    Q_INVOKABLE int columnCount(const QModelIndex &parent = QModelIndex()) const;
-    Q_INVOKABLE bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
-    Q_INVOKABLE bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
-    Q_INVOKABLE bool moveRows(const QModelIndex &sourceParent, int sourceRow, int count, const QModelIndex &destinationParent, int destinationChild);
-    bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
-    QStringList mimeTypes() const;
-    QMimeData *mimeData(const QModelIndexList &indices) const;
+    QVariant data(const QModelIndex &index, int role) const override;
+    QMap<int, QVariant> itemData(const QModelIndex &index) const override;
+    bool setData(const QModelIndex &index, const QVariant &value, int role) override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+    Q_INVOKABLE int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    Q_INVOKABLE int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+    Q_INVOKABLE bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
+    Q_INVOKABLE bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
+    Q_INVOKABLE bool moveRows(
+        const QModelIndex &sourceParent, int sourceRow, int count, const QModelIndex &destinationParent, int destinationChild) override;
+    bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
+    QStringList mimeTypes() const override;
+    QMimeData *mimeData(const QModelIndexList &indices) const override;
     Q_INVOKABLE const Io::Field *field(std::size_t row) const;
 
 public Q_SLOTS:

@@ -41,7 +41,7 @@ public:
     explicit EntryModel(QUndoStack *undoStack, QObject *parent = nullptr);
 #endif
 
-    QHash<int, QByteArray> roleNames() const;
+    QHash<int, QByteArray> roleNames() const override;
     Io::NodeEntry *rootEntry();
     void setRootEntry(Io::NodeEntry *entry);
     Q_INVOKABLE Io::Entry *entry(const QModelIndex &index);
@@ -49,26 +49,27 @@ public:
     Q_INVOKABLE bool insertEntries(int row, const QModelIndex &parent, const QList<Io::Entry *> &entries);
     Io::EntryType insertType() const;
     void setInsertType(Io::EntryType type);
-    QModelIndex index(int row, int column, const QModelIndex &parent) const;
+    QModelIndex index(int row, int column, const QModelIndex &parent) const override;
     QModelIndex index(Io::Entry *entry) const;
-    QModelIndex parent(const QModelIndex &child) const;
-    bool hasChildren(const QModelIndex &parent) const;
+    QModelIndex parent(const QModelIndex &child) const override;
+    bool hasChildren(const QModelIndex &parent) const override;
     Q_INVOKABLE bool isNode(const QModelIndex &parent) const;
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    QMap<int, QVariant> itemData(const QModelIndex &index) const;
-    bool setData(const QModelIndex &index, const QVariant &value, int role);
-    bool setItemData(const QModelIndex &index, const QMap<int, QVariant> &roles);
-    Qt::ItemFlags flags(const QModelIndex &index) const;
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-    Q_INVOKABLE int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    Q_INVOKABLE int columnCount(const QModelIndex &parent = QModelIndex()) const;
-    Q_INVOKABLE bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
-    Q_INVOKABLE bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
-    Q_INVOKABLE bool moveRows(const QModelIndex &sourceParent, int sourceRow, int count, const QModelIndex &destinationParent, int destinationChild);
-    QStringList mimeTypes() const;
-    QMimeData *mimeData(const QModelIndexList &indexes) const;
-    bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
-    Qt::DropActions supportedDropActions() const;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    QMap<int, QVariant> itemData(const QModelIndex &index) const override;
+    bool setData(const QModelIndex &index, const QVariant &value, int role) override;
+    bool setItemData(const QModelIndex &index, const QMap<int, QVariant> &roles) override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+    Q_INVOKABLE int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    Q_INVOKABLE int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+    Q_INVOKABLE bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
+    Q_INVOKABLE bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
+    Q_INVOKABLE bool moveRows(
+        const QModelIndex &sourceParent, int sourceRow, int count, const QModelIndex &destinationParent, int destinationChild) override;
+    QStringList mimeTypes() const override;
+    QMimeData *mimeData(const QModelIndexList &indexes) const override;
+    bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
+    Qt::DropActions supportedDropActions() const override;
     Q_INVOKABLE void setInsertTypeToNode();
     Q_INVOKABLE void setInsertTypeToAccount();
 

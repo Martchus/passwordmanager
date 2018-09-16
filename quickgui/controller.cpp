@@ -309,15 +309,41 @@ void Controller::handleRecentFilesChanged()
     m_settings.setValue(QStringLiteral("recententries"), m_recentFiles);
 }
 
-QStringList Controller::pasteEntries(const QModelIndex &destinationParent, int row)
+QStringList Controller::pasteEntries(const QModelIndex &destinationParentMaybeFromFilterModel, int row)
 {
-    if (m_cutEntries.isEmpty() || !m_entryModel.isNode(destinationParent)) {
+    // skip if no entries have been cut
+    if (m_cutEntries.isEmpty()) {
         return QStringList();
+    }
+
+    // determine destinationParent and row in the source model
+    QModelIndex destinationParent;
+    if (destinationParentMaybeFromFilterModel.model() == &m_entryFilterModel) {
+        if (row < 0) {
+            row = m_entryFilterModel.rowCount(destinationParentMaybeFromFilterModel);
+        }
+        const auto destinationIndexInFilter = m_entryFilterModel.index(row, 0, destinationParentMaybeFromFilterModel);
+        if (destinationIndexInFilter.isValid()) {
+            const auto destinationIndex = m_entryFilterModel.mapToSource(destinationIndexInFilter);
+            destinationParent = destinationIndex.parent();
+            row = destinationIndex.row();
+        } else {
+            destinationParent = m_entryFilterModel.mapToSource(destinationParentMaybeFromFilterModel);
+            row = -1;
+        }
+    } else {
+        destinationParent = destinationParentMaybeFromFilterModel;
     }
     if (row < 0) {
         row = m_entryModel.rowCount(destinationParent);
     }
 
+    // skip if destination is no node
+    if (!m_entryModel.isNode(destinationParent)) {
+        return QStringList();
+    }
+
+    // move the entries
     QStringList successfullyMovedEntries;
     successfullyMovedEntries.reserve(m_cutEntries.size());
     for (const QPersistentModelIndex &cutIndex : m_cutEntries) {
@@ -399,6 +425,19 @@ void Controller::setUseNativeFileDialog(bool useNativeFileDialog)
     }
     emit useNativeFileDialogChanged(m_useNativeFileDialog = useNativeFileDialog);
     m_settings.setValue(QStringLiteral("usenativefiledialog"), m_useNativeFileDialog);
+}
+
+void Controller::setEntryFilter(const QString &filter)
+{
+    const auto previousFilter(m_entryFilterModel.filterRegExp().pattern());
+    if (filter == previousFilter) {
+        return;
+    }
+    m_entryFilterModel.setFilterRegExp(filter);
+    emit entryFilterChanged(filter);
+    if (previousFilter.isEmpty() != filter.isEmpty()) {
+        emit hasEntryFilterChanged(!filter.isEmpty());
+    }
 }
 
 } // namespace QtGui

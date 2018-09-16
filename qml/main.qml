@@ -1,4 +1,5 @@
 import QtQuick 2.7
+import QtQuick.Templates 2.0 as T2
 import QtQuick.Controls 2.1 as Controls
 import QtQuick.Layouts 1.2
 import QtQuick.Dialogs 1.3
@@ -15,15 +16,6 @@ Kirigami.ApplicationWindow {
         minimumHeight: 0
         preferredHeight: Kirigami.Units.gridUnit * 2.3
         maximumHeight: Kirigami.Units.gridUnit * 3
-
-        /*
-        Controls.TextField {
-            anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
-            placeholderText: qsTr("Filter")
-            width: Kirigami.Units.gridUnit * 8
-        }
-        */
     }
     globalDrawer: Kirigami.GlobalDrawer {
         id: leftMenu
@@ -36,6 +28,35 @@ Kirigami.ApplicationWindow {
         resetMenuOnTriggered: false
         topContent: ColumnLayout {
             Layout.fillWidth: true
+
+            Item {
+                Layout.preferredHeight: 4
+            }
+            Item {
+                Layout.fillWidth: true
+                Layout.preferredHeight: filterTextField.implicitHeight
+                enabled: nativeInterface.fileOpen
+
+                Controls.TextField {
+                    id: filterTextField
+                    anchors.fill: parent
+                    placeholderText: qsTr("Filter")
+                    onTextChanged: nativeInterface.entryFilter = text
+                }
+                Kirigami.Icon {
+                    source: "edit-clear"
+                    anchors.right: parent.right
+                    anchors.rightMargin: 6
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: Kirigami.Units.iconSizes.small
+                    height: Kirigami.Units.iconSizes.small
+                    visible: filterTextField.text.length !== 0
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: filterTextField.text = ""
+                    }
+                }
+            }
 
             Controls.MenuSeparator {
                 padding: 0
@@ -104,6 +125,7 @@ Kirigami.ApplicationWindow {
                 shortcut: StandardKey.Open
             },
             Kirigami.Action {
+                id: recentlyOpenedAction
                 text: qsTr("Recently opened ...")
                 iconName: "document-open-recent"
                 children: createRecentlyOpenedActions(
@@ -210,9 +232,7 @@ Kirigami.ApplicationWindow {
                                             nativeInterface.fileName))
                 return
             }
-            var entryModel = nativeInterface.entryModel
-            var rootIndex = entryModel.index(0, 0)
-            pushStackEntry(entryModel, rootIndex)
+            initStack()
             showPassiveNotification(qsTr("%1 opened").arg(
                                         nativeInterface.fileName))
             leftMenu.close()
@@ -231,6 +251,11 @@ Kirigami.ApplicationWindow {
             }
         }
         onEntryAboutToBeRemoved: {
+            // get the filter entry index
+            if (nativeInterface.hasEntryFilter) {
+                removedIndex = nativeInterface.filterEntryIndex(removedIndex)
+            }
+
             // remove all possibly open stack pages of the removed entry and its children
             for (var i = pageStack.depth - 1; i >= 0; --i) {
                 var stackPage = pageStack.get(i)
@@ -241,6 +266,12 @@ Kirigami.ApplicationWindow {
                     pageStack.pop(lastEntriesPage = pageStack.get(i - 1))
                     return
                 }
+            }
+        }
+        onHasEntryFilterChanged: {
+            if (nativeInterface.fileOpen) {
+                pageStack.clear()
+                initStack()
             }
         }
     }
@@ -283,6 +314,12 @@ Kirigami.ApplicationWindow {
     Shortcut {
         sequence: "Ctrl+M"
         onActivated: leftMenu.visible = !leftMenu.visible
+    }
+
+    function initStack() {
+        var entryModel = nativeInterface.hasEntryFilter ? nativeInterface.entryFilterModel : nativeInterface.entryModel
+        var rootIndex = entryModel.index(0, 0)
+        pushStackEntry(entryModel, rootIndex)
     }
 
     function clearStack() {

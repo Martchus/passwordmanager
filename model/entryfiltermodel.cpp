@@ -1,6 +1,8 @@
 #include "./entryfiltermodel.h"
 #include "./entrymodel.h"
 
+#include <cassert>
+
 namespace QtGui {
 
 /*!
@@ -15,7 +17,41 @@ namespace QtGui {
  */
 EntryFilterModel::EntryFilterModel(QObject *parent)
     : QSortFilterProxyModel(parent)
+    , m_sourceModel(nullptr)
 {
+}
+
+bool EntryFilterModel::isNode(const QModelIndex &parent) const
+{
+    return m_sourceModel->isNode(mapToSource(parent));
+}
+
+void EntryFilterModel::setSourceModel(QAbstractItemModel *sourceModel)
+{
+    if (!sourceModel) {
+        QSortFilterProxyModel::setSourceModel(sourceModel);
+        m_sourceModel = nullptr;
+        return;
+    }
+
+    auto *const entryModel = qobject_cast<EntryModel *>(sourceModel);
+    assert(entryModel);
+    QSortFilterProxyModel::setSourceModel(sourceModel);
+    m_sourceModel = entryModel;
+}
+
+void EntryFilterModel::setInsertTypeToNode()
+{
+    if (m_sourceModel) {
+        m_sourceModel->setInsertTypeToNode();
+    }
+}
+
+void EntryFilterModel::setInsertTypeToAccount()
+{
+    if (m_sourceModel) {
+        m_sourceModel->setInsertTypeToAccount();
+    }
 }
 
 bool EntryFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const

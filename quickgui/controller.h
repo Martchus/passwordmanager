@@ -34,6 +34,8 @@ class Controller : public QObject {
     Q_PROPERTY(QStringList recentFiles READ recentFiles RESET clearRecentFiles NOTIFY recentFilesChanged)
     Q_PROPERTY(bool useNativeFileDialog READ useNativeFileDialog WRITE setUseNativeFileDialog NOTIFY useNativeFileDialogChanged)
     Q_PROPERTY(bool supportsNativeFileDialog READ supportsNativeFileDialog NOTIFY supportsNativeFileDialogChanged)
+    Q_PROPERTY(QString entryFilter READ entryFilter WRITE setEntryFilter NOTIFY entryFilterChanged)
+    Q_PROPERTY(bool hasEntryFilter READ hasEntryFilter NOTIFY hasEntryFilterChanged)
 
 public:
     explicit Controller(QSettings &settings, const QString &filePath = QString(), QObject *parent = nullptr);
@@ -53,12 +55,12 @@ public:
     Io::AccountEntry *currentAccount();
     void setCurrentAccount(Io::AccountEntry *entry);
     QModelIndex currentAccountIndex() const;
-    void setCurrentAccountIndex(const QModelIndex &accountIndex);
+    void setCurrentAccountIndex(const QModelIndex &accountIndexMaybeFromFilterModel);
     bool hasCurrentAccount() const;
     const QList<QPersistentModelIndex> &cutEntries() const;
     void setCutEntries(const QList<QPersistentModelIndex> &cutEntries);
     QString currentAccountName() const;
-    Q_INVOKABLE void cutEntry(const QModelIndex &entryIndex);
+    Q_INVOKABLE void cutEntry(const QModelIndex &entryIndexMaybeFromFilterModel);
     Q_INVOKABLE QStringList pasteEntries(const QModelIndex &destinationParent, int row = -1);
     Q_INVOKABLE bool copyToClipboard(const QString &text) const;
     bool canPaste() const;
@@ -67,6 +69,10 @@ public:
     bool useNativeFileDialog() const;
     void setUseNativeFileDialog(bool useNativeFileDialog);
     bool supportsNativeFileDialog() const;
+    Q_INVOKABLE QModelIndex filterEntryIndex(const QModelIndex &entryIndex) const;
+    QString entryFilter() const;
+    void setEntryFilter(const QString &filter);
+    bool hasEntryFilter() const;
 
 public slots:
     void init();
@@ -99,6 +105,8 @@ signals:
     void useNativeFileDialogChanged(bool useNativeFileDialog);
     void supportsNativeFileDialogChanged();
     void entryAboutToBeRemoved(const QModelIndex &removedIndex);
+    void entryFilterChanged(const QString &newFilter);
+    void hasEntryFilterChanged(bool hasEntryFilter);
 
 private slots:
     void handleEntriesRemoved(const QModelIndex &parentIndex, int first, int last);
@@ -109,6 +117,7 @@ private:
     void updateWindowTitle();
     void setFileOpen(bool fileOpen);
     void emitIoError(const QString &when);
+    QModelIndex ensureSourceEntryIndex(const QModelIndex &entryIndexMaybeFromFilterModel) const;
 
     QSettings &m_settings;
     QString m_filePath;
@@ -126,6 +135,12 @@ private:
     bool m_fileModified;
     bool m_useNativeFileDialog;
 };
+
+inline QModelIndex Controller::ensureSourceEntryIndex(const QModelIndex &entryIndexMaybeFromFilterModel) const
+{
+    return entryIndexMaybeFromFilterModel.model() == &m_entryFilterModel ? m_entryFilterModel.mapToSource(entryIndexMaybeFromFilterModel)
+                                                                         : entryIndexMaybeFromFilterModel;
+}
 
 inline const QString &Controller::filePath() const
 {
@@ -193,8 +208,9 @@ inline QModelIndex Controller::currentAccountIndex() const
     return m_fieldModel.accountEntry() ? m_entryModel.index(const_cast<Io::AccountEntry *>(m_fieldModel.accountEntry())) : QModelIndex();
 }
 
-inline void Controller::setCurrentAccountIndex(const QModelIndex &accountIndex)
+inline void Controller::setCurrentAccountIndex(const QModelIndex &accountIndexMaybeFromFilterModel)
 {
+    const auto accountIndex = ensureSourceEntryIndex(accountIndexMaybeFromFilterModel);
     m_fieldModel.setAccountEntry(m_entryModel.isNode(accountIndex) ? nullptr : static_cast<Io::AccountEntry *>(m_entryModel.entry(accountIndex)));
     emit currentAccountChanged();
 }
@@ -221,7 +237,7 @@ inline QString Controller::currentAccountName() const
 
 inline void Controller::cutEntry(const QModelIndex &entryIndex)
 {
-    cutEntriesChanged(m_cutEntries << QPersistentModelIndex(entryIndex));
+    cutEntriesChanged(m_cutEntries << QPersistentModelIndex(ensureSourceEntryIndex(entryIndex)));
 }
 
 inline bool Controller::canPaste() const
@@ -246,6 +262,21 @@ inline bool Controller::supportsNativeFileDialog() const
 #else
     return false;
 #endif
+}
+
+inline QModelIndex Controller::filterEntryIndex(const QModelIndex &entryIndex) const
+{
+    return m_entryFilterModel.mapFromSource(entryIndex);
+}
+
+inline QString Controller::entryFilter() const
+{
+    return m_entryFilterModel.filterRegExp().pattern();
+}
+
+inline bool Controller::hasEntryFilter() const
+{
+    return !m_entryFilterModel.filterRegExp().isEmpty();
 }
 
 } // namespace QtGui
