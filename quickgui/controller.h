@@ -31,7 +31,7 @@ class Controller : public QObject {
     Q_PROPERTY(bool hasCurrentAccount READ hasCurrentAccount NOTIFY currentAccountChanged)
     Q_PROPERTY(QList<QPersistentModelIndex> cutEntries READ cutEntries WRITE setCutEntries NOTIFY cutEntriesChanged)
     Q_PROPERTY(bool canPaste READ canPaste NOTIFY cutEntriesChanged)
-    Q_PROPERTY(QStringList recentFiles READ recentFiles NOTIFY recentFilesChanged)
+    Q_PROPERTY(QStringList recentFiles READ recentFiles RESET clearRecentFiles NOTIFY recentFilesChanged)
     Q_PROPERTY(bool useNativeFileDialog READ useNativeFileDialog WRITE setUseNativeFileDialog NOTIFY useNativeFileDialogChanged)
     Q_PROPERTY(bool supportsNativeFileDialog READ supportsNativeFileDialog NOTIFY supportsNativeFileDialogChanged)
 
@@ -63,6 +63,7 @@ public:
     Q_INVOKABLE bool copyToClipboard(const QString &text) const;
     bool canPaste() const;
     const QStringList &recentFiles() const;
+    Q_INVOKABLE void clearRecentFiles();
     bool useNativeFileDialog() const;
     void setUseNativeFileDialog(bool useNativeFileDialog);
     bool supportsNativeFileDialog() const;
@@ -101,6 +102,7 @@ signals:
 
 private slots:
     void handleEntriesRemoved(const QModelIndex &parentIndex, int first, int last);
+    void handleRecentFilesChanged();
 
 private:
     void resetFileStatus();

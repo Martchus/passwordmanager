@@ -106,7 +106,9 @@ Kirigami.ApplicationWindow {
             Kirigami.Action {
                 text: qsTr("Recently opened ...")
                 iconName: "document-open-recent"
-                children: createFileActions(nativeInterface.recentFiles)
+                children: createRecentlyOpenedActions(
+                              nativeInterface.recentFiles)
+                visible: nativeInterface.recentFiles.length > 0
                 shortcut: "Ctrl+R"
             },
             Kirigami.Action {
@@ -253,6 +255,18 @@ Kirigami.ApplicationWindow {
     }
 
     Component {
+        id: clearRecentFilesActionComponent
+        Kirigami.Action {
+            text: qsTr("Clear recently opened files")
+            iconName: "edit-clear"
+            onTriggered: {
+                nativeInterface.clearRecentFiles()
+                leftMenu.resetMenu()
+            }
+        }
+    }
+
+    Component {
         id: entriesComponent
         EntriesPage {
             main: root
@@ -301,5 +315,11 @@ Kirigami.ApplicationWindow {
                                          "filePath": filePath
                                      })
         }, fileActionComponent)
+    }
+
+    function createRecentlyOpenedActions(files) {
+        var actions = createFileActions(files)
+        actions.push(clearRecentFilesActionComponent.createObject(root))
+        return actions
     }
 }

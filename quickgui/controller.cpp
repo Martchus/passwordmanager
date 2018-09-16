@@ -47,6 +47,7 @@ Controller::Controller(QSettings &settings, const QString &filePath, QObject *pa
     m_settings.beginGroup(QStringLiteral("mainwindow"));
     m_recentFiles = m_settings.value(QStringLiteral("recententries")).toStringList();
     m_useNativeFileDialog = m_settings.value(QStringLiteral("usenativefiledialog"), m_useNativeFileDialog).toBool();
+    connect(this, &Controller::recentFilesChanged, this, &Controller::handleRecentFilesChanged);
 
     // set initial file path
     setFilePath(filePath);
@@ -90,7 +91,6 @@ void Controller::setFilePath(const QString &filePath)
     while (m_recentFiles.size() > 10) {
         m_recentFiles.removeLast();
     }
-    m_settings.setValue(QStringLiteral("recententries"), m_recentFiles);
     emit recentFilesChanged(m_recentFiles);
 }
 
@@ -304,6 +304,11 @@ void Controller::handleEntriesRemoved(const QModelIndex &parentIndex, int first,
     }
 }
 
+void Controller::handleRecentFilesChanged()
+{
+    m_settings.setValue(QStringLiteral("recententries"), m_recentFiles);
+}
+
 QStringList Controller::pasteEntries(const QModelIndex &destinationParent, int row)
 {
     if (m_cutEntries.isEmpty() || !m_entryModel.isNode(destinationParent)) {
@@ -376,6 +381,15 @@ void Controller::emitIoError(const QString &when)
     } catch (...) {
         emit fileError(tr("An unknown error occured when %1 the file %2.").arg(when, m_filePath));
     }
+}
+
+void Controller::clearRecentFiles()
+{
+    if (m_recentFiles.isEmpty()) {
+        return;
+    }
+    m_recentFiles.clear();
+    emit recentFilesChanged(m_recentFiles);
 }
 
 void Controller::setUseNativeFileDialog(bool useNativeFileDialog)
