@@ -1,5 +1,38 @@
 # Password Manager
-A simple password manager with Qt 5 GUI using AES-256-CBC encryption via OpenSSL.
+A simple password manager with Qt 5 GUI and command-line interface using AES-256-CBC encryption via OpenSSL.
+
+## Features
+* Cross-platform: tested under GNU/Linux, Android and Windows
+* Qt Widgets GUI for desktop platforms
+* Qt Quick GUI (using Qt Quick Controls 2 and Kirigami 2) for mobile platforms
+* Interactive command-line interface
+* Simple architecture: All data is stored in ordinary files with AES-256-CBC applied. No cloud stuff. Use
+  eg. Syncthing for synchronization.
+
+## Covered C++/Qt topics
+I've mainly started this project to learn C++ and Qt programming. So beside the mentioned features this project
+and the underlying libraries serve as an example project covering some interesting C++/Qt topics:
+
+* Basic use of Qt Widgets, Qt Quick and Kirigami 2
+* Creating custom Qt models
+    * Nested model and model with multiple columns
+    * Support Drag & Drop in `QTreeView`
+    * Support re-ordering in Qt Quick `ListView`
+    * Use nested and table model within Qt QML
+    * Integration with Qt Widgets' undo/redo framework
+    * Filtering
+* Android tweaks
+    * Add CMake target to invoke `androiddeployqt`
+    * Customize activity
+    * Customize gradle project to add additional Java dependency
+    * Adjust the window style of the activity
+    * Call Java function from C++ and vice verca
+    * Show native file dialog
+    * Open `content://` URL with `std::iostream`
+* Windows specific issues
+    * Open an `std::iostream` for files which have non-ASCII characters in the path
+* Use of zlib to (de)compress buffer
+* Use of OpenSSL for symmetric (de)cryption
 
 ## Download / binary repository
 I currently provide packages for Arch Linux and Windows. Sources for those packages can be found in a
@@ -57,8 +90,20 @@ qt_root=/opt/android-qt5/$qt_version/$_android_arch
 other_libs_root=/opt/android-libs/$_android_arch
 root="$android_ndk_root/sysroot;$other_libs_root;$qt_root"
 
+# locate keystore
+keystore_dir=/path/to/keystore-dir
+keystore_alias=$USER
+keystore_url=$keystore_dir/$keystore_alias
+keystore_password=<password>
+
+# create keystore (do only once)
+pushd "$keystore_dir"
+keytool -genkey -v -keystore keystore_alias.keystore -alias keystore_alias -keyalg RSA -validity 999999
+keytool -importkeystore -srckeystore keystore_alias.keystore -destkeystore keystore_alias.keystore -deststoretype pkcs12 # FIXME: make this in one step
+popd
+
 cmake \
-    -DCMAKE_BUILD_TYPE=Debug \
+    -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_SYSTEM_NAME=Android \
     -DCMAKE_SYSTEM_VERSION=$_android_api_level \
     -DCMAKE_ANDROID_ARCH_ABI=$_android_arch \
@@ -79,9 +124,13 @@ cmake \
     -DWIDGETS_GUI=OFF \
     -DQUICK_GUI=ON \
     -DBUILTIN_ICON_THEMES=breeze \
+    -DANDROID_APK_KEYSTORE_URL="$keystore_url" \
+    -DANDROID_APK_KEYSTORE_ALIAS="$keystore_alias" \
+    -DANDROID_APK_KEYSTORE_PASSWORD="$keystore_password" \
     $SOURCES/subdirs/$_reponame
 
-make apk -j$(nproc)
+make passwordmanager_apk -j$(nproc)
+make passwordmanager_deploy_apk # install app on USB-connected phone
 ```
 
 ##### Notes
