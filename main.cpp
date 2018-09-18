@@ -39,6 +39,7 @@ using namespace Util;
 
 int main(int argc, char *argv[])
 {
+    CMD_UTILS_CONVERT_ARGS_TO_UTF8;
     SET_APPLICATION_INFO;
     QT_CONFIG_ARGUMENTS qtConfigArgs;
     int returnCode = 0;
