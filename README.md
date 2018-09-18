@@ -137,7 +137,15 @@ make passwordmanager_deploy_apk # install app on USB-connected phone
 * The Android packages for the dependencies Qt 5, iconv and OpenSSL are provided in my PKGBUILDs repo.
 * The lastest Java I was able to use was version 8 (`jdk8-openjdk` package).
 
-### Deployment of Android APK file
+### Manual deployment of Android APK file
 1. Find device ID: `adb devices`
 2. Install App on phone: `adb -s <DEVICE_ID> install -r $BUILD_DIR/passwordmanager_build_apk/build/outputs/apk/passwordmanager_build_apk-debug.apk`
 3. View log: `adb -s <DEVICE_ID> logcat`
+
+### Building without Qt 5 GUI
+It is possible to build without the GUI if only the CLI is needed. In this case no Qt dependencies (including qtutilities) are required.
+
+To build without GUI, add the following parameters to the CMake call:
+```
+-DWIDGETS_GUI=OFF -DQUICK_GUI=OFF
+```
