@@ -15,7 +15,7 @@
 #include <vector>
 
 namespace ApplicationUtilities {
-typedef std::vector<std::string> StringVector;
+using StringVector = std::vector<std::string>;
 }
 
 namespace Io {
