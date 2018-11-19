@@ -36,6 +36,7 @@ class Controller : public QObject {
     Q_PROPERTY(bool supportsNativeFileDialog READ supportsNativeFileDialog NOTIFY supportsNativeFileDialogChanged)
     Q_PROPERTY(QString entryFilter READ entryFilter WRITE setEntryFilter NOTIFY entryFilterChanged)
     Q_PROPERTY(bool hasEntryFilter READ hasEntryFilter NOTIFY hasEntryFilterChanged)
+    Q_PROPERTY(bool filterAsDialog READ filterAsDialog NOTIFY filterAsDialogChanged)
 
 public:
     explicit Controller(QSettings &settings, const QString &filePath = QString(), QObject *parent = nullptr);
@@ -73,6 +74,7 @@ public:
     QString entryFilter() const;
     void setEntryFilter(const QString &filter);
     bool hasEntryFilter() const;
+    bool filterAsDialog() const;
 
 public slots:
     void init();
@@ -107,6 +109,7 @@ signals:
     void entryAboutToBeRemoved(const QModelIndex &removedIndex);
     void entryFilterChanged(const QString &newFilter);
     void hasEntryFilterChanged(bool hasEntryFilter);
+    void filterAsDialogChanged(bool filterAsDialog);
 
 private slots:
     void handleEntriesRemoved(const QModelIndex &parentIndex, int first, int last);
@@ -134,6 +137,7 @@ private:
     bool m_fileOpen;
     bool m_fileModified;
     bool m_useNativeFileDialog;
+    bool m_filterAsDialog;
 };
 
 inline QModelIndex Controller::ensureSourceEntryIndex(const QModelIndex &entryIndexMaybeFromFilterModel) const
@@ -277,6 +281,11 @@ inline QString Controller::entryFilter() const
 inline bool Controller::hasEntryFilter() const
 {
     return !m_entryFilterModel.filterRegExp().isEmpty();
+}
+
+inline bool Controller::filterAsDialog() const
+{
+    return m_filterAsDialog;
 }
 
 } // namespace QtGui

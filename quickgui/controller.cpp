@@ -39,6 +39,13 @@ Controller::Controller(QSettings &settings, const QString &filePath, QObject *pa
     , m_fileOpen(false)
     , m_fileModified(false)
     , m_useNativeFileDialog(false)
+    , m_filterAsDialog(
+#ifdef Q_OS_ANDROID
+          true
+#else
+          false
+#endif
+      )
 {
     m_entryFilterModel.setSourceModel(&m_entryModel);
     connect(&m_entryModel, &QAbstractItemModel::rowsAboutToBeRemoved, this, &Controller::handleEntriesRemoved);

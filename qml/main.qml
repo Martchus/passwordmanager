@@ -36,6 +36,7 @@ Kirigami.ApplicationWindow {
                 Layout.fillWidth: true
                 Layout.preferredHeight: filterTextField.implicitHeight
                 enabled: nativeInterface.fileOpen
+                visible: !nativeInterface.filterAsDialog
 
                 Controls.TextField {
                     id: filterTextField
@@ -150,7 +151,31 @@ Kirigami.ApplicationWindow {
                 shortcut: "Ctrl+P"
             },
             Kirigami.Action {
-                text: "Close file"
+                text: nativeInterface.entryFilter.length === 0 ? qsTr("Search") : qsTr(
+                                                                     "Adjust search")
+                enabled: nativeInterface.fileOpen
+                visible: nativeInterface.filterAsDialog
+                iconName: "search"
+                onTriggered: {
+                    leftMenu.resetMenu()
+                    filterDialog.open()
+                }
+                shortcut: "Ctrl+F"
+            },
+            Kirigami.Action {
+                text: qsTr("Clear search")
+                enabled: nativeInterface.fileOpen
+                visible: nativeInterface.filterAsDialog
+                         && nativeInterface.entryFilter.length > 0
+                iconName: "edit-clear"
+                onTriggered: {
+                    leftMenu.resetMenu()
+                    nativeInterface.entryFilter = ""
+                }
+                shortcut: "Ctrl+Shift+F"
+            },
+            Kirigami.Action {
+                text: qsTr("Close file")
                 enabled: nativeInterface.fileOpen
                 iconName: "document-close"
                 onTriggered: nativeInterface.close()
@@ -214,8 +239,52 @@ Kirigami.ApplicationWindow {
         }
     }
 
+    BasicDialog {
+        id: filterDialog
+        title: qsTr("Search for categories and accounts")
+        onAccepted: nativeInterface.entryFilter = filterDialogTextField.text
+        onReset: {
+            nativeInterface.entryFilter = ""
+            filterDialog.close()
+        }
+        onVisibleChanged: {
+            if (visible) {
+                filterDialogTextField.forceActiveFocus()
+            }
+        }
+        footer: Controls.DialogButtonBox {
+            Controls.Button {
+                text: qsTr("Apply search term")
+                Controls.DialogButtonBox.buttonRole: Controls.DialogButtonBox.AcceptRole
+                enabled: filterDialogTextField.text.length > 0
+            }
+            Controls.Button {
+                text: qsTr("Clear search")
+                Controls.DialogButtonBox.buttonRole: Controls.DialogButtonBox.ResetRole
+                enabled: nativeInterface.entryFilter
+            }
+            Controls.Button {
+                text: qsTr("Quit dialog")
+                Controls.DialogButtonBox.buttonRole: Controls.DialogButtonBox.RejectRole
+            }
+        }
+
+        ColumnLayout {
+            Controls.TextField {
+                id: filterDialogTextField
+                Layout.preferredWidth: filterDialog.availableWidth
+                Keys.onPressed: filterDialog.acceptOnReturn(event)
+            }
+        }
+    }
+
     Connections {
         target: nativeInterface
+        onEntryFilterChanged: {
+            if (filterTextField.text !== newFilter) {
+                filterTextField.text = newFilter
+            }
+        }
         onFileError: {
             showPassiveNotification(errorMessage)
         }
