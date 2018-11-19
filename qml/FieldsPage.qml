@@ -48,7 +48,7 @@ Kirigami.ScrollablePage {
                                                                       1), text)
                 }
                 Kirigami.Icon {
-                    source: "handle-right"
+                    source: "handle-left"
                     width: Kirigami.Units.iconSizes.smallMedium
                     height: Kirigami.Units.iconSizes.smallMedium
                     Layout.fillHeight: true
@@ -71,7 +71,8 @@ Kirigami.ScrollablePage {
                     }
                     Controls.MenuItem {
                         icon.name: "edit-copy"
-                        text: qsTr("Copy password")
+                        text: model.isPassword ? qsTr("Copy password") : qsTr(
+                                                     "Copy value")
                         onClicked: showPassiveNotification(
                                        nativeInterface.copyToClipboard(
                                            model.actualValue) ? qsTr("Copied") : qsTr(
