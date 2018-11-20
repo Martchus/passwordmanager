@@ -11,12 +11,6 @@ Kirigami.ApplicationWindow {
     property var fieldsPage: undefined
     property var lastEntriesPage: undefined
 
-    header: Kirigami.ApplicationHeader {
-        backButtonEnabled: false
-        minimumHeight: 0
-        preferredHeight: Kirigami.Units.gridUnit * 2.3
-        maximumHeight: Kirigami.Units.gridUnit * 3
-    }
     globalDrawer: Kirigami.GlobalDrawer {
         id: leftMenu
         property bool showNoPasswordWarning: nativeInterface.fileOpen
