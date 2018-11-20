@@ -47,6 +47,7 @@ Controller::Controller(QSettings &settings, const QString &filePath, QObject *pa
 #endif
       )
 {
+    m_entryFilterModel.setFilterCaseSensitivity(Qt::CaseInsensitive);
     m_entryFilterModel.setSourceModel(&m_entryModel);
     connect(&m_entryModel, &QAbstractItemModel::rowsAboutToBeRemoved, this, &Controller::handleEntriesRemoved);
 
