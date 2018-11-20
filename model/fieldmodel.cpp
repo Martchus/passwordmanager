@@ -186,7 +186,7 @@ bool FieldModel::setData(const QModelIndex &index, const QVariant &value, int ro
             int fieldType = value.toInt(&ok);
             if (ok && Field::isValidType(fieldType)) {
                 m_fields->at(index.row()).setType(static_cast<FieldType>(fieldType));
-                roles << FieldTypeRole << IsPassword;
+                roles << Qt::DisplayRole << Value << FieldTypeRole << IsPassword;
             }
             break;
         }
@@ -201,7 +201,7 @@ bool FieldModel::setData(const QModelIndex &index, const QVariant &value, int ro
             break;
         case IsPassword:
             m_fields->at(index.row()).setType(value.toBool() ? FieldType::Password : FieldType::Normal);
-            roles << Qt::DisplayRole << FieldTypeRole << IsPassword;
+            roles << Qt::DisplayRole << Value << FieldTypeRole << IsPassword;
             break;
         default:;
         }
