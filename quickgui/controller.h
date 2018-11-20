@@ -95,7 +95,7 @@ signals:
     void passwordRequired(const QString &filePath);
     void windowTitleChanged(const QString &windowTitle);
     void fileOpenChanged(bool fileOpen);
-    void fileError(const QString &errorMessage);
+    void fileError(const QString &errorMessage, const QString &retryAction = QString());
     void fileSaved();
     void entryModelChanged();
     void entryFilterModelChanged();

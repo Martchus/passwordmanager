@@ -135,10 +135,10 @@ void Controller::load(const QString &filePath)
         } else {
             // clear password since the password which has been provided likely wasn't correct
             clearPassword();
-            emit fileError(tr("A crypto error occured when opening the file: ") + QString::fromLocal8Bit(e.what()));
+            emit fileError(tr("A crypto error occured when opening the file: ") + QString::fromLocal8Bit(e.what()), QStringLiteral("load"));
         }
     } catch (const runtime_error &e) {
-        emit fileError(tr("A parsing error occured when opening the file: ") + QString::fromLocal8Bit(e.what()));
+        emit fileError(tr("A parsing error occured when opening the file: ") + QString::fromLocal8Bit(e.what()), QStringLiteral("load"));
     } catch (...) {
         emitIoError(tr("loading"));
     }
@@ -211,9 +211,9 @@ void Controller::save()
 #endif
         emit fileSaved();
     } catch (const CryptoException &e) {
-        emit fileError(tr("A crypto error occured when saving the file: ") + QString::fromLocal8Bit(e.what()));
+        emit fileError(tr("A crypto error occured when saving the file: ") + QString::fromLocal8Bit(e.what()), QStringLiteral("save"));
     } catch (const runtime_error &e) {
-        emit fileError(tr("An internal error occured when saving the file: ") + QString::fromLocal8Bit(e.what()));
+        emit fileError(tr("An internal error occured when saving the file: ") + QString::fromLocal8Bit(e.what()), QStringLiteral("save"));
     } catch (...) {
         emitIoError(tr("saving"));
     }
@@ -408,11 +408,12 @@ void Controller::emitIoError(const QString &when)
 {
     try {
         const auto *const msg = catchIoFailure();
-        emit fileError(tr("An IO error occured when %1 the file %2: ").arg(when, m_filePath) + QString::fromLocal8Bit(msg));
+        emit fileError(tr("An IO error occured when %1 the file %2: ").arg(when, m_filePath) + QString::fromLocal8Bit(msg), QStringLiteral("load"));
     } catch (const exception &e) {
-        emit fileError(tr("An unknown exception occured when %1 the file %2: ").arg(when, m_filePath) + QString::fromLocal8Bit(e.what()));
+        emit fileError(tr("An unknown exception occured when %1 the file %2: ").arg(when, m_filePath) + QString::fromLocal8Bit(e.what()),
+            QStringLiteral("load"));
     } catch (...) {
-        emit fileError(tr("An unknown error occured when %1 the file %2.").arg(when, m_filePath));
+        emit fileError(tr("An unknown error occured when %1 the file %2.").arg(when, m_filePath), QStringLiteral("load"));
     }
 }
 

@@ -286,7 +286,14 @@ Kirigami.ApplicationWindow {
             }
         }
         onFileError: {
-            showPassiveNotification(errorMessage)
+            if (retryAction.length === 0) {
+                showPassiveNotification(errorMessage)
+            } else {
+                showPassiveNotification(errorMessage, 2500, qsTr("Retry"),
+                                        function () {
+                                            nativeInterface[retryAction]()
+                                        })
+            }
         }
         onPasswordRequired: {
             enterPasswordDialog.askForExistingPassword(
