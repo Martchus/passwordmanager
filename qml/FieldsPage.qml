@@ -29,7 +29,7 @@ Kirigami.ScrollablePage {
             fieldsListView.model.setData(column0, fieldName)
             fieldsListView.model.setData(column1, fieldValue)
             fieldsListView.model.setData(column0, isPassword ? 1 : 0,
-                                         0x0100 + 1)
+                                                               0x0100 + 1)
         }
 
         ColumnLayout {
@@ -101,7 +101,7 @@ Kirigami.ScrollablePage {
                             Layout.fillHeight: true
                             text: {
                                 if (fieldRow.isLastRow) {
-                                    return "click to add new field"
+                                    return qsTr("click to append new field")
                                 }
 
                                 var pieces = []
@@ -132,7 +132,7 @@ Kirigami.ScrollablePage {
                     Controls.Menu {
                         id: fieldContextMenu
                         Controls.MenuItem {
-                            icon.name: model.isPassword ? "password-show-off" : "password-show-on"
+                            icon.name: !model.isPassword ? "password-show-off" : "password-show-on"
                             text: model.isPassword ? qsTr("Mark as normal field") : qsTr(
                                                          "Mark as password field")
                             onClicked: fieldsListView.model.setData(
@@ -165,7 +165,7 @@ Kirigami.ScrollablePage {
             }
             actions: [
                 Kirigami.Action {
-                    iconName: model.isPassword ? "password-show-off" : "password-show-on"
+                    iconName: !model.isPassword ? "password-show-off" : "password-show-on"
                     text: model.isPassword ? qsTr(
                                                  "Mark as normal field") : qsTr(
                                                  "Mark as password field")
