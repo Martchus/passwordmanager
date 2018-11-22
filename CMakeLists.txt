@@ -142,6 +142,7 @@ set(REQUIRED_ICONS
     preferences-desktop-icons
     preferences-desktop-locale
     qtcreator
+    search
     story-editor
     system-file-manager
     system-run
