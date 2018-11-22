@@ -26,6 +26,7 @@ enum FieldModelRoles {
     Value,
     IsPassword,
     AlwaysActualValue,
+    IsLastRow,
 };
 
 /*!

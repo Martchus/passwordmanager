@@ -59,6 +59,7 @@ QHash<int, QByteArray> FieldModel::roleNames() const
         { FieldModelRoles::Value, "value" },
         { FieldModelRoles::IsPassword, "isPassword" },
         { FieldModelRoles::AlwaysActualValue, "actualValue" },
+        { FieldModelRoles::IsLastRow, "isLastRow" },
     };
     return roles;
 }
@@ -117,6 +118,8 @@ QVariant FieldModel::data(const QModelIndex &index, int role) const
             return QString::fromStdString((*m_fields)[static_cast<size_t>(index.row())].value());
         case IsPassword:
             return (*m_fields)[static_cast<size_t>(index.row())].type() == FieldType::Password;
+        case IsLastRow:
+            return false;
         default:;
         }
 
@@ -223,14 +226,14 @@ bool FieldModel::setData(const QModelIndex &index, const QVariant &value, int ro
                 m_fields->emplace_back(m_accountEntry);
                 m_fields->back().setName(value.toString().toStdString());
                 endInsertRows();
-                roles << Qt::DisplayRole << Qt::EditRole;
+                roles << Qt::DisplayRole << Qt::EditRole << IsLastRow;
                 break;
             case 1:
                 beginInsertRows(index.parent(), rowCount(), rowCount());
                 m_fields->emplace_back(m_accountEntry);
                 m_fields->back().setValue(value.toString().toStdString());
                 endInsertRows();
-                roles << Qt::DisplayRole << Qt::EditRole;
+                roles << Qt::DisplayRole << Qt::EditRole << IsLastRow;
                 break;
             default:;
             }
