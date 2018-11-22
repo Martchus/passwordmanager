@@ -65,6 +65,12 @@ Kirigami.ScrollablePage {
         title: qsTr("Delete %1?").arg(entryDesc)
         onAccepted: entryModel.removeRows(this.entryIndex, 1, rootIndex)
 
+        ColumnLayout {
+            Controls.Label {
+                text: " "
+            }
+        }
+
         function confirmDeletion(entryName, entryIndex) {
             var isNode = entryModel.isNode(entryModel.index(entryIndex, 0,
                                                             rootIndex))
