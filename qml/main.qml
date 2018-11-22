@@ -7,7 +7,6 @@ import org.kde.kirigami 2.4 as Kirigami
 
 Kirigami.ApplicationWindow {
     id: root
-    property alias showPasswordsOnFocus: showPasswordsOnFocusSwitch.checked
     property var fieldsPage: undefined
     property var lastEntriesPage: undefined
 
@@ -181,11 +180,6 @@ Kirigami.ApplicationWindow {
             checked: nativeInterface.useNativeFileDialog
             visible: nativeInterface.supportsNativeFileDialog
             onCheckedChanged: nativeInterface.useNativeFileDialog = checked
-        }
-        Controls.Switch {
-            id: showPasswordsOnFocusSwitch
-            text: qsTr("Show passwords on focus")
-            checked: true
         }
     }
     contextDrawer: Kirigami.ContextDrawer {
