@@ -163,7 +163,7 @@ use_qt_utilities()
 find_package(passwordfile 3.1.0 REQUIRED)
 use_password_file()
 
-# require Qt AndroidExtras
+# require Qt AndroidExtras and Kirigami2
 if(ANDROID AND QUICK_GUI)
     list(APPEND ADDITIONAL_QT_MODULES AndroidExtras)
     list(APPEND ADDITIONAL_KF_MODULES Kirigami2)
