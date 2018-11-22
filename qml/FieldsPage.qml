@@ -79,7 +79,7 @@ Kirigami.ScrollablePage {
             id: fieldsListItem
             contentItem: RowLayout {
                 id: fieldRow
-                property bool isLastRow: model.isPassword === undefined
+                readonly property bool isLast: model.isLastRow
 
                 Kirigami.ListItemDragHandle {
                     listItem: fieldsListItem
@@ -89,7 +89,7 @@ Kirigami.ScrollablePage {
                                          oldIndex, 1,
                                          fieldsListView.model.index(-1, 0),
                                          newIndex)
-                    opacity: fieldRow.isLastRow ? 0 : 100
+                    opacity: fieldRow.isLast ? 0 : 100
                 }
                 Item {
                     Layout.fillWidth: true
@@ -100,7 +100,7 @@ Kirigami.ScrollablePage {
                             Layout.fillWidth: true
                             Layout.fillHeight: true
                             text: {
-                                if (fieldRow.isLastRow) {
+                                if (fieldRow.isLast) {
                                     return qsTr("click to append new field")
                                 }
 
@@ -113,7 +113,7 @@ Kirigami.ScrollablePage {
                                 }
                                 return pieces.join(": ")
                             }
-                            color: fieldRow.isLastRow ? "gray" : palette.text
+                            color: fieldRow.isLast ? "gray" : palette.text
                         }
                     }
                     MouseArea {
@@ -172,7 +172,7 @@ Kirigami.ScrollablePage {
                     onTriggered: fieldsListView.model.setData(
                                      fieldsListView.model.index(index, 0),
                                      model.isPassword ? 0 : 1, 0x0100 + 1)
-                    visible: !fieldRow.isLastRow
+                    visible: !fieldRow.isLast
                 },
                 Kirigami.Action {
                     iconName: "edit-copy"
@@ -183,21 +183,21 @@ Kirigami.ScrollablePage {
                                          model.actualValue) ? qsTr("Copied") : qsTr(
                                                                   "Unable to access clipboard"))
                     shortcut: StandardKey.Cut
-                    visible: !fieldRow.isLastRow
+                    visible: !fieldRow.isLast
                 },
                 Kirigami.Action {
                     iconName: "edit-delete"
                     text: qsTr("Delete field")
                     onTriggered: fieldsListView.model.removeRows(index, 1)
                     shortcut: StandardKey.Delete
-                    visible: !fieldRow.isLastRow
+                    visible: !fieldRow.isLast
                 },
                 Kirigami.Action {
                     iconName: "list-add"
                     text: qsTr("Insert empty field after this")
                     enabled: !nativeInterface.hasEntryFilter
                     onTriggered: fieldsListView.model.insertRows(index + 1, 1)
-                    visible: !fieldRow.isLastRow
+                    visible: !fieldRow.isLast
                 }
             ]
         }
