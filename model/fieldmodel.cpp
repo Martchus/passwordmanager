@@ -136,6 +136,14 @@ QVariant FieldModel::data(const QModelIndex &index, int role) const
             default:;
             }
             break;
+        case Key:
+        case Value:
+        case AlwaysActualValue:
+            return QString();
+        case IsPassword:
+            return false;
+        case IsLastRow:
+            return true;
         default:;
         }
     }
