@@ -171,11 +171,11 @@ bool FieldModel::setData(const QModelIndex &index, const QVariant &value, int ro
         case Qt::EditRole:
             switch (index.column()) {
             case 0:
-                m_fields->at(index.row()).setName(value.toString().toStdString());
+                m_fields->at(static_cast<size_t>(index.row())).setName(value.toString().toStdString());
                 roles << Qt::DisplayRole << Qt::EditRole << Key;
                 break;
             case 1:
-                m_fields->at(index.row()).setValue(value.toString().toStdString());
+                m_fields->at(static_cast<size_t>(index.row())).setValue(value.toString().toStdString());
                 roles << Qt::DisplayRole << Qt::EditRole << Value << AlwaysActualValue;
                 break;
             default:;
@@ -185,28 +185,29 @@ bool FieldModel::setData(const QModelIndex &index, const QVariant &value, int ro
             bool ok;
             int fieldType = value.toInt(&ok);
             if (ok && Field::isValidType(fieldType)) {
-                m_fields->at(index.row()).setType(static_cast<FieldType>(fieldType));
+                m_fields->at(static_cast<size_t>(index.row())).setType(static_cast<FieldType>(fieldType));
                 roles << Qt::DisplayRole << Value << FieldTypeRole << IsPassword;
             }
             break;
         }
         case Key:
-            m_fields->at(index.row()).setName(value.toString().toStdString());
+            m_fields->at(static_cast<size_t>(index.row())).setName(value.toString().toStdString());
             roles << Qt::DisplayRole << Qt::EditRole << Key;
             break;
         case Value:
         case AlwaysActualValue:
-            m_fields->at(index.row()).setValue(value.toString().toStdString());
+            m_fields->at(static_cast<size_t>(index.row())).setValue(value.toString().toStdString());
             roles << Qt::DisplayRole << Qt::EditRole << Value << AlwaysActualValue;
             break;
         case IsPassword:
-            m_fields->at(index.row()).setType(value.toBool() ? FieldType::Password : FieldType::Normal);
+            m_fields->at(static_cast<size_t>(index.row())).setType(value.toBool() ? FieldType::Password : FieldType::Normal);
             roles << Qt::DisplayRole << Value << FieldTypeRole << IsPassword;
             break;
         default:;
         }
         // remove last field if empty, showing an empty field at the end to enabled appending new rows is provided by the data method
-        if (!roles.isEmpty() && static_cast<size_t>(index.row()) == m_fields->size() - 1 && m_fields->at(index.row()).isEmpty()) {
+        if (!roles.isEmpty() && static_cast<size_t>(index.row()) == m_fields->size() - 1
+            && m_fields->at(static_cast<size_t>(index.row())).isEmpty()) {
             beginRemoveRows(index.parent(), index.row(), index.row());
             m_fields->pop_back();
             endRemoveRows();
