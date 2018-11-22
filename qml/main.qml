@@ -168,11 +168,29 @@ Kirigami.ApplicationWindow {
                 shortcut: "Ctrl+Shift+F"
             },
             Kirigami.Action {
+                text: qsTr("Undo \"%1\"").arg(nativeInterface.undoText)
+                visible: nativeInterface.undoText.length !== 0
+                         && nativeInterface.entryFilter.length === 0
+                enabled: visible
+                iconName: "edit-undo"
+                shortcut: StandardKey.Undo
+                onTriggered: nativeInterface.undo()
+            },
+            Kirigami.Action {
+                text: qsTr("Redo \"%1\"").arg(nativeInterface.redoText)
+                visible: nativeInterface.redoText.length !== 0
+                         && nativeInterface.entryFilter.length === 0
+                enabled: visible
+                iconName: "edit-redo"
+                shortcut: StandardKey.Redo
+                onTriggered: nativeInterface.redo()
+            },
+            Kirigami.Action {
                 text: qsTr("Close file")
                 enabled: nativeInterface.fileOpen
                 iconName: "document-close"
-                onTriggered: nativeInterface.close()
                 shortcut: StandardKey.Close
+                onTriggered: nativeInterface.close()
             }
         ]
         Controls.Switch {

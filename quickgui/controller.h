@@ -12,6 +12,11 @@
 
 QT_FORWARD_DECLARE_CLASS(QSettings)
 
+#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
+#define PASSWORD_MANAGER_UNDO_SUPPORT
+#include <QUndoStack>
+#endif
+
 namespace QtGui {
 
 class Controller : public QObject {
@@ -37,6 +42,9 @@ class Controller : public QObject {
     Q_PROPERTY(QString entryFilter READ entryFilter WRITE setEntryFilter NOTIFY entryFilterChanged)
     Q_PROPERTY(bool hasEntryFilter READ hasEntryFilter NOTIFY hasEntryFilterChanged)
     Q_PROPERTY(bool filterAsDialog READ filterAsDialog NOTIFY filterAsDialogChanged)
+    Q_PROPERTY(QUndoStack *undoStack READ undoStack NOTIFY undoStackChanged)
+    Q_PROPERTY(QString undoText READ undoText NOTIFY undoTextChanged)
+    Q_PROPERTY(QString redoText READ redoText NOTIFY redoTextChanged)
 
 public:
     explicit Controller(QSettings &settings, const QString &filePath = QString(), QObject *parent = nullptr);
@@ -75,6 +83,9 @@ public:
     void setEntryFilter(const QString &filter);
     bool hasEntryFilter() const;
     bool filterAsDialog() const;
+    QUndoStack *undoStack();
+    QString undoText() const;
+    QString redoText() const;
 
 public slots:
     void init();
@@ -88,6 +99,8 @@ public slots:
     void handleFileSelectionAcceptedDescriptor(const QString &nativeUrl, const QString &fileName, int fileDescriptor, bool existing);
 #endif
     void handleFileSelectionCanceled();
+    void undo();
+    void redo();
 
 signals:
     void filePathChanged(const QString &newFilePath);
@@ -110,6 +123,9 @@ signals:
     void entryFilterChanged(const QString &newFilter);
     void hasEntryFilterChanged(bool hasEntryFilter);
     void filterAsDialogChanged(bool filterAsDialog);
+    void undoStackChanged(QUndoStack *undoStack);
+    void undoTextChanged(const QString &undoText);
+    void redoTextChanged(const QString &redoText);
 
 private slots:
     void handleEntriesRemoved(const QModelIndex &parentIndex, int first, int last);
@@ -128,6 +144,9 @@ private:
     QString m_password;
     QString m_windowTitle;
     Io::PasswordFile m_file;
+#ifdef PASSWORD_MANAGER_UNDO_SUPPORT
+    QUndoStack m_undoStack;
+#endif
     EntryModel m_entryModel;
     EntryFilterModel m_entryFilterModel;
     FieldModel m_fieldModel;
@@ -286,6 +305,47 @@ inline bool Controller::hasEntryFilter() const
 inline bool Controller::filterAsDialog() const
 {
     return m_filterAsDialog;
+}
+
+inline QUndoStack *Controller::undoStack()
+{
+#ifdef PASSWORD_MANAGER_UNDO_SUPPORT
+    return &m_undoStack;
+#else
+    return nullptr;
+#endif
+}
+
+inline QString Controller::undoText() const
+{
+#ifdef PASSWORD_MANAGER_UNDO_SUPPORT
+    return m_undoStack.undoText();
+#else
+    return QString();
+#endif
+}
+
+inline QString Controller::redoText() const
+{
+#ifdef PASSWORD_MANAGER_UNDO_SUPPORT
+    return m_undoStack.redoText();
+#else
+    return QString();
+#endif
+}
+
+inline void Controller::undo()
+{
+#ifdef PASSWORD_MANAGER_UNDO_SUPPORT
+    return m_undoStack.undo();
+#endif
+}
+
+inline void Controller::redo()
+{
+#ifdef PASSWORD_MANAGER_UNDO_SUPPORT
+    return m_undoStack.redo();
+#endif
 }
 
 } // namespace QtGui

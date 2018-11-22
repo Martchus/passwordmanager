@@ -36,6 +36,10 @@ namespace QtGui {
 Controller::Controller(QSettings &settings, const QString &filePath, QObject *parent)
     : QObject(parent)
     , m_settings(settings)
+#ifdef PASSWORD_MANAGER_UNDO_SUPPORT
+    , m_entryModel(&m_undoStack)
+    , m_fieldModel(&m_undoStack)
+#endif
     , m_fileOpen(false)
     , m_fileModified(false)
     , m_useNativeFileDialog(false)
@@ -50,6 +54,11 @@ Controller::Controller(QSettings &settings, const QString &filePath, QObject *pa
     m_entryFilterModel.setFilterCaseSensitivity(Qt::CaseInsensitive);
     m_entryFilterModel.setSourceModel(&m_entryModel);
     connect(&m_entryModel, &QAbstractItemModel::rowsAboutToBeRemoved, this, &Controller::handleEntriesRemoved);
+
+#ifdef PASSWORD_MANAGER_UNDO_SUPPORT
+    connect(&m_undoStack, &QUndoStack::undoTextChanged, this, &Controller::undoTextChanged);
+    connect(&m_undoStack, &QUndoStack::redoTextChanged, this, &Controller::redoTextChanged);
+#endif
 
     // share settings with main window
     m_settings.beginGroup(QStringLiteral("mainwindow"));
