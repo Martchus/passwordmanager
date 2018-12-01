@@ -163,8 +163,18 @@ use_qt_utilities()
 find_package(passwordfile 3.1.0 REQUIRED)
 use_password_file()
 
-# require Qt AndroidExtras and Kirigami2
+# add further Qt/KF modules required by the
 if(ANDROID AND QUICK_GUI)
+    if(NOT WIDGETS_GUI)
+        option(ENABLE_UNDO_SUPPORT_FOR_QUICK_GUI "enables with undo/redo support for the Qt Quick GUI (requires Qt Widgets)" ON)
+        if(ENABLE_UNDO_SUPPORT_FOR_QUICK_GUI)
+            list(APPEND ADDITIONAL_QT_MODULES Widgets)
+            set_property(
+                SOURCE quickgui/controller.cpp
+                APPEND PROPERTY COMPILE_DEFINITIONS ${META_PROJECT_VARNAME}_ENABLE_UNDO_SUPPORT_FOR_QUICK_GUI
+            )
+        endif()
+    endif()
     list(APPEND ADDITIONAL_QT_MODULES AndroidExtras)
     list(APPEND ADDITIONAL_KF_MODULES Kirigami2)
 endif()
