@@ -13,7 +13,7 @@
 #ifndef QT_NO_CLIPBOARD
 #include <QClipboard>
 #endif
-#if DEBUG_BUILD
+#ifdef DEBUG_BUILD
 #include <QDebug>
 #endif
 #include <QDir>
