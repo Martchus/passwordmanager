@@ -74,8 +74,9 @@ Build c++utilities, passwordfile, qtutilities and passwordmanager in one step to
 
 ```
 # specify Android platform
+_pkg_arch=aarch64
 _android_arch=arm64-v8a
-_android_api_level=21
+_android_api_level=22
 
 # set project name
 _reponame=passwordmanager
@@ -84,17 +85,16 @@ _pkgname=passwordmanager
 # locate SDK, NDK and further libraries
 android_sdk_root=${ANDROID_SDK_ROOT:-/opt/android-sdk}
 android_ndk_root=${ANDROID_NDK_ROOT:-/opt/android-ndk}
-qt_version=$(pacman -Q "android-qt5-$_android_arch" | sed 's/.* \(.*\)-.*/\1/')
 build_tools_version=$(pacman -Q android-sdk-build-tools | sed 's/.* r\(.*\)-.*/\1/')
-qt_root=/opt/android-qt5/$qt_version/$_android_arch
-other_libs_root=/opt/android-libs/$_android_arch
-root="$android_ndk_root/sysroot;$other_libs_root;$qt_root"
+other_libs_root=/opt/android-libs/$_pkg_arch
+other_libs_include=$other_libs_root/include
+root="$android_ndk_root/sysroot;$other_libs_root"
 
 # locate keystore
 keystore_dir=/path/to/keystore-dir
 keystore_alias=$USER
 keystore_url=$keystore_dir/$keystore_alias
-keystore_password=<password>
+#keystore_password=<password>
 
 # create keystore (do only once)
 pushd "$keystore_dir"
@@ -109,14 +109,20 @@ cmake \
     -DCMAKE_ANDROID_ARCH_ABI=$_android_arch \
     -DCMAKE_ANDROID_NDK="$android_ndk_root" \
     -DCMAKE_ANDROID_SDK="$android_sdk_root" \
-    -DCMAKE_ANDROID_STL_TYPE=gnustl_shared \
+    -DCMAKE_ANDROID_STL_TYPE=c++_shared \
     -DCMAKE_INSTALL_PREFIX=$other_libs_root \
     -DCMAKE_PREFIX_PATH="$root" \
-    -DCMAKE_FIND_ROOT_PATH="$root" \
-    -Diconv_DYNAMIC_INCLUDE_DIR="$other_libs_root/include" \
-    -Diconv_STATIC_INCLUDE_DIR="$other_libs_root/include" \
-    -Dcrypto_DYNAMIC_INCLUDE_DIR="$other_libs_root/include" \
-    -Dcrypto_STATIC_INCLUDE_DIR="$other_libs_root/include" \
+    -DCMAKE_FIND_ROOT_PATH="$root;$root/libs" \
+    -Diconv_DYNAMIC_INCLUDE_DIR="$other_libs_include" \
+    -Diconv_STATIC_INCLUDE_DIR="$other_libs_include" \
+    -Diconv_DYNAMIC_LIB="$other_libs_root/lib/libiconv.so" \
+    -Diconv_STATIC_LIB="$other_libs_root/lib/libiconv.a" \
+    -Dcrypto_DYNAMIC_INCLUDE_DIR="$other_libs_include" \
+    -Dcrypto_STATIC_INCLUDE_DIR="$other_libs_include" \
+    -Dboost_iostreams_DYNAMIC_INCLUDE_DIR="$other_libs_include" \
+    -Dboost_iostreams_STATIC_INCLUDE_DIR="$other_libs_include" \
+    -Dboost_iostreams_DYNAMIC_LIB="$other_libs_root/lib/libboost_iostreams.so" \
+    -Dboost_iostreams_STATIC_LIB="$other_libs_root/lib/libboost_iostreams.a" \
     -Dcrypto_DYNAMIC_LIB="$other_libs_root/lib/libcrypto.so" \
     -Dcrypto_STATIC_LIB="$other_libs_root/lib/libcrypto.a" \
     -DUSE_NATIVE_FILE_BUFFER=ON \
