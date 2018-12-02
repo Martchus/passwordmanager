@@ -89,7 +89,14 @@ Kirigami.ScrollablePage {
                                          oldIndex, 1,
                                          fieldsListView.model.index(-1, 0),
                                          newIndex)
-                    opacity: fieldRow.isLast ? 0 : 100
+                    visible: !fieldRow.isLast
+                }
+                Kirigami.Icon {
+                    width: Kirigami.Units.iconSizes.smallMedium
+                    height: width
+                    source: "list-add"
+                    opacity: 0.6
+                    visible: fieldRow.isLast
                 }
                 Item {
                     Layout.fillWidth: true
@@ -114,6 +121,7 @@ Kirigami.ScrollablePage {
                                 return pieces.join(": ")
                             }
                             color: fieldRow.isLast ? "gray" : palette.text
+                            verticalAlignment: Text.AlignVCenter
                         }
                     }
                     MouseArea {

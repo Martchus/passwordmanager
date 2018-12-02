@@ -23,7 +23,7 @@ static Controller *controllerForAndroid = nullptr;
 
 void applyThemingForAndroid()
 {
-    QtAndroid::androidActivity().callObjectMethod("applyTheming", "()");
+    QtAndroid::androidActivity().callMethod<void>("applyTheming", "()");
 }
 
 void registerControllerForAndroid(Controller *controller)

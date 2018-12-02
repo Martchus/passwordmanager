@@ -169,6 +169,7 @@ Kirigami.ScrollablePage {
                             Layout.fillWidth: true
                             Layout.fillHeight: true
                             text: model.name
+                            verticalAlignment: Text.AlignVCenter
                         }
                     }
                     MouseArea {
