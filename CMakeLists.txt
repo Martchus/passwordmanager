@@ -169,9 +169,14 @@ if(ANDROID AND QUICK_GUI)
         option(ENABLE_UNDO_SUPPORT_FOR_QUICK_GUI "enables with undo/redo support for the Qt Quick GUI (requires Qt Widgets)" ON)
         if(ENABLE_UNDO_SUPPORT_FOR_QUICK_GUI)
             list(APPEND ADDITIONAL_QT_MODULES Widgets)
-            set_property(
-                SOURCE quickgui/controller.cpp
-                APPEND PROPERTY COMPILE_DEFINITIONS ${META_PROJECT_VARNAME}_ENABLE_UNDO_SUPPORT_FOR_QUICK_GUI
+            list(APPEND META_PUBLIC_COMPILE_DEFINITIONS ${META_PROJECT_VARNAME_UPPER}_ENABLE_UNDO_SUPPORT_FOR_QUICK_GUI)
+            list(APPEND QML_HEADER_FILES
+                gui/stacksupport.h
+                gui/undocommands.h
+            )
+            list(APPEND QML_SRC_FILES
+                gui/stacksupport.cpp
+                gui/undocommands.cpp
             )
         endif()
     endif()

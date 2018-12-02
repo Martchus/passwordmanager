@@ -1,6 +1,6 @@
 #include "./entrymodel.h"
 
-#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
+#ifdef PASSWORD_MANAGER_UNDO_SUPPORT
 #include "../gui/undocommands.h"
 #endif
 
@@ -41,7 +41,7 @@ EntryModel::EntryModel(QObject *parent)
 {
 }
 
-#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
+#ifdef PASSWORD_MANAGER_UNDO_SUPPORT
 /*!
  * \brief Constructs a new entry model with the specified \a undoStack.
  *
@@ -267,7 +267,7 @@ QMap<int, QVariant> EntryModel::itemData(const QModelIndex &index) const
 
 bool EntryModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
+#ifdef PASSWORD_MANAGER_UNDO_SUPPORT
     if (undoStack()) {
         return push(make_unique<EntryModelSetValueCommand>(this, index, value, role));
     }
@@ -395,7 +395,7 @@ int EntryModel::columnCount(const QModelIndex &) const
 
 bool EntryModel::insertRows(int row, int count, const QModelIndex &parent)
 {
-#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
+#ifdef PASSWORD_MANAGER_UNDO_SUPPORT
     if (undoStack()) {
         return push(make_unique<EntryModelInsertRowsCommand>(this, row, count, parent));
     }
@@ -428,7 +428,7 @@ bool EntryModel::insertRows(int row, int count, const QModelIndex &parent)
 
 bool EntryModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
+#ifdef PASSWORD_MANAGER_UNDO_SUPPORT
     if (undoStack()) {
         return push(make_unique<EntryModelRemoveRowsCommand>(this, row, count, parent));
     }
@@ -448,7 +448,7 @@ bool EntryModel::removeRows(int row, int count, const QModelIndex &parent)
 
 bool EntryModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int count, const QModelIndex &destinationParent, int destinationChild)
 {
-#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
+#ifdef PASSWORD_MANAGER_UNDO_SUPPORT
     if (undoStack()) {
         return push(make_unique<EntryModelMoveRowsCommand>(this, sourceParent, sourceRow, count, destinationParent, destinationChild));
     }

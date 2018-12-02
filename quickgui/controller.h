@@ -13,10 +13,7 @@
 QT_FORWARD_DECLARE_CLASS(QSettings)
 
 #if defined(PASSWORD_MANAGER_GUI_QTWIDGETS) || defined(PASSWORD_MANAGER_ENABLE_UNDO_SUPPORT_FOR_QUICK_GUI)
-#define PASSWORD_MANAGER_UNDO_SUPPORT
-#include <QUndoStack>
-#else
-QT_FORWARD_DECLARE_CLASS(QUndoStack)
+#include "../gui/stacksupport.h"
 #endif
 
 namespace QtGui {

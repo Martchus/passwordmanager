@@ -1,6 +1,6 @@
 #include "./fieldmodel.h"
 
-#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
+#ifdef PASSWORD_MANAGER_UNDO_SUPPORT
 #include "../gui/undocommands.h"
 #endif
 
@@ -36,7 +36,7 @@ FieldModel::FieldModel(QObject *parent)
 {
 }
 
-#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
+#ifdef PASSWORD_MANAGER_UNDO_SUPPORT
 /*!
  * \brief Constructs a new field model with the specified \a undoStack.
  *
@@ -167,7 +167,7 @@ QMap<int, QVariant> FieldModel::itemData(const QModelIndex &index) const
 
 bool FieldModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-#if PASSWORD_MANAGER_GUI_QTWIDGETS
+#ifdef PASSWORD_MANAGER_UNDO_SUPPORT
     if (undoStack()) {
         return push(make_unique<FieldModelSetValueCommand>(this, index, value, role));
     }
@@ -297,7 +297,7 @@ int FieldModel::columnCount(const QModelIndex &parent) const
 
 bool FieldModel::insertRows(int row, int count, const QModelIndex &parent)
 {
-#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
+#ifdef PASSWORD_MANAGER_UNDO_SUPPORT
     if (undoStack()) {
         return push(make_unique<FieldModelInsertRowsCommand>(this, row, count));
     }
@@ -313,7 +313,7 @@ bool FieldModel::insertRows(int row, int count, const QModelIndex &parent)
 
 bool FieldModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
+#ifdef PASSWORD_MANAGER_UNDO_SUPPORT
     if (undoStack()) {
         return push(make_unique<FieldModelRemoveRowsCommand>(this, row, count));
     }

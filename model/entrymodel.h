@@ -1,7 +1,7 @@
 #ifndef ENTRYMODEL_H
 #define ENTRYMODEL_H
 
-#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
+#if defined(PASSWORD_MANAGER_GUI_QTWIDGETS) || defined(PASSWORD_MANAGER_ENABLE_UNDO_SUPPORT_FOR_QUICK_GUI)
 #include "../gui/stacksupport.h"
 #endif
 
@@ -26,7 +26,7 @@ enum EntryModelRoles {
 };
 
 class EntryModel : public QAbstractItemModel
-#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
+#ifdef PASSWORD_MANAGER_UNDO_SUPPORT
     ,
                    public StackSupport
 #endif
@@ -37,7 +37,7 @@ class EntryModel : public QAbstractItemModel
 
 public:
     explicit EntryModel(QObject *parent = nullptr);
-#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
+#ifdef PASSWORD_MANAGER_UNDO_SUPPORT
     explicit EntryModel(QUndoStack *undoStack, QObject *parent = nullptr);
 #endif
 
@@ -96,7 +96,7 @@ inline Io::NodeEntry *EntryModel::rootEntry()
 inline void EntryModel::setRootEntry(Io::NodeEntry *entry)
 {
     if (m_rootEntry != entry) {
-#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
+#ifdef PASSWORD_MANAGER_UNDO_SUPPORT
         clearUndoStack();
 #endif
         beginResetModel();

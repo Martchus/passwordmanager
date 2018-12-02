@@ -7,6 +7,8 @@
 
 #include <memory>
 
+#define PASSWORD_MANAGER_UNDO_SUPPORT
+
 namespace QtGui {
 
 class StackAbsorper;

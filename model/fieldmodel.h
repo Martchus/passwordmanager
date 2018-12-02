@@ -1,7 +1,7 @@
 #ifndef FIELDMODEL_H
 #define FIELDMODEL_H
 
-#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
+#if defined(PASSWORD_MANAGER_GUI_QTWIDGETS) || defined(PASSWORD_MANAGER_ENABLE_UNDO_SUPPORT_FOR_QUICK_GUI)
 #include "../gui/stacksupport.h"
 #endif
 
@@ -39,7 +39,7 @@ enum PasswordVisibility {
 };
 
 class FieldModel : public QAbstractTableModel
-#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
+#ifdef PASSWORD_MANAGER_UNDO_SUPPORT
     ,
                    public StackSupport
 #endif
@@ -50,7 +50,7 @@ class FieldModel : public QAbstractTableModel
 
 public:
     explicit FieldModel(QObject *parent = nullptr);
-#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
+#ifdef PASSWORD_MANAGER_UNDO_SUPPORT
     explicit FieldModel(QUndoStack *undoStack, QObject *parent = nullptr);
 #endif
 
@@ -139,7 +139,7 @@ inline void FieldModel::setPasswordVisibility(PasswordVisibility passwordVisibil
 {
     m_passwordVisibility = passwordVisibility;
     if (m_fields) {
-        emit dataChanged(index(0, 1), index(m_fields->size() - 1, 1), QVector<int>() << Qt::DisplayRole << Qt::EditRole);
+        emit dataChanged(index(0, 1), index(m_fields->size() - 1, 1), QVector<int>({Qt::DisplayRole, Qt::EditRole}));
     }
 }
 } // namespace QtGui
