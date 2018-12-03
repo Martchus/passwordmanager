@@ -95,6 +95,9 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
     auto *const context(engine.rootContext());
     context->setContextProperty(QStringLiteral("userPaths"), userPaths);
     context->setContextProperty(QStringLiteral("nativeInterface"), &controller);
+    context->setContextProperty(QStringLiteral("app"), &a);
+    context->setContextProperty(QStringLiteral("description"), QStringLiteral(APP_DESCRIPTION));
+    context->setContextProperty(QStringLiteral("dependencyVersions"), QStringList(DEPENCENCY_VERSIONS));
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
 
 #ifdef Q_OS_ANDROID

@@ -15,7 +15,7 @@ Kirigami.ApplicationWindow {
         property bool showNoPasswordWarning: nativeInterface.fileOpen
                                              && !nativeInterface.passwordSet
 
-        title: qsTr("Password Manager")
+        title: app.applicationName
         titleIcon: "qrc://icons/hicolor/scalable/apps/passwordmanager-black.svg"
         visible: true
         resetMenuOnTriggered: false
@@ -193,6 +193,11 @@ Kirigami.ApplicationWindow {
                 onTriggered: nativeInterface.close()
             }
         ]
+        onBannerClicked: {
+            leftMenu.resetMenu()
+            aboutDialog.open()
+        }
+
         Controls.Switch {
             text: qsTr("Use native file dialog")
             checked: nativeInterface.useNativeFileDialog
@@ -204,6 +209,49 @@ Kirigami.ApplicationWindow {
         id: contextDrawer
     }
     Component.onCompleted: nativeInterface.init()
+
+    BasicDialog {
+        id: aboutDialog
+        standardButtons: Controls.Dialog.Ok
+
+        ColumnLayout {
+            anchors.fill: parent
+            Image {
+                Layout.alignment: Qt.AlignHCenter
+                source: "qrc:/icons/hicolor/128x128/apps/passwordmanager.png"
+            }
+            Controls.Label {
+                Layout.fillWidth: true
+                text: app.applicationName
+                font.bold: true
+                font.pointSize: font.pointSize * 1.2
+                horizontalAlignment: Text.AlignHCenter
+            }
+            Controls.Label {
+                Layout.fillWidth: true
+                text: app.applicationVersion
+                horizontalAlignment: Text.AlignHCenter
+            }
+            Controls.Label {
+                Layout.fillWidth: true
+                text: description
+                font.italic: true
+                horizontalAlignment: Text.AlignHCenter
+            }
+            Controls.Label {
+                Layout.fillWidth: true
+                text: "<a href=\"" + app.organizationDomain + "\">"
+                      + app.organizationDomain + "</a>"
+                horizontalAlignment: Text.AlignHCenter
+                onLinkActivated: Qt.openUrlExternally(app.organizationDomain)
+            }
+            Controls.Label {
+                Layout.fillWidth: true
+                text: qsTr("developed by %1").arg(app.organizationName)
+                horizontalAlignment: Text.AlignHCenter
+            }
+        }
+    }
 
     PasswordDialog {
         id: enterPasswordDialog
