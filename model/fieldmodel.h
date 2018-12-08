@@ -81,6 +81,8 @@ public Q_SLOTS:
     void reset();
 
 private:
+    QVariant passwordValue(const QModelIndex &index, int role) const;
+
     Io::AccountEntry *m_accountEntry;
     std::vector<Io::Field> *m_fields;
     PasswordVisibility m_passwordVisibility;
@@ -139,7 +141,7 @@ inline void FieldModel::setPasswordVisibility(PasswordVisibility passwordVisibil
 {
     m_passwordVisibility = passwordVisibility;
     if (m_fields) {
-        emit dataChanged(index(0, 1), index(m_fields->size() - 1, 1), QVector<int>({Qt::DisplayRole, Qt::EditRole}));
+        emit dataChanged(index(0, 1), index(m_fields->size() - 1, 1), QVector<int>({ Qt::DisplayRole, Qt::EditRole }));
     }
 }
 } // namespace QtGui

@@ -100,7 +100,7 @@ QList<Entry *> EntryModel::takeEntries(int row, int count, const QModelIndex &pa
     }
     beginRemoveRows(parent, row, lastIndex);
     for (int index = lastIndex; index >= row; --index) {
-        Entry *const child = children[index];
+        Entry *const child = children[static_cast<size_t>(index)];
         child->setParent(nullptr);
         res << child;
     }
@@ -243,13 +243,14 @@ QVariant EntryModel::data(const QModelIndex &index, int role) const
         ss.exceptions(std::stringstream::failbit | std::stringstream::badbit);
         try {
             entry->make(ss);
+            // FIXME: make conversion to QByteArray more efficient
             const auto str(ss.str());
             return QByteArray(str.data(), str.size());
         } catch (...) {
             IoUtilities::catchIoFailure();
             return false;
         }
-    } break;
+    }
     case DefaultExpandedRole:
         return entry->type() == EntryType::Node && static_cast<const NodeEntry *>(entry)->isExpandedByDefault();
     default:;

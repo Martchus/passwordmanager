@@ -84,6 +84,14 @@ void FieldModel::setAccountEntry(AccountEntry *entry)
     endResetModel();
 }
 
+inline QVariant FieldModel::passwordValue(const QModelIndex &index, int role) const
+{
+    return (m_passwordVisibility == PasswordVisibility::Always || role == Qt::EditRole
+               || (*m_fields)[static_cast<size_t>(index.row())].type() != FieldType::Password)
+        ? QString::fromStdString((*m_fields)[static_cast<size_t>(index.row())].value())
+        : QString((*m_fields)[static_cast<size_t>(index.row())].value().size(), QChar(0x2022));
+}
+
 QVariant FieldModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid() || !m_fields || index.row() < 0) {
@@ -98,10 +106,7 @@ QVariant FieldModel::data(const QModelIndex &index, int role) const
             case 0:
                 return QString::fromStdString((*m_fields)[static_cast<size_t>(index.row())].name());
             case 1:
-                return (m_passwordVisibility == PasswordVisibility::Always || role == Qt::EditRole
-                           || (*m_fields)[static_cast<size_t>(index.row())].type() != FieldType::Password)
-                    ? QString::fromStdString((*m_fields)[static_cast<size_t>(index.row())].value())
-                    : QString((*m_fields)[static_cast<size_t>(index.row())].value().size(), QChar(0x2022));
+                return passwordValue(index, role);
             default:;
             }
             break;
@@ -110,10 +115,7 @@ QVariant FieldModel::data(const QModelIndex &index, int role) const
         case Key:
             return QString::fromStdString((*m_fields)[static_cast<size_t>(index.row())].name());
         case Value:
-            return (m_passwordVisibility == PasswordVisibility::Always || role == Qt::EditRole
-                       || (*m_fields)[static_cast<size_t>(index.row())].type() != FieldType::Password)
-                ? QString::fromStdString((*m_fields)[static_cast<size_t>(index.row())].value())
-                : QString((*m_fields)[static_cast<size_t>(index.row())].value().size(), QChar(0x2022));
+            return passwordValue(index, role);
         case AlwaysActualValue:
             return QString::fromStdString((*m_fields)[static_cast<size_t>(index.row())].value());
         case IsPassword:

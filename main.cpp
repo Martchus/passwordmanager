@@ -80,7 +80,6 @@ int main(int argc, char *argv[])
             cli.run();
         }
     } else if (qtConfigArgs.areQtGuiArgsPresent()) {
-        // run Qt gui if no arguments, --qt-gui or --qt-quick-gui specified, a file might be specified
 #if defined(PASSWORD_MANAGER_GUI_QTWIDGETS) || defined(PASSWORD_MANAGER_GUI_QTQUICK)
         const auto file(fileArg.isPresent() ? QString::fromLocal8Bit(fileArg.firstValue()) : QString());
 #endif
@@ -109,7 +108,7 @@ int main(int argc, char *argv[])
 #endif
         }
     }
-#else
+#else // PASSWORD_MANAGER_FORCE_GUI
 #ifdef PASSWORD_MANAGER_GUI_QTQUICK
     returnCode = QtGui::runQuickGui(argc, argv, qtConfigArgs, QString());
 #else
