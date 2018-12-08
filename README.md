@@ -70,6 +70,21 @@ The Password Manager depends on c++utilities and passwordfile. Checkout the READ
    ```
 
 #### Concrete example of 3. for building an Android APK under Arch Linux
+Create stuff for signing the package (remove `-DANDROID_APK_FORCE_DEBUG=ON` line in the CMake invocation to actually use this):
+```
+# locate keystore
+keystore_dir=/path/to/keystore-dir
+keystore_alias=$USER
+keystore_url=$keystore_dir/$keystore_alias
+#keystore_password=<password>
+
+# create keystore (do only once)
+pushd "$keystore_dir"
+keytool -genkey -v -keystore keystore_alias.keystore -alias keystore_alias -keyalg RSA -validity 999999
+keytool -importkeystore -srckeystore keystore_alias.keystore -destkeystore keystore_alias.keystore -deststoretype pkcs12 # FIXME: make this in one step
+popd
+```
+
 Build c++utilities, passwordfile, qtutilities and passwordmanager in one step to create an Android APK for arm64-v8a:
 
 ```
@@ -90,18 +105,6 @@ other_libs_root=/opt/android-libs/$_pkg_arch
 other_libs_include=$other_libs_root/include
 root="$android_ndk_root/sysroot;$other_libs_root"
 
-# locate keystore
-keystore_dir=/path/to/keystore-dir
-keystore_alias=$USER
-keystore_url=$keystore_dir/$keystore_alias
-#keystore_password=<password>
-
-# create keystore (do only once)
-pushd "$keystore_dir"
-keytool -genkey -v -keystore keystore_alias.keystore -alias keystore_alias -keyalg RSA -validity 999999
-keytool -importkeystore -srckeystore keystore_alias.keystore -destkeystore keystore_alias.keystore -deststoretype pkcs12 # FIXME: make this in one step
-popd
-
 cmake \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_SYSTEM_NAME=Android \
@@ -115,21 +118,18 @@ cmake \
     -DCMAKE_FIND_ROOT_PATH="$root;$root/libs" \
     -Diconv_DYNAMIC_INCLUDE_DIR="$other_libs_include" \
     -Diconv_STATIC_INCLUDE_DIR="$other_libs_include" \
-    -Diconv_DYNAMIC_LIB="$other_libs_root/lib/libiconv.so" \
-    -Diconv_STATIC_LIB="$other_libs_root/lib/libiconv.a" \
     -Dcrypto_DYNAMIC_INCLUDE_DIR="$other_libs_include" \
     -Dcrypto_STATIC_INCLUDE_DIR="$other_libs_include" \
     -Dboost_iostreams_DYNAMIC_INCLUDE_DIR="$other_libs_include" \
     -Dboost_iostreams_STATIC_INCLUDE_DIR="$other_libs_include" \
-    -Dboost_iostreams_DYNAMIC_LIB="$other_libs_root/lib/libboost_iostreams.so" \
-    -Dboost_iostreams_STATIC_LIB="$other_libs_root/lib/libboost_iostreams.a" \
-    -Dcrypto_DYNAMIC_LIB="$other_libs_root/lib/libcrypto.so" \
-    -Dcrypto_STATIC_LIB="$other_libs_root/lib/libcrypto.a" \
+    -DCLANG_FORMAT_ENABLED=ON \
     -DUSE_NATIVE_FILE_BUFFER=ON \
     -DNO_DOXYGEN=ON \
     -DWIDGETS_GUI=OFF \
     -DQUICK_GUI=ON \
     -DBUILTIN_ICON_THEMES=breeze \
+    -DBUILTIN_TRANSLATIONS=ON \
+    -DANDROID_APK_FORCE_DEBUG=ON \
     -DANDROID_APK_KEYSTORE_URL="$keystore_url" \
     -DANDROID_APK_KEYSTORE_ALIAS="$keystore_alias" \
     -DANDROID_APK_KEYSTORE_PASSWORD="$keystore_password" \
