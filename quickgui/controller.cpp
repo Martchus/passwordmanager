@@ -138,6 +138,10 @@ void Controller::load(const QString &filePath)
     try {
         m_file.load();
         m_entryModel.setRootEntry(m_file.rootEntry());
+        if (!m_entryModel.rootEntry()) {
+            emit fileError(tr("An error occured when opening the file: root element missing"), QStringLiteral("load"));
+            return;
+        }
         setFileOpen(true);
         updateWindowTitle();
     } catch (const CryptoException &e) {
