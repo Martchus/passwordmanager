@@ -2,6 +2,14 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="de_DE">
 <context>
+    <name>AboutDialog</name>
+    <message>
+        <location filename="../qml/AboutDialog.qml" line="59"/>
+        <source>developed by %1</source>
+        <translation>entwickelt von %1</translation>
+    </message>
+</context>
+<context>
     <name>BasicPage</name>
     <message>
         <source>filter</source>
@@ -41,31 +49,31 @@
         <translation>%1 wirklich löschen?</translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="71"/>
-        <location filename="../qml/EntriesPage.qml" line="112"/>
+        <location filename="../qml/EntriesPage.qml" line="83"/>
+        <location filename="../qml/EntriesPage.qml" line="124"/>
         <source>category </source>
         <translation>Kategorie </translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="71"/>
-        <location filename="../qml/EntriesPage.qml" line="112"/>
+        <location filename="../qml/EntriesPage.qml" line="83"/>
+        <location filename="../qml/EntriesPage.qml" line="124"/>
         <source>account </source>
         <translation>Konto </translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="89"/>
+        <location filename="../qml/EntriesPage.qml" line="101"/>
         <source>Name for new </source>
         <translatorcomment>verb flection maybe incorrect</translatorcomment>
         <translation>Name für neues </translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="89"/>
+        <location filename="../qml/EntriesPage.qml" line="101"/>
         <source>Rename </source>
         <translatorcomment>resulting word order incorrect</translatorcomment>
         <translation>Umbenennen </translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="104"/>
+        <location filename="../qml/EntriesPage.qml" line="116"/>
         <source>enter new name here</source>
         <translation>neuen Namen hier eingeben</translation>
     </message>
@@ -82,20 +90,20 @@
         <translation type="obsolete">Passwort kopieren</translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="178"/>
-        <location filename="../qml/EntriesPage.qml" line="214"/>
+        <location filename="../qml/EntriesPage.qml" line="191"/>
+        <location filename="../qml/EntriesPage.qml" line="220"/>
         <source>Cut</source>
         <translation>Ausschneiden</translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="189"/>
-        <location filename="../qml/EntriesPage.qml" line="225"/>
+        <location filename="../qml/EntriesPage.qml" line="202"/>
+        <location filename="../qml/EntriesPage.qml" line="231"/>
         <source>Delete</source>
         <translation>Löschen</translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="203"/>
-        <location filename="../qml/EntriesPage.qml" line="233"/>
+        <location filename="../qml/EntriesPage.qml" line="209"/>
+        <location filename="../qml/EntriesPage.qml" line="239"/>
         <source>Rename</source>
         <translation>Umbenennen</translation>
     </message>
@@ -119,55 +127,55 @@
         <translation>Zeichen anzeigen</translation>
     </message>
     <message>
-        <location filename="../qml/FieldsPage.qml" line="104"/>
+        <location filename="../qml/FieldsPage.qml" line="111"/>
         <source>click to append new field</source>
         <translation>neues Feld hinzufügen</translation>
     </message>
     <message>
-        <location filename="../qml/FieldsPage.qml" line="136"/>
-        <location filename="../qml/FieldsPage.qml" line="169"/>
+        <location filename="../qml/FieldsPage.qml" line="144"/>
+        <location filename="../qml/FieldsPage.qml" line="177"/>
         <source>Mark as normal field</source>
         <translation>Als normales Feld markieren</translation>
     </message>
     <message>
-        <location filename="../qml/FieldsPage.qml" line="136"/>
-        <location filename="../qml/FieldsPage.qml" line="170"/>
+        <location filename="../qml/FieldsPage.qml" line="144"/>
+        <location filename="../qml/FieldsPage.qml" line="178"/>
         <source>Mark as password field</source>
         <translation>Als Passwortfeld markieren</translation>
     </message>
     <message>
-        <location filename="../qml/FieldsPage.qml" line="145"/>
-        <location filename="../qml/FieldsPage.qml" line="179"/>
+        <location filename="../qml/FieldsPage.qml" line="153"/>
+        <location filename="../qml/FieldsPage.qml" line="187"/>
         <source>Copy password</source>
         <translation>Passwort kopieren</translation>
     </message>
     <message>
-        <location filename="../qml/FieldsPage.qml" line="145"/>
-        <location filename="../qml/FieldsPage.qml" line="179"/>
+        <location filename="../qml/FieldsPage.qml" line="153"/>
+        <location filename="../qml/FieldsPage.qml" line="187"/>
         <source>Copy value</source>
         <translation>Wert kopieren</translation>
     </message>
     <message>
-        <location filename="../qml/FieldsPage.qml" line="149"/>
-        <location filename="../qml/FieldsPage.qml" line="183"/>
+        <location filename="../qml/FieldsPage.qml" line="157"/>
+        <location filename="../qml/FieldsPage.qml" line="191"/>
         <source>Copied</source>
         <translation>Kopiert</translation>
     </message>
     <message>
-        <location filename="../qml/FieldsPage.qml" line="149"/>
-        <location filename="../qml/FieldsPage.qml" line="183"/>
+        <location filename="../qml/FieldsPage.qml" line="157"/>
+        <location filename="../qml/FieldsPage.qml" line="191"/>
         <source>Unable to access clipboard</source>
         <translation>Fehler beim Zugriff auf die Zwischenablage</translation>
     </message>
     <message>
-        <location filename="../qml/FieldsPage.qml" line="154"/>
-        <location filename="../qml/FieldsPage.qml" line="190"/>
+        <location filename="../qml/FieldsPage.qml" line="162"/>
+        <location filename="../qml/FieldsPage.qml" line="198"/>
         <source>Delete field</source>
         <translation>Feld löschen</translation>
     </message>
     <message>
-        <location filename="../qml/FieldsPage.qml" line="159"/>
-        <location filename="../qml/FieldsPage.qml" line="197"/>
+        <location filename="../qml/FieldsPage.qml" line="167"/>
+        <location filename="../qml/FieldsPage.qml" line="205"/>
         <source>Insert empty field after this</source>
         <translation>Leeres Feld nach diesem einfügen</translation>
     </message>
@@ -208,77 +216,82 @@
 <context>
     <name>QtGui::Controller</name>
     <message>
-        <location filename="../quickgui/controller.cpp" line="148"/>
+        <location filename="../quickgui/controller.cpp" line="142"/>
+        <source>An error occured when opening the file: root element missing</source>
+        <translation>Die Datei konnte nicht geöffnet werden, weil das Root-Element fehlt.</translation>
+    </message>
+    <message>
+        <location filename="../quickgui/controller.cpp" line="153"/>
         <source>A crypto error occured when opening the file: </source>
         <translation>Ein Verschlüsselungsfehler ist beim Öffnen der Datei aufgetreten: </translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="151"/>
+        <location filename="../quickgui/controller.cpp" line="156"/>
         <source>A parsing error occured when opening the file: </source>
         <translation>Die Datei konnte nicht richtig eingelesen werden: </translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="153"/>
+        <location filename="../quickgui/controller.cpp" line="158"/>
         <source>loading</source>
         <translation>beim Laden</translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="170"/>
+        <location filename="../quickgui/controller.cpp" line="175"/>
         <source>creating</source>
         <translation>beim Erstellen</translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="185"/>
+        <location filename="../quickgui/controller.cpp" line="190"/>
         <source>closing</source>
         <translation>beim Schließen</translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="209"/>
+        <location filename="../quickgui/controller.cpp" line="214"/>
         <source>Unable to open file descriptor for saving the file.</source>
         <translation>Fehler beim Öffnen des Dateideskriptors zum Speichern der Datei.</translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="224"/>
+        <location filename="../quickgui/controller.cpp" line="229"/>
         <source>A crypto error occured when saving the file: </source>
         <translation>Ein Verschlüsselungsfehler ist beim Speichern der Datei aufgetreten: </translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="226"/>
+        <location filename="../quickgui/controller.cpp" line="231"/>
         <source>An internal error occured when saving the file: </source>
         <translation>Ein interner Fehler ist beim Speichern der Datei aufgetreten: </translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="228"/>
+        <location filename="../quickgui/controller.cpp" line="233"/>
         <source>saving</source>
         <translation>beim Speichern</translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="267"/>
+        <location filename="../quickgui/controller.cpp" line="272"/>
         <source>opening from native file descriptor</source>
         <translation>beim Öffnen mittels nativem Dateideskriptors</translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="277"/>
+        <location filename="../quickgui/controller.cpp" line="282"/>
         <source>Canceled file selection</source>
         <translation>Dateiauswahl geschlossen</translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="406"/>
+        <location filename="../quickgui/controller.cpp" line="411"/>
         <source>No file opened.</source>
         <translation>Keine Datei geöffnet.</translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="421"/>
+        <location filename="../quickgui/controller.cpp" line="426"/>
         <source>An IO error occured when %1 the file %2: </source>
         <translation>Ein Ein- bzw. Ausgabefehler ist %1 der Datei %2 aufgetreten: </translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="423"/>
+        <location filename="../quickgui/controller.cpp" line="428"/>
         <source>An unknown exception occured when %1 the file %2: </source>
         <translation>Eine unbekannte Ausnahme ist %1 der Datei %2 aufgetreten: </translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="426"/>
+        <location filename="../quickgui/controller.cpp" line="431"/>
         <source>An unknown error occured when %1 the file %2.</source>
         <translation>Ein unbekannter Fehler ist %1 der Datei %2 aufgetreten.</translation>
     </message>
@@ -286,7 +299,7 @@
 <context>
     <name>QtGui::EntryModel</name>
     <message>
-        <location filename="../model/entrymodel.cpp" line="363"/>
+        <location filename="../model/entrymodel.cpp" line="364"/>
         <source>Name</source>
         <translation></translation>
     </message>
@@ -294,12 +307,12 @@
 <context>
     <name>QtGui::FieldModel</name>
     <message>
-        <location filename="../model/fieldmodel.cpp" line="274"/>
+        <location filename="../model/fieldmodel.cpp" line="276"/>
         <source>Name</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../model/fieldmodel.cpp" line="276"/>
+        <location filename="../model/fieldmodel.cpp" line="278"/>
         <source>Value</source>
         <translation>Wert</translation>
     </message>
@@ -992,11 +1005,6 @@ OpenSSL-Fehler: %1</translation>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="18"/>
-        <source>Password Manager</source>
-        <translation></translation>
-    </message>
-    <message>
         <location filename="../qml/main.qml" line="37"/>
         <source>Filter</source>
         <translation></translation>
@@ -1055,7 +1063,7 @@ Datei wird unverschlüsselt gespeichert!</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="159"/>
-        <location filename="../qml/main.qml" line="268"/>
+        <location filename="../qml/main.qml" line="277"/>
         <source>Clear search</source>
         <translation>Suchmodus verlassen</translation>
     </message>
@@ -1075,62 +1083,62 @@ Datei wird unverschlüsselt gespeichert!</translation>
         <translation>Datei schließen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="197"/>
+        <location filename="../qml/main.qml" line="202"/>
         <source>Use native file dialog</source>
         <translation>Nativen Dateidialog verwenden</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="220"/>
+        <location filename="../qml/main.qml" line="229"/>
         <source>Select an existing file</source>
         <translation>Bestehende Datei auswählen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="220"/>
+        <location filename="../qml/main.qml" line="229"/>
         <source>Select path for new file</source>
         <translation>Pfad für neue Datei auswählen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="250"/>
+        <location filename="../qml/main.qml" line="259"/>
         <source>Search for categories and accounts</source>
         <translation>Nach Kategorien/Konten suchen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="263"/>
+        <location filename="../qml/main.qml" line="272"/>
         <source>Apply search term</source>
         <translation>Suche starten</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="273"/>
+        <location filename="../qml/main.qml" line="282"/>
         <source>Quit dialog</source>
         <translation>Suchdialog schließen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="298"/>
+        <location filename="../qml/main.qml" line="307"/>
         <source>Retry</source>
         <translation>Nochmal versuchen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="306"/>
+        <location filename="../qml/main.qml" line="315"/>
         <source>Password required to open %1</source>
         <translation>Zum Öffnen von %1 wird ein Passwort benötigt</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="313"/>
+        <location filename="../qml/main.qml" line="322"/>
         <source>%1 closed</source>
         <translation>%1 geschlossen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="318"/>
+        <location filename="../qml/main.qml" line="327"/>
         <source>%1 opened</source>
         <translation>%1 geöffnet</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="323"/>
+        <location filename="../qml/main.qml" line="332"/>
         <source>%1 saved</source>
         <translation>%1 gespeichert</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="373"/>
+        <location filename="../qml/main.qml" line="382"/>
         <source>Clear recently opened files</source>
         <translation>Liste kürzlich geöffneter Dateien löschen</translation>
     </message>
