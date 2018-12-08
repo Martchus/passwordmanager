@@ -30,24 +30,11 @@ using namespace ApplicationUtilities;
 
 namespace QtGui {
 
-#ifdef Q_OS_ANDROID
-namespace Android {
-namespace WindowManager {
-namespace LayoutParams {
-enum RelevantFlags {
-    TranslucentStatus = 0x04000000,
-    DrawsSystemBarBackgrounds = 0x80000000,
-};
-}
-} // namespace WindowManager
-} // namespace Android
-#endif
-
 int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, const QString &file)
 {
-    // setup logging for Android
+    // setup Android-specifics (logging, theming)
 #ifdef Q_OS_ANDROID
-    qInstallMessageHandler(writeToAndroidLog);
+    setupAndroidSpecifics();
 #endif
 
     // init application
@@ -99,10 +86,6 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
     context->setContextProperty(QStringLiteral("description"), QStringLiteral(APP_DESCRIPTION));
     context->setContextProperty(QStringLiteral("dependencyVersions"), QStringList(DEPENCENCY_VERSIONS));
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
-
-#ifdef Q_OS_ANDROID
-    applyThemingForAndroid();
-#endif
 
     // run event loop
     return a.exec();

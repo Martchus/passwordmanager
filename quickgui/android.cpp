@@ -19,11 +19,29 @@ using namespace ConversionUtilities;
 
 namespace QtGui {
 
+namespace Android {
+namespace WindowManager {
+namespace LayoutParams {
+enum RelevantFlags {
+    TranslucentStatus = 0x04000000,
+    DrawsSystemBarBackgrounds = 0x80000000,
+};
+}
+} // namespace WindowManager
+} // namespace Android
+
 static Controller *controllerForAndroid = nullptr;
 
 void applyThemingForAndroid()
 {
-    QtAndroid::androidActivity().callMethod<void>("applyTheming", "()");
+    QtAndroid::runOnAndroidThread([=]() {
+        const auto color = QColor(QLatin1String("#2c714a")).rgba();
+        QAndroidJniObject window = QtAndroid::androidActivity().callObjectMethod("getWindow", "()Landroid/view/Window;");
+        window.callMethod<void>("addFlags", "(I)V", Android::WindowManager::LayoutParams::DrawsSystemBarBackgrounds);
+        window.callMethod<void>("clearFlags", "(I)V", Android::WindowManager::LayoutParams::TranslucentStatus);
+        window.callMethod<void>("setStatusBarColor", "(I)V", color);
+        window.callMethod<void>("setNavigationBarColor", "(I)V", color);
+    });
 }
 
 void registerControllerForAndroid(Controller *controller)

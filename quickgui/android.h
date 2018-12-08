@@ -12,11 +12,12 @@ namespace QtGui {
 
 class Controller;
 
-void applyThemingForAndroid();
+bool applyThemingForAndroid();
 void registerControllerForAndroid(Controller *controller);
 bool showAndroidFileDialog(bool existing);
 int openFileDescriptorFromAndroidContentUrl(const QString &url, const QString &mode);
 void writeToAndroidLog(QtMsgType type, const QMessageLogContext &context, const QString &msg);
+void setupAndroidSpecifics();
 
 }
 

@@ -48,14 +48,6 @@ public class Activity extends QtActivity {
         }
     }
 
-    public void applyTheming() {
-        Window window = getWindow();
-        window.addFlags(LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.setStatusBarColor(0x000000FF);
-        window.setNavigationBarColor(0x000000FF);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
