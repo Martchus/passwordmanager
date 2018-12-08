@@ -10,7 +10,7 @@ namespace QtGui {
 
 class Controller;
 
-bool applyThemingForAndroid();
+void applyThemingForAndroid();
 void registerControllerForAndroid(Controller *controller);
 bool showAndroidFileDialog(bool existing);
 int openFileDescriptorFromAndroidContentUrl(const QString &url, const QString &mode);
