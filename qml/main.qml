@@ -210,64 +210,8 @@ Kirigami.ApplicationWindow {
     }
     Component.onCompleted: nativeInterface.init()
 
-    BasicDialog {
+    AboutDialog {
         id: aboutDialog
-        standardButtons: Controls.Dialog.Ok
-        padding: Kirigami.Units.smallSpacing
-
-        ColumnLayout {
-            anchors.fill: parent
-            Image {
-                readonly property double size: Kirigami.Units.gridUnit * 13
-                Layout.alignment: Qt.AlignHCenter
-                Layout.preferredWidth: size
-                Layout.preferredHeight: size
-                source: "qrc:/icons/hicolor/scalable/apps/passwordmanager.svg"
-                sourceSize.width: size
-                sourceSize.height: size
-            }
-            Controls.Label {
-                Layout.fillWidth: true
-                text: app.applicationName
-                font.bold: true
-                font.pointSize: font.pointSize * 1.2
-                horizontalAlignment: Text.AlignHCenter
-            }
-            Controls.Label {
-                Layout.fillWidth: true
-                text: app.applicationVersion
-                horizontalAlignment: Text.AlignHCenter
-            }
-            Controls.Label {
-                Layout.fillWidth: true
-                text: description
-                font.italic: true
-                horizontalAlignment: Text.AlignHCenter
-                wrapMode: Text.Wrap
-            }
-            Controls.Label {
-                Layout.fillWidth: true
-                text: "<a href=\"" + app.organizationDomain + "\">"
-                      + app.organizationDomain + "</a>"
-                horizontalAlignment: Text.AlignHCenter
-                onLinkActivated: openWebsite()
-                wrapMode: Text.Wrap
-                MouseArea {
-                    anchors.fill: parent
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: parent.openWebsite()
-                }
-                function openWebsite() {
-                    Qt.openUrlExternally(app.organizationDomain)
-                }
-            }
-            Controls.Label {
-                Layout.fillWidth: true
-                text: qsTr("developed by %1").arg(app.organizationName)
-                horizontalAlignment: Text.AlignHCenter
-                wrapMode: Text.Wrap
-            }
-        }
     }
 
     PasswordDialog {
@@ -475,6 +419,10 @@ Kirigami.ApplicationWindow {
     }
 
     function pushStackEntry(entryModel, rootIndex) {
+        console.warn("push stack entry")
+        console.warn(entryModel)
+        console.warn(rootIndex)
+        console.warn(entryModel.data(rootIndex))
         pageStack.push(lastEntriesPage = entriesComponent.createObject(root, {
                                                                            "entryModel": entryModel,
                                                                            "rootIndex": rootIndex

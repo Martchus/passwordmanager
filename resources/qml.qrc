@@ -5,6 +5,7 @@
     <qresource prefix="/qml">
         <file alias="main.qml">../qml/main.qml</file>
         <file alias="BasicDialog.qml">../qml/BasicDialog.qml</file>
+        <file alias="AboutDialog.qml">../qml/AboutDialog.qml</file>
         <file alias="PasswordDialog.qml">../qml/PasswordDialog.qml</file>
         <file alias="EntriesPage.qml">../qml/EntriesPage.qml</file>
         <file alias="FieldsPage.qml">../qml/FieldsPage.qml</file>
