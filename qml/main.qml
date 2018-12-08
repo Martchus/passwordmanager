@@ -16,7 +16,7 @@ Kirigami.ApplicationWindow {
                                              && !nativeInterface.passwordSet
 
         title: app.applicationName
-        titleIcon: "qrc://icons/hicolor/scalable/apps/passwordmanager-black.svg"
+        titleIcon: "qrc://icons/hicolor/scalable/apps/passwordmanager.svg"
         visible: true
         resetMenuOnTriggered: false
         topContent: ColumnLayout {
@@ -217,8 +217,13 @@ Kirigami.ApplicationWindow {
         ColumnLayout {
             anchors.fill: parent
             Image {
+                readonly property double size: Kirigami.Units.gridUnit * 13
                 Layout.alignment: Qt.AlignHCenter
-                source: "qrc:/icons/hicolor/128x128/apps/passwordmanager.png"
+                Layout.preferredWidth: size
+                Layout.preferredHeight: size
+                source: "qrc:/icons/hicolor/scalable/apps/passwordmanager.svg"
+                sourceSize.width: size
+                sourceSize.height: size
             }
             Controls.Label {
                 Layout.fillWidth: true
