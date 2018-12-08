@@ -213,6 +213,7 @@ Kirigami.ApplicationWindow {
     BasicDialog {
         id: aboutDialog
         standardButtons: Controls.Dialog.Ok
+        padding: Kirigami.Units.smallSpacing
 
         ColumnLayout {
             anchors.fill: parent
@@ -242,18 +243,29 @@ Kirigami.ApplicationWindow {
                 text: description
                 font.italic: true
                 horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.Wrap
             }
             Controls.Label {
                 Layout.fillWidth: true
                 text: "<a href=\"" + app.organizationDomain + "\">"
                       + app.organizationDomain + "</a>"
                 horizontalAlignment: Text.AlignHCenter
-                onLinkActivated: Qt.openUrlExternally(app.organizationDomain)
+                onLinkActivated: openWebsite()
+                wrapMode: Text.Wrap
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: parent.openWebsite()
+                }
+                function openWebsite() {
+                    Qt.openUrlExternally(app.organizationDomain)
+                }
             }
             Controls.Label {
                 Layout.fillWidth: true
                 text: qsTr("developed by %1").arg(app.organizationName)
                 horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.Wrap
             }
         }
     }
