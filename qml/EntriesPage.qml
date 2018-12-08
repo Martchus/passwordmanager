@@ -72,19 +72,18 @@ Kirigami.ScrollablePage {
         }
 
         function confirmDeletion(entryName, entryIndex) {
-            // skip if undo is supported
+            var isNode = entryModel.isNode(entryModel.index(entryIndex, 0,
+                                                            rootIndex))
+            var entryType = isNode ? qsTr("category ") : qsTr("account ")
+            this.entryIndex = entryIndex
+            this.entryDesc = entryType + entryName
+
+            // skip dialog if undo is supported
             if (nativeInterface.undoStack) {
                 entryModel.removeRows(entryIndex, 1, rootIndex)
                 showPassiveNotification(qsTr("Deleted %1").arg(entryDesc))
                 return
             }
-
-            var isNode = entryModel.isNode(entryModel.index(entryIndex, 0,
-                                                            rootIndex))
-            var entryType = isNode ? qsTr("category ") : qsTr("account ")
-
-            this.entryIndex = entryIndex
-            this.entryDesc = entryType + entryName
             this.open()
         }
     }
