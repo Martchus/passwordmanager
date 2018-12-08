@@ -34,9 +34,13 @@
         <translation>Einträge können hier nicht eingefügt werden</translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="40"/>
         <source>Pasted </source>
-        <translation>Kopiert </translation>
+        <translation type="vanished">Kopiert </translation>
+    </message>
+    <message>
+        <location filename="../qml/EntriesPage.qml" line="39"/>
+        <source>Pasted %1</source>
+        <translation>%1 kopiert</translation>
     </message>
     <message>
         <location filename="../qml/EntriesPage.qml" line="46"/>
@@ -49,31 +53,44 @@
         <translation>%1 wirklich löschen?</translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="83"/>
-        <location filename="../qml/EntriesPage.qml" line="124"/>
+        <location filename="../qml/EntriesPage.qml" line="78"/>
+        <source>Deleted %1</source>
+        <translation>%1 gelöscht</translation>
+    </message>
+    <message>
+        <location filename="../qml/EntriesPage.qml" line="84"/>
+        <location filename="../qml/EntriesPage.qml" line="126"/>
         <source>category </source>
         <translation>Kategorie </translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="83"/>
-        <location filename="../qml/EntriesPage.qml" line="124"/>
+        <location filename="../qml/EntriesPage.qml" line="84"/>
+        <location filename="../qml/EntriesPage.qml" line="126"/>
         <source>account </source>
         <translation>Konto </translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="101"/>
+        <location filename="../qml/EntriesPage.qml" line="102"/>
+        <source>Name for new %1</source>
+        <translation>Name für %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/EntriesPage.qml" line="102"/>
+        <source>Rename %1</source>
+        <translation>%1 umbenennen</translation>
+    </message>
+    <message>
         <source>Name for new </source>
         <translatorcomment>verb flection maybe incorrect</translatorcomment>
-        <translation>Name für neues </translation>
+        <translation type="vanished">Name für neues </translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="101"/>
         <source>Rename </source>
         <translatorcomment>resulting word order incorrect</translatorcomment>
-        <translation>Umbenennen </translation>
+        <translation type="vanished">Umbenennen </translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="116"/>
+        <location filename="../qml/EntriesPage.qml" line="118"/>
         <source>enter new name here</source>
         <translation>neuen Namen hier eingeben</translation>
     </message>
@@ -90,20 +107,25 @@
         <translation type="obsolete">Passwort kopieren</translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="191"/>
-        <location filename="../qml/EntriesPage.qml" line="220"/>
+        <location filename="../qml/EntriesPage.qml" line="193"/>
+        <location filename="../qml/EntriesPage.qml" line="223"/>
         <source>Cut</source>
         <translation>Ausschneiden</translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="202"/>
-        <location filename="../qml/EntriesPage.qml" line="231"/>
+        <location filename="../qml/EntriesPage.qml" line="199"/>
+        <source>Cut %1</source>
+        <translation>%1 ausgeschnitten</translation>
+    </message>
+    <message>
+        <location filename="../qml/EntriesPage.qml" line="205"/>
+        <location filename="../qml/EntriesPage.qml" line="234"/>
         <source>Delete</source>
         <translation>Löschen</translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="209"/>
-        <location filename="../qml/EntriesPage.qml" line="239"/>
+        <location filename="../qml/EntriesPage.qml" line="212"/>
+        <location filename="../qml/EntriesPage.qml" line="242"/>
         <source>Rename</source>
         <translation>Umbenennen</translation>
     </message>
@@ -111,10 +133,14 @@
 <context>
     <name>FieldsPage</name>
     <message>
-        <location filename="../qml/FieldsPage.qml" line="24"/>
         <source>Edit field of </source>
         <translatorcomment>order of words not so nice</translatorcomment>
-        <translation>Bearbeite Feld von </translation>
+        <translation type="vanished">Bearbeite Feld von </translation>
+    </message>
+    <message>
+        <location filename="../qml/FieldsPage.qml" line="24"/>
+        <source>Edit field of %1</source>
+        <translation>Feld von %1 editieren</translation>
     </message>
     <message>
         <location filename="../qml/FieldsPage.qml" line="54"/>

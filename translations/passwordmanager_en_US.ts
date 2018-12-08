@@ -27,8 +27,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="40"/>
-        <source>Pasted </source>
+        <location filename="../qml/EntriesPage.qml" line="39"/>
+        <source>Pasted %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -42,47 +42,57 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="83"/>
-        <location filename="../qml/EntriesPage.qml" line="124"/>
+        <location filename="../qml/EntriesPage.qml" line="78"/>
+        <source>Deleted %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EntriesPage.qml" line="84"/>
+        <location filename="../qml/EntriesPage.qml" line="126"/>
         <source>category </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="83"/>
-        <location filename="../qml/EntriesPage.qml" line="124"/>
+        <location filename="../qml/EntriesPage.qml" line="84"/>
+        <location filename="../qml/EntriesPage.qml" line="126"/>
         <source>account </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="101"/>
-        <source>Name for new </source>
+        <location filename="../qml/EntriesPage.qml" line="102"/>
+        <source>Name for new %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="101"/>
-        <source>Rename </source>
+        <location filename="../qml/EntriesPage.qml" line="102"/>
+        <source>Rename %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="116"/>
+        <location filename="../qml/EntriesPage.qml" line="118"/>
         <source>enter new name here</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="191"/>
-        <location filename="../qml/EntriesPage.qml" line="220"/>
+        <location filename="../qml/EntriesPage.qml" line="193"/>
+        <location filename="../qml/EntriesPage.qml" line="223"/>
         <source>Cut</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="202"/>
-        <location filename="../qml/EntriesPage.qml" line="231"/>
+        <location filename="../qml/EntriesPage.qml" line="199"/>
+        <source>Cut %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EntriesPage.qml" line="205"/>
+        <location filename="../qml/EntriesPage.qml" line="234"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="209"/>
-        <location filename="../qml/EntriesPage.qml" line="239"/>
+        <location filename="../qml/EntriesPage.qml" line="212"/>
+        <location filename="../qml/EntriesPage.qml" line="242"/>
         <source>Rename</source>
         <translation type="unfinished"></translation>
     </message>
@@ -91,7 +101,7 @@
     <name>FieldsPage</name>
     <message>
         <location filename="../qml/FieldsPage.qml" line="24"/>
-        <source>Edit field of </source>
+        <source>Edit field of %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

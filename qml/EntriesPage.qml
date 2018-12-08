@@ -36,8 +36,8 @@ Kirigami.ScrollablePage {
                                 qsTr("Unable to paste the entries here"))
                     return
                 }
-                showPassiveNotification(
-                            qsTr("Pasted ") + pastedEntries.join(", "))
+                showPassiveNotification(qsTr("Pasted %1").arg(
+                                            pastedEntries.join(", ")))
             }
             shortcut: StandardKey.Paste
         }
@@ -75,6 +75,7 @@ Kirigami.ScrollablePage {
             // skip if undo is supported
             if (nativeInterface.undoStack) {
                 entryModel.removeRows(entryIndex, 1, rootIndex)
+                showPassiveNotification(qsTr("Deleted %1").arg(entryDesc))
                 return
             }
 
@@ -98,7 +99,8 @@ Kirigami.ScrollablePage {
 
         standardButtons: newEntryName.length
                          > 0 ? Controls.Dialog.Ok | Controls.Dialog.Cancel : Controls.Dialog.Cancel
-        title: (entryNew ? qsTr("Name for new ") : qsTr("Rename ")) + entryDesc
+        title: entryNew ? qsTr("Name for new %1").arg(entryDesc) : qsTr(
+                              "Rename %1").arg(entryDesc)
         onAccepted: {
             entryModel.setData(entryModel.index(this.entryIndex, 0, rootIndex),
                                newEntryName)
@@ -194,7 +196,8 @@ Kirigami.ScrollablePage {
                                 nativeInterface.cutEntry(
                                             entryModel.index(index, 0,
                                                              rootIndex))
-                                showPassiveNotification(text + " " + model.name)
+                                showPassiveNotification(qsTr("Cut %1").arg(
+                                                            model.name))
                             }
                         }
                         Controls.MenuItem {

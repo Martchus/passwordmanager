@@ -21,7 +21,7 @@ Kirigami.ScrollablePage {
         property alias fieldName: fieldNameEdit.text
         property alias fieldValue: fieldValueEdit.text
         property alias isPassword: fieldIsPasswordCheckBox.checked
-        title: qsTr("Edit field of ") + nativeInterface.currentAccountName
+        title: qsTr("Edit field of %1").arg(nativeInterface.currentAccountName)
         standardButtons: Controls.Dialog.Ok | Controls.Dialog.Cancel
         onAccepted: {
             var column0 = fieldsListView.model.index(entryIndex, 0)
@@ -29,7 +29,7 @@ Kirigami.ScrollablePage {
             fieldsListView.model.setData(column0, fieldName)
             fieldsListView.model.setData(column1, fieldValue)
             fieldsListView.model.setData(column0, isPassword ? 1 : 0,
-                                                               0x0100 + 1)
+                                         0x0100 + 1)
         }
 
         ColumnLayout {
