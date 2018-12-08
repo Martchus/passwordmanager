@@ -5,11 +5,12 @@
 
 #include <c++utilities/conversion/stringbuilder.h>
 
-#include <QtAndroid>
 #include <QAndroidJniObject>
+#include <QColor>
 #include <QCoreApplication>
-#include <QMetaObject>
 #include <QMessageLogContext>
+#include <QMetaObject>
+#include <QtAndroid>
 
 #include <android/log.h>
 
@@ -56,53 +57,65 @@ bool showAndroidFileDialog(bool existing)
 
 int openFileDescriptorFromAndroidContentUrl(const QString &url, const QString &mode)
 {
-    return QtAndroid::androidActivity().callMethod<jint>("openFileDescriptorFromAndroidContentUri", "(Ljava/lang/String;Ljava/lang/String;)I", QAndroidJniObject::fromString(url).object<jstring>(), QAndroidJniObject::fromString(mode).object<jstring>());
+    return QtAndroid::androidActivity().callMethod<jint>("openFileDescriptorFromAndroidContentUri", "(Ljava/lang/String;Ljava/lang/String;)I",
+        QAndroidJniObject::fromString(url).object<jstring>(), QAndroidJniObject::fromString(mode).object<jstring>());
 }
 
-void writeToAndroidLog(QtMsgType type, const QMessageLogContext &context, const QString &msg) {
+void writeToAndroidLog(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
     constexpr auto tag = PROJECT_NAME "-" APP_VERSION;
-  auto report = msg.toStdString();
-  if (context.file && *context.file) {
-      report += argsToString(" in file ", context.file, " line ", context.line);
-  }
-  if (context.function && !QString(context.function).isEmpty()) {
-      report += argsToString(" function ", context.function);
-  }
+    auto report = msg.toStdString();
+    if (context.file && *context.file) {
+        report += argsToString(" in file ", context.file, " line ", context.line);
+    }
+    if (context.function && !QString(context.function).isEmpty()) {
+        report += argsToString(" function ", context.function);
+    }
 
-  switch (type) {
-  case QtDebugMsg:
-    __android_log_write(ANDROID_LOG_DEBUG, tag, report.data());
-    break;
-  case QtInfoMsg:
-    __android_log_write(ANDROID_LOG_INFO,tag,report.data());
-    break;
-  case QtWarningMsg:
-    __android_log_write(ANDROID_LOG_WARN,tag,report.data());
-    break;
-  case QtCriticalMsg:
-    __android_log_write(ANDROID_LOG_ERROR,tag,report.data());
-    break;
-  case QtFatalMsg:
-    __android_log_write(ANDROID_LOG_FATAL,tag,report.data());
-    abort();
-  }
+    switch (type) {
+    case QtDebugMsg:
+        __android_log_write(ANDROID_LOG_DEBUG, tag, report.data());
+        break;
+    case QtInfoMsg:
+        __android_log_write(ANDROID_LOG_INFO, tag, report.data());
+        break;
+    case QtWarningMsg:
+        __android_log_write(ANDROID_LOG_WARN, tag, report.data());
+        break;
+    case QtCriticalMsg:
+        __android_log_write(ANDROID_LOG_ERROR, tag, report.data());
+        break;
+    case QtFatalMsg:
+        __android_log_write(ANDROID_LOG_FATAL, tag, report.data());
+        abort();
+    }
 }
 
+void setupAndroidSpecifics()
+{
+    qInstallMessageHandler(writeToAndroidLog);
+    applyThemingForAndroid();
 }
+
+} // namespace QtGui
 
 static void onAndroidError(JNIEnv *, jobject, jstring message)
 {
-    QMetaObject::invokeMethod(QtGui::controllerForAndroid, "newNotification", Qt::QueuedConnection, Q_ARG(QString, QAndroidJniObject::fromLocalRef(message).toString()));
+    QMetaObject::invokeMethod(
+        QtGui::controllerForAndroid, "newNotification", Qt::QueuedConnection, Q_ARG(QString, QAndroidJniObject::fromLocalRef(message).toString()));
 }
 
 static void onAndroidFileDialogAccepted(JNIEnv *, jobject, jstring fileName, jboolean existing)
 {
-    QMetaObject::invokeMethod(QtGui::controllerForAndroid, "handleFileSelectionAccepted", Qt::QueuedConnection, Q_ARG(QString, QAndroidJniObject::fromLocalRef(fileName).toString()), Q_ARG(bool, existing));
+    QMetaObject::invokeMethod(QtGui::controllerForAndroid, "handleFileSelectionAccepted", Qt::QueuedConnection,
+        Q_ARG(QString, QAndroidJniObject::fromLocalRef(fileName).toString()), Q_ARG(bool, existing));
 }
 
 static void onAndroidFileDialogAcceptedDescriptor(JNIEnv *, jobject, jstring nativeUrl, jstring fileName, jint fileHandle, jboolean existing)
 {
-    QMetaObject::invokeMethod(QtGui::controllerForAndroid, "handleFileSelectionAcceptedDescriptor", Qt::QueuedConnection, Q_ARG(QString, QAndroidJniObject::fromLocalRef(nativeUrl).toString()), Q_ARG(QString, QAndroidJniObject::fromLocalRef(fileName).toString()), Q_ARG(int, fileHandle), Q_ARG(bool, existing));
+    QMetaObject::invokeMethod(QtGui::controllerForAndroid, "handleFileSelectionAcceptedDescriptor", Qt::QueuedConnection,
+        Q_ARG(QString, QAndroidJniObject::fromLocalRef(nativeUrl).toString()), Q_ARG(QString, QAndroidJniObject::fromLocalRef(fileName).toString()),
+        Q_ARG(int, fileHandle), Q_ARG(bool, existing));
 }
 
 static void onAndroidFileDialogRejected(JNIEnv *, jobject)
@@ -118,7 +131,7 @@ JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *)
 {
     // get the JNIEnv pointer
     JNIEnv *env;
-    if (vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6) != JNI_OK) {
+    if (vm->GetEnv(reinterpret_cast<void **>(&env), JNI_VERSION_1_6) != JNI_OK) {
         return JNI_ERR;
     }
 
@@ -130,10 +143,11 @@ JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *)
 
     // register native methods
     static const JNINativeMethod methods[] = {
-        {"onAndroidError", "(Ljava/lang/String;)V", reinterpret_cast<void *>(onAndroidError)},
-        {"onAndroidFileDialogAccepted", "(Ljava/lang/String;Z)V", reinterpret_cast<void *>(onAndroidFileDialogAccepted)},
-        {"onAndroidFileDialogAcceptedDescriptor", "(Ljava/lang/String;Ljava/lang/String;IZ)V", reinterpret_cast<void *>(onAndroidFileDialogAcceptedDescriptor)},
-        {"onAndroidFileDialogRejected", "()V", reinterpret_cast<void *>(onAndroidFileDialogRejected)},
+        { "onAndroidError", "(Ljava/lang/String;)V", reinterpret_cast<void *>(onAndroidError) },
+        { "onAndroidFileDialogAccepted", "(Ljava/lang/String;Z)V", reinterpret_cast<void *>(onAndroidFileDialogAccepted) },
+        { "onAndroidFileDialogAcceptedDescriptor", "(Ljava/lang/String;Ljava/lang/String;IZ)V",
+            reinterpret_cast<void *>(onAndroidFileDialogAcceptedDescriptor) },
+        { "onAndroidFileDialogRejected", "()V", reinterpret_cast<void *>(onAndroidFileDialogRejected) },
     };
     if (env->RegisterNatives(javaClass, methods, sizeof(methods) / sizeof(methods[0])) < 0) {
         return JNI_ERR;
