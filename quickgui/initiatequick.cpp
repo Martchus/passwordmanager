@@ -6,7 +6,9 @@
 
 #include "resources/config.h"
 
+// enable inline helper functions for Qt Quick provided by qtutilities
 #define QT_UTILITIES_GUI_QTQUICK
+
 #include <qtutilities/resources/qtconfigarguments.h>
 #include <qtutilities/resources/resources.h>
 
@@ -20,10 +22,6 @@
 
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
 #include <QApplication>
-#endif
-
-#ifdef Q_OS_ANDROID
-#include <QtAndroid>
 #endif
 
 using namespace ApplicationUtilities;
@@ -50,28 +48,16 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
     qtConfigArgs.applySettings();
     qtConfigArgs.applySettingsForQuickGui();
 
-#ifdef Q_OS_ANDROID
-    // assume we're bundling breeze icons under Android
+    // assume we're bundling breeze icons
     if (QIcon::themeName().isEmpty()) {
         QIcon::setThemeName(QStringLiteral("breeze"));
     }
-#endif
 
     // load settings from configuration file
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, QStringLiteral(PROJECT_NAME));
 
     // load translations
     LOAD_QT_TRANSLATIONS;
-
-    // determine user paths
-    const QVariantMap userPaths{
-        { QStringLiteral("desktop"), QStandardPaths::writableLocation(QStandardPaths::DesktopLocation) },
-        { QStringLiteral("documents"), QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) },
-        { QStringLiteral("music"), QStandardPaths::writableLocation(QStandardPaths::MusicLocation) },
-        { QStringLiteral("movies"), QStandardPaths::writableLocation(QStandardPaths::MoviesLocation) },
-        { QStringLiteral("pictures"), QStandardPaths::writableLocation(QStandardPaths::PicturesLocation) },
-        { QStringLiteral("home"), QStandardPaths::writableLocation(QStandardPaths::HomeLocation) },
-    };
 
     // init Quick GUI
     QQmlApplicationEngine engine;
@@ -80,7 +66,6 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
     registerControllerForAndroid(&controller);
 #endif
     auto *const context(engine.rootContext());
-    context->setContextProperty(QStringLiteral("userPaths"), userPaths);
     context->setContextProperty(QStringLiteral("nativeInterface"), &controller);
     context->setContextProperty(QStringLiteral("app"), &a);
     context->setContextProperty(QStringLiteral("description"), QStringLiteral(APP_DESCRIPTION));
