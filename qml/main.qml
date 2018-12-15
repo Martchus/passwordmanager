@@ -419,10 +419,6 @@ Kirigami.ApplicationWindow {
     }
 
     function pushStackEntry(entryModel, rootIndex) {
-        console.warn("push stack entry")
-        console.warn(entryModel)
-        console.warn(rootIndex)
-        console.warn(entryModel.data(rootIndex))
         pageStack.push(lastEntriesPage = entriesComponent.createObject(root, {
                                                                            "entryModel": entryModel,
                                                                            "rootIndex": rootIndex

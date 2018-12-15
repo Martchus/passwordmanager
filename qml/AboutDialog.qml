@@ -5,13 +5,15 @@ import QtQuick.Dialogs 1.3
 import org.kde.kirigami 2.4 as Kirigami
 
 BasicDialog {
+    id: aboutDialog
     standardButtons: Controls.Dialog.Ok
     padding: Kirigami.Units.smallSpacing
 
     ColumnLayout {
-        anchors.fill: parent
+        width: aboutDialog.availableWidth
+
         Image {
-            readonly property double size: Kirigami.Units.gridUnit * 13
+            readonly property double size: Kirigami.Units.gridUnit * 12.2
             Layout.alignment: Qt.AlignHCenter
             Layout.preferredWidth: size
             Layout.preferredHeight: size
@@ -23,7 +25,7 @@ BasicDialog {
             Layout.fillWidth: true
             text: app.applicationName
             font.bold: true
-            font.pointSize: font.pointSize * 1.2
+            font.pointSize: Qt.application.font.pointSize * 1.2
             horizontalAlignment: Text.AlignHCenter
         }
         Controls.Label {
@@ -40,8 +42,7 @@ BasicDialog {
         }
         Controls.Label {
             Layout.fillWidth: true
-            text: "<a href=\"" + app.organizationDomain + "\">"
-            + app.organizationDomain + "</a>"
+            text: "<a href=\"" + app.organizationDomain + "\">" + app.organizationDomain + "</a>"
             horizontalAlignment: Text.AlignHCenter
             onLinkActivated: openWebsite()
             wrapMode: Text.Wrap
