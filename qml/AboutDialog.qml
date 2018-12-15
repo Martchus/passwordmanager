@@ -7,7 +7,7 @@ import org.kde.kirigami 2.4 as Kirigami
 BasicDialog {
     id: aboutDialog
     standardButtons: Controls.Dialog.Ok
-    padding: Kirigami.Units.smallSpacing
+    padding: Kirigami.Units.largeSpacing
 
     ColumnLayout {
         width: aboutDialog.availableWidth
