@@ -1,23 +1,28 @@
+/* version of build.grade in android directory for Qt < 5.12 */
+
 buildscript {
     repositories {
-        google()
         jcenter()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.0'
+        classpath 'com.android.tools.build:gradle:2.2.3'
     }
 }
 
-repositories {
-    google()
-    jcenter()
+allprojects {
+    repositories {
+        jcenter()
+        maven {
+            url 'https://maven.google.com'
+        }
+    }
 }
 
 apply plugin: 'com.android.application'
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:support-v4:27.1.0'
 }
 
