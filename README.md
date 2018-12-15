@@ -34,6 +34,10 @@ and the underlying libraries serve as an example project covering some interesti
 * Use of zlib to (de)compress buffer
 * Use of OpenSSL for symmetric (de)cryption
 
+Note that some of the mentioned points are actually implemented the underlying libraries
+[c++utilities](http://github.com/Martchus/cpp-utilities), [qtutilities](http://github.com/Martchus/qtutilities)
+and [passwordfile](http://github.com/Martchus/passwordfile).
+
 ## Download / binary repository
 I currently provide packages for Arch Linux and Windows. Sources for those packages can be found in a
 separate [repository](https://github.com/Martchus/PKGBUILDs). For binaries checkout the release section
@@ -140,7 +144,8 @@ make passwordmanager_deploy_apk # install app on USB-connected phone
 ```
 
 ##### Notes
-* The Android packages for the dependencies Qt 5, iconv and OpenSSL are provided in my PKGBUILDs repo.
+* The Android packages for the dependencies Qt 5, iconv, OpenSSL and Kirigami 2 are provided in
+  my [PKGBUILDs](http://github.com/Martchus/PKGBUILDs) repo.
 * The lastest Java I was able to use was version 8 (`jdk8-openjdk` package).
 
 ### Manual deployment of Android APK file
