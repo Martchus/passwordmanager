@@ -153,6 +153,8 @@ set(REQUIRED_ICONS
 # find c++utilities
 find_package(c++utilities 4.10.0 REQUIRED)
 use_cpp_utilities()
+
+# apply basic configuration
 include(BasicConfig)
 
 # find qtutilities
@@ -163,33 +165,39 @@ use_qt_utilities()
 find_package(passwordfile 3.1.0 REQUIRED)
 use_password_file()
 
-# add further Qt/KF modules required by the
-if(ANDROID AND QUICK_GUI)
-    if(NOT WIDGETS_GUI)
-        option(ENABLE_UNDO_SUPPORT_FOR_QUICK_GUI "enables with undo/redo support for the Qt Quick GUI (requires Qt Widgets)" ON)
-        if(ENABLE_UNDO_SUPPORT_FOR_QUICK_GUI)
-            list(APPEND ADDITIONAL_QT_MODULES Widgets)
-            list(APPEND META_PUBLIC_COMPILE_DEFINITIONS ${META_PROJECT_VARNAME_UPPER}_ENABLE_UNDO_SUPPORT_FOR_QUICK_GUI)
-            list(APPEND QML_HEADER_FILES
-                gui/stacksupport.h
-                gui/undocommands.h
-            )
-            list(APPEND QML_SRC_FILES
-                gui/stacksupport.cpp
-                gui/undocommands.cpp
-            )
-        endif()
+# require qt least Qt 5.8 for the Qt Quick GUI
+if(QUICK_GUI)
+    set(META_QT5_VERSION 5.8)
+endif()
+
+# allow to enable undo support from the widgets GUI in the quick GUI as well (so the quick GUI will depend on Qt Widgets as well)
+if(QUICK_GUI AND NOT WIDGETS_GUI)
+    option(ENABLE_UNDO_SUPPORT_FOR_QUICK_GUI "enables with undo/redo support for the Qt Quick GUI (requires Qt Widgets)" ON)
+    if(ENABLE_UNDO_SUPPORT_FOR_QUICK_GUI)
+        list(APPEND ADDITIONAL_QT_MODULES Widgets)
+        list(APPEND META_PUBLIC_COMPILE_DEFINITIONS ${META_PROJECT_VARNAME_UPPER}_ENABLE_UNDO_SUPPORT_FOR_QUICK_GUI)
+        list(APPEND QML_HEADER_FILES
+            gui/stacksupport.h
+            gui/undocommands.h
+        )
+        list(APPEND QML_SRC_FILES
+            gui/stacksupport.cpp
+            gui/undocommands.cpp
+        )
     endif()
+endif()
+
+# add further Qt/KF modules required by the Qt Quick GUI under Android
+if(ANDROID AND QUICK_GUI)
     list(APPEND ADDITIONAL_QT_MODULES AndroidExtras)
     list(APPEND ADDITIONAL_KF_MODULES Kirigami2)
 endif()
 
-# include modules to apply configuration
+# apply further configuration
 if(WIDGETS_GUI OR QUICK_GUI)
     include(QtGuiConfig)
     include(QtConfig)
 endif()
-
 include(WindowsResources)
 include(AppTarget)
 include(AndroidApk)
