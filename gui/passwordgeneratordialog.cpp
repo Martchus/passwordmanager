@@ -50,7 +50,6 @@ PasswordGeneratorDialog::PasswordGeneratorDialog(QWidget *parent)
 #endif
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
 
-    connect(m_ui->copyPasswordCommandLinkButton, &QCommandLinkButton::clicked, this, &PasswordGeneratorDialog::copyPassword);
     connect(m_ui->generatePassowordCommandLinkButton, &QCommandLinkButton::clicked, this, &PasswordGeneratorDialog::generateNewPassword);
     connect(m_ui->useCapitalLettersCheckBox, &QCheckBox::stateChanged, this, &PasswordGeneratorDialog::handleCheckedCategoriesChanged);
     connect(m_ui->useCapitalLettersCheckBox, &QCheckBox::stateChanged, this, &PasswordGeneratorDialog::handleCheckedCategoriesChanged);
@@ -59,6 +58,12 @@ PasswordGeneratorDialog::PasswordGeneratorDialog(QWidget *parent)
     connect(m_ui->otherCharsLineEdit, &QLineEdit::textChanged, this, &PasswordGeneratorDialog::handleCheckedCategoriesChanged);
     connect(m_ui->passwordLineEdit, &QLineEdit::textChanged, this, &PasswordGeneratorDialog::handlePasswordChanged);
     connect(m_ui->closePushButton, &QPushButton::clicked, this, &PasswordGeneratorDialog::close);
+
+#ifndef QT_NO_CLIPBOARD
+    connect(m_ui->copyPasswordCommandLinkButton, &QCommandLinkButton::clicked, this, &PasswordGeneratorDialog::copyPassword);
+#else
+    m_ui->copyPasswordCommandLinkButton->setDisabled(true);
+#endif
 
     handlePasswordChanged();
 }
@@ -130,7 +135,7 @@ void PasswordGeneratorDialog::generateNewPassword()
         default_random_engine rng(m_random());
         uniform_int_distribution<size_t> dist(0, m_charset.size() - 1);
         const auto getRandomCharacter = [this, &dist, &rng]() { return m_charset[dist(rng)]; };
-        string res(length, 0);
+        string res(static_cast<size_t>(length), 0);
         generate_n(res.begin(), length, getRandomCharacter);
         m_ui->passwordLineEdit->setText(QString::fromLatin1(res.data(), length));
     } catch (const CryptoException &ex) {
@@ -157,12 +162,14 @@ void PasswordGeneratorDialog::handlePasswordChanged()
     m_ui->copyPasswordCommandLinkButton->setEnabled(m_ui->passwordLineEdit->text().count() > 0);
 }
 
+#ifndef QT_NO_CLIPBOARD
 /*!
  * \brief Copies the current password to the clipboard.
  */
 void PasswordGeneratorDialog::copyPassword()
 {
-    QClipboard *cb = QApplication::clipboard();
-    cb->setText(m_ui->passwordLineEdit->text());
+    QApplication::clipboard()->setText(m_ui->passwordLineEdit->text());
 }
+#endif
+
 } // namespace QtGui

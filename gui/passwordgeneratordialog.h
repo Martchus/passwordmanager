@@ -25,7 +25,9 @@ private Q_SLOTS:
     void generateNewPassword();
     void handleCheckedCategoriesChanged();
     void handlePasswordChanged();
+#ifndef QT_NO_CLIPBOARD
     void copyPassword();
+#endif
 
 private:
     std::unique_ptr<Ui::PasswordGeneratorDialog> m_ui;
