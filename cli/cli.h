@@ -45,7 +45,7 @@ class InteractiveCli {
 public:
     InteractiveCli();
     void run(const std::string &file = std::string());
-    void openFile(const std::string &file, bool readOnly);
+    void openFile(const std::string &file, Io::PasswordFileOpenFlags openFlags);
     void closeFile();
     void saveFile();
     void createFile(const std::string &file);

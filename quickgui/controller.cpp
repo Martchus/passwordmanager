@@ -193,15 +193,16 @@ void Controller::close()
 
 void Controller::save()
 {
-    try {
-        const auto useEncryption = !m_password.isEmpty();
-        if (useEncryption) {
-            const auto passwordUtf8(m_password.toUtf8());
-            m_file.setPassword(string(passwordUtf8.data(), static_cast<size_t>(passwordUtf8.size())));
-        } else {
-            m_file.clearPassword();
-        }
+    auto flags = PasswordFileSaveFlags::Compression | PasswordFileSaveFlags::PasswordHashing;
+    if (!m_password.isEmpty()) {
+        flags |= PasswordFileSaveFlags::Encryption;
+        const auto passwordUtf8(m_password.toUtf8());
+        m_file.setPassword(passwordUtf8.data(), static_cast<size_t>(passwordUtf8.size()));
+    } else {
+        m_file.clearPassword();
+    }
 
+    try {
 #if defined(Q_OS_ANDROID) && defined(CPP_UTILITIES_USE_NATIVE_FILE_BUFFER)
         if (!m_nativeUrl.isEmpty()) {
             // ensure file is closed
@@ -216,11 +217,11 @@ void Controller::save()
             }
 
             m_file.fileStream().openFromFileDescriptor(newFileDescriptor, ios_base::out | ios_base::trunc | ios_base::binary);
-            m_file.write(useEncryption);
+            m_file.write(flags);
         } else {
 #endif
             // let libpasswordfile handle everything
-            m_file.save(useEncryption);
+            m_file.save(flags);
 #if defined(Q_OS_ANDROID) && defined(CPP_UTILITIES_USE_NATIVE_FILE_BUFFER)
         }
 #endif

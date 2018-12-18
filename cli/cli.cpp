@@ -98,7 +98,7 @@ InteractiveCli::InteractiveCli()
 void InteractiveCli::run(const string &file)
 {
     if (!file.empty()) {
-        openFile(file, false);
+        openFile(file, PasswordFileOpenFlags::Default);
     }
     string input;
     while (!m_quit) {
@@ -128,9 +128,9 @@ void InteractiveCli::processCommand(const string &cmd)
     } else if (CMD2("clear", "c")) {
         clearConsole();
     } else if (CMD2_P("openreadonly", "or")) {
-        openFile(param, true);
+        openFile(param, PasswordFileOpenFlags::ReadOnly);
     } else if (CMD2_P("open", "o")) {
-        openFile(param, false);
+        openFile(param, PasswordFileOpenFlags::Default);
     } else if (CMD2("close", "c")) {
         closeFile();
     } else if (CMD2("save", "w")) {
@@ -237,7 +237,7 @@ bool InteractiveCli::checkCommand(const string &str, const char *phrase, std::st
     return false;
 }
 
-void InteractiveCli::openFile(const string &file, bool readOnly)
+void InteractiveCli::openFile(const string &file, PasswordFileOpenFlags openFlags)
 {
     if (m_file.isOpen()) {
         m_o << "file \"" << m_file.path() << "\" currently open; close first" << endl;
@@ -247,7 +247,7 @@ void InteractiveCli::openFile(const string &file, bool readOnly)
     for (;;) {
         try {
             try {
-                m_file.open(readOnly);
+                m_file.open(openFlags);
                 if (m_file.isEncryptionUsed()) {
                     m_file.setPassword(askForPassphrase());
                 }
@@ -300,7 +300,11 @@ void InteractiveCli::saveFile()
     }
     try {
         try {
-            m_file.save(*m_file.password());
+            auto flags = PasswordFileSaveFlags::Compression | PasswordFileSaveFlags::PasswordHashing;
+            if (!m_file.password().empty()) {
+                flags |= PasswordFileSaveFlags::Encryption;
+            }
+            m_file.save(flags);
             m_o << "file \"" << m_file.path() << "\" saved" << endl;
         } catch (const ParsingException &) {
             m_o << "error occured when parsing file \"" << m_file.path() << "\"" << endl;
@@ -373,7 +377,7 @@ void InteractiveCli::removePassphrase()
         m_o << "nothing to remove; no file opened or created" << endl;
         return;
     }
-    if (*m_file.password()) {
+    if (!m_file.password().empty()) {
         m_file.clearPassword();
         m_o << "passphrase removed; use save to apply" << endl;
         m_modified = true;

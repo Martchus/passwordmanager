@@ -114,7 +114,7 @@ void MainWindow::setSomethingChanged(bool somethingChanged)
 MainWindow::MainWindow(QSettings &settings, Dialogs::QtSettings *qtSettings, QWidget *parent)
     : QMainWindow(parent)
     , m_ui(new Ui::MainWindow)
-    , m_readOnly(false)
+    , m_openFlags(PasswordFileOpenFlags::None)
     , m_clearClipboardTimer(0)
     , m_aboutDlg(nullptr)
     , m_settings(settings)
@@ -411,7 +411,7 @@ void MainWindow::showUndoView()
  * \brief Opens a file with the specified \a path and updates all widgets to show its contents.
  * \returns Returns true on success; otherwise false
  */
-bool MainWindow::openFile(const QString &path, bool readOnly)
+bool MainWindow::openFile(const QString &path, PasswordFileOpenFlags openFlags)
 {
     using namespace Dialogs;
 
@@ -423,14 +423,14 @@ bool MainWindow::openFile(const QString &path, bool readOnly)
     // set path and open file
     m_file.setPath(path.toStdString());
     try {
-        m_file.open(m_readOnly = readOnly);
+        m_file.open(m_openFlags = openFlags);
     } catch (...) {
         // catch std::ios_base::failure
         const char *const ioError = catchIoFailure();
 
         // try read-only
-        if (!readOnly) {
-            return openFile(path, true);
+        if (!(m_openFlags & PasswordFileOpenFlags::ReadOnly)) {
+            return openFile(path, m_openFlags | PasswordFileOpenFlags::ReadOnly);
         }
 
         // show error message
@@ -495,7 +495,7 @@ bool MainWindow::openFile(const QString &path, bool readOnly)
     m_file.clear();
     m_ui->statusBar->showMessage(msg, 5000);
     if (QMessageBox::critical(this, QApplication::applicationName(), msg, QMessageBox::Cancel, QMessageBox::Retry) == QMessageBox::Retry) {
-        return openFile(path, readOnly); // retry
+        return openFile(path, openFlags); // retry
     } else {
         return false;
     }
@@ -541,7 +541,7 @@ void MainWindow::createFile(const QString &path, const QString &password)
 
     // create the file and show it
     try {
-        m_readOnly = false;
+        m_openFlags = PasswordFileOpenFlags::Default;
         m_file.create();
     } catch (...) {
         catchIoFailure();
@@ -608,7 +608,7 @@ void MainWindow::updateWindowTitle()
         docStatus = Dialogs::DocumentStatus::NoDocument;
     }
     auto documentPath(QString::fromStdString(m_file.path()));
-    if (m_readOnly) {
+    if (m_openFlags & PasswordFileOpenFlags::ReadOnly) {
         documentPath += tr(" [read-only]");
     }
     setWindowTitle(Dialogs::generateWindowTitle(docStatus, documentPath));
@@ -829,7 +829,7 @@ bool MainWindow::saveFile()
     }
 
     // ask for a password if none is set
-    if (m_file.password()[0] == 0) {
+    if (m_file.password().empty()) {
         EnterPasswordDialog pwDlg(this);
         pwDlg.setWindowTitle(tr("Saving file") + QStringLiteral(" - " APP_NAME));
         pwDlg.setInstruction(tr("Enter a password to save the file"));
@@ -848,7 +848,11 @@ bool MainWindow::saveFile()
     // save the file
     QString msg;
     try {
-        m_file.save(m_file.password()[0] != 0);
+        auto flags = PasswordFileSaveFlags::Compression | PasswordFileSaveFlags::PasswordHashing;
+        if (!m_file.password().empty()) {
+            flags |= PasswordFileSaveFlags::Encryption;
+        }
+        m_file.save(flags);
     } catch (const CryptoException &ex) {
         msg = tr("The password list couldn't be saved due to encryption failure.\nOpenSSL error queue: %1").arg(QString::fromLocal8Bit(ex.what()));
     } catch (...) {
@@ -860,8 +864,8 @@ bool MainWindow::saveFile()
         QMessageBox::critical(this, QApplication::applicationName(), msg);
         return false;
     }
-    if (m_readOnly || m_somethingChanged) {
-        m_readOnly = false;
+    if ((m_openFlags & PasswordFileOpenFlags::ReadOnly) || m_somethingChanged) {
+        m_openFlags = PasswordFileOpenFlags::Default;
         m_somethingChanged = false;
         updateWindowTitle();
     }
@@ -1199,7 +1203,10 @@ void MainWindow::showTableViewContextMenu()
     QUrl url;
     static const string protocols[] = { "http:", "https:", "file:" };
     for (const QModelIndex &index : selectedIndexes) {
-        if (const Field *field = m_fieldModel->field(index.row())) {
+        if (!index.isValid()) {
+            continue;
+        }
+        if (const Field *field = m_fieldModel->field(static_cast<size_t>(index.row()))) {
             if (url.isEmpty() && field->type() != FieldType::Password) {
                 for (const string &protocol : protocols) {
                     if (ConversionUtilities::startsWith(field->value(), protocol)) {
@@ -1226,7 +1233,8 @@ void MainWindow::showTableViewContextMenu()
     QMenu contextMenu(this);
     // -> insertion and removal
     contextMenu.addAction(QIcon::fromTheme(QStringLiteral("list-add")), tr("Insert field"), this, &MainWindow::insertRow);
-    contextMenu.addAction(QIcon::fromTheme(QStringLiteral("list-remove")), tr("Remove field(s)", 0, multipleRows), this, &MainWindow::removeRows);
+    contextMenu.addAction(
+        QIcon::fromTheme(QStringLiteral("list-remove")), tr("Remove field(s)", nullptr, multipleRows), this, &MainWindow::removeRows);
     // -> show the "Mark as ..." action only when all selected indexes are of the same type
     if (hasFirstFieldType && allOfSameType) {
         switch (firstType) {

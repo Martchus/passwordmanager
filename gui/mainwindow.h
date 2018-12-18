@@ -54,7 +54,7 @@ public:
 public slots:
     // file management
     bool openFile(const QString &path);
-    bool openFile(const QString &path, bool readOnly);
+    bool openFile(const QString &path, Io::PasswordFileOpenFlags openFlags);
     void createFile(const QString &path, const QString &password);
     void createFile(const QString &path);
     bool createFile();
@@ -124,7 +124,7 @@ private:
     QUndoStack *m_undoStack;
     QUndoView *m_undoView;
     bool m_somethingChanged;
-    bool m_readOnly;
+    Io::PasswordFileOpenFlags m_openFlags;
     bool m_dontUpdateSelection;
     int m_clearClipboardTimer;
     MiscUtils::RecentMenuManager *m_recentMgr;
@@ -140,7 +140,7 @@ private:
  */
 inline bool MainWindow::openFile(const QString &path)
 {
-    return openFile(path, false);
+    return openFile(path, Io::PasswordFileOpenFlags::Default);
 }
 
 } // namespace QtGui
