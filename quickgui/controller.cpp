@@ -191,7 +191,7 @@ void Controller::close()
     }
 }
 
-void Controller::save()
+PasswordFileSaveFlags Controller::prepareSaving()
 {
     auto flags = PasswordFileSaveFlags::Compression | PasswordFileSaveFlags::PasswordHashing;
     if (!m_password.isEmpty()) {
@@ -201,7 +201,12 @@ void Controller::save()
     } else {
         m_file.clearPassword();
     }
+    return flags;
+}
 
+void Controller::save()
+{
+    const auto flags = prepareSaving();
     try {
 #if defined(Q_OS_ANDROID) && defined(CPP_UTILITIES_USE_NATIVE_FILE_BUFFER)
         if (!m_nativeUrl.isEmpty()) {

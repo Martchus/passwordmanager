@@ -189,6 +189,7 @@ MainWindow::MainWindow(QSettings &settings, Dialogs::QtSettings *qtSettings, QWi
     // -> file related actions
     connect(m_ui->actionSave, &QAction::triggered, this, &MainWindow::saveFile);
     connect(m_ui->actionExport, &QAction::triggered, this, &MainWindow::exportFile);
+    connect(m_ui->actionDetails, &QAction::triggered, this, &MainWindow::showFileDetails);
     connect(m_ui->actionShowContainingDirectory, &QAction::triggered, this, &MainWindow::showContainingDirectory);
     connect(m_ui->actionClose, &QAction::triggered, this, &MainWindow::closeFile);
     connect(m_ui->actionCreate, &QAction::triggered, this, static_cast<bool (MainWindow::*)(void)>(&MainWindow::createFile));
@@ -585,6 +586,7 @@ void MainWindow::updateUiStatus()
     m_ui->actionSave->setEnabled(fileOpened);
     m_ui->actionSaveAs->setEnabled(fileOpened);
     m_ui->actionExport->setEnabled(fileOpened);
+    m_ui->actionDetails->setEnabled(fileOpened);
     m_ui->actionShowContainingDirectory->setEnabled(fileOpened);
     m_ui->actionClose->setEnabled(fileOpened);
     m_ui->actionChangepassword->setEnabled(fileOpened);
@@ -624,6 +626,18 @@ void MainWindow::applyDefaultExpanding(const QModelIndex &parent)
         applyDefaultExpanding(index);
         m_ui->treeView->setExpanded(index, m_entryFilterModel->data(index, DefaultExpandedRole).toBool());
     }
+}
+
+/*!
+ * \brief Returns the save options (to be) used when saving the file next time.
+ */
+PasswordFileSaveFlags MainWindow::saveOptions() const
+{
+    auto options = PasswordFileSaveFlags::Compression | PasswordFileSaveFlags::PasswordHashing;
+    if (!m_file.password().empty()) {
+        options |= PasswordFileSaveFlags::Encryption;
+    }
+    return options;
 }
 
 /*!
@@ -848,11 +862,7 @@ bool MainWindow::saveFile()
     // save the file
     QString msg;
     try {
-        auto flags = PasswordFileSaveFlags::Compression | PasswordFileSaveFlags::PasswordHashing;
-        if (!m_file.password().empty()) {
-            flags |= PasswordFileSaveFlags::Encryption;
-        }
-        m_file.save(flags);
+        m_file.save(saveOptions());
     } catch (const CryptoException &ex) {
         msg = tr("The password list couldn't be saved due to encryption failure.\nOpenSSL error queue: %1").arg(QString::fromLocal8Bit(ex.what()));
     } catch (...) {
@@ -1262,6 +1272,14 @@ void MainWindow::showTableViewContextMenu()
     }
 
     contextMenu.exec(QCursor::pos());
+}
+
+void MainWindow::showFileDetails()
+{
+    if (!m_file.isOpen()) {
+        return;
+    }
+    QMessageBox::information(this, tr("File details"), QString::fromStdString(m_file.summary(saveOptions())));
 }
 
 /*!

@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>QtGui::MainWindow</class>
  <widget class="QMainWindow" name="QtGui::MainWindow">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>848</width>
-    <height>444</height>
-   </rect>
-  </property>
   <property name="windowTitle">
    <string>Password Manager</string>
   </property>
@@ -182,8 +174,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>848</width>
-     <height>21</height>
+     <width>513</width>
+     <height>30</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuProgramm">
@@ -204,6 +196,7 @@
     <addaction name="actionSaveAs"/>
     <addaction name="actionExport"/>
     <addaction name="actionShowContainingDirectory"/>
+    <addaction name="actionDetails"/>
     <addaction name="actionAlwaysCreateBackup"/>
     <addaction name="separator"/>
     <addaction name="actionClose"/>
@@ -546,10 +539,11 @@
   </action>
   <action name="actionCopyFields">
    <property name="icon">
-    <iconset theme="edit-copy"/>
+    <iconset theme="edit-copy">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
-    <string>Copy selected field(s)</string>
+    <string>&amp;Copy selected field(s)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+C</string>
@@ -557,13 +551,22 @@
   </action>
   <action name="actionPasteFields">
    <property name="icon">
-    <iconset theme="edit-paste"/>
+    <iconset theme="edit-paste">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
-    <string>Paste to selected field(s)</string>
+    <string>&amp;Paste to selected field(s)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+V</string>
+   </property>
+  </action>
+  <action name="actionDetails">
+   <property name="icon">
+    <iconset theme="document-properties"/>
+   </property>
+   <property name="text">
+    <string>Details ...</string>
    </property>
   </action>
  </widget>

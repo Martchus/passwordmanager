@@ -100,6 +100,8 @@ public slots:
     void handleFileSelectionCanceled();
     void undo();
     void redo();
+    Io::PasswordFileSaveFlags prepareSaving();
+    QString computeFileSummary();
 
 signals:
     void filePathChanged(const QString &newFilePath);
@@ -345,6 +347,11 @@ inline void Controller::redo()
 #ifdef PASSWORD_MANAGER_UNDO_SUPPORT
     return m_undoStack.redo();
 #endif
+}
+
+inline QString Controller::computeFileSummary()
+{
+    return QString::fromStdString(m_file.summary(prepareSaving()));
 }
 
 } // namespace QtGui

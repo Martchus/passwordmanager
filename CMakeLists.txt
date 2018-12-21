@@ -106,6 +106,7 @@ set(REQUIRED_ICONS
     document-new
     document-open
     document-open-recent
+    document-properties
     document-save
     document-save-as
     edit-clear

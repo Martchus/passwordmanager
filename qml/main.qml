@@ -144,6 +144,16 @@ Kirigami.ApplicationWindow {
                 shortcut: "Ctrl+P"
             },
             Kirigami.Action {
+                text: qsTr("Details")
+                enabled: nativeInterface.fileOpen
+                iconName: "document-properties"
+                onTriggered: {
+                    leftMenu.resetMenu()
+                    fileSummaryDialog.show()
+                }
+                shortcut: "Ctrl+I"
+            },
+            Kirigami.Action {
                 text: nativeInterface.entryFilter.length === 0 ? qsTr("Search") : qsTr(
                                                                      "Adjust search")
                 enabled: nativeInterface.fileOpen
@@ -221,6 +231,23 @@ Kirigami.ApplicationWindow {
             if (!nativeInterface.fileOpen) {
                 leftMenu.open()
             }
+        }
+    }
+
+    BasicDialog {
+        id: fileSummaryDialog
+        standardButtons: Controls.Dialog.Ok
+        title: qsTr("File details")
+
+        Controls.Label {
+            id: fileSummaryLabel
+            text: "No file summary available"
+            textFormat: Text.RichText
+        }
+
+        function show() {
+            fileSummaryLabel.text = nativeInterface.computeFileSummary()
+            this.open()
         }
     }
 

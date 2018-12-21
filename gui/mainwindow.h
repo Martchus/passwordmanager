@@ -101,6 +101,7 @@ private slots:
     void showTreeViewContextMenu();
     void showTableViewContextMenu();
     // other
+    void showFileDetails();
     void showContainingDirectory();
     void clearClipboard();
     void setSomethingChanged();
@@ -115,6 +116,7 @@ private:
     void updateUiStatus();
     void updateWindowTitle();
     void applyDefaultExpanding(const QModelIndex &parent);
+    Io::PasswordFileSaveFlags saveOptions() const;
 
     std::unique_ptr<Ui::MainWindow> m_ui;
     Io::PasswordFile m_file;
