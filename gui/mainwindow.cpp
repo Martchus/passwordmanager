@@ -1279,7 +1279,11 @@ void MainWindow::showFileDetails()
     if (!m_file.isOpen()) {
         return;
     }
-    QMessageBox::information(this, tr("File details"), QString::fromStdString(m_file.summary(saveOptions())));
+    QMessageBox msgBox;
+    msgBox.setWindowTitle(tr("File details"));
+    msgBox.setText(QString::fromStdString(m_file.summary(saveOptions())));
+    msgBox.setIcon(QMessageBox::NoIcon);
+    msgBox.exec();
 }
 
 /*!
