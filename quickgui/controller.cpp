@@ -145,7 +145,7 @@ void Controller::load(const QString &filePath)
         setFileOpen(true);
         updateWindowTitle();
     } catch (const CryptoException &e) {
-        if (m_file.isEncryptionUsed() && m_password.isEmpty()) {
+        if ((m_file.saveOptions() & PasswordFileSaveFlags::Encryption) && m_password.isEmpty()) {
             emit passwordRequired(m_filePath);
         } else {
             // clear password since the password which has been provided likely wasn't correct
