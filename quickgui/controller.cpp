@@ -322,12 +322,10 @@ void Controller::handleEntriesRemoved(const QModelIndex &parentIndex, int first,
             }
             break;
         case EntryType::Node:
-            // FIXME: remove const_cast in passwordfile v4
-            if (currentAccount->isIndirectChildOf(static_cast<NodeEntry *>(const_cast<Entry *>(childEntry)))) {
+            if (currentAccount->isIndirectChildOf(static_cast<const NodeEntry *>(childEntry))) {
                 setCurrentAccount(nullptr);
             }
             break;
-        default:;
         }
     }
 }
