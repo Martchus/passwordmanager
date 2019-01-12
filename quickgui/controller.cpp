@@ -13,7 +13,7 @@
 #ifndef QT_NO_CLIPBOARD
 #include <QClipboard>
 #endif
-#ifdef DEBUG_BUILD
+#if defined(DEBUG_BUILD) || (defined(Q_OS_ANDROID) && defined(CPP_UTILITIES_USE_NATIVE_FILE_BUFFER))
 #include <QDebug>
 #endif
 #include <QDir>
@@ -214,7 +214,7 @@ void Controller::save()
             m_file.close();
 
             // open new file descriptor to replace existing file and allow writing
-            IF_DEBUG_BUILD(qDebug() << "Opening new fd for saving, native url: " << m_nativeUrl;)
+            qDebug() << "Opening new fd for saving, native url: " << m_nativeUrl;
             const auto newFileDescriptor = openFileDescriptorFromAndroidContentUrl(m_nativeUrl, QStringLiteral("wt"));
             if (newFileDescriptor < 0) {
                 emit fileError(tr("Unable to open file descriptor for saving the file."));
@@ -271,6 +271,7 @@ void Controller::handleFileSelectionAccepted(const QString &filePath, bool exist
 void Controller::handleFileSelectionAcceptedDescriptor(const QString &nativeUrl, const QString &fileName, int fileDescriptor, bool existing)
 {
     try {
+        qDebug() << "Opening fd for native url: " << nativeUrl;
         m_file.setPath(fileName.toStdString());
         m_file.fileStream().openFromFileDescriptor(fileDescriptor, ios_base::in | ios_base::binary);
         m_file.opened();
