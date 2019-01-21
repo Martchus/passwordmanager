@@ -243,6 +243,8 @@ Kirigami.ApplicationWindow {
             id: fileSummaryLabel
             text: "No file summary available"
             textFormat: Text.RichText
+            wrapMode: Text.Wrap
+            width: fileSummaryDialog.availableWidth
         }
 
         function show() {
