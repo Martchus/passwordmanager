@@ -136,7 +136,9 @@ Kirigami.ScrollablePage {
                         acceptedButtons: Qt.LeftButton | Qt.RightButton
                         onClicked: {
                             if (mouse.button === Qt.RightButton) {
-                                fieldContextMenu.popup()
+                                if (!fieldRow.isLast) {
+                                    fieldContextMenu.popup()
+                                }
                                 return
                             }
                             fieldDialog.init(model, index)
