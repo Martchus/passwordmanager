@@ -97,6 +97,13 @@ Kirigami.ScrollablePage {
                     source: "list-add"
                     opacity: 0.6
                     visible: fieldRow.isLast
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            fieldDialog.init(model, index)
+                            fieldDialog.open()
+                        }
+                    }
                 }
                 Item {
                     Layout.fillWidth: true
