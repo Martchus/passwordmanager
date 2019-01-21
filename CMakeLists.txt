@@ -13,7 +13,7 @@ set(META_GUI_OPTIONAL YES)
 set(META_USE_QQC2 ON)
 set(META_VERSION_MAJOR 4)
 set(META_VERSION_MINOR 0)
-set(META_VERSION_PATCH 0)
+set(META_VERSION_PATCH 1)
 set(META_APP_VERSION ${META_VERSION_MAJOR}.${META_VERSION_MINOR}.${META_VERSION_PATCH})
 set(PNG_ICON_NO_CROP ON)
 
@@ -167,7 +167,7 @@ use_qt_utilities()
 find_package(passwordfile 4.0.0 REQUIRED)
 use_password_file()
 
-# require qt least Qt 5.8 for the Qt Quick GUI
+# require at least Qt 5.8 for the Qt Quick GUI
 if(QUICK_GUI)
     set(META_QT5_VERSION 5.8)
 endif()
