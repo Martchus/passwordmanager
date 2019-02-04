@@ -19,6 +19,10 @@
 #include <QSettings>
 #include <QTextCodec>
 #include <QtQml>
+#ifdef Q_OS_ANDROID
+#include <QDebug>
+#include <QDirIterator>
+#endif
 
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
 #include <QApplication>
@@ -57,6 +61,17 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
     if (QIcon::themeName().isEmpty()) {
         QIcon::setThemeName(QStringLiteral("breeze"));
     }
+
+    // log resource information
+#if defined(Q_OS_ANDROID) && defined(DEBUG_BUILD)
+    qDebug() << "Using icon theme" << QIcon::themeName();
+    qDebug() << "Icon theme search paths" << QIcon::themeSearchPaths();
+    qDebug() << "Resources:";
+    QDirIterator it(QStringLiteral(":/"), QDirIterator::Subdirectories);
+    while (it.hasNext()) {
+        qDebug() << it.next();
+    }
+#endif
 
     // load settings from configuration file
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, QStringLiteral(PROJECT_NAME));
