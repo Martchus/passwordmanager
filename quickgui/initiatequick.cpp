@@ -35,6 +35,11 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
     setupAndroidSpecifics();
 #endif
 
+    // work around kirigami plugin trying to be clever
+    if (!qEnvironmentVariableIsSet("XDG_CURRENT_DESKTOP")) {
+        qputenv("XDG_CURRENT_DESKTOP", QByteArray("please don't override my settings"));
+    }
+
     // init application
     SET_QT_APPLICATION_INFO;
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
