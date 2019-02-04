@@ -90,14 +90,8 @@ Kirigami.ApplicationWindow {
                 Item {
                     Layout.preferredWidth: 2
                 }
-                Kirigami.Icon {
-                    source: "emblem-warning"
-                    width: Kirigami.Units.iconSizes.small
-                    height: Kirigami.Units.iconSizes.small
-                }
                 Controls.Label {
                     text: qsTr("No password set\nFile will be saved unencrypted!")
-                    font.bold: true
                 }
             }
             Item {
