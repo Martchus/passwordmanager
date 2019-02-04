@@ -134,7 +134,8 @@ Kirigami.ApplicationWindow {
                 enabled: nativeInterface.fileOpen
                 iconName: "document-encrypt"
                 onTriggered: enterPasswordDialog.askForNewPassword(
-                                 "Change password for " + nativeInterface.filePath)
+                                 qsTr("Change password for %1").arg(
+                                     nativeInterface.filePath))
                 shortcut: "Ctrl+P"
             },
             Kirigami.Action {
