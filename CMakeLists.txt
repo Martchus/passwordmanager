@@ -138,6 +138,7 @@ set(REQUIRED_ICONS
     insert-text
     list-add
     list-remove
+    password-copy
     password-generate
     password-show-off
     password-show-on
@@ -149,6 +150,7 @@ set(REQUIRED_ICONS
     system-file-manager
     system-run
     system-search
+    username-copy
     window-close
 )
 

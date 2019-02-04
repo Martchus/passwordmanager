@@ -23,6 +23,7 @@ Kirigami.ScrollablePage {
         property alias isPassword: fieldIsPasswordCheckBox.checked
         title: qsTr("Edit field of %1").arg(nativeInterface.currentAccountName)
         standardButtons: Controls.Dialog.Ok | Controls.Dialog.Cancel
+
         onAccepted: {
             var column0 = fieldsListView.model.index(entryIndex, 0)
             var column1 = fieldsListView.model.index(entryIndex, 1)
@@ -33,19 +34,47 @@ Kirigami.ScrollablePage {
         }
 
         ColumnLayout {
-            Controls.TextField {
-                id: fieldNameEdit
+            GridLayout {
                 Layout.preferredWidth: fieldDialog.availableWidth
-                text: fieldDialog.fieldName
-                Keys.onPressed: fieldDialog.acceptOnReturn(event)
-            }
-            Controls.TextField {
-                id: fieldValueEdit
-                Layout.preferredWidth: fieldDialog.availableWidth
-                text: fieldDialog.fieldValue
-                echoMode: fieldDialog.isPassword
-                          && !showCharactersCheckBox.checked ? TextInput.PasswordEchoOnEdit : TextInput.Normal
-                Keys.onPressed: fieldDialog.acceptOnReturn(event)
+                columns: 2
+                columnSpacing: 0
+
+                Controls.TextField {
+                    id: fieldNameEdit
+                    Layout.fillWidth: true
+                    text: fieldDialog.fieldName
+                    Keys.onPressed: fieldDialog.acceptOnReturn(event)
+                }
+                Controls.RoundButton {
+                    flat: true
+                    icon.name: "username-copy"
+                    Layout.preferredWidth: height
+                    onClicked: {
+                        nativeInterface.copyToClipboard(fieldNameEdit.text)
+                        showPassiveNotification(qsTr("Copied field name"))
+                    }
+                }
+                Controls.TextField {
+                    id: fieldValueEdit
+                    property bool hideCharacters: fieldDialog.isPassword
+                                                  && !showCharactersCheckBox.checked
+
+                    Layout.fillWidth: true
+                    text: fieldDialog.fieldValue
+                    echoMode: hideCharacters ? TextInput.PasswordEchoOnEdit : TextInput.Normal
+                    Keys.onPressed: fieldDialog.acceptOnReturn(event)
+                }
+                Controls.RoundButton {
+                    flat: true
+                    icon.name: "password-copy"
+                    Layout.preferredWidth: height
+                    onClicked: {
+                        nativeInterface.copyToClipboard(fieldValueEdit.text)
+                        showPassiveNotification(
+                                    fieldDialog.isPassword ? qsTr("Copied password") : qsTr(
+                                                                 "Copied value"))
+                    }
+                }
             }
             RowLayout {
                 Layout.preferredWidth: fieldDialog.availableWidth
