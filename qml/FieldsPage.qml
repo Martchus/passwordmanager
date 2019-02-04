@@ -60,8 +60,15 @@ Kirigami.ScrollablePage {
                                                   && !showCharactersCheckBox.checked
 
                     Layout.fillWidth: true
+                    // ensure height is always the same, regardless of echo mode (under Android the
+                    // bullet points for PasswordEchoOnEdit have a different size causing a different
+                    // height)
+                    Layout.preferredHeight: fieldNameEdit.height
                     text: fieldDialog.fieldValue
                     echoMode: hideCharacters ? TextInput.PasswordEchoOnEdit : TextInput.Normal
+                    // fix ugly bullet points under Android
+                    font.pointSize: hideCharacters ? fieldNameEdit.font.pointSize
+                                                     * 0.5 : fieldNameEdit.font.pointSize
                     Keys.onPressed: fieldDialog.acceptOnReturn(event)
                 }
                 Controls.RoundButton {
