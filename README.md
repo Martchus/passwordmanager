@@ -95,6 +95,7 @@ Build c++utilities, passwordfile, qtutilities and passwordmanager in one step to
 # specify Android platform
 _pkg_arch=aarch64
 _android_arch=arm64-v8a
+_android_arch2=arm64
 _android_api_level=22
 
 # set project name
@@ -111,6 +112,9 @@ root="$android_ndk_root/sysroot;$other_libs_root"
 
 cmake \
     -DCMAKE_BUILD_TYPE=Release \
+    -DANDROID_ABI=$_android_arch \
+    -DANDROID_PLATFORM=$_android_api_level \
+    -DCMAKE_TOOLCHAIN_FILE=$android_ndk_root/build/cmake/android.toolchain.cmake \
     -DCMAKE_SYSTEM_NAME=Android \
     -DCMAKE_SYSTEM_VERSION=$_android_api_level \
     -DCMAKE_ANDROID_ARCH_ABI=$_android_arch \
@@ -120,6 +124,41 @@ cmake \
     -DCMAKE_INSTALL_PREFIX=$other_libs_root \
     -DCMAKE_PREFIX_PATH="$root" \
     -DCMAKE_FIND_ROOT_PATH="$root;$root/libs" \
+    -DCMAKE_CXX_FLAGS="-I/opt/android-ndk/sources/cxx-stl/llvm-libc++/include" \
+    -Diconv_DYNAMIC_INCLUDE_DIR="$other_libs_include" \
+    -Diconv_STATIC_INCLUDE_DIR="$other_libs_include" \
+    -Dcrypto_DYNAMIC_INCLUDE_DIR="$other_libs_include" \
+    -Dcrypto_STATIC_INCLUDE_DIR="$other_libs_include" \
+    -Dboost_iostreams_DYNAMIC_INCLUDE_DIR="$other_libs_include" \
+    -Dboost_iostreams_STATIC_INCLUDE_DIR="$other_libs_include" \
+    -DZLIB_LIBRARY="$android_ndk_root/platforms/android-$_android_api_level/arch-$_android_arch2/usr/lib/libz.so" \
+    -DCLANG_FORMAT_ENABLED=ON \
+    -DUSE_NATIVE_FILE_BUFFER=ON \
+    -DNO_DOXYGEN=ON \
+    -DWIDGETS_GUI=OFF \
+    -DQUICK_GUI=ON \
+    -DBUILTIN_ICON_THEMES=breeze \
+    -DBUILTIN_TRANSLATIONS=ON \
+    -DANDROID_APK_TOOLCHAIN_VERSION=4.9 \
+    -DANDROID_APK_CXX_STANDARD_LIBRARY="$android_ndk_root/platforms/android-$_android_api_level/arch-$_android_arch2/usr/lib/libstdc++.so" \
+    -DANDROID_APK_FORCE_DEBUG=ON \
+    -DANDROID_APK_KEYSTORE_URL="$keystore_url" \
+    -DANDROID_APK_KEYSTORE_ALIAS="$keystore_alias" \
+    -DANDROID_APK_KEYSTORE_PASSWORD="$keystore_password" \
+    $SOURCES/subdirs/$_reponame
+
+cmake \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_SYSTEM_NAME=Android \
+    -DCMAKE_SYSTEM_VERSION=$_android_api_level \
+    -DCMAKE_ANDROID_ARCH_ABI=$_android_arch \
+    -DCMAKE_ANDROID_NDK="$android_ndk_root" \
+    -DCMAKE_ANDROID_SDK="$android_sdk_root" \
+    -DCMAKE_ANDROID_STL_TYPE=c++_shared \
+    -DCMAKE_INSTALL_PREFIX=$other_libs_root \
+    -DCMAKE_PREFIX_PATH="$root" \
+    -DCMAKE_FIND_ROOT_PATH="$root;$root/libs" \
+    -DCMAKE_CXX_FLAGS="-D__ANDROID_API__=$_android_api_level" \
     -Diconv_DYNAMIC_INCLUDE_DIR="$other_libs_include" \
     -Diconv_STATIC_INCLUDE_DIR="$other_libs_include" \
     -Dcrypto_DYNAMIC_INCLUDE_DIR="$other_libs_include" \
