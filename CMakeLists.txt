@@ -18,27 +18,11 @@ set(META_APP_VERSION ${META_VERSION_MAJOR}.${META_VERSION_MINOR}.${META_VERSION_
 set(PNG_ICON_NO_CROP ON)
 
 # add project files
-set(HEADER_FILES
-    cli/cli.h
-    model/entryfiltermodel.h
-    model/entrymodel.h
-    model/fieldmodel.h
-)
-set(SRC_FILES
-    cli/cli.cpp
-    main.cpp
-)
+set(HEADER_FILES cli/cli.h model/entryfiltermodel.h model/entrymodel.h model/fieldmodel.h)
+set(SRC_FILES cli/cli.cpp main.cpp)
 
-set(GUI_HEADER_FILES
-    model/entryfiltermodel.cpp
-    model/entrymodel.cpp
-    model/fieldmodel.cpp
-)
-set(GUI_SRC_FILES
-    model/entryfiltermodel.cpp
-    model/entrymodel.cpp
-    model/fieldmodel.cpp
-)
+set(GUI_HEADER_FILES model/entryfiltermodel.cpp model/entrymodel.cpp model/fieldmodel.cpp)
+set(GUI_SRC_FILES model/entryfiltermodel.cpp model/entrymodel.cpp model/fieldmodel.cpp)
 
 set(WIDGETS_HEADER_FILES
     gui/fielddelegate.h
@@ -46,8 +30,7 @@ set(WIDGETS_HEADER_FILES
     gui/mainwindow.h
     gui/passwordgeneratordialog.h
     gui/stacksupport.h
-    gui/undocommands.h
-)
+    gui/undocommands.h)
 set(WIDGETS_SRC_FILES
     gui/fielddelegate.cpp
     gui/initiatequi.cpp
@@ -55,44 +38,21 @@ set(WIDGETS_SRC_FILES
     gui/passwordgeneratordialog.cpp
     gui/stacksupport.cpp
     gui/undocommands.cpp
-    resources/icons.qrc
-)
-set(WIDGETS_UI_FILES
-    gui/mainwindow.ui
-    gui/passwordgeneratordialog.ui
-)
+    resources/icons.qrc)
+set(WIDGETS_UI_FILES gui/mainwindow.ui gui/passwordgeneratordialog.ui)
 
-set(QML_HEADER_FILES
-    quickgui/controller.h
-    quickgui/initiatequick.h
-)
-set(QML_SRC_FILES
-    quickgui/controller.cpp
-    quickgui/initiatequick.cpp
-    resources/icons.qrc
-    resources/qml.qrc
-)
-if(ANDROID)
-    list(APPEND QML_HEADER_FILES
-        quickgui/android.h
-    )
-    list(APPEND QML_SRC_FILES
-        quickgui/android.cpp
-    )
-endif()
+set(QML_HEADER_FILES quickgui/controller.h quickgui/initiatequick.h)
+set(QML_SRC_FILES quickgui/controller.cpp quickgui/initiatequick.cpp resources/icons.qrc resources/qml.qrc)
+if (ANDROID)
+    list(APPEND QML_HEADER_FILES quickgui/android.h)
+    list(APPEND QML_SRC_FILES quickgui/android.cpp)
+endif ()
 
-set(TS_FILES
-    translations/${META_PROJECT_NAME}_de_DE.ts
-    translations/${META_PROJECT_NAME}_en_US.ts
-)
+set(TS_FILES translations/${META_PROJECT_NAME}_de_DE.ts translations/${META_PROJECT_NAME}_en_US.ts)
 
-set(ICON_FILES
-    resources/icons/hicolor/scalable/apps/${META_PROJECT_NAME}.svg
-)
+set(ICON_FILES resources/icons/hicolor/scalable/apps/${META_PROJECT_NAME}.svg)
 
-set(DOC_FILES
-    README.md
-)
+set(DOC_FILES README.md)
 
 set(REQUIRED_ICONS
     application-exit
@@ -151,8 +111,7 @@ set(REQUIRED_ICONS
     system-run
     system-search
     username-copy
-    window-close
-)
+    window-close)
 
 # find c++utilities
 find_package(c++utilities 4.10.0 REQUIRED)
@@ -170,38 +129,33 @@ find_package(passwordfile 4.0.0 REQUIRED)
 use_password_file()
 
 # require at least Qt 5.8 for the Qt Quick GUI
-if(QUICK_GUI)
+if (QUICK_GUI)
     set(META_QT5_VERSION 5.8)
-endif()
+endif ()
 
-# allow to enable undo support from the widgets GUI in the quick GUI as well (so the quick GUI will depend on Qt Widgets as well)
-if(QUICK_GUI AND NOT WIDGETS_GUI)
+# allow to enable undo support from the widgets GUI in the quick GUI as well (so the quick GUI will depend on Qt Widgets as
+# well)
+if (QUICK_GUI AND NOT WIDGETS_GUI)
     option(ENABLE_UNDO_SUPPORT_FOR_QUICK_GUI "enables with undo/redo support for the Qt Quick GUI (requires Qt Widgets)" ON)
-    if(ENABLE_UNDO_SUPPORT_FOR_QUICK_GUI)
+    if (ENABLE_UNDO_SUPPORT_FOR_QUICK_GUI)
         list(APPEND ADDITIONAL_QT_MODULES Widgets)
         list(APPEND META_PUBLIC_COMPILE_DEFINITIONS ${META_PROJECT_VARNAME_UPPER}_ENABLE_UNDO_SUPPORT_FOR_QUICK_GUI)
-        list(APPEND QML_HEADER_FILES
-            gui/stacksupport.h
-            gui/undocommands.h
-        )
-        list(APPEND QML_SRC_FILES
-            gui/stacksupport.cpp
-            gui/undocommands.cpp
-        )
-    endif()
-endif()
+        list(APPEND QML_HEADER_FILES gui/stacksupport.h gui/undocommands.h)
+        list(APPEND QML_SRC_FILES gui/stacksupport.cpp gui/undocommands.cpp)
+    endif ()
+endif ()
 
 # add further Qt/KF modules required by the Qt Quick GUI under Android
-if(ANDROID AND QUICK_GUI)
+if (ANDROID AND QUICK_GUI)
     list(APPEND ADDITIONAL_QT_MODULES AndroidExtras)
     list(APPEND ADDITIONAL_KF_MODULES Kirigami2)
-endif()
+endif ()
 
 # apply further configuration
-if(WIDGETS_GUI OR QUICK_GUI)
+if (WIDGETS_GUI OR QUICK_GUI)
     include(QtGuiConfig)
     include(QtConfig)
-endif()
+endif ()
 include(WindowsResources)
 include(AppTarget)
 include(AndroidApk)
