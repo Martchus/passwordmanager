@@ -38,10 +38,27 @@ Note that some of the mentioned points are actually implemented the underlying l
 [c++utilities](http://github.com/Martchus/cpp-utilities), [qtutilities](http://github.com/Martchus/qtutilities)
 and [passwordfile](http://github.com/Martchus/passwordfile).
 
-## Download / binary repository
-I currently provide packages for Arch Linux and Windows. Sources for those packages can be found in a
-separate [repository](https://github.com/Martchus/PKGBUILDs). For binaries checkout the release section
-on GitHub or my [website](http://martchus.no-ip.biz/website/page.php?name=programming).
+## Download
+### Source
+See the release section on GitHub.
+
+### Packages and binaries
+* Arch Linux
+    * for PKGBUILDs checkout [my GitHub repository](https://github.com/Martchus/PKGBUILDs) or
+      [the AUR](https://aur.archlinux.org/packages?SeB=m&K=Martchus)
+    * for a binary repository checkout [my website](http://martchus.no-ip.biz/website/page.php?name=programming)
+* Tumbleweed, Leap, Fedora
+    * for RPM \*.spec files and binary repository checkout
+      [openSUSE Build Servide](https://build.opensuse.org/project/show/home:mkittler)
+    * there's also a [repo with builds of Git master](https://build.opensuse.org/project/show/home:mkittler:vcs)
+* Other GNU/Linux systems
+    * [AppImage repository for releases on the openSUSE Build Service](https://download.opensuse.org/repositories/home:/mkittler:/appimage/AppImage)
+    * [AppImage repository for builds from Git master the openSUSE Build Service](https://download.opensuse.org/repositories/home:/mkittler:/appimage:/vcs/AppImage/)
+* Windows
+    * for mingw-w64 PKGBUILDs checkout [my GitHub repository](https://github.com/Martchus/PKGBUILDs)
+    * for statically linked binaries checkout the [release section on GitHub](https://github.com/Martchus/tageditor/releases)
+    * [my website](http://martchus.no-ip.biz/website/page.php?name=programming) also contains an occasionally
+      updated archive with a dynamically linked executable
 
 ## Build instructions
 The Password Manager depends on c++utilities and passwordfile. Checkout the README of c++utilities for more details. Note that this project is not built differently than any other CMake project.
@@ -80,12 +97,13 @@ Create stuff for signing the package (remove `-DANDROID_APK_FORCE_DEBUG=ON` line
 keystore_dir=/path/to/keystore-dir
 keystore_alias=$USER
 keystore_url=$keystore_dir/$keystore_alias
-#keystore_password=<password>
+
+# make up some password to protect the store; enter this on keytool invocation
+keystore_password=<password>
 
 # create keystore (do only once)
 pushd "$keystore_dir"
-keytool -genkey -v -keystore keystore_alias.keystore -alias keystore_alias -keyalg RSA -validity 999999
-keytool -importkeystore -srckeystore keystore_alias.keystore -destkeystore keystore_alias.keystore -deststoretype pkcs12 # FIXME: make this in one step
+keytool -genkey -v -keystore "$keystore_alias" -alias "$keystore_alias" -keyalg RSA -keysize 2048 -validity 10000
 popd
 ```
 
@@ -110,6 +128,12 @@ other_libs_root=/opt/android-libs/$_pkg_arch
 other_libs_include=$other_libs_root/include
 root="$android_ndk_root/sysroot;$other_libs_root"
 
+# use Java 8 which seems to be the latest version which works
+export PATH=/usr/lib/jvm/java-8-openjdk/jre/bin/:$PATH
+
+# configure with the toolchain file provided by the Android NDK (still WIP)
+# note: This configuration is likely required in the future to resolve https://gitlab.kitware.com/cmake/cmake/issues/18739. But for now
+#       better keep using CMake's internal Android support.
 cmake \
     -DCMAKE_BUILD_TYPE=Release \
     -DANDROID_ABI=$_android_arch \
@@ -147,6 +171,8 @@ cmake \
     -DANDROID_APK_KEYSTORE_PASSWORD="$keystore_password" \
     $SOURCES/subdirs/$_reponame
 
+# configure with CMake's internal Android support
+# note: Requires workaround with Android NDK r19: https://gitlab.kitware.com/cmake/cmake/issues/18739#note_498676
 cmake \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_SYSTEM_NAME=Android \
@@ -178,8 +204,11 @@ cmake \
     -DANDROID_APK_KEYSTORE_PASSWORD="$keystore_password" \
     $SOURCES/subdirs/$_reponame
 
+# build all binaries and make APK file using all CPU cores
 make passwordmanager_apk -j$(nproc)
-make passwordmanager_deploy_apk # install app on USB-connected phone
+
+# install app on USB-connected phone
+make passwordmanager_deploy_apk
 ```
 
 ##### Notes
