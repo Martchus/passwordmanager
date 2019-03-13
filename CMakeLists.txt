@@ -114,18 +114,20 @@ set(REQUIRED_ICONS
     window-close)
 
 # find c++utilities
-find_package(c++utilities 4.10.0 REQUIRED)
+set(CONFIGURATION_PACKAGE_SUFFIX ""
+    CACHE STRING "sets the suffix for find_package() calls to packages configured via c++utilities")
+find_package(c++utilities${CONFIGURATION_PACKAGE_SUFFIX} 5.0.0 REQUIRED)
 use_cpp_utilities()
 
 # apply basic configuration
 include(BasicConfig)
 
 # find qtutilities
-find_package(qtutilities 5.11.0 REQUIRED)
+find_package(qtutilities${CONFIGURATION_PACKAGE_SUFFIX} 6.0.0 REQUIRED)
 use_qt_utilities()
 
 # find passwordfile
-find_package(passwordfile 4.0.0 REQUIRED)
+find_package(passwordfile${CONFIGURATION_PACKAGE_SUFFIX} 5.0.0 REQUIRED)
 use_password_file()
 
 # require at least Qt 5.8 for the Qt Quick GUI

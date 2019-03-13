@@ -9,7 +9,6 @@
 #include <c++utilities/application/commandlineutils.h>
 #include <c++utilities/conversion/stringconversion.h>
 #include <c++utilities/io/ansiescapecodes.h>
-#include <c++utilities/io/catchiofailure.h>
 
 #if defined(PLATFORM_UNIX)
 #include <unistd.h>
@@ -260,10 +259,9 @@ void InteractiveCli::openFile(const string &file, PasswordFileOpenFlags openFlag
             } catch (const CryptoException &) {
                 m_o << "error occured when decrypting file \"" << file << "\"" << endl;
                 throw;
-            } catch (...) {
-                const char *what = catchIoFailure();
+            } catch (const std::ios_base::failure &) {
                 m_o << "IO error occured when opening file \"" << file << "\"" << endl;
-                throw ios_base::failure(what);
+                throw;
             }
         } catch (const std::exception &e) {
             if (*e.what() != 0) {
@@ -312,10 +310,9 @@ void InteractiveCli::saveFile()
         } catch (const CryptoException &) {
             m_o << "error occured when encrypting file \"" << m_file.path() << "\"" << endl;
             throw;
-        } catch (...) {
-            const char *what = catchIoFailure();
+        } catch (const std::ios_base::failure &) {
             m_o << "IO error occured when saving file \"" << m_file.path() << "\"" << endl;
-            throw ios_base::failure(what);
+            throw;
         }
     } catch (const exception &e) {
         if (*e.what() != 0) {
@@ -341,10 +338,9 @@ void InteractiveCli::createFile(const string &file)
             m_file.generateRootEntry();
             m_currentEntry = m_file.rootEntry();
             m_o << "file \"" << file << "\" created and opened" << endl;
-        } catch (...) {
-            const char *what = catchIoFailure();
+        } catch (const std::ios_base::failure &) {
             m_o << "IO error occured when creating file \"" << file << "\"" << endl;
-            throw ios_base::failure(what);
+            throw;
         }
     } catch (const exception &e) {
         if (*e.what() != 0) {

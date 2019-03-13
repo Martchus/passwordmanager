@@ -5,6 +5,7 @@
 #endif
 
 #include "resources/config.h"
+#include "resources/qtconfig.h"
 
 // enable inline helper functions for Qt Quick provided by qtutilities
 #define QT_UTILITIES_GUI_QTQUICK

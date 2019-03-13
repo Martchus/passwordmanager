@@ -7,6 +7,7 @@
 #endif
 
 #include "resources/config.h"
+#include "resources/qtconfig.h"
 
 #include <passwordfile/util/openssl.h>
 

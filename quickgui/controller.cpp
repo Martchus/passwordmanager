@@ -6,7 +6,6 @@
 
 #include <qtutilities/misc/dialogutils.h>
 
-#include <c++utilities/io/catchiofailure.h>
 #include <c++utilities/io/nativefilestream.h>
 #include <c++utilities/io/path.h>
 
@@ -155,7 +154,7 @@ void Controller::load(const QString &filePath)
     } catch (const runtime_error &e) {
         emit fileError(tr("A parsing error occured when opening the file: ") + QString::fromLocal8Bit(e.what()), QStringLiteral("load"));
     } catch (...) {
-        emitIoError(tr("loading"));
+        emitFileError(tr("loading"));
     }
 }
 
@@ -172,7 +171,7 @@ void Controller::create(const QString &filePath)
         }
         m_file.create();
     } catch (...) {
-        emitIoError(tr("creating"));
+        emitFileError(tr("creating"));
     }
 
     m_file.generateRootEntry();
@@ -187,7 +186,7 @@ void Controller::close()
         m_file.close();
         resetFileStatus();
     } catch (...) {
-        emitIoError(tr("closing"));
+        emitFileError(tr("closing"));
     }
 }
 
@@ -221,7 +220,7 @@ void Controller::save()
                 return;
             }
 
-            m_file.fileStream().openFromFileDescriptor(newFileDescriptor, ios_base::out | ios_base::trunc | ios_base::binary);
+            m_file.fileStream().open(newFileDescriptor, ios_base::out | ios_base::trunc | ios_base::binary);
             m_file.write(flags);
         } else {
 #endif
@@ -236,7 +235,7 @@ void Controller::save()
     } catch (const runtime_error &e) {
         emit fileError(tr("An internal error occured when saving the file: ") + QString::fromLocal8Bit(e.what()), QStringLiteral("save"));
     } catch (...) {
-        emitIoError(tr("saving"));
+        emitFileError(tr("saving"));
     }
 }
 
@@ -273,10 +272,10 @@ void Controller::handleFileSelectionAcceptedDescriptor(const QString &nativeUrl,
     try {
         qDebug() << "Opening fd for native url: " << nativeUrl;
         m_file.setPath(fileName.toStdString());
-        m_file.fileStream().openFromFileDescriptor(fileDescriptor, ios_base::in | ios_base::binary);
+        m_file.fileStream().open(fileDescriptor, ios_base::in | ios_base::binary);
         m_file.opened();
     } catch (...) {
-        emitIoError(tr("opening from native file descriptor"));
+        emitFileError(tr("opening from native file descriptor"));
     }
     emit filePathChanged(m_filePath = m_fileName = fileName);
     handleFileSelectionAccepted(QString(), existing);
@@ -424,11 +423,13 @@ void Controller::setFileOpen(bool fileOpen)
     }
 }
 
-void Controller::emitIoError(const QString &when)
+void Controller::emitFileError(const QString &when)
 {
     try {
-        const auto *const msg = catchIoFailure();
-        emit fileError(tr("An IO error occured when %1 the file %2: ").arg(when, m_filePath) + QString::fromLocal8Bit(msg), QStringLiteral("load"));
+        throw;
+    } catch (const std::ios_base::failure &failure) {
+        emit fileError(
+            tr("An IO error occured when %1 the file %2: ").arg(when, m_filePath) + QString::fromLocal8Bit(failure.what()), QStringLiteral("load"));
     } catch (const exception &e) {
         emit fileError(tr("An unknown exception occured when %1 the file %2: ").arg(when, m_filePath) + QString::fromLocal8Bit(e.what()),
             QStringLiteral("load"));

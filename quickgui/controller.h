@@ -136,7 +136,7 @@ private:
     void resetFileStatus();
     void updateWindowTitle();
     void setFileOpen(bool fileOpen);
-    void emitIoError(const QString &when);
+    void emitFileError(const QString &when);
     QModelIndex ensureSourceEntryIndex(const QModelIndex &entryIndexMaybeFromFilterModel) const;
 
     QSettings &m_settings;

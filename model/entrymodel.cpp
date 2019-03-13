@@ -7,8 +7,6 @@
 #include <passwordfile/io/entry.h>
 #include <passwordfile/io/parsingexception.h>
 
-#include <c++utilities/io/catchiofailure.h>
-
 #include <QBuffer>
 #include <QDebug>
 #include <QIcon>
@@ -246,8 +244,7 @@ QVariant EntryModel::data(const QModelIndex &index, int role) const
             // FIXME: make conversion to QByteArray more efficient
             const auto str(ss.str());
             return QByteArray(str.data(), str.size());
-        } catch (...) {
-            IoUtilities::catchIoFailure();
+        } catch (const std::ios_base::failure &) {
             return false;
         }
     }
@@ -318,9 +315,8 @@ bool EntryModel::setData(const QModelIndex &index, const QVariant &value, int ro
         } catch (const Io::ParsingException &parsingError) {
             cerr << "EntryModel::setData: parsing exception: " << parsingError.what() << endl;
             return false;
-        } catch (...) {
-            const char *const errorMessage(IoUtilities::catchIoFailure());
-            cerr << "EntryModel::setData: IO exception: " << errorMessage << endl;
+        } catch (const std::ios_base::failure &failure) {
+            cerr << "EntryModel::setData: IO exception: " << failure.what() << endl;
             return false;
         }
     }
