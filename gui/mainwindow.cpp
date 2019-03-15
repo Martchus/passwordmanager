@@ -1022,6 +1022,7 @@ void MainWindow::accountSelected(const QModelIndex &selected, const QModelIndex 
     if (Entry *entry = m_entryModel->entry(m_entryFilterModel->mapToSource(selected))) {
         if (entry->type() == EntryType::Account) {
             m_fieldModel->setAccountEntry(static_cast<AccountEntry *>(entry));
+            m_ui->tableView->resizeRowsToContents();
             return;
         }
     }
