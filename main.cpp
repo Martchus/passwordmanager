@@ -13,7 +13,7 @@
 
 #include <c++utilities/application/argumentparser.h>
 #include <c++utilities/application/commandlineutils.h>
-#include <c++utilities/application/failure.h>
+#include <c++utilities/misc/parseerror.h>
 
 #if defined(PASSWORD_MANAGER_GUI_QTWIDGETS) || defined(PASSWORD_MANAGER_GUI_QTQUICK)
 #include <QString>
@@ -35,7 +35,7 @@ ENABLE_QT_RESOURCES_OF_STATIC_DEPENDENCIES
 #endif
 
 using namespace std;
-using namespace ApplicationUtilities;
+using namespace CppUtilities;
 using namespace Util;
 
 int main(int argc, char *argv[])
@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
     HelpArgument helpArg(parser);
     parser.setMainArguments({ &qtConfigArgs.qtWidgetsGuiArg(), &qtConfigArgs.qtQuickGuiArg(), &cliArg, &helpArg });
     // parse the specified arguments
-    parser.parseArgsOrExit(argc, argv);
+    parser.parseArgs(argc, argv);
 #endif
 
     // init OpenSSL

@@ -19,10 +19,8 @@
 
 using namespace std;
 using namespace std::placeholders;
-using namespace ApplicationUtilities;
-using namespace ConversionUtilities;
-using namespace EscapeCodes;
-using namespace IoUtilities;
+using namespace CppUtilities;
+using namespace CppUtilities::EscapeCodes;
 using namespace Io;
 
 namespace Cli {

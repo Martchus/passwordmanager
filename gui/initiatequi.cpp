@@ -13,8 +13,8 @@
 #include <QFile>
 #include <QSettings>
 
-using namespace ApplicationUtilities;
-using namespace Dialogs;
+using namespace CppUtilities;
+using namespace QtUtilities;
 
 namespace QtGui {
 

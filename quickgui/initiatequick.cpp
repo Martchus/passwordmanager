@@ -29,7 +29,7 @@
 #include <QApplication>
 #endif
 
-using namespace ApplicationUtilities;
+using namespace CppUtilities;
 
 namespace QtGui {
 

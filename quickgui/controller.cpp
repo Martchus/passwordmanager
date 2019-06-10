@@ -27,8 +27,8 @@
 
 using namespace std;
 using namespace Io;
-using namespace IoUtilities;
-using namespace Dialogs;
+using namespace CppUtilities;
+using namespace QtUtilities;
 
 namespace QtGui {
 
@@ -89,7 +89,7 @@ void Controller::setFilePath(const QString &filePath)
     // assign full file path and file name
     m_file.clear();
     m_file.setPath(filePath.toLocal8Bit().data());
-    m_fileName = QString::fromLocal8Bit(IoUtilities::fileName(m_file.path()).data());
+    m_fileName = QString::fromLocal8Bit(CppUtilities::fileName(m_file.path()).data());
     emit filePathChanged(m_filePath = filePath);
 
     // clear password so we don't use the password from the previous file

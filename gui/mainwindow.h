@@ -20,19 +20,16 @@ QT_FORWARD_DECLARE_CLASS(QUndoView)
 QT_FORWARD_DECLARE_CLASS(QSettings)
 
 namespace Io {
-DECLARE_ENUM_CLASS(EntryType, int);
-DECLARE_ENUM_CLASS(FieldType, int);
+enum class EntryType : int;
+enum class FieldType : int;
 } // namespace Io
 
-namespace MiscUtils {
+namespace QtUtilities {
 class RecentMenuManager;
-}
-
-namespace Dialogs {
 class AboutDialog;
 class SettingsDialog;
 class QtSettings;
-} // namespace Dialogs
+} // namespace QtUtilities
 
 namespace QtGui {
 
@@ -48,7 +45,7 @@ class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QSettings &settings, Dialogs::QtSettings *qtSettings = nullptr, QWidget *parent = nullptr);
+    explicit MainWindow(QSettings &settings, QtUtilities::QtSettings *qtSettings = nullptr, QWidget *parent = nullptr);
     ~MainWindow() override;
 
 public slots:
@@ -129,11 +126,11 @@ private:
     Io::PasswordFileOpenFlags m_openFlags;
     bool m_dontUpdateSelection;
     int m_clearClipboardTimer;
-    MiscUtils::RecentMenuManager *m_recentMgr;
-    Dialogs::AboutDialog *m_aboutDlg;
+    QtUtilities::RecentMenuManager *m_recentMgr;
+    QtUtilities::AboutDialog *m_aboutDlg;
     QSettings &m_settings;
-    Dialogs::QtSettings *m_qtSettings;
-    Dialogs::SettingsDialog *m_settingsDlg;
+    QtUtilities::QtSettings *m_qtSettings;
+    QtUtilities::SettingsDialog *m_settingsDlg;
 };
 
 /*!

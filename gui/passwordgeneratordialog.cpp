@@ -19,7 +19,7 @@
 using namespace std;
 using namespace Io;
 using namespace Util;
-using namespace Dialogs;
+using namespace QtUtilities;
 
 namespace QtGui {
 

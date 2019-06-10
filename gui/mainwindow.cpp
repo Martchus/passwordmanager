@@ -42,10 +42,9 @@
 #include <stdexcept>
 
 using namespace std;
-using namespace IoUtilities;
+using namespace CppUtilities;
+using namespace QtUtilities;
 using namespace Io;
-using namespace Dialogs;
-using namespace MiscUtils;
 
 namespace QtGui {
 
@@ -110,7 +109,7 @@ void MainWindow::setSomethingChanged(bool somethingChanged)
 /*!
  * \brief Constructs a new main window.
  */
-MainWindow::MainWindow(QSettings &settings, Dialogs::QtSettings *qtSettings, QWidget *parent)
+MainWindow::MainWindow(QSettings &settings, QtUtilities::QtSettings *qtSettings, QWidget *parent)
     : QMainWindow(parent)
     , m_ui(new Ui::MainWindow)
     , m_openFlags(PasswordFileOpenFlags::None)
@@ -413,8 +412,6 @@ void MainWindow::showUndoView()
  */
 bool MainWindow::openFile(const QString &path, PasswordFileOpenFlags openFlags)
 {
-    using namespace Dialogs;
-
     // close previous file
     if (m_file.hasRootEntry() && !closeFile()) {
         return false;
@@ -596,21 +593,21 @@ void MainWindow::updateUiStatus()
  */
 void MainWindow::updateWindowTitle()
 {
-    Dialogs::DocumentStatus docStatus;
+    DocumentStatus docStatus;
     if (m_file.hasRootEntry()) {
         if (m_somethingChanged) {
-            docStatus = Dialogs::DocumentStatus::Unsaved;
+            docStatus = DocumentStatus::Unsaved;
         } else {
-            docStatus = Dialogs::DocumentStatus::Saved;
+            docStatus = DocumentStatus::Saved;
         }
     } else {
-        docStatus = Dialogs::DocumentStatus::NoDocument;
+        docStatus = DocumentStatus::NoDocument;
     }
     auto documentPath(QString::fromStdString(m_file.path()));
     if (m_openFlags & PasswordFileOpenFlags::ReadOnly) {
         documentPath += tr(" [read-only]");
     }
-    setWindowTitle(Dialogs::generateWindowTitle(docStatus, documentPath));
+    setWindowTitle(generateWindowTitle(docStatus, documentPath));
 }
 
 void MainWindow::applyDefaultExpanding(const QModelIndex &parent)
@@ -817,7 +814,6 @@ bool MainWindow::closeFile()
  */
 bool MainWindow::saveFile()
 {
-    using namespace Dialogs;
     if (showNoFileOpened()) {
         return false;
     }
@@ -922,7 +918,7 @@ void MainWindow::showContainingDirectory()
     }
     const QFileInfo file(QString::fromStdString(m_file.path()));
     if (file.dir().exists()) {
-        DesktopUtils::openLocalFileOrDir(file.dir().absolutePath());
+        openLocalFileOrDir(file.dir().absolutePath());
     }
 }
 
@@ -1131,7 +1127,6 @@ void MainWindow::setPasswordVisibility(QAction *selectedAction)
  */
 void MainWindow::changePassword()
 {
-    using namespace Dialogs;
     if (showNoFileOpened()) {
         return;
     }
@@ -1217,7 +1212,7 @@ void MainWindow::showTableViewContextMenu()
         if (const Field *field = m_fieldModel->field(static_cast<size_t>(index.row()))) {
             if (url.isEmpty() && field->type() != FieldType::Password) {
                 for (const string &protocol : protocols) {
-                    if (ConversionUtilities::startsWith(field->value(), protocol)) {
+                    if (startsWith(field->value(), protocol)) {
                         url = QString::fromUtf8(field->value().data());
                     }
                 }
