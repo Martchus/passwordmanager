@@ -272,7 +272,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
                 }
                 return true;
             }
-            FALLTHROUGH;
+            [[fallthrough]];
         default:;
         }
     }

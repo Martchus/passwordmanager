@@ -64,7 +64,7 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
     }
 
     // log resource information
-#if defined(Q_OS_ANDROID) && defined(DEBUG_BUILD)
+#if defined(Q_OS_ANDROID) && defined(CPP_UTILITIES_DEBUG_BUILD)
     qDebug() << "Using icon theme" << QIcon::themeName();
     qDebug() << "Icon theme search paths" << QIcon::themeSearchPaths();
     qDebug() << "Resources:";

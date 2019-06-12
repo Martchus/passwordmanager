@@ -12,7 +12,7 @@
 #ifndef QT_NO_CLIPBOARD
 #include <QClipboard>
 #endif
-#if defined(DEBUG_BUILD) || (defined(Q_OS_ANDROID) && defined(CPP_UTILITIES_USE_NATIVE_FILE_BUFFER))
+#if defined(CPP_UTILITIES_DEBUG_BUILD) || (defined(Q_OS_ANDROID) && defined(CPP_UTILITIES_USE_NATIVE_FILE_BUFFER))
 #include <QDebug>
 #endif
 #include <QDir>

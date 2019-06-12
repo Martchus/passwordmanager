@@ -458,7 +458,7 @@ bool EntryModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int co
     // determine the source parent entry and dest parent entry as node entries
     auto *const srcParentEntry = static_cast<NodeEntry *>(sourceParent.internalPointer());
     auto *const destParentEntry = static_cast<NodeEntry *>(destinationParent.internalPointer());
-#if DEBUG_BUILD
+#if CPP_UTILITIES_DEBUG_BUILD
     cout << "destinationChild: " << destinationChild << endl;
 #endif
     // source rows must be within the valid range
