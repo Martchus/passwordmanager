@@ -3,6 +3,7 @@
 #include "./gui/mainwindow.h"
 
 #include "resources/config.h"
+#include "resources/qtconfig.h"
 
 #include <qtutilities/resources/importplugin.h>
 #include <qtutilities/resources/qtconfigarguments.h>
