@@ -29,11 +29,11 @@ class Controller : public QObject {
     Q_PROPERTY(EntryModel *entryModel READ entryModel NOTIFY entryModelChanged)
     Q_PROPERTY(EntryFilterModel *entryFilterModel READ entryFilterModel NOTIFY entryFilterModelChanged)
     Q_PROPERTY(FieldModel *fieldModel READ fieldModel NOTIFY fieldModelChanged)
-    Q_PROPERTY(Io::AccountEntry *currentAccount READ currentAccount WRITE setCurrentAccount NOTIFY currentAccountChanged)
+    //Q_PROPERTY(Io::AccountEntry *currentAccount READ currentAccount WRITE setCurrentAccount NOTIFY currentAccountChanged)
     Q_PROPERTY(QModelIndex currentAccountIndex READ currentAccountIndex WRITE setCurrentAccountIndex NOTIFY currentAccountChanged)
     Q_PROPERTY(QString currentAccountName READ currentAccountName NOTIFY currentAccountChanged)
     Q_PROPERTY(bool hasCurrentAccount READ hasCurrentAccount NOTIFY currentAccountChanged)
-    Q_PROPERTY(QList<QPersistentModelIndex> cutEntries READ cutEntries WRITE setCutEntries NOTIFY cutEntriesChanged)
+    //Q_PROPERTY(QList<QPersistentModelIndex> cutEntries READ cutEntries WRITE setCutEntries NOTIFY cutEntriesChanged)
     Q_PROPERTY(bool canPaste READ canPaste NOTIFY cutEntriesChanged)
     Q_PROPERTY(QStringList recentFiles READ recentFiles RESET clearRecentFiles NOTIFY recentFilesChanged)
     Q_PROPERTY(bool useNativeFileDialog READ useNativeFileDialog WRITE setUseNativeFileDialog NOTIFY useNativeFileDialogChanged)
@@ -88,14 +88,15 @@ public:
 
 public slots:
     void init();
-    void load(const QString &filePath = QString());
-    void create(const QString &filePath = QString());
+    void load();
+    void create();
     void close();
+    void clear();
     void save();
-    bool showNativeFileDialog(bool existing);
-    void handleFileSelectionAccepted(const QString &filePath, bool existing);
+    bool showNativeFileDialog(bool existing, bool createNew);
+    void handleFileSelectionAccepted(const QString &filePath, const QString &nativeUrl, bool existing, bool createNew);
 #if defined(Q_OS_ANDROID) && defined(CPP_UTILITIES_USE_NATIVE_FILE_BUFFER)
-    void handleFileSelectionAcceptedDescriptor(const QString &nativeUrl, const QString &fileName, int fileDescriptor, bool existing);
+    void handleFileSelectionAcceptedDescriptor(const QString &nativeUrl, const QString &fileName, int fileDescriptor, bool existing, bool createNew);
 #endif
     void handleFileSelectionCanceled();
     void undo();
@@ -109,7 +110,7 @@ signals:
     void passwordRequired(const QString &filePath);
     void windowTitleChanged(const QString &windowTitle);
     void fileOpenChanged(bool fileOpen);
-    void fileError(const QString &errorMessage, const QString &retryAction = QString());
+    void fileError(const QString &errorMessage, const QString &retryAction);
     void fileSaved();
     void entryModelChanged();
     void entryFilterModelChanged();

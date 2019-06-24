@@ -12,7 +12,7 @@ class Controller;
 
 void applyThemingForAndroid();
 void registerControllerForAndroid(Controller *controller);
-bool showAndroidFileDialog(bool existing);
+bool showAndroidFileDialog(bool existing, bool createNew);
 int openFileDescriptorFromAndroidContentUrl(const QString &url, const QString &mode);
 void writeToAndroidLog(QtMsgType type, const QMessageLogContext &context, const QString &msg);
 void setupAndroidSpecifics();

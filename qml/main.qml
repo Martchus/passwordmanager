@@ -129,6 +129,13 @@ Kirigami.ApplicationWindow {
                 shortcut: StandardKey.Save
             },
             Kirigami.Action {
+                text: qsTr("Save as")
+                enabled: nativeInterface.fileOpen
+                iconName: "document-save-as"
+                onTriggered: fileDialog.saveAs()
+                shortcut: StandardKey.SaveAs
+            },
+            Kirigami.Action {
                 text: nativeInterface.passwordSet ? qsTr("Change password") : qsTr(
                                                         "Add password")
                 enabled: nativeInterface.fileOpen
@@ -250,19 +257,21 @@ Kirigami.ApplicationWindow {
 
     FileDialog {
         id: fileDialog
-        title: selectExisting ? qsTr("Select an existing file") : qsTr(
-                                    "Select path for new file")
+        property bool createNewFile: false
+        title: selectExisting ? qsTr("Select an existing file") : (saveAs ? qsTr("Select path to save file") : qsTr("Select path for new file"))
         onAccepted: {
             if (fileUrls.length < 1) {
                 return
             }
-            nativeInterface.handleFileSelectionAccepted(fileUrls[0],
-                                                        this.selectExisting)
+            nativeInterface.handleFileSelectionAccepted(fileUrls[0], "",
+                                                        this.selectExisting,
+                                                        this.createNewFile)
         }
         onRejected: nativeInterface.handleFileSelectionCanceled()
 
         function show() {
-            if (nativeInterface.showNativeFileDialog(this.selectExisting)) {
+            if (nativeInterface.showNativeFileDialog(this.selectExisting,
+                                                     this.createNewFile)) {
                 return
             }
             // fallback to the Qt Quick file dialog if a native implementation is not available
@@ -270,10 +279,17 @@ Kirigami.ApplicationWindow {
         }
         function openExisting() {
             this.selectExisting = true
+            this.createNewFile = false
             this.show()
         }
         function createNew() {
             this.selectExisting = false
+            this.createNewFile = true
+            this.show()
+        }
+        function saveAs() {
+            this.selectExisting = false
+            this.createNewFile = false
             this.show()
         }
     }
@@ -325,12 +341,16 @@ Kirigami.ApplicationWindow {
             }
         }
         onFileError: {
-            if (retryAction.length === 0) {
+            var retryMethod = null
+            if (retryAction === "load" || retryAction === "save") {
+                retryMethod = retryAction
+            }
+            if (retryMethod) {
                 showPassiveNotification(errorMessage)
             } else {
                 showPassiveNotification(errorMessage, 2500, qsTr("Retry"),
                                         function () {
-                                            nativeInterface[retryAction]()
+                                            nativeInterface[retryMethod]()
                                         })
             }
         }
@@ -396,7 +416,11 @@ Kirigami.ApplicationWindow {
         Kirigami.Action {
             property string filePath
             text: filePath.substring(filePath.lastIndexOf('/') + 1)
-            onTriggered: nativeInterface.load(filePath)
+            onTriggered: {
+                nativeInterface.clear()
+                nativeInterface.filePath = filePath
+                nativeInterface.load()
+            }
         }
     }
 

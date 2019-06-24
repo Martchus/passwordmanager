@@ -50,9 +50,9 @@ void registerControllerForAndroid(Controller *controller)
     controllerForAndroid = controller;
 }
 
-bool showAndroidFileDialog(bool existing)
+bool showAndroidFileDialog(bool existing, bool createNew)
 {
-    return QtAndroid::androidActivity().callMethod<jboolean>("showAndroidFileDialog", "(Z)Z", existing);
+    return QtAndroid::androidActivity().callMethod<jboolean>("showAndroidFileDialog", "(ZZ)Z", existing, createNew);
 }
 
 int openFileDescriptorFromAndroidContentUrl(const QString &url, const QString &mode)
@@ -105,17 +105,17 @@ static void onAndroidError(JNIEnv *, jobject, jstring message)
         QtGui::controllerForAndroid, "newNotification", Qt::QueuedConnection, Q_ARG(QString, QAndroidJniObject::fromLocalRef(message).toString()));
 }
 
-static void onAndroidFileDialogAccepted(JNIEnv *, jobject, jstring fileName, jboolean existing)
+static void onAndroidFileDialogAccepted(JNIEnv *, jobject, jstring fileName, jboolean existing, jboolean createNew)
 {
     QMetaObject::invokeMethod(QtGui::controllerForAndroid, "handleFileSelectionAccepted", Qt::QueuedConnection,
-        Q_ARG(QString, QAndroidJniObject::fromLocalRef(fileName).toString()), Q_ARG(bool, existing));
+        Q_ARG(QString, QAndroidJniObject::fromLocalRef(fileName).toString()), Q_ARG(bool, existing), Q_ARG(bool, createNew));
 }
 
-static void onAndroidFileDialogAcceptedDescriptor(JNIEnv *, jobject, jstring nativeUrl, jstring fileName, jint fileHandle, jboolean existing)
+static void onAndroidFileDialogAcceptedDescriptor(JNIEnv *, jobject, jstring nativeUrl, jstring fileName, jint fileHandle, jboolean existing, jboolean createNew)
 {
     QMetaObject::invokeMethod(QtGui::controllerForAndroid, "handleFileSelectionAcceptedDescriptor", Qt::QueuedConnection,
         Q_ARG(QString, QAndroidJniObject::fromLocalRef(nativeUrl).toString()), Q_ARG(QString, QAndroidJniObject::fromLocalRef(fileName).toString()),
-        Q_ARG(int, fileHandle), Q_ARG(bool, existing));
+        Q_ARG(int, fileHandle), Q_ARG(bool, existing), Q_ARG(bool, createNew));
 }
 
 static void onAndroidFileDialogRejected(JNIEnv *, jobject)
@@ -144,8 +144,8 @@ JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *)
     // register native methods
     static const JNINativeMethod methods[] = {
         { "onAndroidError", "(Ljava/lang/String;)V", reinterpret_cast<void *>(onAndroidError) },
-        { "onAndroidFileDialogAccepted", "(Ljava/lang/String;Z)V", reinterpret_cast<void *>(onAndroidFileDialogAccepted) },
-        { "onAndroidFileDialogAcceptedDescriptor", "(Ljava/lang/String;Ljava/lang/String;IZ)V",
+        { "onAndroidFileDialogAccepted", "(Ljava/lang/String;ZZ)V", reinterpret_cast<void *>(onAndroidFileDialogAccepted) },
+        { "onAndroidFileDialogAcceptedDescriptor", "(Ljava/lang/String;Ljava/lang/String;IZZ)V",
             reinterpret_cast<void *>(onAndroidFileDialogAcceptedDescriptor) },
         { "onAndroidFileDialogRejected", "()V", reinterpret_cast<void *>(onAndroidFileDialogRejected) },
     };

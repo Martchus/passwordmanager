@@ -12,16 +12,16 @@ import java.io.FileNotFoundException;
 import org.qtproject.qt5.android.bindings.QtActivity;
 
 public class Activity extends QtActivity {
-    private final int REQUEST_CODE_PICK_DIR = 1;
-    private final int REQUEST_CODE_PICK_EXISTING_FILE = 2;
-    private final int REQUEST_CODE_PICK_NEW_FILE = 3;
+    private final int REQUEST_CODE_OPEN_EXISTING_FILE = 1;
+    private final int REQUEST_CODE_CREATE_NEW_FILE = 2;
+    private final int REQUEST_CODE_SAVE_FILE_AS = 3;
 
     /*!
      * \brief Shows the native Android file dialog. Results are handled in onActivityResult().
      */
-    public boolean showAndroidFileDialog(boolean existing) {
+    public boolean showAndroidFileDialog(boolean existing, boolean createNew) {
         String action = existing ? Intent.ACTION_OPEN_DOCUMENT : Intent.ACTION_CREATE_DOCUMENT;
-        int requestCode = existing ? REQUEST_CODE_PICK_EXISTING_FILE : REQUEST_CODE_PICK_NEW_FILE;
+        int requestCode = existing ? REQUEST_CODE_OPEN_EXISTING_FILE : (createNew ? REQUEST_CODE_CREATE_NEW_FILE : REQUEST_CODE_SAVE_FILE_AS);
         Intent intent = new Intent(action);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("*/*");
@@ -51,9 +51,12 @@ public class Activity extends QtActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-        case REQUEST_CODE_PICK_EXISTING_FILE:
-        case REQUEST_CODE_PICK_NEW_FILE:
-            boolean existingFile = requestCode == REQUEST_CODE_PICK_EXISTING_FILE;
+        case REQUEST_CODE_OPEN_EXISTING_FILE:
+        case REQUEST_CODE_CREATE_NEW_FILE:
+        case REQUEST_CODE_SAVE_FILE_AS:
+            boolean createNew = requestCode == REQUEST_CODE_CREATE_NEW_FILE;
+            boolean existingFile = requestCode == REQUEST_CODE_OPEN_EXISTING_FILE;
+            boolean saveAs = requestCode == REQUEST_CODE_SAVE_FILE_AS;
 
             if (resultCode != RESULT_OK) {
                 onAndroidFileDialogRejected();
@@ -65,7 +68,7 @@ public class Activity extends QtActivity {
                 try {
                     DocumentFile file = DocumentFile.fromSingleUri(this, uri);
                     ParcelFileDescriptor fd = getContentResolver().openFileDescriptor(file.getUri(), existingFile ? "r" : "wt");
-                    onAndroidFileDialogAcceptedDescriptor(file.getUri().toString(), file.getName(), fd.detachFd(), existingFile);
+                    onAndroidFileDialogAcceptedDescriptor(file.getUri().toString(), file.getName(), fd.detachFd(), existingFile, createNew);
                 } catch (FileNotFoundException e) {
                     onAndroidError("Failed to find selected file.");
                 }
@@ -74,7 +77,7 @@ public class Activity extends QtActivity {
 
             String fileName = data.getDataString();
             if (fileName != null) {
-                onAndroidFileDialogAccepted(fileName, existingFile);
+                onAndroidFileDialogAccepted(fileName, existingFile, createNew);
                 return;
             }
             onAndroidError("Failed to read result from Android's file dialog.");
@@ -85,7 +88,7 @@ public class Activity extends QtActivity {
     }
 
     public static native void onAndroidError(String message);
-    public static native void onAndroidFileDialogAccepted(String fileName, boolean existing);
-    public static native void onAndroidFileDialogAcceptedDescriptor(String nativeUrl, String fileName, int fileDescriptor, boolean existing);
+    public static native void onAndroidFileDialogAccepted(String fileName, boolean existing, boolean createNew);
+    public static native void onAndroidFileDialogAcceptedDescriptor(String nativeUrl, String fileName, int fileDescriptor, boolean existing, boolean createNew);
     public static native void onAndroidFileDialogRejected();
 }

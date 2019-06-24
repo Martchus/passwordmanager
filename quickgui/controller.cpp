@@ -77,25 +77,21 @@ void Controller::setFilePath(const QString &filePath)
     if (filePath.startsWith(QLatin1String("file:"))) {
         actualFilePath = filePath.midRef(5);
     }
-    while (filePath.startsWith(QLatin1String("//"))) {
+    while (actualFilePath.startsWith(QLatin1String("//"))) {
         actualFilePath = actualFilePath.mid(1);
     }
 
-    // skip if this path is already set
-    if (m_filePath == actualFilePath) {
-        return;
-    }
-
     // assign full file path and file name
-    m_file.clear();
-    m_file.setPath(filePath.toLocal8Bit().data());
-    m_fileName = QString::fromLocal8Bit(CppUtilities::fileName(m_file.path()).data());
-    emit filePathChanged(m_filePath = filePath);
-
-    // clear password so we don't use the password from the previous file
-    m_password.clear();
+    m_filePath = actualFilePath.toString();
+    m_file.setPath(m_filePath.toLocal8Bit().toStdString());
+    const auto fileName = CppUtilities::fileName(m_file.path());
+    m_fileName = QString::fromLocal8Bit(fileName.data(), static_cast<int>(fileName.size()));
+    emit filePathChanged(m_filePath);
 
     // handle recent files
+    if (m_filePath.isEmpty()) {
+        return;
+    }
     const auto index = m_recentFiles.indexOf(m_filePath);
     if (!index) {
         return;
@@ -127,13 +123,8 @@ void Controller::init()
     }
 }
 
-void Controller::load(const QString &filePath)
+void Controller::load()
 {
-    if (!filePath.isEmpty()) {
-        setFilePath(filePath);
-    }
-
-    resetFileStatus();
     try {
         m_file.load();
         m_entryModel.setRootEntry(m_file.rootEntry());
@@ -158,17 +149,9 @@ void Controller::load(const QString &filePath)
     }
 }
 
-void Controller::create(const QString &filePath)
+void Controller::create()
 {
-    if (!filePath.isEmpty()) {
-        setFilePath(filePath);
-    }
-
-    resetFileStatus();
     try {
-        if (filePath.isEmpty()) {
-            m_file.clear();
-        }
         m_file.create();
     } catch (...) {
         emitFileError(tr("creating"));
@@ -190,9 +173,20 @@ void Controller::close()
     }
 }
 
+void Controller::clear()
+{
+    try {
+        m_file.close();
+    } catch (...) {
+        emitFileError(tr("closing"));
+    }
+    m_file.clear();
+    resetFileStatus();
+}
+
 PasswordFileSaveFlags Controller::prepareSaving()
 {
-    auto flags = PasswordFileSaveFlags::Compression | PasswordFileSaveFlags::PasswordHashing;
+    auto flags = PasswordFileSaveFlags::Compression | PasswordFileSaveFlags::PasswordHashing | PasswordFileSaveFlags::AllowToCreateNewFile;
     if (!m_password.isEmpty()) {
         flags |= PasswordFileSaveFlags::Encryption;
         const auto passwordUtf8(m_password.toUtf8());
@@ -216,7 +210,7 @@ void Controller::save()
             qDebug() << "Opening new fd for saving, native url: " << m_nativeUrl;
             const auto newFileDescriptor = openFileDescriptorFromAndroidContentUrl(m_nativeUrl, QStringLiteral("wt"));
             if (newFileDescriptor < 0) {
-                emit fileError(tr("Unable to open file descriptor for saving the file."));
+                emit fileError(tr("Unable to open file descriptor for saving the file."), QStringLiteral("save"));
                 return;
             }
 
@@ -243,43 +237,69 @@ void Controller::save()
  * \brief Shows a native file dialog if supported; otherwise returns false.
  * \remarks If supported, this method will load/create the selected file (according to \a existing).
  */
-bool Controller::showNativeFileDialog(bool existing)
+bool Controller::showNativeFileDialog(bool existing, bool createNew)
 {
 #if defined(Q_OS_ANDROID) && defined(CPP_UTILITIES_USE_NATIVE_FILE_BUFFER)
     if (!m_useNativeFileDialog) {
         return false;
     }
-    return showAndroidFileDialog(existing);
+    return showAndroidFileDialog(existing, createNew);
 #else
     Q_UNUSED(existing)
+    Q_UNUSED(createNew)
     return false;
 #endif
 }
 
-void Controller::handleFileSelectionAccepted(const QString &filePath, bool existing)
+void Controller::handleFileSelectionAccepted(const QString &filePath, const QString &nativeUrl, bool existing, bool createNew)
 {
-    m_nativeUrl.clear();
+    m_nativeUrl = nativeUrl;
+
+    // assign the "ordinary" file path if one has been passed; otherwise the caller is responsible for handling this
+    const auto saveAs = !existing && !createNew;
+    if (!filePath.isEmpty()) {
+        // clear leftovers from possibly previously opened file unless we want to save the current file under a different location
+        if (!saveAs) {
+            m_file.clear();
+        }
+        setFilePath(filePath);
+    }
+    cout << "path is still " << m_file.path() << " (2)" << endl;
+
+    if (!saveAs) {
+        resetFileStatus();
+    }
+
     if (existing) {
-        load(filePath);
-    } else {
-        create(filePath);
+        load();
+    } else if (createNew) {
+        create();
+    } else if (saveAs) {
+        save();
     }
 }
 
 #if defined(Q_OS_ANDROID) && defined(CPP_UTILITIES_USE_NATIVE_FILE_BUFFER)
-void Controller::handleFileSelectionAcceptedDescriptor(const QString &nativeUrl, const QString &fileName, int fileDescriptor, bool existing)
+void Controller::handleFileSelectionAcceptedDescriptor(
+    const QString &nativeUrl, const QString &fileName, int fileDescriptor, bool existing, bool createNew)
 {
+    qDebug() << "Opening file descriptor for native url: " << nativeUrl;
+    qDebug() << "(existing: " << existing << ", create new: " << createNew << ")";
+
     try {
-        qDebug() << "Opening fd for native url: " << nativeUrl;
+        // clear leftovers from possibly previously opened file unless we want to save the current file under a different location
+        if (existing || createNew) {
+            m_file.clear();
+        }
         m_file.setPath(fileName.toStdString());
         m_file.fileStream().open(fileDescriptor, ios_base::in | ios_base::binary);
         m_file.opened();
     } catch (...) {
-        emitFileError(tr("opening from native file descriptor"));
+        emitFileError(existing ? QStringLiteral("load") : (createNew ? QStringLiteral("create") : QStringLiteral("save")));
     }
+
     emit filePathChanged(m_filePath = m_fileName = fileName);
-    handleFileSelectionAccepted(QString(), existing);
-    m_nativeUrl = nativeUrl;
+    handleFileSelectionAccepted(QString(), nativeUrl, existing, createNew);
 }
 #endif
 
