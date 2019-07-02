@@ -16,7 +16,7 @@
 
 #include <jni.h>
 
-using namespace ConversionUtilities;
+using namespace CppUtilities;
 
 namespace QtGui {
 

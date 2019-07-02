@@ -149,15 +149,10 @@ cmake \
     -DCMAKE_PREFIX_PATH="$root" \
     -DCMAKE_FIND_ROOT_PATH="$root;$root/libs" \
     -DCMAKE_CXX_FLAGS="-I/opt/android-ndk/sources/cxx-stl/llvm-libc++/include" \
-    -Diconv_DYNAMIC_INCLUDE_DIR="$other_libs_include" \
-    -Diconv_STATIC_INCLUDE_DIR="$other_libs_include" \
-    -Dcrypto_DYNAMIC_INCLUDE_DIR="$other_libs_include" \
-    -Dcrypto_STATIC_INCLUDE_DIR="$other_libs_include" \
-    -Dboost_iostreams_DYNAMIC_INCLUDE_DIR="$other_libs_include" \
-    -Dboost_iostreams_STATIC_INCLUDE_DIR="$other_libs_include" \
     -DZLIB_LIBRARY="$android_ndk_root/platforms/android-$_android_api_level/arch-$_android_arch2/usr/lib/libz.so" \
     -DCLANG_FORMAT_ENABLED=ON \
     -DUSE_NATIVE_FILE_BUFFER=ON \
+    -DUSE_STANDARD_FILESYSTEM=OFF \
     -DNO_DOXYGEN=ON \
     -DWIDGETS_GUI=OFF \
     -DQUICK_GUI=ON \
@@ -185,14 +180,9 @@ cmake \
     -DCMAKE_PREFIX_PATH="$root" \
     -DCMAKE_FIND_ROOT_PATH="$root;$root/libs" \
     -DCMAKE_CXX_FLAGS="-D__ANDROID_API__=$_android_api_level" \
-    -Diconv_DYNAMIC_INCLUDE_DIR="$other_libs_include" \
-    -Diconv_STATIC_INCLUDE_DIR="$other_libs_include" \
-    -Dcrypto_DYNAMIC_INCLUDE_DIR="$other_libs_include" \
-    -Dcrypto_STATIC_INCLUDE_DIR="$other_libs_include" \
-    -Dboost_iostreams_DYNAMIC_INCLUDE_DIR="$other_libs_include" \
-    -Dboost_iostreams_STATIC_INCLUDE_DIR="$other_libs_include" \
     -DCLANG_FORMAT_ENABLED=ON \
     -DUSE_NATIVE_FILE_BUFFER=ON \
+    -DUSE_STANDARD_FILESYSTEM=OFF \
     -DNO_DOXYGEN=ON \
     -DWIDGETS_GUI=OFF \
     -DQUICK_GUI=ON \
