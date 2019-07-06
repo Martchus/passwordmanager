@@ -149,6 +149,7 @@ cmake \
     -DCMAKE_PREFIX_PATH="$root" \
     -DCMAKE_FIND_ROOT_PATH="$root;$root/libs" \
     -DCMAKE_CXX_FLAGS="-I/opt/android-ndk/sources/cxx-stl/llvm-libc++/include" \
+    -DBUILD_SHARED_LIBS=ON \
     -DZLIB_LIBRARY="$android_ndk_root/platforms/android-$_android_api_level/arch-$_android_arch2/usr/lib/libz.so" \
     -DCLANG_FORMAT_ENABLED=ON \
     -DUSE_NATIVE_FILE_BUFFER=ON \
@@ -181,6 +182,7 @@ cmake \
     -DCMAKE_FIND_ROOT_PATH="$root;$root/libs" \
     -DCMAKE_CXX_FLAGS="-D__ANDROID_API__=$_android_api_level" \
     -DCLANG_FORMAT_ENABLED=ON \
+    -DBUILD_SHARED_LIBS=ON \
     -DUSE_NATIVE_FILE_BUFFER=ON \
     -DUSE_STANDARD_FILESYSTEM=OFF \
     -DNO_DOXYGEN=ON \
