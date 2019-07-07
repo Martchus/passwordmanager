@@ -19,10 +19,12 @@ QT_FORWARD_DECLARE_CLASS(QUndoStack)
 QT_FORWARD_DECLARE_CLASS(QUndoView)
 QT_FORWARD_DECLARE_CLASS(QSettings)
 
+#define PASSWORD_MANAGER_ENUM_CLASS enum class
 namespace Io {
-enum class EntryType : int;
-enum class FieldType : int;
+PASSWORD_MANAGER_ENUM_CLASS EntryType : int;
+PASSWORD_MANAGER_ENUM_CLASS FieldType : int;
 } // namespace Io
+#undef PASSWORD_MANAGER_ENUM_CLASS
 
 namespace QtUtilities {
 class RecentMenuManager;
