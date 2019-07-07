@@ -63,6 +63,12 @@ namespace QtGui {
  * \brief The MainWindow class provides the main window of the widgets-based GUI of the application.
  */
 
+/*
+ * TRANSLATOR QtGui::MainWindow
+ * This comment is needed by lupdate to prevent "Qualifying with unknown namespace/class ::MainWindow".
+ * Even with Qt 5.13.0 this still seems required.
+ */
+
 /*!
  * \brief Copies the selected cells to the clipboard.
  */
