@@ -97,8 +97,8 @@ private slots:
     void copyFields();
     void insertFieldsFromClipboard();
     // showing context menus
-    void showTreeViewContextMenu();
-    void showTableViewContextMenu();
+    void showTreeViewContextMenu(const QPoint &pos);
+    void showTableViewContextMenu(const QPoint &pos);
     // other
     void showFileDetails();
     void showContainingDirectory();

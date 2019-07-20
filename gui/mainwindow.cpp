@@ -1155,7 +1155,7 @@ void MainWindow::changePassword()
 /*!
  * \brief Shows the tree view context menu.
  */
-void MainWindow::showTreeViewContextMenu()
+void MainWindow::showTreeViewContextMenu(const QPoint &pos)
 {
     if (!m_file.hasRootEntry()) {
         return;
@@ -1183,13 +1183,13 @@ void MainWindow::showTreeViewContextMenu()
             std::bind(&EntryModel::setData, m_entryModel, std::cref(selected), QVariant(!nodeEntry->isExpandedByDefault()), DefaultExpandedRole));
         contextMenu.addAction(action);
     }
-    contextMenu.exec(QCursor::pos());
+    contextMenu.exec(m_ui->treeView->mapToGlobal(pos));
 }
 
 /*!
  * \brief Shows the table view context menu.
  */
-void MainWindow::showTableViewContextMenu()
+void MainWindow::showTableViewContextMenu(const QPoint &pos)
 {
     // check whether there is a selection at all
     const QModelIndexList selectedIndexes = m_ui->tableView->selectionModel()->selectedIndexes();
@@ -1265,7 +1265,7 @@ void MainWindow::showTableViewContextMenu()
         contextMenu.addAction(openUrlAction);
     }
 
-    contextMenu.exec(QCursor::pos());
+    contextMenu.exec(m_ui->tableView->mapToGlobal(pos));
 }
 
 void MainWindow::showFileDetails()
