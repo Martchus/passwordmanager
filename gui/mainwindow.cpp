@@ -343,7 +343,7 @@ void MainWindow::showSettingsDialog()
 void MainWindow::showAboutDialog()
 {
     if (!m_aboutDlg) {
-        m_aboutDlg = new AboutDialog(this, tr("A simple password store using AES-256-CBC encryption via OpenSSL."),
+        m_aboutDlg = new AboutDialog(this, QStringLiteral(APP_URL), tr("A simple password store using AES-256-CBC encryption via OpenSSL."),
             QImage(":/icons/hicolor/128x128/apps/passwordmanager.png"));
     }
     m_aboutDlg->show();
