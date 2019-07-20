@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
 
-# meta data
-set(META_PROJECT_NAME passwordmanager)
+# set meta data
+project(passwordmanager)
+set(META_PROJECT_NAME ${PROJECT_NAME})
 set(META_PROJECT_VARNAME password_manager)
 set(META_PROJECT_TYPE application)
 set(META_APP_NAME "Password Manager")
