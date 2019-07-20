@@ -1183,7 +1183,7 @@ void MainWindow::showTreeViewContextMenu(const QPoint &pos)
             std::bind(&EntryModel::setData, m_entryModel, std::cref(selected), QVariant(!nodeEntry->isExpandedByDefault()), DefaultExpandedRole));
         contextMenu.addAction(action);
     }
-    contextMenu.exec(m_ui->treeView->mapToGlobal(pos));
+    contextMenu.exec(m_ui->treeView->viewport()->mapToGlobal(pos));
 }
 
 /*!
@@ -1265,7 +1265,7 @@ void MainWindow::showTableViewContextMenu(const QPoint &pos)
         contextMenu.addAction(openUrlAction);
     }
 
-    contextMenu.exec(m_ui->tableView->mapToGlobal(pos));
+    contextMenu.exec(m_ui->tableView->viewport()->mapToGlobal(pos));
 }
 
 void MainWindow::showFileDetails()
