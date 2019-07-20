@@ -1254,7 +1254,8 @@ void MainWindow::showTableViewContextMenu()
     contextMenu.addSeparator();
     contextMenu.addAction(QIcon::fromTheme(QStringLiteral("edit-copy")), tr("Copy"), this, &MainWindow::copyFields);
     contextMenu.addAction(QIcon::fromTheme(QStringLiteral("edit-copy")), tr("Copy for 5 seconds"), this, &MainWindow::copyFieldsForXMilliSeconds);
-    if (QApplication::clipboard()->mimeData()->hasText()) {
+    const auto *const mimeData = QGuiApplication::clipboard()->mimeData();
+    if (mimeData && mimeData->hasText()) {
         contextMenu.addAction(QIcon::fromTheme(QStringLiteral("edit-paste")), tr("Paste"), this, &MainWindow::insertFieldsFromClipboard);
     }
     // -> insert open URL

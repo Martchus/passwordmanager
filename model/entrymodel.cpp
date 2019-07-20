@@ -505,7 +505,7 @@ QMimeData *EntryModel::mimeData(const QModelIndexList &indexes) const
     if (types.isEmpty()) {
         return nullptr;
     }
-    QMimeData *const data = new QMimeData();
+    auto *const data = new QMimeData();
     QStringList plainTextParts;
     plainTextParts.reserve(indexes.size());
     QByteArray encoded;
