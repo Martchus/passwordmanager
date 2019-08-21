@@ -34,7 +34,7 @@ set(WIDGETS_HEADER_FILES
     gui/undocommands.h)
 set(WIDGETS_SRC_FILES
     gui/fielddelegate.cpp
-    gui/initiatequi.cpp
+    gui/initiategui.cpp
     gui/mainwindow.cpp
     gui/passwordgeneratordialog.cpp
     gui/stacksupport.cpp
