@@ -133,7 +133,7 @@ export PATH=/usr/lib/jvm/java-8-openjdk/jre/bin/:$PATH
 
 # configure with the toolchain file provided by the Android NDK (still WIP)
 # note: This configuration is likely required in the future to resolve https://gitlab.kitware.com/cmake/cmake/issues/18739. But for now
-#       better keep using CMake's internal Android support.
+#       better keep using CMake's internal Android support because this config has its own pitfalls (see CMAKE_CXX_FLAGS).
 cmake \
     -DCMAKE_BUILD_TYPE=Release \
     -DANDROID_ABI=$_android_arch \
@@ -148,7 +148,7 @@ cmake \
     -DCMAKE_INSTALL_PREFIX=$other_libs_root \
     -DCMAKE_PREFIX_PATH="$root" \
     -DCMAKE_FIND_ROOT_PATH="$root;$root/libs" \
-    -DCMAKE_CXX_FLAGS="-I/opt/android-ndk/sources/cxx-stl/llvm-libc++/include" \
+    -DCMAKE_CXX_FLAGS="-include $android_ndk_root/sysroot/usr/include/math.h -include $android_ndk_root/sources/cxx-stl/llvm-libc++/include/math.h -I$other_libs_include" \
     -DBUILD_SHARED_LIBS=ON \
     -DZLIB_LIBRARY="$android_ndk_root/platforms/android-$_android_api_level/arch-$_android_arch2/usr/lib/libz.so" \
     -DCLANG_FORMAT_ENABLED=ON \
@@ -165,6 +165,8 @@ cmake \
     -DANDROID_APK_KEYSTORE_URL="$keystore_url" \
     -DANDROID_APK_KEYSTORE_ALIAS="$keystore_alias" \
     -DANDROID_APK_KEYSTORE_PASSWORD="$keystore_password" \
+    -DANDROID_APK_APPLICATION_ID_SUFFIX=".unstable" \
+    -DANDROID_APK_APPLICATION_LABEL="Password Manager (unstable)" \
     $SOURCES/subdirs/$_reponame
 
 # configure with CMake's internal Android support
@@ -194,6 +196,8 @@ cmake \
     -DANDROID_APK_KEYSTORE_URL="$keystore_url" \
     -DANDROID_APK_KEYSTORE_ALIAS="$keystore_alias" \
     -DANDROID_APK_KEYSTORE_PASSWORD="$keystore_password" \
+    -DANDROID_APK_APPLICATION_ID_SUFFIX=".unstable" \
+    -DANDROID_APK_APPLICATION_LABEL="Password Manager (unstable)" \
     $SOURCES/subdirs/$_reponame
 
 # build all binaries and make APK file using all CPU cores

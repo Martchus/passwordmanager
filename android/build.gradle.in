@@ -39,6 +39,11 @@ android {
 
     buildToolsVersion androidBuildToolsVersion
 
+    defaultConfig {
+        applicationId "@META_ANDROID_PACKAGE_NAME@"
+        applicationIdSuffix "@ANDROID_APK_APPLICATION_ID_SUFFIX@"
+    }
+
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'

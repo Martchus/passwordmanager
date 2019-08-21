@@ -12,10 +12,10 @@ set(META_APP_URL "https://github.com/${META_APP_AUTHOR}/${META_PROJECT_NAME}")
 set(META_APP_DESCRIPTION "A simple password store using AES-256-CBC encryption via OpenSSL")
 set(META_GUI_OPTIONAL YES)
 set(META_USE_QQC2 ON)
+set(META_ANDROID_PACKAGE_NAME "org.martchus.passwordmanager")
 set(META_VERSION_MAJOR 4)
 set(META_VERSION_MINOR 1)
 set(META_VERSION_PATCH 0)
-set(META_APP_VERSION ${META_VERSION_MAJOR}.${META_VERSION_MINOR}.${META_VERSION_PATCH})
 set(PNG_ICON_NO_CROP ON)
 
 # add project files
