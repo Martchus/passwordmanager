@@ -14,10 +14,6 @@
 #include <string>
 #include <vector>
 
-namespace ApplicationUtilities {
-using StringVector = std::vector<std::string>;
-}
-
 namespace Io {
 class Entry;
 enum class EntryType : int;
