@@ -286,10 +286,12 @@ void MainWindow::closeEvent(QCloseEvent *event)
         event->ignore();
         return;
     }
+
     // close undow view
     if (m_undoView) {
         m_undoView->close();
     }
+
     // save settings
     m_settings.beginGroup(QStringLiteral("mainwindow"));
     m_settings.setValue(QStringLiteral("geometry"), saveGeometry());
@@ -307,6 +309,9 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
     m_settings.setValue(QStringLiteral("pwvisibility"), pwVisibility);
     m_settings.endGroup();
+    if (m_qtSettings) {
+        m_qtSettings->save(m_settings);
+    }
 }
 
 void MainWindow::timerEvent(QTimerEvent *event)
@@ -328,7 +333,6 @@ void MainWindow::showSettingsDialog()
             m_settingsDlg->setWindowTitle(tr("Qt settings"));
             m_settingsDlg->setSingleCategory(m_qtSettings->category());
         }
-        //connect(m_settingsDlg, &SettingsDialog::applied, this, &MainWindow::settingsAccepted);
     }
     if (m_settingsDlg->isHidden()) {
         m_settingsDlg->showNormal();

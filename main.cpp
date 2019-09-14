@@ -16,6 +16,7 @@
 #include <c++utilities/misc/parseerror.h>
 
 #if defined(PASSWORD_MANAGER_GUI_QTWIDGETS) || defined(PASSWORD_MANAGER_GUI_QTQUICK)
+#include <QCoreApplication>
 #include <QString>
 #include <qtutilities/resources/qtconfigarguments.h>
 ENABLE_QT_RESOURCES_OF_STATIC_DEPENDENCIES
@@ -68,18 +69,22 @@ int main(int argc, char *argv[])
     parser.parseArgs(argc, argv);
 #endif
 
-    // init OpenSSL
-    OpenSsl::init();
-
 #ifndef PASSWORD_MANAGER_FORCE_GUI
     // start either interactive CLI or GUI
     if (cliArg.isPresent()) {
+        // init OpenSSL
+        OpenSsl::init();
+
         Cli::InteractiveCli cli;
         if (fileArg.isPresent()) {
             cli.run(fileArg.firstValue());
         } else {
             cli.run();
         }
+
+        // clean OpenSSL
+        OpenSsl::clean();
+
     } else if (qtConfigArgs.areQtGuiArgsPresent()) {
 #if defined(PASSWORD_MANAGER_GUI_QTWIDGETS) || defined(PASSWORD_MANAGER_GUI_QTQUICK)
         const auto file(fileArg.isPresent() ? QString::fromLocal8Bit(fileArg.firstValue()) : QString());
@@ -116,9 +121,6 @@ int main(int argc, char *argv[])
     returnCode = QtGui::runWidgetsGui(argc, argv, qtConfigArgs, QString());
 #endif
 #endif
-
-    // clean OpenSSL
-    OpenSsl::clean();
 
     return returnCode;
 }

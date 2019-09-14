@@ -13,6 +13,8 @@
 #include <qtutilities/resources/qtconfigarguments.h>
 #include <qtutilities/resources/resources.h>
 
+#include <passwordfile/util/openssl.h>
+
 #include <QGuiApplication>
 #include <QIcon>
 #include <QQmlApplicationEngine>
@@ -30,6 +32,7 @@
 #endif
 
 using namespace CppUtilities;
+using namespace Util;
 
 namespace QtGui {
 
@@ -45,13 +48,16 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
         qputenv("XDG_CURRENT_DESKTOP", QByteArray("please don't override my settings"));
     }
 
+    // init OpenSSL
+    OpenSsl::init();
+
     // init application
     SET_QT_APPLICATION_INFO;
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
-    QApplication a(argc, argv);
+    QApplication application(argc, argv);
 #else
-    QGuiApplication a(argc, argv);
+    QGuiApplication application(argc, argv);
 #endif
 
     // apply settings specified via command line args
@@ -88,12 +94,13 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
 #endif
     auto *const context(engine.rootContext());
     context->setContextProperty(QStringLiteral("nativeInterface"), &controller);
-    context->setContextProperty(QStringLiteral("app"), &a);
+    context->setContextProperty(QStringLiteral("app"), &application);
     context->setContextProperty(QStringLiteral("description"), QStringLiteral(APP_DESCRIPTION));
     context->setContextProperty(QStringLiteral("dependencyVersions"), QStringList(DEPENCENCY_VERSIONS));
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
 
     // run event loop
-    return a.exec();
+    QObject::connect(&application, &QCoreApplication::aboutToQuit, &OpenSsl::clean);
+    return application.exec();
 }
 } // namespace QtGui
