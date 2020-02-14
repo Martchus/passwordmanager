@@ -432,8 +432,7 @@ bool MainWindow::openFile(const QString &path, PasswordFileOpenFlags openFlags)
         }
 
         // show error message
-        const QString errmsg
-            = tr("An IO error occured when opening the specified file \"%1\".\n\n(%2)").arg(path, QString::fromLocal8Bit(failure.what()));
+        const QString errmsg = tr("An IO error occured when opening the specified file \"%1\": %2").arg(path, QString::fromLocal8Bit(failure.what()));
         m_ui->statusBar->showMessage(errmsg, 5000);
         QMessageBox::critical(this, QApplication::applicationName(), errmsg);
         return false;
@@ -828,8 +827,7 @@ bool MainWindow::saveFile()
             try {
                 m_file.doBackup();
             } catch (const std::ios_base::failure &failure) {
-                const QString message(
-                    tr("The backup file couldn't be created because in IO error occured: %1").arg(QString::fromLocal8Bit(failure.what())));
+                const QString message(tr("An IO error occured when making the backup file: %1").arg(QString::fromLocal8Bit(failure.what())));
                 QMessageBox::critical(this, QApplication::applicationName(), message);
                 m_ui->statusBar->showMessage(message, 7000);
                 return false;
@@ -898,7 +896,7 @@ void MainWindow::exportFile()
     try {
         m_file.exportToTextfile(targetPath.toStdString());
     } catch (const std::ios_base::failure &failure) {
-        errmsg = tr("The password list couldn't be exported. %1").arg(QString::fromLocal8Bit(failure.what()));
+        errmsg = tr("An IO error occurred when exporting the password list: %1").arg(QString::fromLocal8Bit(failure.what()));
     }
     if (errmsg.isEmpty()) {
         m_ui->statusBar->showMessage(tr("The password list has been exported."), 5000);
