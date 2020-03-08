@@ -86,7 +86,7 @@ public:
     QString undoText() const;
     QString redoText() const;
 
-public slots:
+public Q_SLOTS:
     void init();
     void load();
     void create();
@@ -129,7 +129,7 @@ signals:
     void undoTextChanged(const QString &undoText);
     void redoTextChanged(const QString &redoText);
 
-private slots:
+private Q_SLOTS:
     void handleEntriesRemoved(const QModelIndex &parentIndex, int first, int last);
     void handleRecentFilesChanged();
 

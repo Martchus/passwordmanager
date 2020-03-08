@@ -50,7 +50,7 @@ public:
     explicit MainWindow(QSettings &settings, QtUtilities::QtSettings *qtSettings = nullptr, QWidget *parent = nullptr);
     ~MainWindow() override;
 
-public slots:
+public Q_SLOTS:
     // file management
     bool openFile(const QString &path);
     bool openFile(const QString &path, Io::PasswordFileOpenFlags openFlags);
@@ -74,7 +74,7 @@ protected:
     void closeEvent(QCloseEvent *event) override;
     void timerEvent(QTimerEvent *event) override;
 
-private slots:
+private Q_SLOTS:
     // file management
     bool showFile();
     // account/categories management
