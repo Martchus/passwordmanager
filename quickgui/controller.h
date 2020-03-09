@@ -104,7 +104,7 @@ public Q_SLOTS:
     Io::PasswordFileSaveFlags prepareSaving();
     QString computeFileSummary();
 
-signals:
+Q_SIGNALS:
     void filePathChanged(const QString &newFilePath);
     void passwordChanged(const QString &newPassword);
     void passwordRequired(const QString &filePath);
