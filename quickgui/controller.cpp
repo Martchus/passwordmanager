@@ -157,6 +157,7 @@ void Controller::create()
 
     m_file.generateRootEntry();
     m_entryModel.setRootEntry(m_file.rootEntry());
+    m_password.clear(); // avoid using the password of previously opened file
     setFileOpen(true);
     updateWindowTitle();
 }
