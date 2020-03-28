@@ -143,7 +143,13 @@ void Controller::load()
             emit fileError(tr("A crypto error occured when opening the file: ") + QString::fromLocal8Bit(e.what()), QStringLiteral("load"));
         }
     } catch (...) {
-        emitFileError(tr("loading"));
+        if ((m_file.saveOptions() & PasswordFileSaveFlags::Encryption) && m_password.isEmpty()) {
+            emit passwordRequired(m_filePath);
+        } else {
+            // clear password since the password which has been provided might not have been correct (although there was no CryptoException)
+            clearPassword();
+            emitFileError(tr("loading"));
+        }
     }
 }
 
