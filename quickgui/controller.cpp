@@ -142,8 +142,6 @@ void Controller::load()
             clearPassword();
             emit fileError(tr("A crypto error occured when opening the file: ") + QString::fromLocal8Bit(e.what()), QStringLiteral("load"));
         }
-    } catch (const runtime_error &e) {
-        emit fileError(tr("A parsing error occured when opening the file: ") + QString::fromLocal8Bit(e.what()), QStringLiteral("load"));
     } catch (...) {
         emitFileError(tr("loading"));
     }
@@ -226,8 +224,6 @@ void Controller::save()
         emit fileSaved();
     } catch (const CryptoException &e) {
         emit fileError(tr("A crypto error occured when saving the file: ") + QString::fromLocal8Bit(e.what()), QStringLiteral("save"));
-    } catch (const runtime_error &e) {
-        emit fileError(tr("An internal error occured when saving the file: ") + QString::fromLocal8Bit(e.what()), QStringLiteral("save"));
     } catch (...) {
         emitFileError(tr("saving"));
     }
@@ -450,6 +446,8 @@ void Controller::emitFileError(const QString &when)
     } catch (const std::ios_base::failure &failure) {
         emit fileError(
             tr("An IO error occured when %1 the file %2: ").arg(when, m_filePath) + QString::fromLocal8Bit(failure.what()), QStringLiteral("load"));
+    } catch (const runtime_error &e) {
+        emit fileError(tr("An error occured when %1 the file: ").arg(when) + QString::fromLocal8Bit(e.what()), QStringLiteral("save"));
     } catch (const exception &e) {
         emit fileError(tr("An unknown exception occured when %1 the file %2: ").arg(when, m_filePath) + QString::fromLocal8Bit(e.what()),
             QStringLiteral("load"));

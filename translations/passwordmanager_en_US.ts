@@ -230,67 +230,62 @@
     </message>
     <message>
         <location filename="../quickgui/controller.cpp" line="146"/>
-        <source>A parsing error occured when opening the file: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../quickgui/controller.cpp" line="148"/>
         <source>loading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="157"/>
+        <location filename="../quickgui/controller.cpp" line="155"/>
         <source>creating</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="172"/>
-        <location filename="../quickgui/controller.cpp" line="181"/>
+        <location filename="../quickgui/controller.cpp" line="170"/>
+        <location filename="../quickgui/controller.cpp" line="179"/>
         <source>closing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="213"/>
+        <location filename="../quickgui/controller.cpp" line="211"/>
         <source>Unable to open file descriptor for saving the file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="228"/>
+        <location filename="../quickgui/controller.cpp" line="226"/>
         <source>A crypto error occured when saving the file: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="230"/>
-        <source>An internal error occured when saving the file: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../quickgui/controller.cpp" line="232"/>
+        <location filename="../quickgui/controller.cpp" line="228"/>
         <source>saving</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="308"/>
+        <location filename="../quickgui/controller.cpp" line="304"/>
         <source>Canceled file selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="435"/>
+        <location filename="../quickgui/controller.cpp" line="431"/>
         <source>No file opened.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="452"/>
+        <location filename="../quickgui/controller.cpp" line="448"/>
         <source>An IO error occured when %1 the file %2: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="454"/>
+        <location filename="../quickgui/controller.cpp" line="450"/>
+        <source>An error occured when %1 the file: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../quickgui/controller.cpp" line="452"/>
         <source>An unknown exception occured when %1 the file %2: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="457"/>
+        <location filename="../quickgui/controller.cpp" line="455"/>
         <source>An unknown error occured when %1 the file %2.</source>
         <translation type="unfinished"></translation>
     </message>
