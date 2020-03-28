@@ -43,6 +43,8 @@ BasicDialog {
             Layout.preferredWidth: passwordDialog.availableWidth
             echoMode: showCharactersCheckBox.checked ? TextInput.Normal : TextInput.Password
             placeholderText: qsTr("enter password here, leave empty for no encryption")
+            color: "#101010"
+            placeholderTextColor: "#505050"
             background: Rectangle {
                 border.color: "#5d5e6d"
             }
@@ -55,6 +57,8 @@ BasicDialog {
                      && !showCharactersCheckBox.checked
             echoMode: TextInput.Password
             placeholderText: qsTr("repeat password")
+            color: "#101010"
+            placeholderTextColor: "#505050"
             background: Rectangle {
                 border.color: passwordDialog.canAccept ? "#089900" : "#ff0000"
             }
