@@ -699,7 +699,7 @@
     <message>
         <location filename="../gui/mainwindow.cpp" line="454"/>
         <source>Enter the password to open the file &quot;%1&quot;</source>
-        <translation>Gibt das Passwort ein, um die Datei &quot;%1&quot; zu öffnen.</translation>
+        <translation>Gib das Passwort ein, um die Datei &quot;%1&quot; zu öffnen.</translation>
     </message>
     <message>
         <location filename="../gui/mainwindow.cpp" line="459"/>
