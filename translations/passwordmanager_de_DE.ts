@@ -244,12 +244,12 @@
         <translation>Passwort hier eingeben, leer lassen um Verschlüsselung zu deaktivieren</translation>
     </message>
     <message>
-        <location filename="../qml/PasswordDialog.qml" line="57"/>
+        <location filename="../qml/PasswordDialog.qml" line="59"/>
         <source>repeat password</source>
         <translation>Passwort wiederholen</translation>
     </message>
     <message>
-        <location filename="../qml/PasswordDialog.qml" line="65"/>
+        <location filename="../qml/PasswordDialog.qml" line="69"/>
         <source>Show characters</source>
         <translation>Zeichen anzeigen</translation>
     </message>
@@ -271,28 +271,28 @@
         <translation type="vanished">Die Datei konnte nicht richtig eingelesen werden: </translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="146"/>
+        <location filename="../quickgui/controller.cpp" line="151"/>
         <source>loading</source>
         <translation>beim Laden</translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="155"/>
+        <location filename="../quickgui/controller.cpp" line="161"/>
         <source>creating</source>
         <translation>beim Erstellen</translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="170"/>
-        <location filename="../quickgui/controller.cpp" line="179"/>
+        <location filename="../quickgui/controller.cpp" line="177"/>
+        <location filename="../quickgui/controller.cpp" line="186"/>
         <source>closing</source>
         <translation>beim Schließen</translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="211"/>
+        <location filename="../quickgui/controller.cpp" line="218"/>
         <source>Unable to open file descriptor for saving the file.</source>
         <translation>Fehler beim Öffnen des Dateideskriptors zum Speichern der Datei.</translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="226"/>
+        <location filename="../quickgui/controller.cpp" line="233"/>
         <source>A crypto error occured when saving the file: </source>
         <translation>Ein Verschlüsselungsfehler ist beim Speichern der Datei aufgetreten: </translation>
     </message>
@@ -301,7 +301,7 @@
         <translation type="vanished">Ein interner Fehler ist beim Speichern der Datei aufgetreten: </translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="228"/>
+        <location filename="../quickgui/controller.cpp" line="235"/>
         <source>saving</source>
         <translation>beim Speichern</translation>
     </message>
@@ -310,32 +310,32 @@
         <translation type="vanished">beim Öffnen mittels nativem Dateideskriptors</translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="304"/>
+        <location filename="../quickgui/controller.cpp" line="311"/>
         <source>Canceled file selection</source>
         <translation>Dateiauswahl geschlossen</translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="431"/>
+        <location filename="../quickgui/controller.cpp" line="438"/>
         <source>No file opened.</source>
         <translation>Keine Datei geöffnet.</translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="448"/>
+        <location filename="../quickgui/controller.cpp" line="455"/>
         <source>An IO error occured when %1 the file %2: </source>
         <translation>Ein Ein- bzw. Ausgabefehler ist %1 der Datei %2 aufgetreten: </translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="450"/>
+        <location filename="../quickgui/controller.cpp" line="457"/>
         <source>An error occured when %1 the file: </source>
         <translation>Ein Fehler ist %1 der Datei aufgetreten: </translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="452"/>
+        <location filename="../quickgui/controller.cpp" line="459"/>
         <source>An unknown exception occured when %1 the file %2: </source>
         <translation>Eine unbekannte Ausnahme ist %1 der Datei %2 aufgetreten: </translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="455"/>
+        <location filename="../quickgui/controller.cpp" line="462"/>
         <source>An unknown error occured when %1 the file %2.</source>
         <translation>Ein unbekannter Fehler ist %1 der Datei %2 aufgetreten.</translation>
     </message>

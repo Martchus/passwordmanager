@@ -206,12 +206,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/PasswordDialog.qml" line="57"/>
+        <location filename="../qml/PasswordDialog.qml" line="59"/>
         <source>repeat password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/PasswordDialog.qml" line="65"/>
+        <location filename="../qml/PasswordDialog.qml" line="69"/>
         <source>Show characters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -229,63 +229,63 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="146"/>
+        <location filename="../quickgui/controller.cpp" line="151"/>
         <source>loading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="155"/>
+        <location filename="../quickgui/controller.cpp" line="161"/>
         <source>creating</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="170"/>
-        <location filename="../quickgui/controller.cpp" line="179"/>
+        <location filename="../quickgui/controller.cpp" line="177"/>
+        <location filename="../quickgui/controller.cpp" line="186"/>
         <source>closing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="211"/>
+        <location filename="../quickgui/controller.cpp" line="218"/>
         <source>Unable to open file descriptor for saving the file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="226"/>
+        <location filename="../quickgui/controller.cpp" line="233"/>
         <source>A crypto error occured when saving the file: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="228"/>
+        <location filename="../quickgui/controller.cpp" line="235"/>
         <source>saving</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="304"/>
+        <location filename="../quickgui/controller.cpp" line="311"/>
         <source>Canceled file selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="431"/>
+        <location filename="../quickgui/controller.cpp" line="438"/>
         <source>No file opened.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="448"/>
+        <location filename="../quickgui/controller.cpp" line="455"/>
         <source>An IO error occured when %1 the file %2: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="450"/>
+        <location filename="../quickgui/controller.cpp" line="457"/>
         <source>An error occured when %1 the file: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="452"/>
+        <location filename="../quickgui/controller.cpp" line="459"/>
         <source>An unknown exception occured when %1 the file %2: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="455"/>
+        <location filename="../quickgui/controller.cpp" line="462"/>
         <source>An unknown error occured when %1 the file %2.</source>
         <translation type="unfinished"></translation>
     </message>
