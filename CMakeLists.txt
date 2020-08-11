@@ -15,8 +15,7 @@ set(META_USE_QQC2 ON)
 set(META_ANDROID_PACKAGE_NAME "org.martchus.passwordmanager")
 set(META_VERSION_MAJOR 4)
 set(META_VERSION_MINOR 1)
-set(META_VERSION_PATCH 4)
-set(PNG_ICON_NO_CROP ON)
+set(META_VERSION_PATCH 5)
 
 # add project files
 set(HEADER_FILES cli/cli.h model/entryfiltermodel.h model/entrymodel.h model/fieldmodel.h)
@@ -117,7 +116,7 @@ set(REQUIRED_ICONS
 # find c++utilities
 set(CONFIGURATION_PACKAGE_SUFFIX ""
     CACHE STRING "sets the suffix for find_package() calls to packages configured via c++utilities")
-find_package(c++utilities${CONFIGURATION_PACKAGE_SUFFIX} 5.0.0 REQUIRED)
+find_package(c++utilities${CONFIGURATION_PACKAGE_SUFFIX} 5.6.0 REQUIRED)
 use_cpp_utilities()
 
 # apply basic configuration
