@@ -1,5 +1,5 @@
 # Password Manager
-A simple password manager with Qt 5 GUI and command-line interface using AES-256-CBC encryption via OpenSSL.
+A simple password manager with Qt GUI and command-line interface using AES-256-CBC encryption via OpenSSL.
 
 ## Features
 * Cross-platform: tested under GNU/Linux, Android and Windows
@@ -65,11 +65,11 @@ The Password Manager depends on c++utilities and passwordfile. Checkout the READ
 
 ### Optional dependencies
 * When building any Qt GUI, the library qtutilities is required.
-* When building with Qt Widgets GUI support, the following Qt modules are required: core gui widgets
-* When building with support for the experimental Qt Quick GUI, the following Qt/KDE modules are required: core gui qml quick quickcontrols2 kirigami
+* When building with Qt Widgets GUI support, the following Qt modules are required (version 5.6 or higher): core gui widgets
+* When building with support for the experimental Qt Quick GUI, the following Qt/KDE modules are required (version 5.12 or higher): core gui qml quick quickcontrols2 kirigami
 
 ### Building this straight
-1. Install (preferably the latest version of) g++ or clang, the required Qt 5 modules and CMake. OpenSSL, iconv and
+1. Install (preferably the latest version of) g++ or clang, the required Qt modules and CMake. OpenSSL, iconv and
    zlib are required as well but likely already installed.
 2. Get the sources of additional dependencies and the password manager itself. For the lastest version from Git clone the following repositories:  
    ```
@@ -208,7 +208,7 @@ make passwordmanager_deploy_apk
 ```
 
 ##### Notes
-* The Android packages for the dependencies Qt 5, iconv, OpenSSL and Kirigami 2 are provided in
+* The Android packages for the dependencies Qt, iconv, OpenSSL and Kirigami 2 are provided in
   my [PKGBUILDs](http://github.com/Martchus/PKGBUILDs) repo.
 * The lastest Java I was able to use was version 8 (`jdk8-openjdk` package).
 
@@ -217,7 +217,7 @@ make passwordmanager_deploy_apk
 2. Install App on phone: `adb -s <DEVICE_ID> install -r $BUILD_DIR/passwordmanager_build_apk/build/outputs/apk/passwordmanager_build_apk-debug.apk`
 3. View log: `adb -s <DEVICE_ID> logcat`
 
-### Building without Qt 5 GUI
+### Building without Qt GUI
 It is possible to build without the GUI if only the CLI is needed. In this case no Qt dependencies (including qtutilities) are required.
 
 To build without GUI, add the following parameters to the CMake call:
