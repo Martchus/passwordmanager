@@ -53,7 +53,6 @@ public:
 public Q_SLOTS:
     // file management
     bool openFile(const QString &path);
-    bool openFile(const QString &path, Io::PasswordFileOpenFlags openFlags);
     void createFile(const QString &path, const QString &password);
     void createFile(const QString &path);
     bool createFile();
@@ -68,6 +67,9 @@ public Q_SLOTS:
     void showAboutDialog();
     void showPassowrdGeneratorDialog();
     void showUndoView();
+
+public:
+    bool openFile(const QString &path, Io::PasswordFileOpenFlags openFlags); // can not be a slot in Qt 6 without further effort, see QTBUG-86424
 
 protected:
     bool eventFilter(QObject *obj, QEvent *event) override;

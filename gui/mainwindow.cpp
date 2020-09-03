@@ -294,10 +294,10 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
     // save settings
     m_settings.beginGroup(QStringLiteral("mainwindow"));
-    m_settings.setValue(QStringLiteral("geometry"), saveGeometry());
-    m_settings.setValue(QStringLiteral("state"), saveState());
-    m_settings.setValue(QStringLiteral("recententries"), m_recentMgr->save());
-    m_settings.setValue(QStringLiteral("accountfilter"), m_ui->accountFilterLineEdit->text());
+    m_settings.setValue(QStringLiteral("geometry"), QVariant(saveGeometry()));
+    m_settings.setValue(QStringLiteral("state"), QVariant(saveState()));
+    m_settings.setValue(QStringLiteral("recententries"), QVariant(m_recentMgr->save()));
+    m_settings.setValue(QStringLiteral("accountfilter"), QVariant(m_ui->accountFilterLineEdit->text()));
     m_settings.setValue(QStringLiteral("alwayscreatebackup"), m_ui->actionAlwaysCreateBackup->isChecked());
     QString pwVisibility;
     if (m_ui->actionShowAlways->isChecked()) {
@@ -307,7 +307,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     } else {
         pwVisibility = QStringLiteral("editing");
     }
-    m_settings.setValue(QStringLiteral("pwvisibility"), pwVisibility);
+    m_settings.setValue(QStringLiteral("pwvisibility"), QVariant(pwVisibility));
     m_settings.endGroup();
     if (m_qtSettings) {
         m_qtSettings->save(m_settings);
@@ -972,7 +972,7 @@ void MainWindow::addEntry(EntryType type)
         QMessageBox::warning(this, QApplication::applicationName(), tr("Unable to create new entry."));
         return;
     }
-    m_entryModel->setData(m_entryModel->index(row, 0, selected), text, Qt::DisplayRole);
+    m_entryModel->setData(m_entryModel->index(row, 0, selected), QVariant(text), Qt::DisplayRole);
     setSomethingChanged(true);
 }
 
@@ -1001,7 +1001,13 @@ void MainWindow::removeEntry()
  */
 void MainWindow::applyFilter(const QString &filterText)
 {
-    m_entryFilterModel->setFilterRegExp(filterText);
+    m_entryFilterModel->
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
+        setFilterRegularExpression
+#else
+        setFilterRegExp
+#endif
+        (filterText);
     if (filterText.isEmpty()) {
         applyDefaultExpanding(QModelIndex());
     } else {
