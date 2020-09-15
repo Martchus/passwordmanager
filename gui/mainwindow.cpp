@@ -1002,7 +1002,7 @@ void MainWindow::removeEntry()
 void MainWindow::applyFilter(const QString &filterText)
 {
     m_entryFilterModel->
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
         setFilterRegularExpression
 #else
         setFilterRegExp
