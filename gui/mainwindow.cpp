@@ -1002,12 +1002,12 @@ void MainWindow::removeEntry()
 void MainWindow::applyFilter(const QString &filterText)
 {
     m_entryFilterModel->
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-        setFilterRegularExpression
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
+        setFilterRegularExpression(QRegularExpression(filterText, QRegularExpression::CaseInsensitiveOption))
 #else
-        setFilterRegExp
+        setFilterRegExp(filterText)
 #endif
-        (filterText);
+        ;
     if (filterText.isEmpty()) {
         applyDefaultExpanding(QModelIndex());
     } else {
