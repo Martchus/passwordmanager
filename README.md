@@ -1,6 +1,6 @@
-Password managers take the hassle out of creating and remembering strong passwords. A single user has many website logins. Using the same password everywhere is not a good idea because if one password is compromised, other login credentials get compromised too. A Password Manager is hence essential.
 
-# Password Manager
+
+# [Password Manager] (https://en.wikipedia.org/wiki/Password_manager)
 A simple password manager with Qt GUI and command-line interface using AES-256-CBC encryption via OpenSSL.
 
 ## Features
