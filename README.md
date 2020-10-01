@@ -1,5 +1,5 @@
-# [Password Manager](https://en.wikipedia.org/wiki/Password_manager)
-A simple password manager with Qt GUI and command-line interface using AES-256-CBC encryption via OpenSSL.
+# Password Manager
+A simple [password manager](https://en.wikipedia.org/wiki/Password_manager) with Qt GUI and command-line interface using AES-256-CBC encryption via OpenSSL.
 
 ## Features
 * Cross-platform: tested under GNU/Linux, Android and Windows
