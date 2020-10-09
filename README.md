@@ -69,7 +69,7 @@ The Password Manager depends on c++utilities and passwordfile. Checkout the READ
 * When building with support for the experimental Qt Quick GUI, the following Qt/KDE modules are required (version 5.12 or higher): core gui qml quick quickcontrols2 kirigami
 
 ### Building this straight
-1. Install (preferably the latest version of) g++ or clang, the required Qt modules and CMake. OpenSSL, iconv and
+1. Install (preferably the latest version of) GCC or Clang, the required Qt modules, CMake and Ninja/Make. OpenSSL, iconv and
    zlib are required as well but likely already installed.
 2. Get the sources of additional dependencies and the password manager itself. For the lastest version from Git clone the following repositories:  
    ```
@@ -84,10 +84,11 @@ The Password Manager depends on c++utilities and passwordfile. Checkout the READ
    ```
    cd $BUILD_DIR
    cmake \
+    -G Ninja \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX="/install/prefix" \
     $SOURCES/subdirs/passwordmanager
-   make install -j$(nproc)
+   ninja install
    ```
 
 #### Concrete example of 3. for building an Android APK under Arch Linux
