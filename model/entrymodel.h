@@ -9,11 +9,15 @@
 
 #include <QAbstractItemModel>
 
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+#include <passwordfile/io/entry.h>
+#else
 namespace Io {
 class Entry;
 class NodeEntry;
 enum class EntryType;
 } // namespace Io
+#endif
 
 namespace QtGui {
 
