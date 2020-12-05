@@ -48,9 +48,11 @@ See the release section on GitHub.
       [the AUR](https://aur.archlinux.org/packages?SeB=m&K=Martchus)
     * for a binary repository checkout [my website](http://martchus.no-ip.biz/website/page.php?name=programming)
 * Tumbleweed, Leap, Fedora
-    * for RPM \*.spec files and binary repository checkout
-      [openSUSE Build Servide](https://build.opensuse.org/project/show/home:mkittler)
-    * there's also a [repo with builds of Git master](https://build.opensuse.org/project/show/home:mkittler:vcs)
+    * RPM \*.spec files and binaries are available via openSUSE Build Service
+        * latest releases: [download page](https://software.opensuse.org/download.html?project=home:mkittler&package=passwordmanager),
+          [project page](https://build.opensuse.org/project/show/home:mkittler)
+        * Git master: [download page](https://software.opensuse.org/download.html?project=home:mkittler:vcs&package=passwordmanager),
+          [project page](https://build.opensuse.org/project/show/home:mkittler:vcs)
 * Other GNU/Linux systems
     * [AppImage repository for releases on the openSUSE Build Service](https://download.opensuse.org/repositories/home:/mkittler:/appimage/AppImage)
     * [AppImage repository for builds from Git master the openSUSE Build Service](https://download.opensuse.org/repositories/home:/mkittler:/appimage:/vcs/AppImage/)
