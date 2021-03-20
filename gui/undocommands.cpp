@@ -174,7 +174,7 @@ bool FieldModelRemoveRowsCommand::internalRedo()
     m_model->setAccountEntry(m_account);
     if (m_values.isEmpty()) {
         for (int row = m_row, end = m_row + m_count; row < end; ++row) {
-            if (const Field *field = m_model->field(row)) {
+            if (const Field *const field = m_model->field(static_cast<std::size_t>(row))) {
                 m_values << Field(*field);
             }
         }

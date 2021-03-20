@@ -89,7 +89,7 @@ inline QVariant FieldModel::passwordValue(const QModelIndex &index, int role) co
     return (m_passwordVisibility == PasswordVisibility::Always || role == Qt::EditRole
                || (*m_fields)[static_cast<size_t>(index.row())].type() != FieldType::Password)
         ? QString::fromStdString((*m_fields)[static_cast<size_t>(index.row())].value())
-        : QString((*m_fields)[static_cast<size_t>(index.row())].value().size(), QChar(0x2022));
+        : QString(static_cast<QString::size_type>((*m_fields)[static_cast<size_t>(index.row())].value().size()), QChar(0x2022));
 }
 
 QVariant FieldModel::data(const QModelIndex &index, int role) const
@@ -289,7 +289,7 @@ QVariant FieldModel::headerData(int section, Qt::Orientation orientation, int ro
 
 int FieldModel::rowCount(const QModelIndex &parent) const
 {
-    return (!parent.isValid() && m_fields) ? m_fields->size() + 1 : 0;
+    return (!parent.isValid() && m_fields) ? static_cast<int>(m_fields->size()) + 1 : 0;
 }
 
 int FieldModel::columnCount(const QModelIndex &parent) const

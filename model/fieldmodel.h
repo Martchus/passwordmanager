@@ -141,7 +141,7 @@ inline void FieldModel::setPasswordVisibility(PasswordVisibility passwordVisibil
 {
     m_passwordVisibility = passwordVisibility;
     if (m_fields) {
-        emit dataChanged(index(0, 1), index(m_fields->size() - 1, 1), QVector<int>({ Qt::DisplayRole, Qt::EditRole }));
+        emit dataChanged(index(0, 1), index(static_cast<int>(m_fields->size() - 1), 1), QVector<int>({ Qt::DisplayRole, Qt::EditRole }));
     }
 }
 } // namespace QtGui

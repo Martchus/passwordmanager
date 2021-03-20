@@ -94,7 +94,7 @@ QList<Entry *> EntryModel::takeEntries(int row, int count, const QModelIndex &pa
     int lastIndex = row + count - 1;
     const vector<Entry *> &children = parentNodeEntry->children();
     if (lastIndex < 0 || static_cast<size_t>(lastIndex) >= children.size()) {
-        lastIndex = children.size() - 1;
+        lastIndex = static_cast<int>(children.size() - 1);
     }
     beginRemoveRows(parent, row, lastIndex);
     for (int index = lastIndex; index >= row; --index) {
@@ -125,7 +125,7 @@ bool EntryModel::insertEntries(int row, const QModelIndex &parent, const QList<E
     NodeEntry *const parentNodeEntry = static_cast<NodeEntry *>(parentEntry);
     const vector<Entry *> &children = parentNodeEntry->children();
     if (row < 0 || static_cast<size_t>(row) > children.size()) {
-        row = children.size();
+        row = static_cast<int>(children.size());
     }
     beginInsertRows(parent, row, row + entries.size() - 1);
     for (Entry *const entry : entries) {
@@ -243,7 +243,7 @@ QVariant EntryModel::data(const QModelIndex &index, int role) const
             entry->make(ss);
             // FIXME: make conversion to QByteArray more efficient
             const auto str(ss.str());
-            return QByteArray(str.data(), str.size());
+            return QByteArray(str.data(), static_cast<QByteArray::size_type>(str.size()));
         } catch (const std::ios_base::failure &) {
             return false;
         }
@@ -375,7 +375,7 @@ int EntryModel::rowCount(const QModelIndex &parent) const
         if (Entry *parentEntry = static_cast<Entry *>(parent.internalPointer())) {
             switch (parentEntry->type()) {
             case EntryType::Node:
-                return static_cast<NodeEntry *>(parentEntry)->children().size();
+                return static_cast<int>(static_cast<NodeEntry *>(parentEntry)->children().size());
             case EntryType::Account:;
             }
         }
