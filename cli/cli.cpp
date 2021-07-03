@@ -252,13 +252,13 @@ void InteractiveCli::openFile(const string &file, PasswordFileOpenFlags openFlag
                 m_currentEntry = m_file.rootEntry();
                 m_o << "file \"" << file << "\" opened" << endl;
             } catch (const ParsingException &) {
-                m_o << "error occured when parsing file \"" << file << "\"" << endl;
+                m_o << "error occurred when parsing file \"" << file << "\"" << endl;
                 throw;
             } catch (const CryptoException &) {
-                m_o << "error occured when decrypting file \"" << file << "\"" << endl;
+                m_o << "error occurred when decrypting file \"" << file << "\"" << endl;
                 throw;
             } catch (const std::ios_base::failure &) {
-                m_o << "IO error occured when opening file \"" << file << "\"" << endl;
+                m_o << "IO error occurred when opening file \"" << file << "\"" << endl;
                 throw;
             }
         } catch (const std::exception &e) {
@@ -303,13 +303,13 @@ void InteractiveCli::saveFile()
             m_file.save(flags);
             m_o << "file \"" << m_file.path() << "\" saved" << endl;
         } catch (const ParsingException &) {
-            m_o << "error occured when parsing file \"" << m_file.path() << "\"" << endl;
+            m_o << "error occurred when parsing file \"" << m_file.path() << "\"" << endl;
             throw;
         } catch (const CryptoException &) {
-            m_o << "error occured when encrypting file \"" << m_file.path() << "\"" << endl;
+            m_o << "error occurred when encrypting file \"" << m_file.path() << "\"" << endl;
             throw;
         } catch (const std::ios_base::failure &) {
-            m_o << "IO error occured when saving file \"" << m_file.path() << "\"" << endl;
+            m_o << "IO error occurred when saving file \"" << m_file.path() << "\"" << endl;
             throw;
         }
     } catch (const exception &e) {
@@ -337,7 +337,7 @@ void InteractiveCli::createFile(const string &file)
             m_currentEntry = m_file.rootEntry();
             m_o << "file \"" << file << "\" created and opened" << endl;
         } catch (const std::ios_base::failure &) {
-            m_o << "IO error occured when creating file \"" << file << "\"" << endl;
+            m_o << "IO error occurred when creating file \"" << file << "\"" << endl;
             throw;
         }
     } catch (const exception &e) {
@@ -407,7 +407,7 @@ void InteractiveCli::cd(const string &path)
 void InteractiveCli::ls()
 {
     if (!m_file.isOpen()) {
-        m_o << "can not list any entires; no file open" << endl;
+        m_o << "can not list any entries; no file open" << endl;
         return;
     }
     switch (m_currentEntry->type()) {

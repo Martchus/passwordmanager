@@ -71,7 +71,7 @@ The Password Manager depends on c++utilities and passwordfile. Checkout the READ
 ### Building this straight
 1. Install (preferably the latest version of) GCC or Clang, the required Qt modules, CMake and Ninja/Make. OpenSSL, iconv and
    zlib are required as well but likely already installed.
-2. Get the sources of additional dependencies and the password manager itself. For the lastest version from Git clone the following repositories:  
+2. Get the sources of additional dependencies and the password manager itself. For the latest version from Git clone the following repositories:  
    ```
    cd $SOURCES
    git clone https://github.com/Martchus/cpp-utilities.git c++utilities
@@ -211,7 +211,7 @@ make passwordmanager_deploy_apk
 ##### Notes
 * The Android packages for the dependencies Qt, iconv, OpenSSL and Kirigami 2 are provided in
   my [PKGBUILDs](http://github.com/Martchus/PKGBUILDs) repo.
-* The lastest Java I was able to use was version 8 (`jdk8-openjdk` package).
+* The latest Java I was able to use was version 8 (`jdk8-openjdk` package).
 
 ### Manual deployment of Android APK file
 1. Find device ID: `adb devices`

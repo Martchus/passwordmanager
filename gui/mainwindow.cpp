@@ -432,7 +432,7 @@ bool MainWindow::openFile(const QString &path, PasswordFileOpenFlags openFlags)
         }
 
         // show error message
-        const QString errmsg = tr("An IO error occured when opening the specified file \"%1\": %2").arg(path, QString::fromLocal8Bit(failure.what()));
+        const QString errmsg = tr("An IO error occurred when opening the specified file \"%1\": %2").arg(path, QString::fromLocal8Bit(failure.what()));
         m_ui->statusBar->showMessage(errmsg, 5000);
         QMessageBox::critical(this, QApplication::applicationName(), errmsg);
         return false;
@@ -827,7 +827,7 @@ bool MainWindow::saveFile()
             try {
                 m_file.doBackup();
             } catch (const std::ios_base::failure &failure) {
-                const QString message(tr("An IO error occured when making the backup file: %1").arg(QString::fromLocal8Bit(failure.what())));
+                const QString message(tr("An IO error occurred when making the backup file: %1").arg(QString::fromLocal8Bit(failure.what())));
                 QMessageBox::critical(this, QApplication::applicationName(), message);
                 m_ui->statusBar->showMessage(message, 7000);
                 return false;

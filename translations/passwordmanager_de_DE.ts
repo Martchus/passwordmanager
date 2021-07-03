@@ -258,16 +258,16 @@
     <name>QtGui::Controller</name>
     <message>
         <location filename="../quickgui/controller.cpp" line="132"/>
-        <source>An error occured when opening the file: root element missing</source>
+        <source>An error occurred when opening the file: root element missing</source>
         <translation>Die Datei konnte nicht geöffnet werden, weil das Root-Element fehlt.</translation>
     </message>
     <message>
         <location filename="../quickgui/controller.cpp" line="143"/>
-        <source>A crypto error occured when opening the file: </source>
+        <source>A crypto error occurred when opening the file: </source>
         <translation>Ein Verschlüsselungsfehler ist beim Öffnen der Datei aufgetreten: </translation>
     </message>
     <message>
-        <source>A parsing error occured when opening the file: </source>
+        <source>A parsing error occurred when opening the file: </source>
         <translation type="vanished">Die Datei konnte nicht richtig eingelesen werden: </translation>
     </message>
     <message>
@@ -293,11 +293,11 @@
     </message>
     <message>
         <location filename="../quickgui/controller.cpp" line="233"/>
-        <source>A crypto error occured when saving the file: </source>
+        <source>A crypto error occurred when saving the file: </source>
         <translation>Ein Verschlüsselungsfehler ist beim Speichern der Datei aufgetreten: </translation>
     </message>
     <message>
-        <source>An internal error occured when saving the file: </source>
+        <source>An internal error occurred when saving the file: </source>
         <translation type="vanished">Ein interner Fehler ist beim Speichern der Datei aufgetreten: </translation>
     </message>
     <message>
@@ -321,22 +321,22 @@
     </message>
     <message>
         <location filename="../quickgui/controller.cpp" line="455"/>
-        <source>An IO error occured when %1 the file %2: </source>
+        <source>An IO error occurred when %1 the file %2: </source>
         <translation>Ein Ein- bzw. Ausgabefehler ist %1 der Datei %2 aufgetreten: </translation>
     </message>
     <message>
         <location filename="../quickgui/controller.cpp" line="457"/>
-        <source>An error occured when %1 the file: </source>
+        <source>An error occurred when %1 the file: </source>
         <translation>Ein Fehler ist %1 der Datei aufgetreten: </translation>
     </message>
     <message>
         <location filename="../quickgui/controller.cpp" line="459"/>
-        <source>An unknown exception occured when %1 the file %2: </source>
+        <source>An unknown exception occurred when %1 the file %2: </source>
         <translation>Eine unbekannte Ausnahme ist %1 der Datei %2 aufgetreten: </translation>
     </message>
     <message>
         <location filename="../quickgui/controller.cpp" line="462"/>
-        <source>An unknown error occured when %1 the file %2.</source>
+        <source>An unknown error occurred when %1 the file %2.</source>
         <translation>Ein unbekannter Fehler ist %1 der Datei %2 aufgetreten.</translation>
     </message>
 </context>
@@ -679,7 +679,7 @@
         <translation>Änderungshistorie</translation>
     </message>
     <message>
-        <source>An IO error occured when opening the specified file &quot;%1&quot;.
+        <source>An IO error occurred when opening the specified file &quot;%1&quot;.
 
 (%2)</source>
         <translation type="vanished">Beim Öffnen der Datei &quot;%1&quot; ist ein Ein-/Ausgabefehler aufgetreten.
@@ -778,7 +778,7 @@ OpenSSL-Fehler: %1</translation>
         <translation>Passwortdatei wurde geschlossen.</translation>
     </message>
     <message>
-        <source>The backup file couldn&apos;t be created because in IO error occured: %1</source>
+        <source>The backup file couldn&apos;t be created because in IO error occurred: %1</source>
         <translation type="vanished">Die Backupdatei konnte aufgrund eines Ein-/Ausgabefehlers nicht erstellt werden: %1</translation>
     </message>
     <message>
@@ -881,7 +881,7 @@ OpenSSL-Fehler: %1</translation>
     </message>
     <message>
         <location filename="../gui/mainwindow.cpp" line="435"/>
-        <source>An IO error occured when opening the specified file &quot;%1&quot;: %2</source>
+        <source>An IO error occurred when opening the specified file &quot;%1&quot;: %2</source>
         <translation>Beim Öffnen der Datei &quot;%1&quot; ist ein Ein-/Ausgabefehler aufgetreten: %2</translation>
     </message>
     <message>
@@ -896,7 +896,7 @@ OpenSSL-Fehler: %1</translation>
     </message>
     <message>
         <location filename="../gui/mainwindow.cpp" line="830"/>
-        <source>An IO error occured when making the backup file: %1</source>
+        <source>An IO error occurred when making the backup file: %1</source>
         <translation>Beim Erstellen der Backup-Datei ist ein Ein-/Ausgabefehler aufgetreten: %1</translation>
     </message>
     <message>

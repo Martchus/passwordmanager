@@ -439,7 +439,7 @@ bool EntryModelMoveRowsCommand::internalUndo()
         if (sourceParentEntry && destParentEntry) {
             int sourceRow = m_destChild;
             int destChild = m_sourceRow;
-            // moves whithin the same parent needs special consideration
+            // moves within the same parent needs special consideration
             if (sourceParentEntry == destParentEntry) {
                 // move entry down
                 if (m_sourceRow < m_destChild) {

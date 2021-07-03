@@ -255,7 +255,7 @@ bool FieldModel::setData(const QModelIndex &index, const QVariant &value, int ro
     if (roles.isEmpty()) {
         return false;
     }
-    // emit data changed signal on sucess
+    // emit data changed signal on success
     emit dataChanged(index, index, roles);
     return true;
 }

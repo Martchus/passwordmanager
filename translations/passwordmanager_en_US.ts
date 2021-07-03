@@ -220,12 +220,12 @@
     <name>QtGui::Controller</name>
     <message>
         <location filename="../quickgui/controller.cpp" line="132"/>
-        <source>An error occured when opening the file: root element missing</source>
+        <source>An error occurred when opening the file: root element missing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../quickgui/controller.cpp" line="143"/>
-        <source>A crypto error occured when opening the file: </source>
+        <source>A crypto error occurred when opening the file: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -251,7 +251,7 @@
     </message>
     <message>
         <location filename="../quickgui/controller.cpp" line="233"/>
-        <source>A crypto error occured when saving the file: </source>
+        <source>A crypto error occurred when saving the file: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -271,22 +271,22 @@
     </message>
     <message>
         <location filename="../quickgui/controller.cpp" line="455"/>
-        <source>An IO error occured when %1 the file %2: </source>
+        <source>An IO error occurred when %1 the file %2: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../quickgui/controller.cpp" line="457"/>
-        <source>An error occured when %1 the file: </source>
+        <source>An error occurred when %1 the file: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../quickgui/controller.cpp" line="459"/>
-        <source>An unknown exception occured when %1 the file %2: </source>
+        <source>An unknown exception occurred when %1 the file %2: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../quickgui/controller.cpp" line="462"/>
-        <source>An unknown error occured when %1 the file %2.</source>
+        <source>An unknown error occurred when %1 the file %2.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -797,7 +797,7 @@ OpenSSL error queue: %1</source>
     </message>
     <message>
         <location filename="../gui/mainwindow.cpp" line="435"/>
-        <source>An IO error occured when opening the specified file &quot;%1&quot;: %2</source>
+        <source>An IO error occurred when opening the specified file &quot;%1&quot;: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -812,7 +812,7 @@ OpenSSL error queue: %1</source>
     </message>
     <message>
         <location filename="../gui/mainwindow.cpp" line="830"/>
-        <source>An IO error occured when making the backup file: %1</source>
+        <source>An IO error occurred when making the backup file: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
