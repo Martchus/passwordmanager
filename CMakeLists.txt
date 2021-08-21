@@ -24,13 +24,8 @@ set(SRC_FILES cli/cli.cpp main.cpp)
 set(GUI_HEADER_FILES model/entryfiltermodel.cpp model/entrymodel.cpp model/fieldmodel.cpp)
 set(GUI_SRC_FILES model/entryfiltermodel.cpp model/entrymodel.cpp model/fieldmodel.cpp)
 
-set(WIDGETS_HEADER_FILES
-    gui/fielddelegate.h
-    gui/initiategui.h
-    gui/mainwindow.h
-    gui/passwordgeneratordialog.h
-    gui/stacksupport.h
-    gui/undocommands.h)
+set(WIDGETS_HEADER_FILES gui/fielddelegate.h gui/initiategui.h gui/mainwindow.h gui/passwordgeneratordialog.h
+                         gui/stacksupport.h gui/undocommands.h)
 set(WIDGETS_SRC_FILES
     gui/fielddelegate.cpp
     gui/initiategui.cpp
@@ -114,7 +109,8 @@ set(REQUIRED_ICONS
     window-close)
 
 # find c++utilities
-set(CONFIGURATION_PACKAGE_SUFFIX ""
+set(CONFIGURATION_PACKAGE_SUFFIX
+    ""
     CACHE STRING "sets the suffix for find_package() calls to packages configured via c++utilities")
 find_package(c++utilities${CONFIGURATION_PACKAGE_SUFFIX} 5.6.0 REQUIRED)
 use_cpp_utilities()
@@ -123,7 +119,8 @@ use_cpp_utilities()
 include(BasicConfig)
 
 # find qtutilities
-set(CONFIGURATION_PACKAGE_SUFFIX_QTUTILITIES "${CONFIGURATION_PACKAGE_SUFFIX}"
+set(CONFIGURATION_PACKAGE_SUFFIX_QTUTILITIES
+    "${CONFIGURATION_PACKAGE_SUFFIX}"
     CACHE STRING "sets the suffix for qtutilities")
 find_package(qtutilities${CONFIGURATION_PACKAGE_SUFFIX_QTUTILITIES} 6.0.0 REQUIRED)
 use_qt_utilities()

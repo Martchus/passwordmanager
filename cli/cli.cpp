@@ -108,9 +108,9 @@ void InteractiveCli::run(const string &file)
 
 void InteractiveCli::processCommand(const string &cmd)
 {
-#define CMD(value) !paramMissing && cmd == value
+#define CMD(value) !paramMissing &&cmd == value
 #define CMD2(value1, value2) !paramMissing && (cmd == value1 || cmd == value2)
-#define CMD_P(value) !paramMissing && checkCommand(cmd, value, param, paramMissing)
+#define CMD_P(value) !paramMissing &&checkCommand(cmd, value, param, paramMissing)
 #define CMD2_P(value1, value2) !paramMissing && (checkCommand(cmd, value1, param, paramMissing) || checkCommand(cmd, value2, param, paramMissing))
 
     string param;
