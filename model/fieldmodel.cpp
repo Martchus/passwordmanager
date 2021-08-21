@@ -155,14 +155,14 @@ QVariant FieldModel::data(const QModelIndex &index, int role) const
 QMap<int, QVariant> FieldModel::itemData(const QModelIndex &index) const
 {
     static const auto roleMap = [this, index] {
-        QMap<int, QVariant> roleMap;
+        auto res = QMap<int, QVariant>();
         for (const auto role : initializer_list<int>{ Qt::EditRole, FieldTypeRole }) {
             const auto variantData(data(index, role));
             if (variantData.isValid()) {
-                roleMap.insert(role, variantData);
+                res.insert(role, variantData);
             }
         }
-        return roleMap;
+        return res;
     }();
     return roleMap;
 }
