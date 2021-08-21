@@ -104,14 +104,8 @@ int main(int argc, char *argv[])
             cerr << "The application has not been built with Qt quick support." << endl;
 #endif
         } else {
-#if defined(PASSWORD_MANAGER_GUI_QTQUICK)
-            returnCode = QtGui::runQuickGui(argc, argv, qtConfigArgs, file);
-#elif defined(PASSWORD_MANAGER_GUI_QTWIDGETS)
-            returnCode = QtGui::runWidgetsGui(argc, argv, qtConfigArgs, file);
-#else
             CMD_UTILS_START_CONSOLE;
             cerr << "See --help for usage." << endl;
-#endif
         }
     }
 #else // PASSWORD_MANAGER_FORCE_GUI
