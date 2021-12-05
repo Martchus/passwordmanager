@@ -63,7 +63,15 @@ See the release section on GitHub.
         * the Qt 5 based version should still work on older versions down to Windows 7 although this is not regularly checked
 
 ## Build instructions
-The Password Manager depends on c++utilities and passwordfile. Checkout the README of c++utilities for more details. Note that this project is not built differently than any other CMake project.
+The application depends on [c++utilities](https://github.com/Martchus/cpp-utilities) and
+[passwordfile](https://github.com/Martchus/passwordfile) and is built the same way as these libraries.
+For basic instructions checkout the README file of [c++utilities](https://github.com/Martchus/cpp-utilities).
+When the Qt GUI is enabled, Qt and [qtutilities](https://github.com/Martchus/qtutilities) are required, too.
+
+To avoid building c++utilities/passwordfile/qtutilities separately, follow the instructions under
+"Building this straight". There's also documentation about
+[various build variables](https://github.com/Martchus/cpp-utilities/blob/master/doc/buildvariables.md) which
+can be passed to CMake to influence the build.
 
 ### Optional dependencies
 * When building any Qt GUI, the library qtutilities is required.
@@ -71,27 +79,30 @@ The Password Manager depends on c++utilities and passwordfile. Checkout the READ
 * When building with support for the experimental Qt Quick GUI, the following Qt/KDE modules are required (version 5.12 or higher): core gui qml quick quickcontrols2 kirigami
 
 ### Building this straight
-1. Install (preferably the latest version of) GCC or Clang, the required Qt modules, CMake and Ninja/Make. OpenSSL, iconv and
-   zlib are required as well but likely already installed.
-2. Get the sources of additional dependencies and the password manager itself. For the latest version from Git clone the following repositories:  
+0. Install (preferably the latest version of) the CGG toolchain or Clang, the required Qt modules, OpenSSL, iconv,
+   zlib, CMake and Ninja.
+1. Get the sources of additional dependencies and the password manager itself. For the latest version from Git clone the following repositories:
    ```
-   cd $SOURCES
+   cd "$SOURCES"
    git clone https://github.com/Martchus/cpp-utilities.git c++utilities
    git clone https://github.com/Martchus/passwordfile.git
    git clone https://github.com/Martchus/qtutilities.git                  # only required for Qt GUI
    git clone https://github.com/Martchus/passwordmanager.git
    git clone https://github.com/Martchus/subdirs.git
    ```
-3. Build and install everything in one step:  
+2. Build and install everything in one step:
    ```
-   cd $BUILD_DIR
+   cd "$BUILD_DIR"
    cmake \
     -G Ninja \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX="/install/prefix" \
-    $SOURCES/subdirs/passwordmanager
+    "$SOURCES/subdirs/passwordmanager"
    ninja install
    ```
+    * If the install directory is not writable, do **not** conduct the build as root. Instead, set `DESTDIR` to a
+      writable location (e.g. `DESTDIR="temporary/install/dir" ninja install`) and move the files from there to
+      the desired location afterwards.
 
 #### Concrete example of 3. for building an Android APK under Arch Linux
 Create stuff for signing the package (remove `-DANDROID_APK_FORCE_DEBUG=ON` line in the CMake invocation to actually use this):
