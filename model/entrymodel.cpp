@@ -451,40 +451,44 @@ bool EntryModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int co
     }
 #endif
     // check validation of specified arguments: source and destination parent entries need to be node entries
-    if (!sourceParent.isValid() || !destinationParent.isValid() || sourceRow < 0 || count <= 0 || entry(sourceParent)->type() != EntryType::Node //
-        || entry(destinationParent)->type() != EntryType::Node) {
+    if (sourceRow < 0 || count <= 0) {
+        return false;
+    }
+    const auto *const srcParentEntry = entry(sourceParent);
+    const auto *const destParentEntry = entry(sourceParent);
+    if (!srcParentEntry || !destParentEntry || srcParentEntry->type() != EntryType::Node || destParentEntry->type() != EntryType::Node) {
         return false;
     }
     // determine the source parent entry and dest parent entry as node entries
-    auto *const srcParentEntry = static_cast<NodeEntry *>(sourceParent.internalPointer());
-    auto *const destParentEntry = static_cast<NodeEntry *>(destinationParent.internalPointer());
+    auto *const srcParentNodeEntry = static_cast<NodeEntry *>(sourceParent.internalPointer());
+    auto *const destParentNodeEntry = static_cast<NodeEntry *>(destinationParent.internalPointer());
 #if CPP_UTILITIES_DEBUG_BUILD
     cout << "destinationChild: " << destinationChild << endl;
 #endif
     // source rows must be within the valid range
-    if (static_cast<size_t>(sourceRow + count) > srcParentEntry->children().size()
+    if (static_cast<size_t>(sourceRow + count) > srcParentNodeEntry->children().size()
         // if source and destination parent are the same the destination child mustn't be in the source range
-        || !(srcParentEntry != destParentEntry || (destinationChild < sourceRow || (sourceRow + count) < destinationChild))) {
+        || !(srcParentNodeEntry != destParentNodeEntry || (destinationChild < sourceRow || (sourceRow + count) < destinationChild))) {
         return false;
     }
     // do not move a row to one of its own children! -> check before
     for (int index = 0; index < count; ++index) {
-        Entry *const toMove = srcParentEntry->children()[static_cast<size_t>(sourceRow + index)];
+        Entry *const toMove = srcParentNodeEntry->children()[static_cast<size_t>(sourceRow + index)];
         if (toMove->type() != EntryType::Node) {
             continue;
         }
-        if (toMove == destParentEntry || destParentEntry->isIndirectChildOf(static_cast<NodeEntry *>(toMove))) {
+        if (toMove == destParentNodeEntry || destParentNodeEntry->isIndirectChildOf(static_cast<NodeEntry *>(toMove))) {
             return false;
         }
     }
     // actually perform the move operation
     beginMoveRows(sourceParent, sourceRow, sourceRow + count - 1, destinationParent, destinationChild);
     for (int index = 0; index < count; ++index) {
-        Entry *toMove = srcParentEntry->children()[static_cast<size_t>(sourceRow + index)];
-        if (srcParentEntry == destParentEntry && sourceRow < destinationChild) {
-            toMove->setParent(destParentEntry, destinationChild + index - 1);
+        Entry *toMove = srcParentNodeEntry->children()[static_cast<size_t>(sourceRow + index)];
+        if (srcParentNodeEntry == destParentNodeEntry && sourceRow < destinationChild) {
+            toMove->setParent(destParentNodeEntry, destinationChild + index - 1);
         } else {
-            toMove->setParent(destParentEntry, destinationChild + index);
+            toMove->setParent(destParentNodeEntry, destinationChild + index);
         }
     }
     endMoveRows();
