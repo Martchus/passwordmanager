@@ -49,9 +49,16 @@ See the release section on GitHub.
     * there is also a [binary repository](https://martchus.no-ip.biz/repo/arch/ownstuff)
 * Tumbleweed, Leap, Fedora
     * RPM \*.spec files and binaries are available via openSUSE Build Service
+        * remarks
+            * Be sure to add the repository that matches the version of your OS and to keep it
+              in sync when upgrading.
+            * The linked download pages might be incomplete, use the repositories URL for a full
+              list.
         * latest releases: [download page](https://software.opensuse.org/download.html?project=home:mkittler&package=passwordmanager),
+          [repositories URL](https://download.opensuse.org/repositories/home:/mkittler),
           [project page](https://build.opensuse.org/project/show/home:mkittler)
         * Git master: [download page](https://software.opensuse.org/download.html?project=home:mkittler:vcs&package=passwordmanager),
+          [repositories URL](https://download.opensuse.org/repositories/home:/mkittler:/vcs),
           [project page](https://build.opensuse.org/project/show/home:mkittler:vcs)
 * Other GNU/Linux systems
     * [AppImage repository for releases on the openSUSE Build Service](https://download.opensuse.org/repositories/home:/mkittler:/appimage/AppImage)
