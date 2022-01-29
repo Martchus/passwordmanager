@@ -85,6 +85,7 @@ public:
     QUndoStack *undoStack();
     QString undoText() const;
     QString redoText() const;
+    Io::PasswordFileSaveFlags prepareSaving();
 
 public Q_SLOTS:
     void init();
@@ -101,7 +102,6 @@ public Q_SLOTS:
     void handleFileSelectionCanceled();
     void undo();
     void redo();
-    Io::PasswordFileSaveFlags prepareSaving();
     QString computeFileSummary();
 
 Q_SIGNALS:
@@ -296,12 +296,20 @@ inline QModelIndex Controller::filterEntryIndex(const QModelIndex &entryIndex) c
 
 inline QString Controller::entryFilter() const
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
+    return m_entryFilterModel.filterRegularExpression().pattern();
+#else
     return m_entryFilterModel.filterRegExp().pattern();
+#endif
 }
 
 inline bool Controller::hasEntryFilter() const
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
+    return !m_entryFilterModel.filterRegularExpression().pattern().isEmpty();
+#else
     return !m_entryFilterModel.filterRegExp().isEmpty();
+#endif
 }
 
 inline bool Controller::filterAsDialog() const

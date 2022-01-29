@@ -4,6 +4,7 @@
 #include <passwordfile/io/cryptoexception.h>
 #include <passwordfile/io/parsingexception.h>
 
+#include <qtutilities/misc/compat.h>
 #include <qtutilities/misc/dialogutils.h>
 
 #include <c++utilities/io/nativefilestream.h>
@@ -73,9 +74,9 @@ Controller::Controller(QSettings &settings, const QString &filePath, QObject *pa
 void Controller::setFilePath(const QString &filePath)
 {
     // get rid of file:// prefix
-    QStringRef actualFilePath(&filePath);
+    auto actualFilePath = makeStringView(filePath);
     if (filePath.startsWith(QLatin1String("file:"))) {
-        actualFilePath = filePath.midRef(5);
+        actualFilePath = midRef(filePath, 5);
     }
     while (actualFilePath.startsWith(QLatin1String("//"))) {
         actualFilePath = actualFilePath.mid(1);
@@ -483,11 +484,19 @@ void Controller::setUseNativeFileDialog(bool useNativeFileDialog)
 
 void Controller::setEntryFilter(const QString &filter)
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
+    const auto previousFilter(m_entryFilterModel.filterRegularExpression().pattern());
+#else
     const auto previousFilter(m_entryFilterModel.filterRegExp().pattern());
+#endif
     if (filter == previousFilter) {
         return;
     }
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
+    m_entryFilterModel.setFilterRegularExpression(filter);
+#else
     m_entryFilterModel.setFilterRegExp(filter);
+#endif
     emit entryFilterChanged(filter);
     if (previousFilter.isEmpty() != filter.isEmpty()) {
         emit hasEntryFilterChanged(!filter.isEmpty());

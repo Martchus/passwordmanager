@@ -20,7 +20,6 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QSettings>
-#include <QTextCodec>
 #include <QtQml>
 #ifdef Q_OS_ANDROID
 #include <QDebug>
@@ -53,7 +52,6 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
 
     // init application
     SET_QT_APPLICATION_INFO;
-    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
     QApplication application(argc, argv);
 #else
