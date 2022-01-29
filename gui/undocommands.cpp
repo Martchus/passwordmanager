@@ -186,7 +186,7 @@ bool FieldModelRemoveRowsCommand::internalUndo()
 {
     m_model->setAccountEntry(m_account);
     bool res = m_model->insertRows(m_row, m_count, QModelIndex());
-    for (int row = m_row, end = m_row + m_count, value = 0, values = m_values.size(); row < end && value < values; ++row, ++value) {
+    for (int row = m_row, end = m_row + m_count, value = 0, values = static_cast<int>(m_values.size()); row < end && value < values; ++row, ++value) {
         m_model->setData(m_model->index(row, 0), QString::fromStdString(m_values.at(value).name()), Qt::EditRole);
         m_model->setData(m_model->index(row, 1), QString::fromStdString(m_values.at(value).value()), Qt::EditRole);
         m_model->setData(m_model->index(row, 0), static_cast<int>(m_values.at(value).type()), FieldTypeRole);

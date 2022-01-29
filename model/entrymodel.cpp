@@ -127,7 +127,7 @@ bool EntryModel::insertEntries(int row, const QModelIndex &parent, const QList<E
     if (row < 0 || static_cast<size_t>(row) > children.size()) {
         row = static_cast<int>(children.size());
     }
-    beginInsertRows(parent, row, row + entries.size() - 1);
+    beginInsertRows(parent, row, row + static_cast<int>(entries.size()) - 1);
     for (Entry *const entry : entries) {
         entry->setParent(parentNodeEntry, row);
         ++row;

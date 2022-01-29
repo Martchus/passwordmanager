@@ -705,7 +705,7 @@ void MainWindow::insertFields(const QString &fieldsString)
     }();
 
     auto row = selectedIndexes.front().row();
-    m_fieldModel->insertRows(row, rowValues.size(), QModelIndex());
+    m_fieldModel->insertRows(row, static_cast<int>(rowValues.size()), QModelIndex());
 
     for (const auto &rowValue : rowValues) {
         int col = initCol;
