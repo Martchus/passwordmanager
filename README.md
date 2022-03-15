@@ -245,3 +245,6 @@ To build without GUI, add the following parameters to the CMake call:
 ```
 -DWIDGETS_GUI=OFF -DQUICK_GUI=OFF
 ```
+
+## License
+All code is licensed under [GPL-2-or-later](LICENSE).
