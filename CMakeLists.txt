@@ -15,7 +15,7 @@ set(META_USE_QQC2 ON)
 set(META_ANDROID_PACKAGE_NAME "org.martchus.passwordmanager")
 set(META_VERSION_MAJOR 4)
 set(META_VERSION_MINOR 1)
-set(META_VERSION_PATCH 9)
+set(META_VERSION_PATCH 10)
 
 # add project files
 set(HEADER_FILES cli/cli.h model/entryfiltermodel.h model/entrymodel.h model/fieldmodel.h)
@@ -147,8 +147,10 @@ if (QUICK_GUI AND NOT WIDGETS_GUI)
 endif ()
 
 # add further Qt/KF modules required by the Qt Quick GUI under Android
-if (ANDROID AND QUICK_GUI)
+if (ANDROID)
     list(APPEND ADDITIONAL_QT_MODULES AndroidExtras)
+endif ()
+if (QUICK_GUI)
     list(APPEND ADDITIONAL_KF_MODULES Kirigami2)
 endif ()
 
