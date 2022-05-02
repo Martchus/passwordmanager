@@ -95,6 +95,12 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
     context->setContextProperty(QStringLiteral("app"), &application);
     context->setContextProperty(QStringLiteral("description"), QStringLiteral(APP_DESCRIPTION));
     context->setContextProperty(QStringLiteral("dependencyVersions"), QStringList(DEPENCENCY_VERSIONS));
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+    const auto importPaths = qEnvironmentVariable(PROJECT_VARNAME_UPPER "_QML_IMPORT_PATHS").split(QChar(':'));
+    for (const auto &path : importPaths) {
+        engine.addImportPath(path);
+    }
+#endif
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
 
     // run event loop
