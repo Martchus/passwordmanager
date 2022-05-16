@@ -89,6 +89,10 @@ can be passed to CMake to influence the build.
 * When building with Qt Widgets GUI support, the following Qt modules are required (version 5.6 or higher): core gui widgets
 * When building with support for the experimental Qt Quick GUI, the following Qt/KDE modules are required (version 5.12 or higher): core gui qml quick quickcontrols2 kirigami
 
+To specify the major Qt version to use, set `QT_PACKAGE_PREFIX` (e.g. add `-DQT_PACKAGE_PREFIX:STRING=Qt6`
+to the CMake arguments). There's also `KF_PACKAGE_PREFIX` for KDE dependencies. Note that the Qt Quick GUI
+always requires the same major Qt version as your KDE modules use.
+
 ### Building this straight
 0. Install (preferably the latest version of) the CGG toolchain or Clang, the required Qt modules, OpenSSL, iconv,
    zlib, CMake and Ninja.
