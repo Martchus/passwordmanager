@@ -33,15 +33,9 @@ int runWidgetsGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs,
     QApplication application(argc, argv);
 
     // restore Qt settings
-    QtSettings qtSettings;
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope, QStringLiteral(PROJECT_NAME));
-
-    // move old config to new location
-    const QString oldConfig
-        = QSettings(QSettings::IniFormat, QSettings::UserScope, QApplication::organizationName(), QApplication::applicationName()).fileName();
-    QFile::rename(oldConfig, settings.fileName()) || QFile::remove(oldConfig);
-    settings.sync();
-    qtSettings.restore(settings);
+    auto qtSettings = QtSettings();
+    auto settings = QtUtilities::getSettings(QStringLiteral(PROJECT_NAME));
+    qtSettings.restore(*settings);
     qtSettings.apply();
 
     // apply settings specified via command line args
@@ -49,7 +43,7 @@ int runWidgetsGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs,
     LOAD_QT_TRANSLATIONS;
 
     // init widgets GUI
-    MainWindow w(settings, &qtSettings);
+    auto w = MainWindow(*settings, &qtSettings);
     w.show();
     if (!file.isEmpty()) {
         w.openFile(file);

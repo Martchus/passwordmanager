@@ -79,14 +79,14 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
 #endif
 
     // load settings from configuration file
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope, QStringLiteral(PROJECT_NAME));
+    auto settings = QtUtilities::getSettings(QStringLiteral(PROJECT_NAME));
 
     // load translations
     LOAD_QT_TRANSLATIONS;
 
     // init Quick GUI
-    QQmlApplicationEngine engine;
-    Controller controller(settings, file);
+    auto engine = QQmlApplicationEngine();
+    auto controller = Controller(*settings, file);
 #ifdef Q_OS_ANDROID
     registerControllerForAndroid(&controller);
 #endif
