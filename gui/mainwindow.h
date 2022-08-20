@@ -50,6 +50,8 @@ public:
     explicit MainWindow(QSettings &settings, QtUtilities::QtSettings *qtSettings = nullptr, QWidget *parent = nullptr);
     ~MainWindow() override;
 
+    QString selectedFieldsString() const;
+
 public Q_SLOTS:
     // file management
     bool openFile(const QString &path);
@@ -93,7 +95,6 @@ private Q_SLOTS:
     void markAsNormalField();
     void setFieldType(Io::FieldType fieldType);
     void setPasswordVisibility(QAction *selectedAction);
-    QString selectedFieldsString() const;
     void insertFields(const QString &fieldsString);
     void copyFieldsForXMilliSeconds(int x = 5000);
     void copyFields();
