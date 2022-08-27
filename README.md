@@ -94,7 +94,7 @@ to the CMake arguments). There's also `KF_PACKAGE_PREFIX` for KDE dependencies. 
 always requires the same major Qt version as your KDE modules use.
 
 ### Building this straight
-0. Install (preferably the latest version of) the CGG toolchain or Clang, the required Qt modules, OpenSSL, iconv,
+0. Install (preferably the latest version of) the GCC toolchain or Clang, the required Qt modules, OpenSSL, iconv,
    zlib, CMake and Ninja.
 1. Get the sources of additional dependencies and the password manager itself. For the latest version from Git clone the following repositories:
    ```
