@@ -255,6 +255,6 @@ To build without GUI, add the following parameters to the CMake call:
 ```
 
 ## Copyright notice and license
-Copyright © 2015-2022 Marius Kittler
+Copyright © 2015-2023 Marius Kittler
 
 All code is licensed under [GPL-2-or-later](LICENSE).
