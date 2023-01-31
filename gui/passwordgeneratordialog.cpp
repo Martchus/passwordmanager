@@ -159,7 +159,7 @@ void PasswordGeneratorDialog::handleCheckedCategoriesChanged()
  */
 void PasswordGeneratorDialog::handlePasswordChanged()
 {
-    m_ui->copyPasswordCommandLinkButton->setEnabled(m_ui->passwordLineEdit->text().count() > 0);
+    m_ui->copyPasswordCommandLinkButton->setEnabled(m_ui->passwordLineEdit->text().size() > 0);
 }
 
 #ifndef QT_NO_CLIPBOARD
