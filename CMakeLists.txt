@@ -155,6 +155,19 @@ if (QUICK_GUI)
     list(APPEND ADDITIONAL_KF_MODULES Kirigami2)
 endif ()
 
+# add Qt-version-specific QML files
+unset(QML_FILE)
+if (NOT QT_PACKAGE_PREFIX)
+    set(QML_FILE "resources/qml5.qrc")
+elseif (QT_PACKAGE_PREFIX MATCHES ".*Qt([0-9]+).*")
+    set(QML_FILE "resources/qml${CMAKE_MATCH_1}.qrc")
+endif ()
+if (NOT QML_FILE)
+    message(FATAL_ERROR "Unable to add Qt-version-specific resource file for QT_PACKAGE_PREFIX \"${QT_PACKAGE_PREFIX}\".")
+endif ()
+message(STATUS "Adding Qt-version-specific resource file \"${QML_FILE}\" to build")
+list(APPEND QML_SRC_FILES "${QML_FILE}")
+
 # apply further configuration
 if (WIDGETS_GUI OR QUICK_GUI)
     include(QtGuiConfig)
