@@ -168,6 +168,11 @@ endif ()
 message(STATUS "Adding Qt-version-specific resource file \"${QML_FILE}\" to build")
 list(APPEND QML_SRC_FILES "${QML_FILE}")
 
+# add other QML files to "EXCLUDED_FILES" so they're still considered for translations in any case
+file(GLOB OTHER_QML_FILES "resources/qml*.qrc")
+list(REMOVE_ITEM OTHER_QML_FILES ${QML_SRC_FILES})
+list(APPEND EXCLUDED_FILES ${OTHER_QML_FILES})
+
 # apply further configuration
 if (WIDGETS_GUI OR QUICK_GUI)
     include(QtGuiConfig)
