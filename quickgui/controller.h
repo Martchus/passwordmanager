@@ -128,6 +128,7 @@ Q_SIGNALS:
     void undoStackChanged(QUndoStack *undoStack);
     void undoTextChanged(const QString &undoText);
     void redoTextChanged(const QString &redoText);
+    void settingsError(const QString &errorMessage);
 
 private Q_SLOTS:
     void handleEntriesRemoved(const QModelIndex &parentIndex, int first, int last);

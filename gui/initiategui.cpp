@@ -14,6 +14,7 @@
 
 #include <QApplication>
 #include <QFile>
+#include <QMessageBox>
 #include <QSettings>
 
 using namespace CppUtilities;
@@ -35,6 +36,7 @@ int runWidgetsGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs,
     // restore Qt settings
     auto qtSettings = QtSettings();
     auto settings = QtUtilities::getSettings(QStringLiteral(PROJECT_NAME));
+    auto settingsError = QtUtilities::errorMessageForSettings(*settings);
     qtSettings.restore(*settings);
     qtSettings.apply();
 
@@ -43,6 +45,9 @@ int runWidgetsGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs,
     LOAD_QT_TRANSLATIONS;
 
     // init widgets GUI
+    if (!settingsError.isEmpty()) {
+        QMessageBox::critical(nullptr, QCoreApplication::applicationName(), settingsError);
+    }
     auto w = MainWindow(*settings, &qtSettings);
     w.show();
     if (!file.isEmpty()) {
@@ -51,6 +56,17 @@ int runWidgetsGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs,
 
     // start event loop
     QObject::connect(&application, &QCoreApplication::aboutToQuit, &OpenSsl::clean);
-    return application.exec();
+    auto res = application.exec();
+
+    // save settings to disk
+    settings->sync();
+    if (settingsError.isEmpty()) {
+        settingsError = QtUtilities::errorMessageForSettings(*settings);
+        if (!settingsError.isEmpty()) {
+            QMessageBox::critical(nullptr, QCoreApplication::applicationName(), settingsError);
+        }
+    }
+
+    return res;
 }
 } // namespace QtGui

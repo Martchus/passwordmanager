@@ -6,6 +6,7 @@
 
 #include <qtutilities/misc/compat.h>
 #include <qtutilities/misc/dialogutils.h>
+#include <qtutilities/resources/resources.h>
 
 #include <c++utilities/io/nativefilestream.h>
 #include <c++utilities/io/path.h>
@@ -121,6 +122,9 @@ void Controller::init()
 {
     if (!m_filePath.isEmpty()) {
         load();
+    }
+    if (const auto error = QtUtilities::errorMessageForSettings(m_settings); !error.isEmpty()) {
+        emit settingsError(error);
     }
 }
 

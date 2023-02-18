@@ -318,6 +318,9 @@ Kirigami.ApplicationWindow {
                                         })
             }
         }
+        onSettingsError: {
+            showPassiveNotification(errorMessage)
+        }
         onPasswordRequired: {
             enterPasswordDialog.askForExistingPassword(
                         qsTr("Password required to open %1").arg(
