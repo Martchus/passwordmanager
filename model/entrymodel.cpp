@@ -301,8 +301,11 @@ bool EntryModel::setData(const QModelIndex &index, const QVariant &value, int ro
         try {
             stringstream ss(stringstream::in | stringstream::out | stringstream::binary);
             ss.exceptions(std::stringstream::failbit | std::stringstream::badbit);
+#if defined(__GLIBCXX__) && !defined(_LIBCPP_VERSION)
             ss.rdbuf()->pubsetbuf(array.data(), array.size());
-
+#else
+            ss.write(array.data(), array.size());
+#endif
             Entry *const newEntry = Entry::parse(ss);
             const int row = entry->index();
             beginRemoveRows(parentIndex, row, row);
