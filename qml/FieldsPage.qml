@@ -218,7 +218,7 @@ Kirigami.ScrollablePage {
             }
             actions: [
                 Kirigami.Action {
-                    iconName: !model.isPassword ? "password-show-off" : "password-show-on"
+                    icon.name: !model.isPassword ? "password-show-off" : "password-show-on"
                     text: model.isPassword ? qsTr(
                                                  "Mark as normal field") : qsTr(
                                                  "Mark as password field")
@@ -228,7 +228,7 @@ Kirigami.ScrollablePage {
                     visible: !fieldRow.isLast
                 },
                 Kirigami.Action {
-                    iconName: "edit-copy"
+                    icon.name: "edit-copy"
                     text: model.isPassword ? qsTr("Copy password") : qsTr(
                                                  "Copy value")
                     onTriggered: showPassiveNotification(
@@ -239,14 +239,14 @@ Kirigami.ScrollablePage {
                     visible: !fieldRow.isLast
                 },
                 Kirigami.Action {
-                    iconName: "edit-delete"
+                    icon.name: "edit-delete"
                     text: qsTr("Delete field")
                     onTriggered: fieldsListView.model.removeRows(index, 1)
                     shortcut: StandardKey.Delete
                     visible: !fieldRow.isLast
                 },
                 Kirigami.Action {
-                    iconName: "list-add"
+                    icon.name: "list-add"
                     text: qsTr("Insert empty field after this")
                     enabled: !nativeInterface.hasEntryFilter
                     onTriggered: fieldsListView.model.insertRows(index + 1, 1)
@@ -267,9 +267,6 @@ Kirigami.ScrollablePage {
                 easing.type: Easing.InOutQuad
             }
         }
-        delegate: Kirigami.DelegateRecycler {
-            width: parent ? parent.width : implicitWidth
-            sourceComponent: fieldsListDelegateComponent
-        }
+        delegate: fieldsListDelegateComponent
     }
 }

@@ -42,3 +42,6 @@ Makefile*
 
 # clang-format
 /.clang-format
+
+# Android-specific
+/android/AndroidManifest.xml

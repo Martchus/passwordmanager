@@ -124,131 +124,44 @@ always requires the same major Qt version as your KDE modules use.
       the desired location afterwards.
 
 #### Concrete example of 3. for building an Android APK under Arch Linux
-Create stuff for signing the package (remove `-DANDROID_APK_FORCE_DEBUG=ON` line in the CMake invocation to actually use this):
+Create stuff for signing the package:
 ```
-# locate keystore
+# set variables for creating keystore and androiddeployqt to find it
 keystore_dir=/path/to/keystore-dir
-keystore_alias=$USER
-keystore_url=$keystore_dir/$keystore_alias
-
-# make up some password to protect the store; enter this on keytool invocation
-keystore_password=<password>
+export QT_ANDROID_KEYSTORE_PATH=$keystore_dir QT_ANDROID_KEYSTORE_ALIAS=$USER QT_ANDROID_KEYSTORE_STORE_PASS=$USER-devel QT_ANDROID_KEYSTORE_KEY_PASS=$USER-devel
 
 # create keystore (do only once)
+mkdir -p "$keystore_dir"
 pushd "$keystore_dir"
-keytool -genkey -v -keystore "$keystore_alias" -alias "$keystore_alias" -keyalg RSA -keysize 2048 -validity 10000
+keytool -genkey -v -keystore "$QT_ANDROID_KEYSTORE_ALIAS" -alias "$QT_ANDROID_KEYSTORE_ALIAS" -keyalg RSA -keysize 2048 -validity 10000
 popd
 ```
 
-Build c++utilities, passwordfile, qtutilities and passwordmanager in one step to create an Android APK for arm64-v8a:
+Build c++utilities, passwordfile, qtutilities and passwordmanager in one step to create an Android APK for aarch64:
 
 ```
-# specify Android platform
-_pkg_arch=aarch64
-_android_arch=arm64-v8a
-_android_arch2=arm64
-_android_api_level=22
+# use Java 17, the latest Java doesn't work at this point and avoid unwanted Java options
+export PATH=/usr/lib/jvm/java-17-openjdk/bin:$PATH
+export _JAVA_OPTIONS=
 
-# set project name
-_reponame=passwordmanager
-_pkgname=passwordmanager
+# configure and build using helpers from android-cmake package
+android_arch=aarch64
+build_dir=$BUILD_DIR/../manual/passwordmanager-android-$android_arch-release
+source /usr/bin/android-env $android_arch
+android-$android_arch-cmake -G Ninja -S . -B "$build_dir" \
+  -DCMAKE_FIND_ROOT_PATH="${ANDROID_PREFIX}" -DANDROID_SDK_ROOT="${ANDROID_HOME}" \
+  -DPKG_CONFIG_EXECUTABLE:FILEPATH=/usr/bin/android-$android_arch-pkg-config \
+  -DQT_PACKAGE_PREFIX:STRING=Qt6 -DKF_PACKAGE_PREFIX:STRING=KF6
+cmake --build "$build_dir"
 
-# locate SDK, NDK and further libraries
-android_sdk_root=${ANDROID_SDK_ROOT:-/opt/android-sdk}
-android_ndk_root=${ANDROID_NDK_ROOT:-/opt/android-ndk}
-build_tools_version=$(pacman -Q android-sdk-build-tools | sed 's/.* r\(.*\)-.*/\1/')
-other_libs_root=/opt/android-libs/$_pkg_arch
-other_libs_include=$other_libs_root/include
-root="$android_ndk_root/sysroot;$other_libs_root"
-
-# use Java 8 which seems to be the latest version which works
-export PATH=/usr/lib/jvm/java-8-openjdk/jre/bin/:$PATH
-
-# configure with the toolchain file provided by the Android NDK (still WIP)
-# note: This configuration is likely required in the future to resolve https://gitlab.kitware.com/cmake/cmake/issues/18739. But for now
-#       better keep using CMake's internal Android support because this config has its own pitfalls (see CMAKE_CXX_FLAGS).
-cmake \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DANDROID_ABI=$_android_arch \
-    -DANDROID_PLATFORM=$_android_api_level \
-    -DCMAKE_TOOLCHAIN_FILE=$android_ndk_root/build/cmake/android.toolchain.cmake \
-    -DCMAKE_SYSTEM_NAME=Android \
-    -DCMAKE_SYSTEM_VERSION=$_android_api_level \
-    -DCMAKE_ANDROID_ARCH_ABI=$_android_arch \
-    -DCMAKE_ANDROID_NDK="$android_ndk_root" \
-    -DCMAKE_ANDROID_SDK="$android_sdk_root" \
-    -DCMAKE_ANDROID_STL_TYPE=c++_shared \
-    -DCMAKE_INSTALL_PREFIX=$other_libs_root \
-    -DCMAKE_PREFIX_PATH="$root" \
-    -DCMAKE_FIND_ROOT_PATH="$root;$root/libs" \
-    -DCMAKE_CXX_FLAGS="-include $android_ndk_root/sysroot/usr/include/math.h -include $android_ndk_root/sources/cxx-stl/llvm-libc++/include/math.h -I$other_libs_include" \
-    -DBUILD_SHARED_LIBS=ON \
-    -DZLIB_LIBRARY="$android_ndk_root/platforms/android-$_android_api_level/arch-$_android_arch2/usr/lib/libz.so" \
-    -DCLANG_FORMAT_ENABLED=ON \
-    -DUSE_NATIVE_FILE_BUFFER=ON \
-    -DUSE_STANDARD_FILESYSTEM=OFF \
-    -DNO_DOXYGEN=ON \
-    -DWIDGETS_GUI=OFF \
-    -DQUICK_GUI=ON \
-    -DBUILTIN_ICON_THEMES=breeze \
-    -DBUILTIN_TRANSLATIONS=ON \
-    -DANDROID_APK_TOOLCHAIN_VERSION=4.9 \
-    -DANDROID_APK_CXX_STANDARD_LIBRARY="$android_ndk_root/platforms/android-$_android_api_level/arch-$_android_arch2/usr/lib/libstdc++.so" \
-    -DANDROID_APK_FORCE_DEBUG=ON \
-    -DANDROID_APK_KEYSTORE_URL="$keystore_url" \
-    -DANDROID_APK_KEYSTORE_ALIAS="$keystore_alias" \
-    -DANDROID_APK_KEYSTORE_PASSWORD="$keystore_password" \
-    -DANDROID_APK_APPLICATION_ID_SUFFIX=".unstable" \
-    -DANDROID_APK_APPLICATION_LABEL="Password Manager (unstable)" \
-    $SOURCES/subdirs/$_reponame
-
-# configure with CMake's internal Android support
-# note: Requires workaround with Android NDK r19: https://gitlab.kitware.com/cmake/cmake/issues/18739#note_498676
-cmake \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_SYSTEM_NAME=Android \
-    -DCMAKE_SYSTEM_VERSION=$_android_api_level \
-    -DCMAKE_ANDROID_ARCH_ABI=$_android_arch \
-    -DCMAKE_ANDROID_NDK="$android_ndk_root" \
-    -DCMAKE_ANDROID_SDK="$android_sdk_root" \
-    -DCMAKE_ANDROID_STL_TYPE=c++_shared \
-    -DCMAKE_INSTALL_PREFIX=$other_libs_root \
-    -DCMAKE_PREFIX_PATH="$root" \
-    -DCMAKE_FIND_ROOT_PATH="$root;$root/libs" \
-    -DCMAKE_CXX_FLAGS="-D__ANDROID_API__=$_android_api_level" \
-    -DCLANG_FORMAT_ENABLED=ON \
-    -DBUILD_SHARED_LIBS=ON \
-    -DUSE_NATIVE_FILE_BUFFER=ON \
-    -DUSE_STANDARD_FILESYSTEM=OFF \
-    -DNO_DOXYGEN=ON \
-    -DWIDGETS_GUI=OFF \
-    -DQUICK_GUI=ON \
-    -DBUILTIN_ICON_THEMES=breeze \
-    -DBUILTIN_TRANSLATIONS=ON \
-    -DANDROID_APK_FORCE_DEBUG=ON \
-    -DANDROID_APK_KEYSTORE_URL="$keystore_url" \
-    -DANDROID_APK_KEYSTORE_ALIAS="$keystore_alias" \
-    -DANDROID_APK_KEYSTORE_PASSWORD="$keystore_password" \
-    -DANDROID_APK_APPLICATION_ID_SUFFIX=".unstable" \
-    -DANDROID_APK_APPLICATION_LABEL="Password Manager (unstable)" \
-    $SOURCES/subdirs/$_reponame
-
-# build all binaries and make APK file using all CPU cores
-make passwordmanager_apk -j$(nproc)
-
-# install app on USB-connected phone
-make passwordmanager_deploy_apk
+# install the app
+adb install "$build_dir/passwordmanager/android-build//build/outputs/apk/release/android-build-release-signed.apk"
 ```
 
 ##### Notes
-* The Android packages for the dependencies Qt, iconv, OpenSSL and Kirigami 2 are provided in
+* The Android packages for the dependencies Boost, Qt, iconv, OpenSSL and Kirigami are provided in
   my [PKGBUILDs](http://github.com/Martchus/PKGBUILDs) repo.
-* The latest Java I was able to use was version 8 (`jdk8-openjdk` package).
-
-### Manual deployment of Android APK file
-1. Find device ID: `adb devices`
-2. Install App on phone: `adb -s <DEVICE_ID> install -r $BUILD_DIR/passwordmanager_build_apk/build/outputs/apk/passwordmanager_build_apk-debug.apk`
-3. View log: `adb -s <DEVICE_ID> logcat`
+* The latest Java I was able to use was version 17.
 
 ### Building without Qt GUI
 It is possible to build without the GUI if only the CLI is needed. In this case no Qt dependencies (including qtutilities) are required.

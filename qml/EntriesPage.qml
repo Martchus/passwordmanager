@@ -15,17 +15,17 @@ Kirigami.ScrollablePage {
         var currentEntryName = entryModel.data(rootIndex)
         return currentEntryName ? currentEntryName : ""
     }
-    actions {
-        main: Kirigami.Action {
-            iconName: "list-add"
+    actions:[
+        Kirigami.Action {
+            icon.name: "list-add"
             text: qsTr("Add account")
             visible: !nativeInterface.hasEntryFilter
             enabled: !nativeInterface.hasEntryFilter
             onTriggered: insertEntry("Account")
             shortcut: "Ctrl+A"
-        }
-        left: Kirigami.Action {
-            iconName: "edit-paste"
+        },
+        Kirigami.Action {
+            icon.name: "edit-paste"
             text: qsTr("Paste account")
             visible: !nativeInterface.hasEntryFilter
             enabled: nativeInterface.canPaste && !nativeInterface.hasEntryFilter
@@ -40,16 +40,16 @@ Kirigami.ScrollablePage {
                                             pastedEntries.join(", ")))
             }
             shortcut: StandardKey.Paste
-        }
-        right: Kirigami.Action {
-            iconName: "folder-add"
+        },
+        Kirigami.Action {
+            icon.name: "folder-add"
             text: qsTr("Add category")
             visible: !nativeInterface.hasEntryFilter
             enabled: !nativeInterface.hasEntryFilter
             onTriggered: insertEntry("Node")
             shortcut: "Ctrl+Shift+A"
         }
-    }
+    ]
     background: Rectangle {
         color: Kirigami.Theme.backgroundColor
     }
@@ -218,7 +218,7 @@ Kirigami.ScrollablePage {
             }
             actions: [
                 Kirigami.Action {
-                    iconName: "edit-cut"
+                    icon.name: "edit-cut"
                     text: qsTr("Cut")
                     enabled: !nativeInterface.hasEntryFilter
                     onTriggered: {
@@ -229,7 +229,7 @@ Kirigami.ScrollablePage {
                     shortcut: StandardKey.Cut
                 },
                 Kirigami.Action {
-                    iconName: "edit-delete"
+                    icon.name: "edit-delete"
                     text: qsTr("Delete")
                     enabled: !nativeInterface.hasEntryFilter
                     onTriggered: confirmDeletionDialog.confirmDeletion(
@@ -237,7 +237,7 @@ Kirigami.ScrollablePage {
                     shortcut: StandardKey.Delete
                 },
                 Kirigami.Action {
-                    iconName: "edit-rename"
+                    icon.name: "edit-rename"
                     text: qsTr("Rename")
                     enabled: !nativeInterface.hasEntryFilter
                     onTriggered: renameDialog.renameEntry(model.name, index)
@@ -259,11 +259,7 @@ Kirigami.ScrollablePage {
         }
         model: DelegateModel {
             id: delegateModel
-
-            delegate: Kirigami.DelegateRecycler {
-                width: parent ? parent.width : implicitWidth
-                sourceComponent: listDelegateComponent
-            }
+            delegate: listDelegateComponent
 
             function isNode(rowNumber) {
                 return entryModel.isNode(entryModel.index(rowNumber, 0,

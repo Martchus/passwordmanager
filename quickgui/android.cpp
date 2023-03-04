@@ -5,12 +5,11 @@
 
 #include <c++utilities/conversion/stringbuilder.h>
 
-#include <QAndroidJniObject>
+#include <QJniObject>
 #include <QColor>
 #include <QCoreApplication>
 #include <QMessageLogContext>
 #include <QMetaObject>
-#include <QtAndroid>
 
 #include <android/log.h>
 
@@ -35,9 +34,9 @@ static Controller *controllerForAndroid = nullptr;
 
 void applyThemingForAndroid()
 {
-    QtAndroid::runOnAndroidThread([=]() {
+    QNativeInterface::QAndroidApplication::runOnAndroidMainThread([=]() {
         const auto color = QColor(QLatin1String("#2c714a")).rgba();
-        QAndroidJniObject window = QtAndroid::androidActivity().callObjectMethod("getWindow", "()Landroid/view/Window;");
+        QJniObject window = QJniObject(QNativeInterface::QAndroidApplication::context()).callObjectMethod("getWindow", "()Landroid/view/Window;");
         window.callMethod<void>("addFlags", "(I)V", Android::WindowManager::LayoutParams::DrawsSystemBarBackgrounds);
         window.callMethod<void>("clearFlags", "(I)V", Android::WindowManager::LayoutParams::TranslucentStatus);
         window.callMethod<void>("setStatusBarColor", "(I)V", color);
@@ -52,13 +51,13 @@ void registerControllerForAndroid(Controller *controller)
 
 bool showAndroidFileDialog(bool existing, bool createNew)
 {
-    return QtAndroid::androidActivity().callMethod<jboolean>("showAndroidFileDialog", "(ZZ)Z", existing, createNew);
+    return QJniObject(QNativeInterface::QAndroidApplication::context()).callMethod<jboolean>("showAndroidFileDialog", "(ZZ)Z", existing, createNew);
 }
 
 int openFileDescriptorFromAndroidContentUrl(const QString &url, const QString &mode)
 {
-    return QtAndroid::androidActivity().callMethod<jint>("openFileDescriptorFromAndroidContentUri", "(Ljava/lang/String;Ljava/lang/String;)I",
-        QAndroidJniObject::fromString(url).object<jstring>(), QAndroidJniObject::fromString(mode).object<jstring>());
+    return QJniObject(QNativeInterface::QAndroidApplication::context()).callMethod<jint>("openFileDescriptorFromAndroidContentUri", "(Ljava/lang/String;Ljava/lang/String;)I",
+        QJniObject::fromString(url).object<jstring>(), QJniObject::fromString(mode).object<jstring>());
 }
 
 void writeToAndroidLog(QtMsgType type, const QMessageLogContext &context, const QString &msg)
@@ -102,19 +101,19 @@ void setupAndroidSpecifics()
 static void onAndroidError(JNIEnv *, jobject, jstring message)
 {
     QMetaObject::invokeMethod(
-        QtGui::controllerForAndroid, "newNotification", Qt::QueuedConnection, Q_ARG(QString, QAndroidJniObject::fromLocalRef(message).toString()));
+        QtGui::controllerForAndroid, "newNotification", Qt::QueuedConnection, Q_ARG(QString, QJniObject::fromLocalRef(message).toString()));
 }
 
 static void onAndroidFileDialogAccepted(JNIEnv *, jobject, jstring fileName, jboolean existing, jboolean createNew)
 {
     QMetaObject::invokeMethod(QtGui::controllerForAndroid, "handleFileSelectionAccepted", Qt::QueuedConnection,
-        Q_ARG(QString, QAndroidJniObject::fromLocalRef(fileName).toString()), Q_ARG(bool, existing), Q_ARG(bool, createNew));
+        Q_ARG(QString, QJniObject::fromLocalRef(fileName).toString()), Q_ARG(bool, existing), Q_ARG(bool, createNew));
 }
 
 static void onAndroidFileDialogAcceptedDescriptor(JNIEnv *, jobject, jstring nativeUrl, jstring fileName, jint fileHandle, jboolean existing, jboolean createNew)
 {
     QMetaObject::invokeMethod(QtGui::controllerForAndroid, "handleFileSelectionAcceptedDescriptor", Qt::QueuedConnection,
-        Q_ARG(QString, QAndroidJniObject::fromLocalRef(nativeUrl).toString()), Q_ARG(QString, QAndroidJniObject::fromLocalRef(fileName).toString()),
+        Q_ARG(QString, QJniObject::fromLocalRef(nativeUrl).toString()), Q_ARG(QString, QJniObject::fromLocalRef(fileName).toString()),
         Q_ARG(int, fileHandle), Q_ARG(bool, existing), Q_ARG(bool, createNew));
 }
 

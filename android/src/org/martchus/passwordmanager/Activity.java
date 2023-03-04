@@ -7,9 +7,9 @@ import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.view.Window;
 import android.view.WindowManager.LayoutParams;
-import android.support.v4.provider.DocumentFile;
+import androidx.documentfile.provider.DocumentFile;
 import java.io.FileNotFoundException;
-import org.qtproject.qt5.android.bindings.QtActivity;
+import org.qtproject.qt.android.bindings.QtActivity;
 
 public class Activity extends QtActivity {
     private final int REQUEST_CODE_OPEN_EXISTING_FILE = 1;

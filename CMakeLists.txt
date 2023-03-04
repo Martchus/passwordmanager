@@ -130,11 +130,6 @@ use_qt_utilities()
 find_package(passwordfile${CONFIGURATION_PACKAGE_SUFFIX} 5.0.0 REQUIRED)
 use_password_file()
 
-# require at least Qt 5.8 for the Qt Quick GUI
-if (QUICK_GUI)
-    set(META_QT5_VERSION 5.8)
-endif ()
-
 # allow to enable undo support from the widgets GUI in the quick GUI as well (so the quick GUI will depend on Qt Widgets as
 # well)
 if (QUICK_GUI AND NOT WIDGETS_GUI)
@@ -147,20 +142,33 @@ if (QUICK_GUI AND NOT WIDGETS_GUI)
     endif ()
 endif ()
 
-# add further Qt/KF modules required by the Qt Quick GUI under Android
-if (ANDROID)
-    list(APPEND ADDITIONAL_QT_MODULES AndroidExtras)
+# deduce major Qt version from package prefix
+if (NOT QT_PACKAGE_PREFIX)
+    set(MAJOR_QT_VERSION "5")
+elseif (QT_PACKAGE_PREFIX MATCHES ".*Qt([0-9]+).*")
+    set(MAJOR_QT_VERSION "${CMAKE_MATCH_1}")
 endif ()
+
+# require Qt 6 for the Qt Quick GUI
+if (QUICK_GUI AND MAJOR_QT_VERSION VERSION_LESS 6 OR MAJOR_QT_VERSION VERSION_GREATER_EQUAL 7)
+    message(FATAL_ERROR "The Qt Quick GUI is only compatible with Qt 6 (but Qt ${MAJOR_QT_VERSION} was found).")
+endif ()
+
+# workaround "ld: error: undefined symbol: qt_resourceFeatureZstd" when Qt 6 is not configured with zstd support
+if (MAJOR_QT_VERSION GREATER_EQUAL 6 AND NOT QT_FEATURE_zstd)
+    set(CMAKE_AUTORCC_OPTIONS "--no-zstd")
+endif ()
+
+# add further Qt/KF modules required by Qt Quick GUI
 if (QUICK_GUI)
+    list(APPEND ADDITIONAL_QT_MODULES QuickControls2)
     list(APPEND ADDITIONAL_KF_MODULES Kirigami2)
 endif ()
 
 # add Qt-version-specific QML files
 unset(QML_FILE)
-if (NOT QT_PACKAGE_PREFIX)
-    set(QML_FILE "resources/qml5.qrc")
-elseif (QT_PACKAGE_PREFIX MATCHES ".*Qt([0-9]+).*")
-    set(QML_FILE "resources/qml${CMAKE_MATCH_1}.qrc")
+if (MAJOR_QT_VERSION)
+    set(QML_FILE "resources/qml${MAJOR_QT_VERSION}.qrc")
 endif ()
 if (NOT QML_FILE)
     message(FATAL_ERROR "Unable to add Qt-version-specific resource file for QT_PACKAGE_PREFIX \"${QT_PACKAGE_PREFIX}\".")
@@ -180,9 +188,28 @@ if (WIDGETS_GUI OR QUICK_GUI)
 endif ()
 include(WindowsResources)
 include(AppTarget)
-include(AndroidApk)
 include(ShellCompletion)
 include(ConfigHeader)
+
+# configure creating an Android package using androiddeployqt
+if (ANDROID)
+    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
+    set_target_properties(${META_TARGET_NAME} PROPERTIES QT_ANDROID_PACKAGE_SOURCE_DIR "${ANDROID_PACKAGE_SOURCE_DIR}")
+
+    set(ANDROID_MANIFEST_PATH "${ANDROID_PACKAGE_SOURCE_DIR}/AndroidManifest.xml")
+    configure_file("resources/AndroidManifest.xml.in" "${ANDROID_MANIFEST_PATH}")
+
+    # bundle OpenMP (used by Kirigami) explicitly as it is otherwise not bundled
+    find_package(OpenMP)
+    if (OpenMP_CXX_FOUND)
+        message(STATUS "Bundling OpenMP library for Kirigami: ${OpenMP_omp_LIBRARY}")
+        set_target_properties(${META_TARGET_NAME} PROPERTIES QT_ANDROID_EXTRA_LIBS "${OpenMP_omp_LIBRARY}")
+    endif ()
+
+    set(QT_ANDROID_SIGN_APK ON)
+    qt_android_generate_deployment_settings(${META_TARGET_NAME})
+    qt_android_add_apk_target(${META_TARGET_NAME})
+endif ()
 
 # create desktop file using previously defined meta data
 add_desktop_file()

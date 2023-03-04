@@ -16,6 +16,12 @@ Kirigami.ApplicationWindow {
 
         title: app.applicationName
         titleIcon: "qrc://icons/hicolor/scalable/apps/passwordmanager.svg"
+        // FIXME: not sure why this doesn't work anymore
+        //onBannerClicked: () => {
+        //    leftMenu.resetMenu()
+        //    aboutDialog.open()
+        //}
+
         visible: true
         resetMenuOnTriggered: false
         topContent: ColumnLayout {
@@ -101,20 +107,20 @@ Kirigami.ApplicationWindow {
         actions: [
             Kirigami.Action {
                 text: qsTr("Create new file")
-                iconName: "document-new"
+                icon.name: "document-new"
                 onTriggered: fileDialog.createNew()
                 shortcut: StandardKey.New
             },
             Kirigami.Action {
                 text: qsTr("Open existing file")
-                iconName: "document-open"
+                icon.name: "document-open"
                 onTriggered: fileDialog.openExisting()
                 shortcut: StandardKey.Open
             },
             Kirigami.Action {
                 id: recentlyOpenedAction
                 text: qsTr("Recently opened ...")
-                iconName: "document-open-recent"
+                icon.name: "document-open-recent"
                 children: createRecentlyOpenedActions(
                               nativeInterface.recentFiles)
                 visible: nativeInterface.recentFiles.length > 0
@@ -123,14 +129,14 @@ Kirigami.ApplicationWindow {
             Kirigami.Action {
                 text: qsTr("Save modifications")
                 enabled: nativeInterface.fileOpen
-                iconName: "document-save"
+                icon.name: "document-save"
                 onTriggered: nativeInterface.save()
                 shortcut: StandardKey.Save
             },
             Kirigami.Action {
                 text: qsTr("Save as")
                 enabled: nativeInterface.fileOpen
-                iconName: "document-save-as"
+                icon.name: "document-save-as"
                 onTriggered: fileDialog.saveAs()
                 shortcut: StandardKey.SaveAs
             },
@@ -138,7 +144,7 @@ Kirigami.ApplicationWindow {
                 text: nativeInterface.passwordSet ? qsTr("Change password") : qsTr(
                                                         "Add password")
                 enabled: nativeInterface.fileOpen
-                iconName: "document-encrypt"
+                icon.name: "document-encrypt"
                 onTriggered: enterPasswordDialog.askForNewPassword(
                                  qsTr("Change password for %1").arg(
                                      nativeInterface.filePath))
@@ -147,7 +153,7 @@ Kirigami.ApplicationWindow {
             Kirigami.Action {
                 text: qsTr("Details")
                 enabled: nativeInterface.fileOpen
-                iconName: "document-properties"
+                icon.name: "document-properties"
                 onTriggered: {
                     leftMenu.resetMenu()
                     fileSummaryDialog.show()
@@ -159,7 +165,7 @@ Kirigami.ApplicationWindow {
                                                                      "Adjust search")
                 enabled: nativeInterface.fileOpen
                 visible: nativeInterface.filterAsDialog
-                iconName: "search"
+                icon.name: "search"
                 onTriggered: {
                     leftMenu.resetMenu()
                     filterDialog.open()
@@ -171,7 +177,7 @@ Kirigami.ApplicationWindow {
                 enabled: nativeInterface.fileOpen
                 visible: nativeInterface.filterAsDialog
                          && nativeInterface.entryFilter.length > 0
-                iconName: "edit-clear"
+                icon.name: "edit-clear"
                 onTriggered: {
                     leftMenu.resetMenu()
                     nativeInterface.entryFilter = ""
@@ -183,7 +189,7 @@ Kirigami.ApplicationWindow {
                 visible: nativeInterface.undoText.length !== 0
                          && nativeInterface.entryFilter.length === 0
                 enabled: visible
-                iconName: "edit-undo"
+                icon.name: "edit-undo"
                 shortcut: StandardKey.Undo
                 onTriggered: nativeInterface.undo()
             },
@@ -192,22 +198,18 @@ Kirigami.ApplicationWindow {
                 visible: nativeInterface.redoText.length !== 0
                          && nativeInterface.entryFilter.length === 0
                 enabled: visible
-                iconName: "edit-redo"
+                icon.name: "edit-redo"
                 shortcut: StandardKey.Redo
                 onTriggered: nativeInterface.redo()
             },
             Kirigami.Action {
                 text: qsTr("Close file")
                 enabled: nativeInterface.fileOpen
-                iconName: "document-close"
+                icon.name: "document-close"
                 shortcut: StandardKey.Close
                 onTriggered: nativeInterface.close()
             }
         ]
-        onBannerClicked: {
-            leftMenu.resetMenu()
-            aboutDialog.open()
-        }
 
         Controls.Switch {
             text: qsTr("Use native file dialog")
@@ -395,7 +397,7 @@ Kirigami.ApplicationWindow {
         id: clearRecentFilesActionComponent
         Kirigami.Action {
             text: qsTr("Clear recently opened files")
-            iconName: "edit-clear"
+            icon.name: "edit-clear"
             onTriggered: {
                 nativeInterface.clearRecentFiles()
                 leftMenu.resetMenu()
