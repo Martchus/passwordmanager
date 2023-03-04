@@ -379,7 +379,7 @@
 <context>
     <name>QtGui::EntryModel</name>
     <message>
-        <location filename="../model/entrymodel.cpp" line="360"/>
+        <location filename="../model/entrymodel.cpp" line="363"/>
         <source>Name</source>
         <translation></translation>
     </message>
