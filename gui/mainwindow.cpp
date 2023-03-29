@@ -107,6 +107,19 @@ void MainWindow::setSomethingChanged(bool somethingChanged)
 }
 
 /*!
+ * \brief Updates the style sheet.
+ */
+void MainWindow::updateStyleSheet()
+{
+#ifdef Q_OS_WINDOWS
+    const auto p = palette();
+    setStyleSheet(QStringLiteral("%1 #splitter QWidget { background-color: palette(base); color: palette(text); } #splitter QWidget *, #splitter "
+                                 "QWidget * { background-color: none; } #leftWidget { border-right: 1px solid %2; }")
+                      .arg(dialogStyleForPalette(p), windowFrameColorForPalette(p).name()));
+#endif
+}
+
+/*!
  * \brief Constructs a new main window.
  */
 MainWindow::MainWindow(QSettings &settings, QtUtilities::QtSettings *qtSettings, QWidget *parent)
@@ -120,12 +133,9 @@ MainWindow::MainWindow(QSettings &settings, QtUtilities::QtSettings *qtSettings,
     , m_settingsDlg(nullptr)
 {
     // setup ui
+    updateStyleSheet();
     m_ui->setupUi(this);
-#ifdef Q_OS_WIN32
-    setStyleSheet(QStringLiteral("%1 #splitter QWidget { background-color: palette(base); color: palette(text); } #splitter QWidget *, #splitter "
-                                 "QWidget * { background-color: none; } #leftWidget { border-right: 1px solid %2; }")
-                      .arg(dialogStyle(), windowFrameColor().name()));
-#endif
+
     // set default values
     setSomethingChanged(false);
     m_dontUpdateSelection = false;
@@ -238,6 +248,17 @@ MainWindow::MainWindow(QSettings &settings, QtUtilities::QtSettings *qtSettings,
  */
 MainWindow::~MainWindow()
 {
+}
+
+bool MainWindow::event(QEvent *event)
+{
+    switch (event->type()) {
+    case QEvent::PaletteChange:
+        updateStyleSheet();
+        break;
+    default:;
+    }
+    return QMainWindow::event(event);
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)

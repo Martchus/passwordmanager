@@ -43,11 +43,8 @@ PasswordGeneratorDialog::PasswordGeneratorDialog(QWidget *parent)
     : QDialog(parent)
     , m_ui(new Ui::PasswordGeneratorDialog)
 {
+    updateStyleSheet();
     m_ui->setupUi(this);
-#ifdef Q_OS_WIN32
-    setStyleSheet(QStringLiteral("%1 QCommandLinkButton  { font-size: 12pt; color: %2; font-weight: normal; }")
-                      .arg(dialogStyle(), instructionTextColor().name()));
-#endif
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
 
     connect(m_ui->generatePassowordCommandLinkButton, &QCommandLinkButton::clicked, this, &PasswordGeneratorDialog::generateNewPassword);
@@ -73,6 +70,17 @@ PasswordGeneratorDialog::PasswordGeneratorDialog(QWidget *parent)
  */
 PasswordGeneratorDialog::~PasswordGeneratorDialog()
 {
+}
+
+bool PasswordGeneratorDialog::event(QEvent *event)
+{
+    switch (event->type()) {
+    case QEvent::PaletteChange:
+        updateStyleSheet();
+        break;
+    default:;
+    }
+    return QDialog::event(event);
 }
 
 /*!
@@ -160,6 +168,17 @@ void PasswordGeneratorDialog::handleCheckedCategoriesChanged()
 void PasswordGeneratorDialog::handlePasswordChanged()
 {
     m_ui->copyPasswordCommandLinkButton->setEnabled(m_ui->passwordLineEdit->text().size() > 0);
+}
+
+/*!
+ * \brief Updates the style sheet.
+ */
+void PasswordGeneratorDialog::updateStyleSheet()
+{
+#ifdef Q_OS_WINDOWS
+    setStyleSheet(QStringLiteral("%1 QCommandLinkButton  { font-size: 12pt; color: %2; font-weight: normal; }")
+                      .arg(dialogStyleForPalette(palette()), instructionTextColor().name()));
+#endif
 }
 
 #ifndef QT_NO_CLIPBOARD

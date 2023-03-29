@@ -74,6 +74,7 @@ public:
     bool openFile(const QString &path, Io::PasswordFileOpenFlags openFlags); // can not be a slot in Qt 6 without further effort, see QTBUG-86424
 
 protected:
+    bool event(QEvent *event) override;
     bool eventFilter(QObject *obj, QEvent *event) override;
     void closeEvent(QCloseEvent *event) override;
     void timerEvent(QTimerEvent *event) override;
@@ -108,6 +109,7 @@ private Q_SLOTS:
     void clearClipboard();
     void setSomethingChanged();
     void setSomethingChanged(bool somethingChanged);
+    void updateStyleSheet();
 
 private:
     // showing conditional messages/prompts

@@ -21,10 +21,14 @@ public:
     explicit PasswordGeneratorDialog(QWidget *parent = nullptr);
     ~PasswordGeneratorDialog() override;
 
+protected:
+    bool event(QEvent *event) override;
+
 private Q_SLOTS:
     void generateNewPassword();
     void handleCheckedCategoriesChanged();
     void handlePasswordChanged();
+    void updateStyleSheet();
 #ifndef QT_NO_CLIPBOARD
     void copyPassword();
 #endif
