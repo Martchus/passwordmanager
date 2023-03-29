@@ -353,6 +353,7 @@ void MainWindow::showSettingsDialog()
         if (m_qtSettings) {
             m_settingsDlg->setWindowTitle(tr("Qt settings"));
             m_settingsDlg->setSingleCategory(m_qtSettings->category());
+            connect(m_settingsDlg, &SettingsDialog::applied, this, [this] { m_qtSettings->apply(); });
         }
     }
     if (m_settingsDlg->isHidden()) {

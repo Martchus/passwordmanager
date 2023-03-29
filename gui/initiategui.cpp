@@ -37,6 +37,7 @@ int runWidgetsGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs,
     auto qtSettings = QtSettings();
     auto settings = QtUtilities::getSettings(QStringLiteral(PROJECT_NAME));
     auto settingsError = QtUtilities::errorMessageForSettings(*settings);
+    qtSettings.disableNotices();
     qtSettings.restore(*settings);
     qtSettings.apply();
 
