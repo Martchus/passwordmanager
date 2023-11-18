@@ -237,7 +237,7 @@ MainWindow::MainWindow(QSettings &settings, QtUtilities::QtSettings *qtSettings,
     connect(m_ui->accountFilterLineEdit, &QLineEdit::textChanged, this, &MainWindow::applyFilter);
 
     // setup other controls
-    m_ui->actionAlwaysCreateBackup->setChecked(settings.value(QStringLiteral("alwayscreatebackup"), false).toBool());
+    m_ui->actionAlwaysCreateBackup->setChecked(settings.value(QStringLiteral("alwayscreatebackup"), true).toBool());
     m_ui->accountFilterLineEdit->setText(settings.value(QStringLiteral("accountfilter"), QString()).toString());
     m_ui->centralWidget->installEventFilter(this);
     settings.endGroup();
