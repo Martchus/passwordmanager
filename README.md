@@ -69,7 +69,7 @@ See the release section on GitHub.
           native Wayland support if it does not work on your system)
 * Windows
     * for binaries checkout the [release section on GitHub](https://github.com/Martchus/tageditor/releases)
-        * the Qt 6 based version is stable and preferable but only supports Windows 10 and newer
+        * the Qt 6 based version is stable and preferable but only supports Windows 10 version 1809 and newer
         * the Qt 5 based version should still work on older versions down to Windows 7 although this is not regularly checked
     * for mingw-w64 PKGBUILDs checkout [my GitHub repository](https://github.com/Martchus/PKGBUILDs)
 
