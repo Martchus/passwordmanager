@@ -15,7 +15,7 @@ set(META_USE_QQC2 ON)
 set(META_ANDROID_PACKAGE_NAME "org.martchus.passwordmanager")
 set(META_VERSION_MAJOR 4)
 set(META_VERSION_MINOR 1)
-set(META_VERSION_PATCH 13)
+set(META_VERSION_PATCH 14)
 set(META_RELEASE_DATE "2023-11-21")
 
 # add project files
