@@ -67,10 +67,14 @@ See the release section on GitHub.
               the package `libopengl0` is installed on Debian/Ubuntu)
         * Supports X11 and Wayland (set the environment variable `QT_QPA_PLATFORM=xcb` to disable
           native Wayland support if it does not work on your system)
+        * Binaries are signed with the GPG key
+          [`B9E36A7275FC61B464B67907E06FE8F53CDC6A4C`](https://keyserver.ubuntu.com/pks/lookup?search=B9E36A7275FC61B464B67907E06FE8F53CDC6A4C&fingerprint=on&op=index).
 * Windows
     * for binaries checkout the [release section on GitHub](https://github.com/Martchus/tageditor/releases)
         * the Qt 6 based version is stable and preferable but only supports Windows 10 version 1809 and newer
         * the Qt 5 based version should still work on older versions down to Windows 7 although this is not regularly checked
+        * Binaries are signed with the GPG key
+          [`B9E36A7275FC61B464B67907E06FE8F53CDC6A4C`](https://keyserver.ubuntu.com/pks/lookup?search=B9E36A7275FC61B464B67907E06FE8F53CDC6A4C&fingerprint=on&op=index).
     * for mingw-w64 PKGBUILDs checkout [my GitHub repository](https://github.com/Martchus/PKGBUILDs)
 
 ## Build instructions
