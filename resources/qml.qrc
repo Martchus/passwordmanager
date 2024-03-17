@@ -8,6 +8,8 @@
         <file alias="AboutDialog.qml">../qml/AboutDialog.qml</file>
         <file alias="PasswordDialog.qml">../qml/PasswordDialog.qml</file>
         <file alias="EntriesPage.qml">../qml/EntriesPage.qml</file>
+        <file alias="EntryDelegate.qml">../qml/EntryDelegate.qml</file>
         <file alias="FieldsPage.qml">../qml/FieldsPage.qml</file>
+        <file alias="FieldsDelegate.qml">../qml/FieldsDelegate.qml</file>
     </qresource>
 </RCC>

@@ -6,9 +6,7 @@ Controls.Dialog {
     modal: true
     focus: true
     parent: applicationWindow().overlay
-    //anchors.centerIn: parent // enable if requiring at least Qt 5.12 instead of setting x and y manually
-    x: (parent.width - width) / 2
-    y: (parent.height - height) / 2
+    anchors.centerIn: parent
     width: Math.min(parent.width, Kirigami.Units.gridUnit * 30)
 
     function acceptOnReturn(event) {

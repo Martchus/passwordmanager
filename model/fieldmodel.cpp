@@ -233,17 +233,15 @@ bool FieldModel::setData(const QModelIndex &index, const QVariant &value, int ro
             switch (index.column()) {
             case 0:
                 beginInsertRows(index.parent(), rowCount(), rowCount());
-                m_fields->emplace_back(m_accountEntry);
-                m_fields->back().setName(value.toString().toStdString());
+                m_fields->emplace_back(m_accountEntry).setName(value.toString().toStdString());
                 endInsertRows();
-                roles << Qt::DisplayRole << Qt::EditRole << IsLastRow;
+                roles << Qt::DisplayRole << Qt::EditRole << Key << IsLastRow;
                 break;
             case 1:
                 beginInsertRows(index.parent(), rowCount(), rowCount());
-                m_fields->emplace_back(m_accountEntry);
-                m_fields->back().setValue(value.toString().toStdString());
+                m_fields->emplace_back(m_accountEntry).setValue(value.toString().toStdString());
                 endInsertRows();
-                roles << Qt::DisplayRole << Qt::EditRole << IsLastRow;
+                roles << Qt::DisplayRole << Qt::EditRole << Value << IsLastRow;
                 break;
             default:;
             }
@@ -335,25 +333,22 @@ bool FieldModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int co
 
     // validate input parameter
     if (sourceParent.isValid() || destinationParent.isValid() || sourceRow < 0 || count <= 0 || destinationChild < 0
-        || static_cast<size_t>(sourceRow + count) > m_fields->size() || static_cast<size_t>(destinationChild) >= m_fields->size()
+        || static_cast<std::size_t>(sourceRow + count) > m_fields->size() || static_cast<std::size_t>(destinationChild) >= m_fields->size()
         || (destinationChild >= sourceRow && destinationChild < (sourceRow + count))) {
         return false;
     }
 
     // begin the move
-    if (destinationChild > sourceRow) {
-        // move rows down: the third param is still counted in the initial array!
-        beginMoveRows(sourceParent, sourceRow, sourceRow + count - 1, destinationParent, destinationChild + count);
-    } else {
-        // move rows up
-        beginMoveRows(sourceParent, sourceRow, sourceRow + count - 1, destinationParent, destinationChild);
+    // note: When moving rows down (destinationChild > sourceRow) the third param is still counted in the initial array!
+    if (!beginMoveRows(sourceParent, sourceRow, sourceRow + count - 1, destinationParent, destinationChild > sourceRow ? destinationChild + count : destinationChild)) {
+        return false;
     }
 
     // reserve space for temporary copies (FIXME: possible to avoid this?)
-    m_fields->reserve(m_fields->size() + static_cast<size_t>(count));
-    vector<Io::Field> tmp(static_cast<size_t>(count));
+    m_fields->reserve(m_fields->size() + static_cast<std::size_t>(count));
+    auto tmp = vector<Io::Field>(static_cast<std::size_t>(count));
     // move rows to temporary array
-    move(m_fields->begin() + sourceRow, m_fields->begin() + sourceRow + count, tmp.begin());
+    std::move(m_fields->begin() + sourceRow, m_fields->begin() + sourceRow + count, tmp.begin());
     // erase slots of rows to be moved
     m_fields->erase(m_fields->begin() + sourceRow, m_fields->begin() + sourceRow + count);
     // insert rows again at their new position

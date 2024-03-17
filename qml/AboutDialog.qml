@@ -7,8 +7,7 @@ BasicDialog {
     id: aboutDialog
     standardButtons: Controls.Dialog.Ok
     padding: Kirigami.Units.largeSpacing
-
-    ColumnLayout {
+    contentItem: ColumnLayout {
         width: aboutDialog.availableWidth
 
         Image {

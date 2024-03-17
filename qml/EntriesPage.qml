@@ -1,4 +1,4 @@
-import QtQuick 2.4
+import QtQuick 2.15
 import QtQuick.Layouts 1.2
 import QtQml.Models 2.2
 import QtQuick.Controls 2.4 as Controls
@@ -64,8 +64,7 @@ Kirigami.ScrollablePage {
         standardButtons: Controls.Dialog.Ok | Controls.Dialog.Cancel
         title: qsTr("Delete %1?").arg(entryDesc)
         onAccepted: entryModel.removeRows(this.entryIndex, 1, rootIndex)
-
-        ColumnLayout {
+        contentItem: ColumnLayout {
             Controls.Label {
                 text: " "
             }
@@ -109,13 +108,12 @@ Kirigami.ScrollablePage {
                 entryModel.removeRows(this.entryIndex, 1, rootIndex)
             }
         }
-
-        ColumnLayout {
+        contentItem: ColumnLayout {
             Controls.TextField {
                 id: entryNameTextField
                 Layout.preferredWidth: renameDialog.availableWidth
                 placeholderText: qsTr("enter new name here")
-                Keys.onPressed: renameDialog.acceptOnReturn(event)
+                Keys.onPressed: (event) => renameDialog.acceptOnReturn(event)
             }
         }
 
@@ -138,115 +136,6 @@ Kirigami.ScrollablePage {
         }
     }
 
-    // component representing an entry
-    Component {
-        id: listDelegateComponent
-
-        Kirigami.SwipeListItem {
-            id: listItem
-            contentItem: RowLayout {
-                Kirigami.ListItemDragHandle {
-                    listItem: listItem
-                    listView: entriesListView
-                    enabled: !nativeInterface.hasEntryFilter
-                    // FIXME: not sure why newIndex + 1 is required to be able to move a row at the end
-                    onMoveRequested: entryModel.moveRows(
-                                         rootIndex, oldIndex, 1, rootIndex,
-                                         oldIndex < newIndex ? newIndex + 1 : newIndex)
-                }
-                Item {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    RowLayout {
-                        anchors.fill: parent
-                        Kirigami.Icon {
-                            width: Kirigami.Units.iconSizes.smallMedium
-                            height: Kirigami.Units.iconSizes.smallMedium
-                            Layout.fillHeight: true
-                            source: delegateModel.isNode(
-                                        index) ? "folder-symbolic" : "story-editor"
-                        }
-                        Controls.Label {
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            text: model.name
-                            verticalAlignment: Text.AlignVCenter
-                        }
-                    }
-                    MouseArea {
-                        anchors.fill: parent
-                        acceptedButtons: Qt.LeftButton | Qt.RightButton
-                        onClicked: {
-                            if (mouse.button === Qt.RightButton) {
-                                entryContextMenu.popup()
-                                return
-                            }
-                            delegateModel.handleEntryClicked(index, model.name)
-                        }
-                        onPressAndHold: entryContextMenu.popup()
-                    }
-                    Controls.Menu {
-                        id: entryContextMenu
-                        Controls.MenuItem {
-                            icon.name: "edit-cut"
-                            text: qsTr("Cut")
-                            enabled: !nativeInterface.hasEntryFilter
-                            onTriggered: {
-                                nativeInterface.cutEntry(
-                                            entryModel.index(index, 0,
-                                                             rootIndex))
-                                showPassiveNotification(qsTr("Cut %1").arg(
-                                                            model.name))
-                            }
-                        }
-                        Controls.MenuItem {
-                            icon.name: "edit-delete"
-                            text: qsTr("Delete")
-                            enabled: !nativeInterface.hasEntryFilter
-                            onTriggered: confirmDeletionDialog.confirmDeletion(
-                                             model.name, index)
-                        }
-                        Controls.MenuItem {
-                            icon.name: "edit-rename"
-                            text: qsTr("Rename")
-                            enabled: !nativeInterface.hasEntryFilter
-                            onTriggered: renameDialog.renameEntry(model.name,
-                                                                  index)
-                        }
-                    }
-                }
-            }
-            actions: [
-                Kirigami.Action {
-                    icon.name: "edit-cut"
-                    text: qsTr("Cut")
-                    enabled: !nativeInterface.hasEntryFilter
-                    onTriggered: {
-                        nativeInterface.cutEntry(entryModel.index(index, 0,
-                                                                  rootIndex))
-                        showPassiveNotification(text + " " + model.name)
-                    }
-                    shortcut: StandardKey.Cut
-                },
-                Kirigami.Action {
-                    icon.name: "edit-delete"
-                    text: qsTr("Delete")
-                    enabled: !nativeInterface.hasEntryFilter
-                    onTriggered: confirmDeletionDialog.confirmDeletion(
-                                     model.name, index)
-                    shortcut: StandardKey.Delete
-                },
-                Kirigami.Action {
-                    icon.name: "edit-rename"
-                    text: qsTr("Rename")
-                    enabled: !nativeInterface.hasEntryFilter
-                    onTriggered: renameDialog.renameEntry(model.name, index)
-                    shortcut: "F2"
-                }
-            ]
-        }
-    }
-
     // list view to display one hierarchy level of entry model
     ListView {
         id: entriesListView
@@ -257,9 +146,17 @@ Kirigami.ScrollablePage {
                 easing.type: Easing.InOutQuad
             }
         }
+        reuseItems: true
         model: DelegateModel {
             id: delegateModel
-            delegate: listDelegateComponent
+            delegate: EntryDelegate {
+                width: entriesListView.width
+                view: entriesListView
+                onMoveRequested:
+                    (oldIndex, newIndex) => {
+                        entryModel.moveRows(rootIndex, oldIndex, 1, rootIndex, oldIndex < newIndex ? newIndex + 1 : newIndex)
+                    }
+            }
 
             function isNode(rowNumber) {
                 return entryModel.isNode(entryModel.index(rowNumber, 0,

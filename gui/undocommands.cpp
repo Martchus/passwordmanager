@@ -197,7 +197,7 @@ bool FieldModelRemoveRowsCommand::internalUndo()
 /*!
  * \brief Stores the entry path for the specified \a model and \a index in \a res.
  */
-void indexToPath(EntryModel *model, const QModelIndex &index, list<string> &res)
+static void indexToPath(EntryModel *model, const QModelIndex &index, list<string> &res)
 {
     res.clear();
     if (Entry *entry = model->entry(index)) {
@@ -209,7 +209,7 @@ void indexToPath(EntryModel *model, const QModelIndex &index, list<string> &res)
  * \brief Fetches the entry for the specified \a model and \a path.
  * \remarks The \a path will be modified. To prevent this use entryFromPathCpy().
  */
-Entry *entryFromPath(EntryModel *model, list<string> &path)
+static Entry *entryFromPath(EntryModel *model, list<string> &path)
 {
     if (NodeEntry *rootEntry = model->rootEntry()) {
         return rootEntry->entryByPath(path);
@@ -220,7 +220,7 @@ Entry *entryFromPath(EntryModel *model, list<string> &path)
 /*!
  * \brief Fetches the entry for the specified \a model and \a path.
  */
-Entry *entryFromPathCpy(EntryModel *model, list<string> path)
+static Entry *entryFromPathCpy(EntryModel *model, list<string> path)
 {
     return entryFromPath(model, path);
 }

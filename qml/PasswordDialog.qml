@@ -30,8 +30,7 @@ BasicDialog {
                         qsTr("You aborted. The password has not been altered."))
         }
     }
-
-    ColumnLayout {
+    contentItem: ColumnLayout {
         Controls.Label {
             id: instructionLabel
             Layout.preferredWidth: passwordDialog.availableWidth
@@ -42,19 +41,21 @@ BasicDialog {
             id: passwordTextField
             Layout.preferredWidth: passwordDialog.availableWidth
             echoMode: showCharactersCheckBox.checked ? TextInput.Normal : TextInput.Password
-            placeholderText: qsTr("enter password here, leave empty for no encryption")
+            placeholderText: newPassword
+                ? qsTr("enter password here, leave empty for no encryption")
+                : qsTr("enter password here")
             color: "#101010"
             placeholderTextColor: "#505050"
             background: Rectangle {
                 border.color: "#5d5e6d"
             }
-            Keys.onPressed: passwordDialog.acceptOnReturn(event)
+            Keys.onPressed: (event) => passwordDialog.acceptOnReturn(event)
         }
         Controls.TextField {
             id: repeatPasswordTextField
             Layout.preferredWidth: passwordDialog.availableWidth
             visible: passwordDialog.newPassword
-                     && !showCharactersCheckBox.checked
+            enabled: visible && !showCharactersCheckBox.checked
             echoMode: TextInput.Password
             placeholderText: qsTr("repeat password")
             color: "#101010"

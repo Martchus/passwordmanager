@@ -43,7 +43,7 @@ Controller::Controller(QSettings &settings, const QString &filePath, QObject *pa
 #endif
     , m_fileOpen(false)
     , m_fileModified(false)
-    , m_useNativeFileDialog(false)
+    , m_useNativeFileDialog(supportsNativeFileDialog())
     , m_filterAsDialog(
 #ifdef Q_OS_ANDROID
           true

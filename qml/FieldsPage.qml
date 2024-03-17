@@ -1,4 +1,4 @@
-import QtQuick 2.4
+import QtQuick 2.15
 import QtQuick.Layouts 1.2
 import QtQml.Models 2.2
 import QtQuick.Controls 2.4 as Controls
@@ -10,6 +10,21 @@ Kirigami.ScrollablePage {
 
     Layout.fillWidth: true
     title: nativeInterface.currentAccountName
+    actions:[
+        Kirigami.Action {
+            icon.name: "list-add"
+            text: qsTr("Add field")
+            visible: !nativeInterface.hasEntryFilter
+            enabled: !nativeInterface.hasEntryFilter
+            onTriggered: {
+                const delegateModel = fieldsListView.model
+                const row = delegateModel.rowCount() - 1
+                fieldDialog.init(delegateModel, row)
+                fieldDialog.open()
+            }
+            shortcut: "Ctrl+Shift+A"
+        }
+    ]
     background: Rectangle {
         color: Kirigami.Theme.backgroundColor
     }
@@ -32,8 +47,7 @@ Kirigami.ScrollablePage {
             fieldsListView.model.setData(column0, isPassword ? 1 : 0,
                                          0x0100 + 1)
         }
-
-        ColumnLayout {
+        contentItem: ColumnLayout {
             GridLayout {
                 Layout.preferredWidth: fieldDialog.availableWidth
                 columns: 2
@@ -43,7 +57,7 @@ Kirigami.ScrollablePage {
                     id: fieldNameEdit
                     Layout.fillWidth: true
                     text: fieldDialog.fieldName
-                    Keys.onPressed: fieldDialog.acceptOnReturn(event)
+                    Keys.onPressed: (event) => fieldDialog.acceptOnReturn(event)
                 }
                 Controls.RoundButton {
                     flat: true
@@ -69,7 +83,7 @@ Kirigami.ScrollablePage {
                     // fix ugly bullet points under Android
                     font.pointSize: hideCharacters ? fieldNameEdit.font.pointSize
                                                      * 0.5 : fieldNameEdit.font.pointSize
-                    Keys.onPressed: fieldDialog.acceptOnReturn(event)
+                    Keys.onPressed: (event) => fieldDialog.acceptOnReturn(event)
                 }
                 Controls.RoundButton {
                     flat: true
@@ -107,166 +121,27 @@ Kirigami.ScrollablePage {
         }
     }
 
-    // component representing a field
-    Component {
-        id: fieldsListDelegateComponent
-
-        Kirigami.SwipeListItem {
-            id: fieldsListItem
-            contentItem: RowLayout {
-                id: fieldRow
-                readonly property bool isLast: model.isLastRow
-
-                Kirigami.ListItemDragHandle {
-                    listItem: fieldsListItem
-                    listView: fieldsListView
-                    onMoveRequested: fieldsListView.model.moveRows(
-                                         fieldsListView.model.index(-1, 0),
-                                         oldIndex, 1,
-                                         fieldsListView.model.index(-1, 0),
-                                         newIndex)
-                    visible: !fieldRow.isLast
-                }
-                Kirigami.Icon {
-                    width: Kirigami.Units.iconSizes.smallMedium
-                    height: width
-                    source: "list-add"
-                    opacity: 0.6
-                    visible: fieldRow.isLast
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: {
-                            fieldDialog.init(model, index)
-                            fieldDialog.open()
-                        }
-                    }
-                }
-                Item {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    RowLayout {
-                        anchors.fill: parent
-                        Controls.Label {
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            text: {
-                                if (fieldRow.isLast) {
-                                    return qsTr("click to append new field")
-                                }
-
-                                var pieces = []
-                                if (model.key) {
-                                    pieces.push(model.key)
-                                }
-                                if (model.value) {
-                                    pieces.push(model.value)
-                                }
-                                return pieces.join(": ")
-                            }
-                            color: fieldRow.isLast ? "gray" : palette.text
-                            verticalAlignment: Text.AlignVCenter
-                        }
-                    }
-                    MouseArea {
-                        anchors.fill: parent
-                        acceptedButtons: Qt.LeftButton | Qt.RightButton
-                        onClicked: {
-                            if (mouse.button === Qt.RightButton) {
-                                if (!fieldRow.isLast) {
-                                    fieldContextMenu.popup()
-                                }
-                                return
-                            }
-                            fieldDialog.init(model, index)
-                            fieldDialog.open()
-                        }
-                        onPressAndHold: fieldContextMenu.popup()
-                    }
-                    Controls.Menu {
-                        id: fieldContextMenu
-                        Controls.MenuItem {
-                            icon.name: !model.isPassword ? "password-show-off" : "password-show-on"
-                            text: model.isPassword ? qsTr("Mark as normal field") : qsTr(
-                                                         "Mark as password field")
-                            onClicked: fieldsListView.model.setData(
-                                           fieldsListView.model.index(index,
-                                                                      0),
-                                           model.isPassword ? 0 : 1, 0x0100 + 1)
-                        }
-                        Controls.MenuItem {
-                            icon.name: "edit-copy"
-                            text: model.isPassword ? qsTr("Copy password") : qsTr(
-                                                         "Copy value")
-                            onClicked: showPassiveNotification(
-                                           nativeInterface.copyToClipboard(
-                                               model.actualValue) ? qsTr("Copied") : qsTr(
-                                                                        "Unable to access clipboard"))
-                        }
-                        Controls.MenuItem {
-                            icon.name: "edit-delete"
-                            text: qsTr("Delete field")
-                            onClicked: fieldsListView.model.removeRows(index, 1)
-                        }
-                        Controls.MenuItem {
-                            icon.name: "list-add"
-                            text: qsTr("Insert empty field after this")
-                            onClicked: fieldsListView.model.insertRows(
-                                           index + 1, 1)
-                        }
-                    }
-                }
-            }
-            actions: [
-                Kirigami.Action {
-                    icon.name: !model.isPassword ? "password-show-off" : "password-show-on"
-                    text: model.isPassword ? qsTr(
-                                                 "Mark as normal field") : qsTr(
-                                                 "Mark as password field")
-                    onTriggered: fieldsListView.model.setData(
-                                     fieldsListView.model.index(index, 0),
-                                     model.isPassword ? 0 : 1, 0x0100 + 1)
-                    visible: !fieldRow.isLast
-                },
-                Kirigami.Action {
-                    icon.name: "edit-copy"
-                    text: model.isPassword ? qsTr("Copy password") : qsTr(
-                                                 "Copy value")
-                    onTriggered: showPassiveNotification(
-                                     nativeInterface.copyToClipboard(
-                                         model.actualValue) ? qsTr("Copied") : qsTr(
-                                                                  "Unable to access clipboard"))
-                    shortcut: StandardKey.Cut
-                    visible: !fieldRow.isLast
-                },
-                Kirigami.Action {
-                    icon.name: "edit-delete"
-                    text: qsTr("Delete field")
-                    onTriggered: fieldsListView.model.removeRows(index, 1)
-                    shortcut: StandardKey.Delete
-                    visible: !fieldRow.isLast
-                },
-                Kirigami.Action {
-                    icon.name: "list-add"
-                    text: qsTr("Insert empty field after this")
-                    enabled: !nativeInterface.hasEntryFilter
-                    onTriggered: fieldsListView.model.insertRows(index + 1, 1)
-                    visible: !fieldRow.isLast
-                }
-            ]
-        }
-    }
-
     // list view to edit the currently selected account
     ListView {
         id: fieldsListView
         implicitWidth: Kirigami.Units.gridUnit * 30
         model: nativeInterface.fieldModel
+        reuseItems: true
         moveDisplaced: Transition {
             YAnimator {
                 duration: Kirigami.Units.longDuration
                 easing.type: Easing.InOutQuad
             }
         }
-        delegate: fieldsListDelegateComponent
+        delegate: FieldsDelegate {
+            width: fieldsListView.width
+            view: fieldsListView
+            onMoveRequested:
+                (oldIndex, newIndex) => {
+                    const model = fieldsListView.model
+                    const invalidIndex = model.index(-1, 0)
+                    model.moveRows(invalidIndex, oldIndex, 1, invalidIndex, newIndex)
+                }
+        }
     }
 }

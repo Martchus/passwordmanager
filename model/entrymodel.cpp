@@ -453,30 +453,38 @@ bool EntryModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int co
         return push(make_unique<EntryModelMoveRowsCommand>(this, sourceParent, sourceRow, count, destinationParent, destinationChild));
     }
 #endif
+#if CPP_UTILITIES_DEBUG_BUILD
+    std::cout << "sourceRow: " << sourceRow << endl;
+    std::cout << "destinationChild: " << destinationChild << endl;
+#endif
     // check validation of specified arguments: source and destination parent entries need to be node entries
     if (sourceRow < 0 || count <= 0) {
         return false;
     }
     const auto *const srcParentEntry = entry(sourceParent);
-    const auto *const destParentEntry = entry(sourceParent);
+    const auto *const destParentEntry = entry(destinationParent);
     if (!srcParentEntry || !destParentEntry || srcParentEntry->type() != EntryType::Node || destParentEntry->type() != EntryType::Node) {
         return false;
     }
     // determine the source parent entry and dest parent entry as node entries
     auto *const srcParentNodeEntry = static_cast<NodeEntry *>(sourceParent.internalPointer());
     auto *const destParentNodeEntry = static_cast<NodeEntry *>(destinationParent.internalPointer());
-#if CPP_UTILITIES_DEBUG_BUILD
-    cout << "destinationChild: " << destinationChild << endl;
-#endif
     // source rows must be within the valid range
-    if (static_cast<size_t>(sourceRow + count) > srcParentNodeEntry->children().size()
-        // if source and destination parent are the same the destination child mustn't be in the source range
-        || !(srcParentNodeEntry != destParentNodeEntry || (destinationChild < sourceRow || (sourceRow + count) < destinationChild))) {
+    if (static_cast<std::size_t>(sourceRow + count) > srcParentNodeEntry->children().size()) {
         return false;
+    }
+    // if source and destination parent are the same the destination child mustn't be in the source range
+    if (srcParentNodeEntry == destParentNodeEntry) {
+        if (destinationChild == sourceRow) {
+            return true;
+        }
+        if (!(destinationChild < sourceRow || (sourceRow + count) < destinationChild)) {
+            return false;
+        }
     }
     // do not move a row to one of its own children! -> check before
     for (int index = 0; index < count; ++index) {
-        Entry *const toMove = srcParentNodeEntry->children()[static_cast<size_t>(sourceRow + index)];
+        Entry *const toMove = srcParentNodeEntry->children()[static_cast<std::size_t>(sourceRow + index)];
         if (toMove->type() != EntryType::Node) {
             continue;
         }
@@ -485,9 +493,11 @@ bool EntryModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int co
         }
     }
     // actually perform the move operation
-    beginMoveRows(sourceParent, sourceRow, sourceRow + count - 1, destinationParent, destinationChild);
+    if (!beginMoveRows(sourceParent, sourceRow, sourceRow + count - 1, destinationParent, destinationChild)) {
+        return false;
+    }
     for (int index = 0; index < count; ++index) {
-        Entry *toMove = srcParentNodeEntry->children()[static_cast<size_t>(sourceRow + index)];
+        Entry *toMove = srcParentNodeEntry->children()[static_cast<std::size_t>(sourceRow + index)];
         if (srcParentNodeEntry == destParentNodeEntry && sourceRow < destinationChild) {
             toMove->setParent(destParentNodeEntry, destinationChild + index - 1);
         } else {

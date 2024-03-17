@@ -16,11 +16,6 @@ Kirigami.ApplicationWindow {
 
         title: app.applicationName
         titleIcon: "qrc://icons/hicolor/scalable/apps/passwordmanager.svg"
-        // FIXME: not sure why this doesn't work anymore
-        //onBannerClicked: () => {
-        //    leftMenu.resetMenu()
-        //    aboutDialog.open()
-        //}
 
         visible: true
         resetMenuOnTriggered: false
@@ -208,15 +203,20 @@ Kirigami.ApplicationWindow {
                 icon.name: "document-close"
                 shortcut: StandardKey.Close
                 onTriggered: nativeInterface.close()
+            },
+            Kirigami.Action {
+                separator: true
+            },
+            Kirigami.Action {
+                text: qsTr("About")
+                icon.name: "help-about"
+                shortcut: "Ctrl+?"
+                onTriggered: {
+                    leftMenu.resetMenu()
+                    aboutDialog.open()
+                }
             }
         ]
-
-        Controls.Switch {
-            text: qsTr("Use native file dialog")
-            checked: nativeInterface.useNativeFileDialog
-            visible: nativeInterface.supportsNativeFileDialog
-            onCheckedChanged: nativeInterface.useNativeFileDialog = checked
-        }
     }
     contextDrawer: Kirigami.ContextDrawer {
         id: contextDrawer
@@ -241,9 +241,9 @@ Kirigami.ApplicationWindow {
         id: fileSummaryDialog
         standardButtons: Controls.Dialog.Ok
         title: qsTr("File details")
-
-        Controls.Label {
+        contentItem: Controls.TextArea {
             id: fileSummaryLabel
+            readOnly: true
             text: "No file summary available"
             textFormat: Text.RichText
             wrapMode: Text.Wrap
@@ -289,8 +289,7 @@ Kirigami.ApplicationWindow {
                 Controls.DialogButtonBox.buttonRole: Controls.DialogButtonBox.RejectRole
             }
         }
-
-        ColumnLayout {
+        contentItem: ColumnLayout {
             Controls.TextField {
                 id: filterDialogTextField
                 Layout.preferredWidth: filterDialog.availableWidth
@@ -301,12 +300,12 @@ Kirigami.ApplicationWindow {
 
     Connections {
         target: nativeInterface
-        onEntryFilterChanged: {
+        function onEntryFilterChanged(newFilter) {
             if (filterTextField.text !== newFilter) {
                 filterTextField.text = newFilter
             }
         }
-        onFileError: {
+        function onFileError(errorMessage, retryAction) {
             var retryMethod = null
             if (retryAction === "load" || retryAction === "save") {
                 retryMethod = retryAction
@@ -320,16 +319,16 @@ Kirigami.ApplicationWindow {
                                         })
             }
         }
-        onSettingsError: {
+        function onSettingsError(errorMessage) {
             showPassiveNotification(errorMessage)
         }
-        onPasswordRequired: {
+        function onPasswordRequired(filePath) {
             enterPasswordDialog.askForExistingPassword(
                         qsTr("Password required to open %1").arg(
                             nativeInterface.filePath))
             leftMenu.resetMenu()
         }
-        onFileOpenChanged: {
+        function onFileOpenChanged(fileOpen) {
             clearStack()
             if (!nativeInterface.fileOpen) {
                 showPassiveNotification(qsTr("%1 closed").arg(
@@ -341,20 +340,20 @@ Kirigami.ApplicationWindow {
                                         nativeInterface.fileName))
             leftMenu.close()
         }
-        onFileSaved: {
+        function onFileSaved() {
             showPassiveNotification(qsTr("%1 saved").arg(
                                         nativeInterface.fileName))
         }
-        onNewNotification: {
+        function onNewNotification(message) {
             showPassiveNotification(message)
         }
-        onCurrentAccountChanged: {
+        function onCurrentAccountChanged() {
             // remove the fields page if the current account has been removed
             if (!nativeInterface.hasCurrentAccount) {
                 pageStack.pop(lastEntriesPage)
             }
         }
-        onEntryAboutToBeRemoved: {
+        function onEntryAboutToBeRemoved(removedIndex) {
             // get the filter entry index
             if (nativeInterface.hasEntryFilter) {
                 removedIndex = nativeInterface.filterEntryIndex(removedIndex)
@@ -372,7 +371,7 @@ Kirigami.ApplicationWindow {
                 }
             }
         }
-        onHasEntryFilterChanged: {
+        function onHasEntryFilterChanged(hasEntryFilter) {
             if (nativeInterface.fileOpen) {
                 pageStack.clear()
                 initStack()
