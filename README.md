@@ -127,12 +127,11 @@ always requires the same major Qt version as your KDE modules use.
 Create stuff for signing the package:
 ```
 # set variables for creating keystore and androiddeployqt to find it
-keystore_dir=/path/to/keystore-dir
-export QT_ANDROID_KEYSTORE_PATH=$keystore_dir QT_ANDROID_KEYSTORE_ALIAS=$USER QT_ANDROID_KEYSTORE_STORE_PASS=$USER-devel QT_ANDROID_KEYSTORE_KEY_PASS=$USER-devel
+export QT_ANDROID_KEYSTORE_PATH=/path/to/keystore-dir QT_ANDROID_KEYSTORE_ALIAS=$USER-devel QT_ANDROID_KEYSTORE_STORE_PASS=$USER-devel QT_ANDROID_KEYSTORE_KEY_PASS=$USER-devel
 
 # create keystore (do only once)
-mkdir -p "$keystore_dir"
-pushd "$keystore_dir"
+mkdir -p "${QT_ANDROID_KEYSTORE_PATH%/*}"
+pushd "${QT_ANDROID_KEYSTORE_PATH%/*}"
 keytool -genkey -v -keystore "$QT_ANDROID_KEYSTORE_ALIAS" -alias "$QT_ANDROID_KEYSTORE_ALIAS" -keyalg RSA -keysize 2048 -validity 10000
 popd
 ```
