@@ -340,7 +340,8 @@ bool FieldModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int co
 
     // begin the move
     // note: When moving rows down (destinationChild > sourceRow) the third param is still counted in the initial array!
-    if (!beginMoveRows(sourceParent, sourceRow, sourceRow + count - 1, destinationParent, destinationChild > sourceRow ? destinationChild + count : destinationChild)) {
+    if (!beginMoveRows(sourceParent, sourceRow, sourceRow + count - 1, destinationParent,
+            destinationChild > sourceRow ? destinationChild + count : destinationChild)) {
         return false;
     }
 
