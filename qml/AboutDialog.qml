@@ -42,16 +42,8 @@ BasicDialog {
             Layout.fillWidth: true
             text: "<a href=\"" + app.organizationDomain + "\">" + app.organizationDomain + "</a>"
             horizontalAlignment: Text.AlignHCenter
-            onLinkActivated: openWebsite()
+            onLinkActivated: Qt.openUrlExternally(app.organizationDomain)
             wrapMode: Text.Wrap
-            MouseArea {
-                anchors.fill: parent
-                cursorShape: Qt.PointingHandCursor
-                onClicked: parent.openWebsite()
-            }
-            function openWebsite() {
-                Qt.openUrlExternally(app.organizationDomain)
-            }
         }
         Controls.Label {
             Layout.fillWidth: true
