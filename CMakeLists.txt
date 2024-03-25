@@ -162,8 +162,7 @@ endif ()
 
 # add further Qt/KF modules required by Qt Quick GUI
 if (QUICK_GUI)
-    list(APPEND ADDITIONAL_QT_MODULES QuickControls2)
-    list(APPEND ADDITIONAL_KF_MODULES Kirigami2)
+    list(APPEND ADDITIONAL_KF_MODULES Kirigami)
 endif ()
 
 # add Qt-version-specific QML files
