@@ -14,9 +14,6 @@ Kirigami.ApplicationWindow {
         property bool showNoPasswordWarning: nativeInterface.fileOpen
                                              && !nativeInterface.passwordSet
 
-        title: app.applicationName
-        titleIcon: "qrc://icons/hicolor/scalable/apps/passwordmanager.svg"
-
         visible: true
         resetMenuOnTriggered: false
         topContent: ColumnLayout {
