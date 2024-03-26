@@ -4,7 +4,7 @@ A simple [password manager](https://en.wikipedia.org/wiki/Password_manager) with
 ## Features
 * Cross-platform: tested under GNU/Linux, Android and Windows
 * Qt Widgets GUI for desktop platforms
-* Qt Quick GUI (using Qt Quick Controls 2 and Kirigami 2) for mobile platforms
+* Qt Quick GUI (using Qt Quick Controls 2 and Kirigami) for mobile platforms
 * Interactive command-line interface
 * Simple architecture: All data is stored in ordinary files with AES-256-CBC applied. No cloud stuff. Use
   eg. Syncthing for synchronization.
@@ -13,7 +13,7 @@ A simple [password manager](https://en.wikipedia.org/wiki/Password_manager) with
 I've mainly started this project to learn C++ and Qt programming. So beside the mentioned features this project
 and the underlying libraries serve as an example project covering some interesting C++/Qt topics:
 
-* Basic use of Qt Widgets, Qt Quick and Kirigami 2
+* Basic use of Qt Widgets, Qt Quick and Kirigami
 * Creating custom Qt models
     * Nested model and model with multiple columns
     * Support Drag & Drop in `QTreeView`
@@ -22,7 +22,7 @@ and the underlying libraries serve as an example project covering some interesti
     * Integration with Qt Widgets' undo/redo framework
     * Filtering
 * Android tweaks
-    * Add CMake target to invoke `androiddeployqt`
+    * Create APK via CMake (using `androiddeployqt`)
     * Customize activity
     * Customize gradle project to add additional Java dependency
     * Adjust the window style of the activity
