@@ -12,6 +12,7 @@
 
 #include <qtutilities/resources/qtconfigarguments.h>
 #include <qtutilities/resources/resources.h>
+#include <qtutilities/settingsdialog/qtsettings.h>
 
 #include <passwordfile/util/openssl.h>
 
@@ -21,8 +22,8 @@
 #include <QQmlContext>
 #include <QSettings>
 #include <QtQml>
-#ifdef Q_OS_ANDROID
 #include <QDebug>
+#ifdef Q_OS_ANDROID
 #include <QDirIterator>
 #endif
 
@@ -53,19 +54,24 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
     // init application
     SET_QT_APPLICATION_INFO;
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
-    QApplication application(argc, argv);
+    auto application = QApplication(argc, argv);
 #else
-    QGuiApplication application(argc, argv);
+    auto application = QGuiApplication(argc, argv);
 #endif
 
-    // apply settings specified via command line args
-    qtConfigArgs.applySettings();
-    qtConfigArgs.applySettingsForQuickGui();
-
-    // assume we're bundling breeze icons
-    if (QIcon::themeName().isEmpty()) {
-        QIcon::setThemeName(QStringLiteral("breeze"));
+    // restore Qt settings
+    auto qtSettings = QtUtilities::QtSettings();
+    auto settings = QtUtilities::getSettings(QStringLiteral(PROJECT_NAME));
+    if (auto settingsError = QtUtilities::errorMessageForSettings(*settings); !settingsError.isEmpty()) {
+        qDebug() << settingsError;
     }
+    qtSettings.restore(*settings);
+    qtSettings.apply();
+
+    // apply settings specified via command line args
+    qtConfigArgs.applySettings(qtSettings.hasCustomFont());
+    qtConfigArgs.applySettingsForQuickGui();
+    LOAD_QT_TRANSLATIONS;
 
     // log resource information
 #if defined(Q_OS_ANDROID) && defined(CPP_UTILITIES_DEBUG_BUILD)
@@ -77,12 +83,6 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
         qDebug() << it.next();
     }
 #endif
-
-    // load settings from configuration file
-    auto settings = QtUtilities::getSettings(QStringLiteral(PROJECT_NAME));
-
-    // load translations
-    LOAD_QT_TRANSLATIONS;
 
     // init Quick GUI
     auto controller = Controller(*settings, file);
