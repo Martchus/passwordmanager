@@ -150,6 +150,7 @@ source /usr/bin/android-env $android_arch
 android-$android_arch-cmake -G Ninja -S . -B "$build_dir" \
   -DCMAKE_FIND_ROOT_PATH="${ANDROID_PREFIX}" -DANDROID_SDK_ROOT="${ANDROID_HOME}" \
   -DPKG_CONFIG_EXECUTABLE:FILEPATH=/usr/bin/android-$android_arch-pkg-config \
+  -DBUILTIN_ICON_THEMES='breeze;breeze-dark' -DBUILTIN_TRANSLATIONS=ON \
   -DQT_PACKAGE_PREFIX:STRING=Qt6 -DKF_PACKAGE_PREFIX:STRING=KF6
 cmake --build "$build_dir"
 
