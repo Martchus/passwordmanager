@@ -37,39 +37,39 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="65"/>
+        <location filename="../qml/EntriesPage.qml" line="62"/>
         <source>Delete %1?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="83"/>
+        <location filename="../qml/EntriesPage.qml" line="80"/>
         <source>Deleted %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="76"/>
-        <location filename="../qml/EntriesPage.qml" line="123"/>
+        <location filename="../qml/EntriesPage.qml" line="73"/>
+        <location filename="../qml/EntriesPage.qml" line="120"/>
         <source>category </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="76"/>
-        <location filename="../qml/EntriesPage.qml" line="123"/>
+        <location filename="../qml/EntriesPage.qml" line="73"/>
+        <location filename="../qml/EntriesPage.qml" line="120"/>
         <source>account </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="100"/>
+        <location filename="../qml/EntriesPage.qml" line="97"/>
         <source>Name for new %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="100"/>
+        <location filename="../qml/EntriesPage.qml" line="97"/>
         <source>Rename %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="115"/>
+        <location filename="../qml/EntriesPage.qml" line="112"/>
         <source>enter new name here</source>
         <translation type="unfinished"></translation>
     </message>
@@ -103,50 +103,50 @@
 <context>
     <name>FieldsDelegate</name>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="63"/>
-        <location filename="../qml/FieldsDelegate.qml" line="96"/>
+        <location filename="../qml/FieldsDelegate.qml" line="62"/>
+        <location filename="../qml/FieldsDelegate.qml" line="95"/>
         <source>Mark as normal field</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="63"/>
-        <location filename="../qml/FieldsDelegate.qml" line="97"/>
+        <location filename="../qml/FieldsDelegate.qml" line="62"/>
+        <location filename="../qml/FieldsDelegate.qml" line="96"/>
         <source>Mark as password field</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="72"/>
-        <location filename="../qml/FieldsDelegate.qml" line="105"/>
+        <location filename="../qml/FieldsDelegate.qml" line="71"/>
+        <location filename="../qml/FieldsDelegate.qml" line="104"/>
         <source>Copy password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="72"/>
-        <location filename="../qml/FieldsDelegate.qml" line="105"/>
+        <location filename="../qml/FieldsDelegate.qml" line="71"/>
+        <location filename="../qml/FieldsDelegate.qml" line="104"/>
         <source>Copy value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="76"/>
-        <location filename="../qml/FieldsDelegate.qml" line="109"/>
+        <location filename="../qml/FieldsDelegate.qml" line="75"/>
+        <location filename="../qml/FieldsDelegate.qml" line="108"/>
         <source>Copied</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="76"/>
-        <location filename="../qml/FieldsDelegate.qml" line="109"/>
+        <location filename="../qml/FieldsDelegate.qml" line="75"/>
+        <location filename="../qml/FieldsDelegate.qml" line="108"/>
         <source>Unable to access clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="81"/>
-        <location filename="../qml/FieldsDelegate.qml" line="115"/>
+        <location filename="../qml/FieldsDelegate.qml" line="80"/>
+        <location filename="../qml/FieldsDelegate.qml" line="114"/>
         <source>Delete field</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="86"/>
-        <location filename="../qml/FieldsDelegate.qml" line="121"/>
+        <location filename="../qml/FieldsDelegate.qml" line="85"/>
+        <location filename="../qml/FieldsDelegate.qml" line="120"/>
         <source>Insert empty field after this</source>
         <translation type="unfinished"></translation>
     </message>
@@ -154,32 +154,32 @@
 <context>
     <name>FieldsPage</name>
     <message>
-        <location filename="../qml/FieldsPage.qml" line="39"/>
+        <location filename="../qml/FieldsPage.qml" line="36"/>
         <source>Edit field of %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FieldsPage.qml" line="68"/>
+        <location filename="../qml/FieldsPage.qml" line="65"/>
         <source>Copied field name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FieldsPage.qml" line="95"/>
+        <location filename="../qml/FieldsPage.qml" line="92"/>
         <source>Copied password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FieldsPage.qml" line="95"/>
+        <location filename="../qml/FieldsPage.qml" line="92"/>
         <source>Copied value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FieldsPage.qml" line="104"/>
+        <location filename="../qml/FieldsPage.qml" line="101"/>
         <source>Mark as password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FieldsPage.qml" line="109"/>
+        <location filename="../qml/FieldsPage.qml" line="106"/>
         <source>Show characters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -253,12 +253,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/PasswordDialog.qml" line="60"/>
+        <location filename="../qml/PasswordDialog.qml" line="55"/>
         <source>repeat password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/PasswordDialog.qml" line="70"/>
+        <location filename="../qml/PasswordDialog.qml" line="60"/>
         <source>Show characters</source>
         <translation type="unfinished"></translation>
     </message>
