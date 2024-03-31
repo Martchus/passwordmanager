@@ -17,13 +17,13 @@
 
 #include <passwordfile/util/openssl.h>
 
+#include <QDebug>
 #include <QGuiApplication>
 #include <QIcon>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QSettings>
 #include <QtQml>
-#include <QDebug>
 #ifdef Q_OS_ANDROID
 #include <QDirIterator>
 #endif
