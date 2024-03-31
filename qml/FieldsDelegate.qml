@@ -40,7 +40,6 @@ Item {
                             }
                             return pieces.join(": ")
                         }
-                        color: palette.text
                         verticalAlignment: Text.AlignVCenter
                     }
                 }

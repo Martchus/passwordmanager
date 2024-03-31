@@ -50,9 +50,6 @@ Kirigami.ScrollablePage {
             shortcut: "Ctrl+Shift+A"
         }
     ]
-    background: Rectangle {
-        color: Kirigami.Theme.backgroundColor
-    }
 
     // dialog to confirm deletion of an entry
     BasicDialog {
