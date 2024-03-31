@@ -73,17 +73,6 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
     qtConfigArgs.applySettingsForQuickGui();
     LOAD_QT_TRANSLATIONS;
 
-    // log resource information
-#if defined(Q_OS_ANDROID) && defined(CPP_UTILITIES_DEBUG_BUILD)
-    qDebug() << "Using icon theme" << QIcon::themeName();
-    qDebug() << "Icon theme search paths" << QIcon::themeSearchPaths();
-    qDebug() << "Resources:";
-    QDirIterator it(QStringLiteral(":/"), QDirIterator::Subdirectories);
-    while (it.hasNext()) {
-        qDebug() << it.next();
-    }
-#endif
-
     // init Quick GUI
     auto controller = Controller(*settings, file);
     auto engine = QQmlApplicationEngine();
