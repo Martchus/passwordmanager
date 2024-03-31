@@ -10,6 +10,7 @@
 // enable inline helper functions for Qt Quick provided by qtutilities
 #define QT_UTILITIES_GUI_QTQUICK
 
+#include <qtutilities/misc/desktoputils.h>
 #include <qtutilities/resources/qtconfigarguments.h>
 #include <qtutilities/resources/resources.h>
 #include <qtutilities/settingsdialog/qtsettings.h>
@@ -67,6 +68,9 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
     }
     qtSettings.restore(*settings);
     qtSettings.apply();
+#if defined(Q_OS_ANDROID)
+    qtSettings.reapplyDefaultIconTheme(QtUtilities::isDarkModeEnabled().value_or(false));
+#endif
 
     // apply settings specified via command line args
     qtConfigArgs.applySettings(qtSettings.hasCustomFont());
