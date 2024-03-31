@@ -32,6 +32,8 @@
 #include <QApplication>
 #endif
 
+#include <cstdlib>
+
 using namespace CppUtilities;
 using namespace Util;
 
@@ -83,7 +85,7 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
 #ifdef Q_OS_ANDROID
     registerControllerForAndroid(&controller);
 #endif
-    auto *const context(engine.rootContext());
+    auto *const context = engine.rootContext();
     context->setContextProperty(QStringLiteral("nativeInterface"), &controller);
     context->setContextProperty(QStringLiteral("app"), &application);
     context->setContextProperty(QStringLiteral("description"), QStringLiteral(APP_DESCRIPTION));
@@ -94,10 +96,19 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
         engine.addImportPath(path);
     }
 #endif
-    engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
 
-    // run event loop
     QObject::connect(&application, &QCoreApplication::aboutToQuit, &OpenSsl::clean);
+    // load main QML file; run event loop or exit if it cannot be loaded
+    const auto mainUrl = QUrl(QStringLiteral("qrc:/qml/main.qml"));
+    QObject::connect(
+        &engine, &QQmlApplicationEngine::objectCreated, &application,
+        [&mainUrl](QObject *obj, const QUrl &objUrl) {
+            if (!obj && objUrl == mainUrl) {
+                QCoreApplication::exit(EXIT_FAILURE);
+            }
+        },
+        Qt::QueuedConnection);
+    engine.load(mainUrl);
     return application.exec();
 }
 } // namespace QtGui
