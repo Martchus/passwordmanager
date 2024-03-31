@@ -18,18 +18,17 @@
 #include <passwordfile/util/openssl.h>
 
 #include <QDebug>
-#include <QGuiApplication>
 #include <QIcon>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QSettings>
-#include <QtQml>
-#ifdef Q_OS_ANDROID
-#include <QDirIterator>
-#endif
 
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
 #include <QApplication>
+using App = QApplication;
+#else
+#include <QGuiApplication>
+using App = QGuiApplication;
 #endif
 
 #include <cstdlib>
@@ -46,21 +45,13 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
     setupAndroidSpecifics();
 #endif
 
-    // work around kirigami plugin trying to be clever
-    if (!qEnvironmentVariableIsSet("XDG_CURRENT_DESKTOP")) {
-        qputenv("XDG_CURRENT_DESKTOP", QByteArray("please don't override my settings"));
-    }
-
     // init OpenSSL
     OpenSsl::init();
 
     // init application
     SET_QT_APPLICATION_INFO;
-#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
-    auto application = QApplication(argc, argv);
-#else
-    auto application = QGuiApplication(argc, argv);
-#endif
+    auto application = App(argc, argv);
+    QObject::connect(&application, &QCoreApplication::aboutToQuit, &OpenSsl::clean);
 
     // restore Qt settings
     auto qtSettings = QtUtilities::QtSettings();
@@ -79,7 +70,7 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
     qtConfigArgs.applySettingsForQuickGui();
     LOAD_QT_TRANSLATIONS;
 
-    // init Quick GUI
+    // init QML engine
     auto controller = Controller(*settings, file);
     auto engine = QQmlApplicationEngine();
 #ifdef Q_OS_ANDROID
@@ -97,7 +88,6 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
     }
 #endif
 
-    QObject::connect(&application, &QCoreApplication::aboutToQuit, &OpenSsl::clean);
     // load main QML file; run event loop or exit if it cannot be loaded
     const auto mainUrl = QUrl(QStringLiteral("qrc:/qml/main.qml"));
     QObject::connect(
