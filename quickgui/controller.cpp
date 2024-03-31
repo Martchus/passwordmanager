@@ -50,7 +50,8 @@ Controller::Controller(QSettings &settings, const QString &filePath, QObject *pa
 #else
           false
 #endif
-      )
+          )
+    , m_darkModeEnabled(false)
 {
     m_fieldModel.setPasswordVisibility(PasswordVisibility::Never);
     m_entryFilterModel.setFilterCaseSensitivity(Qt::CaseInsensitive);

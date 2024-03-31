@@ -1,6 +1,8 @@
 import QtQuick 2.7
 import QtQuick.Templates 2.0 as T2
 import QtQuick.Controls 2.1 as Controls
+import QtQuick.Controls.Material
+import QtQuick.Controls.Universal
 import QtQuick.Layouts 1.2
 import org.kde.kirigami 2.4 as Kirigami
 
@@ -8,6 +10,9 @@ Kirigami.ApplicationWindow {
     id: root
     property var fieldsPage: undefined
     property var lastEntriesPage: undefined
+
+    Material.theme: nativeInterface.darkModeEnabled ? Material.Dark : Material.Light
+    Universal.theme: nativeInterface.darkModeEnabled ? Universal.Dark : Universal.Light
 
     globalDrawer: Kirigami.GlobalDrawer {
         id: leftMenu

@@ -44,6 +44,7 @@ class Controller : public QObject {
     Q_PROPERTY(QUndoStack *undoStack READ undoStack NOTIFY undoStackChanged)
     Q_PROPERTY(QString undoText READ undoText NOTIFY undoTextChanged)
     Q_PROPERTY(QString redoText READ redoText NOTIFY redoTextChanged)
+    Q_PROPERTY(bool darkModeEnabled READ isDarkModeEnabled WRITE setDarkModeEnabled NOTIFY darkModeEnabledChanged)
 
 public:
     explicit Controller(QSettings &settings, const QString &filePath = QString(), QObject *parent = nullptr);
@@ -86,6 +87,8 @@ public:
     QString undoText() const;
     QString redoText() const;
     Io::PasswordFileSaveFlags prepareSaving();
+    bool isDarkModeEnabled() const;
+    void setDarkModeEnabled(bool darkModeEnabled);
 
 public Q_SLOTS:
     void init();
@@ -129,6 +132,7 @@ Q_SIGNALS:
     void undoTextChanged(const QString &undoText);
     void redoTextChanged(const QString &redoText);
     void settingsError(const QString &errorMessage);
+    void darkModeEnabledChanged(bool darkModeEnabled);
 
 private Q_SLOTS:
     void handleEntriesRemoved(const QModelIndex &parentIndex, int first, int last);
@@ -160,6 +164,7 @@ private:
     bool m_fileModified;
     bool m_useNativeFileDialog;
     bool m_filterAsDialog;
+    bool m_darkModeEnabled;
 };
 
 inline QModelIndex Controller::ensureSourceEntryIndex(const QModelIndex &entryIndexMaybeFromFilterModel) const
@@ -343,6 +348,18 @@ inline QString Controller::redoText() const
 #else
     return QString();
 #endif
+}
+
+inline bool Controller::isDarkModeEnabled() const
+{
+    return m_darkModeEnabled;
+}
+
+inline void Controller::setDarkModeEnabled(bool darkModeEnabled)
+{
+    if (darkModeEnabled != m_darkModeEnabled) {
+        emit darkModeEnabledChanged(m_darkModeEnabled = darkModeEnabled);
+    }
 }
 
 inline void Controller::undo()

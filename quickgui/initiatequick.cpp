@@ -61,8 +61,24 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
     }
     qtSettings.restore(*settings);
     qtSettings.apply();
-#if defined(Q_OS_ANDROID)
-    qtSettings.reapplyDefaultIconTheme(QtUtilities::isDarkModeEnabled().value_or(false));
+
+    // create controller and handle dark mode
+    // note: Not handling changes of the dark mode setting dynamically yet because it does not work with Kirigami.
+    //       It looks like Kirigami does not follow the QCC2 theme (the Material.theme/Material.theme settings) but
+    //       instead uses colors based on the initial palette. Not sure how to toggle Kirigami's palette in accordance
+    //       with the QCC2 theme. Hence this code is disabled via APPLY_COLOR_SCHEME_DYNAMICALLY for now.
+    auto controller = Controller(*settings, file);
+#ifdef APPLY_COLOR_SCHEME_DYNAMICALLY
+    QtUtilities::onDarkModeChanged(
+        [&qtSettings, &controller](bool isDarkModeEnabled) {
+            qtSettings.reapplyDefaultIconTheme(isDarkModeEnabled);
+            controller.setDarkModeEnabled(isDarkModeEnabled);
+        },
+        &controller);
+#else
+    const auto isDarkModeEnabled = QtUtilities::isDarkModeEnabled().value_or(false);
+    qtSettings.reapplyDefaultIconTheme(isDarkModeEnabled);
+    controller.setDarkModeEnabled(isDarkModeEnabled);
 #endif
 
     // apply settings specified via command line args
@@ -71,7 +87,6 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
     LOAD_QT_TRANSLATIONS;
 
     // init QML engine
-    auto controller = Controller(*settings, file);
     auto engine = QQmlApplicationEngine();
 #ifdef Q_OS_ANDROID
     registerControllerForAndroid(&controller);
