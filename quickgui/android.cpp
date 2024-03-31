@@ -5,9 +5,9 @@
 
 #include <c++utilities/conversion/stringbuilder.h>
 
-#include <QJniObject>
 #include <QColor>
 #include <QCoreApplication>
+#include <QJniObject>
 #include <QMessageLogContext>
 #include <QMetaObject>
 
@@ -56,8 +56,9 @@ bool showAndroidFileDialog(bool existing, bool createNew)
 
 int openFileDescriptorFromAndroidContentUrl(const QString &url, const QString &mode)
 {
-    return QJniObject(QNativeInterface::QAndroidApplication::context()).callMethod<jint>("openFileDescriptorFromAndroidContentUri", "(Ljava/lang/String;Ljava/lang/String;)I",
-        QJniObject::fromString(url).object<jstring>(), QJniObject::fromString(mode).object<jstring>());
+    return QJniObject(QNativeInterface::QAndroidApplication::context())
+        .callMethod<jint>("openFileDescriptorFromAndroidContentUri", "(Ljava/lang/String;Ljava/lang/String;)I",
+            QJniObject::fromString(url).object<jstring>(), QJniObject::fromString(mode).object<jstring>());
 }
 
 void writeToAndroidLog(QtMsgType type, const QMessageLogContext &context, const QString &msg)
@@ -110,7 +111,8 @@ static void onAndroidFileDialogAccepted(JNIEnv *, jobject, jstring fileName, jbo
         Q_ARG(QString, QJniObject::fromLocalRef(fileName).toString()), Q_ARG(bool, existing), Q_ARG(bool, createNew));
 }
 
-static void onAndroidFileDialogAcceptedDescriptor(JNIEnv *, jobject, jstring nativeUrl, jstring fileName, jint fileHandle, jboolean existing, jboolean createNew)
+static void onAndroidFileDialogAcceptedDescriptor(
+    JNIEnv *, jobject, jstring nativeUrl, jstring fileName, jint fileHandle, jboolean existing, jboolean createNew)
 {
     QMetaObject::invokeMethod(QtGui::controllerForAndroid, "handleFileSelectionAcceptedDescriptor", Qt::QueuedConnection,
         Q_ARG(QString, QJniObject::fromLocalRef(nativeUrl).toString()), Q_ARG(QString, QJniObject::fromLocalRef(fileName).toString()),

@@ -43,6 +43,8 @@ set(QML_SRC_FILES quickgui/controller.cpp quickgui/initiatequick.cpp resources/i
 if (ANDROID)
     list(APPEND QML_HEADER_FILES quickgui/android.h)
     list(APPEND QML_SRC_FILES quickgui/android.cpp)
+else ()
+    list(APPEND EXCLUDED_FILES quickgui/android.h quickgui/android.cpp)
 endif ()
 
 set(TS_FILES translations/${META_PROJECT_NAME}_de_DE.ts translations/${META_PROJECT_NAME}_en_US.ts)
