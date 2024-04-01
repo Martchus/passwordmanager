@@ -124,7 +124,7 @@ always requires the same major Qt version as your KDE modules use.
       the desired location afterwards.
 
 #### Concrete example of 3. for building an Android APK under Arch Linux
-Create stuff for signing the package:
+Create a key for signing the package (always required; otherwise the APK file won't install):
 ```
 # set variables for creating keystore and androiddeployqt to find it
 export QT_ANDROID_KEYSTORE_PATH=/path/to/keystore-dir QT_ANDROID_KEYSTORE_ALIAS=$USER-devel QT_ANDROID_KEYSTORE_STORE_PASS=$USER-devel QT_ANDROID_KEYSTORE_KEY_PASS=$USER-devel
@@ -139,7 +139,7 @@ popd
 Build c++utilities, passwordfile, qtutilities and passwordmanager in one step to create an Android APK for aarch64:
 
 ```
-# use Java 17, the latest Java doesn't work at this point and avoid unwanted Java options
+# use Java 17 (the latest Java doesn't work at this point) and avoid unwanted Java options
 export PATH=/usr/lib/jvm/java-17-openjdk/bin:$PATH
 export _JAVA_OPTIONS=
 
@@ -162,6 +162,8 @@ adb install "$build_dir/passwordmanager/android-build//build/outputs/apk/release
 * The Android packages for the dependencies Boost, Qt, iconv, OpenSSL and Kirigami are provided in
   my [PKGBUILDs](http://github.com/Martchus/PKGBUILDs) repo.
 * The latest Java I was able to use was version 17.
+* Use  `QT_QUICK_CONTROLS_STYLE=Material` and `QT_QUICK_CONTROLS_MOBILE=1` to test the Qt Quick GUI like it would be shown under
+  Android via a normal desktop build.
 
 ### Building without Qt GUI
 It is possible to build without the GUI if only the CLI is needed. In this case no Qt dependencies (including qtutilities) are required.
