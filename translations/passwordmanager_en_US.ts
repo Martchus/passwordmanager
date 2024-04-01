@@ -77,25 +77,25 @@
 <context>
     <name>EntryDelegate</name>
     <message>
-        <location filename="../qml/EntryDelegate.qml" line="60"/>
-        <location filename="../qml/EntryDelegate.qml" line="90"/>
+        <location filename="../qml/EntryDelegate.qml" line="61"/>
+        <location filename="../qml/EntryDelegate.qml" line="91"/>
         <source>Cut</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EntryDelegate.qml" line="66"/>
+        <location filename="../qml/EntryDelegate.qml" line="67"/>
         <source>Cut %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EntryDelegate.qml" line="72"/>
-        <location filename="../qml/EntryDelegate.qml" line="101"/>
+        <location filename="../qml/EntryDelegate.qml" line="73"/>
+        <location filename="../qml/EntryDelegate.qml" line="102"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EntryDelegate.qml" line="79"/>
-        <location filename="../qml/EntryDelegate.qml" line="109"/>
+        <location filename="../qml/EntryDelegate.qml" line="80"/>
+        <location filename="../qml/EntryDelegate.qml" line="110"/>
         <source>Rename</source>
         <translation type="unfinished"></translation>
     </message>
@@ -103,50 +103,50 @@
 <context>
     <name>FieldsDelegate</name>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="62"/>
-        <location filename="../qml/FieldsDelegate.qml" line="95"/>
+        <location filename="../qml/FieldsDelegate.qml" line="63"/>
+        <location filename="../qml/FieldsDelegate.qml" line="96"/>
         <source>Mark as normal field</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="62"/>
-        <location filename="../qml/FieldsDelegate.qml" line="96"/>
+        <location filename="../qml/FieldsDelegate.qml" line="63"/>
+        <location filename="../qml/FieldsDelegate.qml" line="97"/>
         <source>Mark as password field</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="71"/>
-        <location filename="../qml/FieldsDelegate.qml" line="104"/>
+        <location filename="../qml/FieldsDelegate.qml" line="72"/>
+        <location filename="../qml/FieldsDelegate.qml" line="105"/>
         <source>Copy password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="71"/>
-        <location filename="../qml/FieldsDelegate.qml" line="104"/>
+        <location filename="../qml/FieldsDelegate.qml" line="72"/>
+        <location filename="../qml/FieldsDelegate.qml" line="105"/>
         <source>Copy value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="75"/>
-        <location filename="../qml/FieldsDelegate.qml" line="108"/>
+        <location filename="../qml/FieldsDelegate.qml" line="76"/>
+        <location filename="../qml/FieldsDelegate.qml" line="109"/>
         <source>Copied</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="75"/>
-        <location filename="../qml/FieldsDelegate.qml" line="108"/>
+        <location filename="../qml/FieldsDelegate.qml" line="76"/>
+        <location filename="../qml/FieldsDelegate.qml" line="109"/>
         <source>Unable to access clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="80"/>
-        <location filename="../qml/FieldsDelegate.qml" line="114"/>
+        <location filename="../qml/FieldsDelegate.qml" line="81"/>
+        <location filename="../qml/FieldsDelegate.qml" line="115"/>
         <source>Delete field</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="85"/>
-        <location filename="../qml/FieldsDelegate.qml" line="120"/>
+        <location filename="../qml/FieldsDelegate.qml" line="86"/>
+        <location filename="../qml/FieldsDelegate.qml" line="121"/>
         <source>Insert empty field after this</source>
         <translation type="unfinished"></translation>
     </message>
@@ -266,73 +266,73 @@
 <context>
     <name>QtGui::Controller</name>
     <message>
-        <location filename="../quickgui/controller.cpp" line="137"/>
+        <location filename="../quickgui/controller.cpp" line="138"/>
         <source>An error occurred when opening the file: root element missing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="148"/>
+        <location filename="../quickgui/controller.cpp" line="149"/>
         <source>A crypto error occurred when opening the file: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="156"/>
+        <location filename="../quickgui/controller.cpp" line="157"/>
         <source>loading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="166"/>
+        <location filename="../quickgui/controller.cpp" line="167"/>
         <source>creating</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="182"/>
-        <location filename="../quickgui/controller.cpp" line="191"/>
+        <location filename="../quickgui/controller.cpp" line="183"/>
+        <location filename="../quickgui/controller.cpp" line="192"/>
         <source>closing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="223"/>
+        <location filename="../quickgui/controller.cpp" line="224"/>
         <source>Unable to open file descriptor for saving the file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="238"/>
+        <location filename="../quickgui/controller.cpp" line="239"/>
         <source>A crypto error occurred when saving the file: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="240"/>
+        <location filename="../quickgui/controller.cpp" line="241"/>
         <source>saving</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="316"/>
+        <location filename="../quickgui/controller.cpp" line="317"/>
         <source>Canceled file selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="443"/>
+        <location filename="../quickgui/controller.cpp" line="444"/>
         <source>No file opened.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="460"/>
+        <location filename="../quickgui/controller.cpp" line="461"/>
         <source>An IO error occurred when %1 the file %2: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="462"/>
+        <location filename="../quickgui/controller.cpp" line="463"/>
         <source>An error occurred when %1 the file: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="464"/>
+        <location filename="../quickgui/controller.cpp" line="465"/>
         <source>An unknown exception occurred when %1 the file %2: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="467"/>
+        <location filename="../quickgui/controller.cpp" line="468"/>
         <source>An unknown error occurred when %1 the file %2.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1038,149 +1038,149 @@ OpenSSL error: %1</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="34"/>
+        <location filename="../qml/main.qml" line="39"/>
         <source>Filter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="66"/>
+        <location filename="../qml/main.qml" line="71"/>
         <source>No file opened</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="91"/>
+        <location filename="../qml/main.qml" line="96"/>
         <source>No password set
 File will be saved unencrypted!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="101"/>
+        <location filename="../qml/main.qml" line="106"/>
         <source>Create new file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="107"/>
+        <location filename="../qml/main.qml" line="112"/>
         <source>Open existing file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="114"/>
+        <location filename="../qml/main.qml" line="119"/>
         <source>Recently opened ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="122"/>
+        <location filename="../qml/main.qml" line="127"/>
         <source>Save modifications</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="129"/>
+        <location filename="../qml/main.qml" line="134"/>
         <source>Save as</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="136"/>
+        <location filename="../qml/main.qml" line="141"/>
         <source>Change password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="136"/>
+        <location filename="../qml/main.qml" line="141"/>
         <source>Add password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="141"/>
+        <location filename="../qml/main.qml" line="146"/>
         <source>Change password for %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="146"/>
+        <location filename="../qml/main.qml" line="151"/>
         <source>Details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="156"/>
+        <location filename="../qml/main.qml" line="161"/>
         <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="156"/>
+        <location filename="../qml/main.qml" line="161"/>
         <source>Adjust search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="168"/>
-        <location filename="../qml/main.qml" line="280"/>
+        <location filename="../qml/main.qml" line="173"/>
+        <location filename="../qml/main.qml" line="285"/>
         <source>Clear search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="180"/>
+        <location filename="../qml/main.qml" line="185"/>
         <source>Undo &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="189"/>
+        <location filename="../qml/main.qml" line="194"/>
         <source>Redo &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="198"/>
+        <location filename="../qml/main.qml" line="203"/>
         <source>Close file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="208"/>
+        <location filename="../qml/main.qml" line="213"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="240"/>
+        <location filename="../qml/main.qml" line="245"/>
         <source>File details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="262"/>
+        <location filename="../qml/main.qml" line="267"/>
         <source>Search for categories and accounts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="275"/>
+        <location filename="../qml/main.qml" line="280"/>
         <source>Apply search term</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="285"/>
+        <location filename="../qml/main.qml" line="290"/>
         <source>Quit dialog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="313"/>
+        <location filename="../qml/main.qml" line="318"/>
         <source>Retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="324"/>
+        <location filename="../qml/main.qml" line="329"/>
         <source>Password required to open %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="331"/>
+        <location filename="../qml/main.qml" line="336"/>
         <source>%1 closed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="336"/>
+        <location filename="../qml/main.qml" line="341"/>
         <source>%1 opened</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="341"/>
+        <location filename="../qml/main.qml" line="346"/>
         <source>%1 saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="395"/>
+        <location filename="../qml/main.qml" line="400"/>
         <source>Clear recently opened files</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1188,37 +1188,37 @@ File will be saved unencrypted!</source>
 <context>
     <name>undocommands</name>
     <message>
-        <location filename="../gui/undocommands.cpp" line="85"/>
+        <location filename="../gui/undocommands.cpp" line="93"/>
         <source>setting field name to »%1«</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/undocommands.cpp" line="87"/>
+        <location filename="../gui/undocommands.cpp" line="95"/>
         <source>setting field name »%1« to »%2«</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/undocommands.cpp" line="92"/>
+        <location filename="../gui/undocommands.cpp" line="102"/>
         <source>setting value of empty field</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/undocommands.cpp" line="94"/>
+        <location filename="../gui/undocommands.cpp" line="100"/>
         <source>setting value of »%1« field</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/undocommands.cpp" line="100"/>
+        <location filename="../gui/undocommands.cpp" line="108"/>
         <source>setting type of »%1« field</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/undocommands.cpp" line="103"/>
+        <location filename="../gui/undocommands.cpp" line="111"/>
         <source>setting field property in row »%1«</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../gui/undocommands.cpp" line="135"/>
+        <location filename="../gui/undocommands.cpp" line="143"/>
         <source>insertion of %1 row(s) before row %2</source>
         <translation>
             <numerusform>insertion of %1 row before row %2</numerusform>
@@ -1226,7 +1226,7 @@ File will be saved unencrypted!</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../gui/undocommands.cpp" line="166"/>
+        <location filename="../gui/undocommands.cpp" line="174"/>
         <source>removal of row %1</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -1234,7 +1234,7 @@ File will be saved unencrypted!</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../gui/undocommands.cpp" line="168"/>
+        <location filename="../gui/undocommands.cpp" line="176"/>
         <source>removal of the rows %1 to %2</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -1242,27 +1242,27 @@ File will be saved unencrypted!</source>
         </translation>
     </message>
     <message>
-        <location filename="../gui/undocommands.cpp" line="248"/>
+        <location filename="../gui/undocommands.cpp" line="256"/>
         <source>setting entry name to »%1«</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/undocommands.cpp" line="251"/>
+        <location filename="../gui/undocommands.cpp" line="259"/>
         <source>setting entry name from »%1« to »%2«</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/undocommands.cpp" line="257"/>
+        <location filename="../gui/undocommands.cpp" line="265"/>
         <source>setting property of an entry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/undocommands.cpp" line="259"/>
+        <location filename="../gui/undocommands.cpp" line="267"/>
         <source>setting property of entry »%1«</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../gui/undocommands.cpp" line="355"/>
+        <location filename="../gui/undocommands.cpp" line="363"/>
         <source>insertion of %1 entry/entries</source>
         <translation>
             <numerusform>insertion of %1 entry</numerusform>
@@ -1270,7 +1270,7 @@ File will be saved unencrypted!</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../gui/undocommands.cpp" line="387"/>
+        <location filename="../gui/undocommands.cpp" line="395"/>
         <source>removal of %1 entry/entries</source>
         <translation>
             <numerusform>removal of %1 entry</numerusform>
@@ -1278,7 +1278,7 @@ File will be saved unencrypted!</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../gui/undocommands.cpp" line="418"/>
+        <location filename="../gui/undocommands.cpp" line="426"/>
         <source>move of %1 entry/entries</source>
         <translation>
             <numerusform>move of %1 entry</numerusform>
