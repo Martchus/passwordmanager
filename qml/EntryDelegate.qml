@@ -14,6 +14,7 @@ Item {
 
     Kirigami.SwipeListItem {
         id: listItem
+        alwaysVisibleActions: true // default is broken in mobile/tablet mode
         contentItem: RowLayout {
             Kirigami.ListItemDragHandle {
                 listItem: listItem

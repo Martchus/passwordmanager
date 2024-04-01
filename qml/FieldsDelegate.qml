@@ -14,6 +14,7 @@ Item {
 
     Kirigami.SwipeListItem {
         id: listItem
+        alwaysVisibleActions: true // default is broken in mobile/tablet mode
         visible: !model.isLastRow
         contentItem: RowLayout {
             id: fieldRow
