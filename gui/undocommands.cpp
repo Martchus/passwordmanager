@@ -62,6 +62,15 @@ void CustomUndoCommand::undo()
  * \brief Sets the value for the specified index and role in the specified field model.
  */
 
+/// \cond
+
+static QString getFieldName(FieldModel *model, int row, const QModelIndex &index)
+{
+    return model->index(row, 0, index.parent()).data().toString();
+}
+
+/// \endcond
+
 /*!
  * \brief Constructs a new command.
  */
@@ -75,7 +84,6 @@ FieldModelSetValueCommand::FieldModelSetValueCommand(FieldModel *model, const QM
     , m_oldValue(model->data(index, role))
     , m_role(role)
 {
-    QString fieldName = model->index(m_row, 0, index.parent()).data().toString();
     switch (role) {
     case Qt::DisplayRole:
     case Qt::EditRole:
@@ -88,16 +96,16 @@ FieldModelSetValueCommand::FieldModelSetValueCommand(FieldModel *model, const QM
             }
             break;
         case 1:
-            if (fieldName.isEmpty()) {
-                setText(QApplication::translate("undocommands", "setting value of empty field"));
-            } else {
+            if (const auto fieldName = getFieldName(model, m_row, index); !fieldName.isEmpty()) {
                 setText(QApplication::translate("undocommands", "setting value of »%1« field").arg(fieldName));
+            } else {
+                setText(QApplication::translate("undocommands", "setting value of empty field"));
             }
             break;
         }
         break;
     case FieldTypeRole:
-        setText(QApplication::translate("undocommands", "setting type of »%1« field").arg(fieldName));
+        setText(QApplication::translate("undocommands", "setting type of »%1« field").arg(getFieldName(model, m_row, index)));
         break;
     default:
         setText(QApplication::translate("undocommands", "setting field property in row »%1«").arg(m_row + 1));
@@ -316,7 +324,7 @@ EntryModelModifyRowsCommand::~EntryModelModifyRowsCommand()
  */
 bool EntryModelModifyRowsCommand::insert()
 {
-    if (Entry *parentEntry = entryFromPathCpy(m_model, m_parentPath)) {
+    if (Entry *const parentEntry = entryFromPathCpy(m_model, m_parentPath)) {
         if (m_model->insertEntries(m_row, m_model->index(parentEntry), m_values)) {
             m_values.clear();
             return true;
@@ -334,7 +342,7 @@ bool EntryModelModifyRowsCommand::insert()
  */
 bool EntryModelModifyRowsCommand::remove()
 {
-    if (Entry *parentEntry = entryFromPathCpy(m_model, m_parentPath)) {
+    if (Entry *const parentEntry = entryFromPathCpy(m_model, m_parentPath)) {
         m_values = m_model->takeEntries(m_row, m_count, m_model->index(parentEntry));
         return !m_values.isEmpty();
     }
@@ -433,29 +441,28 @@ bool EntryModelMoveRowsCommand::internalRedo()
 
 bool EntryModelMoveRowsCommand::internalUndo()
 {
-    if (m_count) {
-        Entry *sourceParentEntry = entryFromPathCpy(m_model, m_sourceParentPath);
-        Entry *destParentEntry = entryFromPathCpy(m_model, m_destParentPath);
-        if (sourceParentEntry && destParentEntry) {
-            int sourceRow = m_destChild;
-            int destChild = m_sourceRow;
-            // moves within the same parent needs special consideration
-            if (sourceParentEntry == destParentEntry) {
-                // move entry down
-                if (m_sourceRow < m_destChild) {
-                    sourceRow -= m_count;
-                    // move entry up
-                } else if (m_sourceRow > m_destChild) {
-                    destChild += m_count;
-                    // keep entry were it is
-                } else {
-                    return true;
-                }
-            }
-            return m_model->moveRows(m_model->index(destParentEntry), sourceRow, m_count, m_model->index(sourceParentEntry), destChild);
-        }
-        return false;
+    if (!m_count) {
+        return true;
     }
-    return true;
+    Entry *const sourceParentEntry = entryFromPathCpy(m_model, m_sourceParentPath);
+    Entry *const destParentEntry = entryFromPathCpy(m_model, m_destParentPath);
+    if (sourceParentEntry && destParentEntry) {
+        auto sourceRow = m_destChild, destChild = m_sourceRow;
+        // moves within the same parent needs special consideration
+        if (sourceParentEntry == destParentEntry) {
+            // move entry down
+            if (m_sourceRow < m_destChild) {
+                sourceRow -= m_count;
+                // move entry up
+            } else if (m_sourceRow > m_destChild) {
+                destChild += m_count;
+                // keep entry were it is
+            } else {
+                return true;
+            }
+        }
+        return m_model->moveRows(m_model->index(destParentEntry), sourceRow, m_count, m_model->index(sourceParentEntry), destChild);
+    }
+    return false;
 }
 } // namespace QtGui

@@ -347,7 +347,7 @@ bool FieldModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int co
 
     // reserve space for temporary copies (FIXME: possible to avoid this?)
     m_fields->reserve(m_fields->size() + static_cast<std::size_t>(count));
-    auto tmp = vector<Io::Field>(static_cast<std::size_t>(count));
+    auto tmp = std::vector<Io::Field>(static_cast<std::size_t>(count));
     // move rows to temporary array
     std::move(m_fields->begin() + sourceRow, m_fields->begin() + sourceRow + count, tmp.begin());
     // erase slots of rows to be moved
@@ -394,10 +394,7 @@ QMimeData *FieldModel::mimeData(const QModelIndexList &indices) const
  */
 const Field *FieldModel::field(size_t row) const
 {
-    if (m_fields && row < m_fields->size()) {
-        return &(*m_fields)[row];
-    }
-    return nullptr;
+    return m_fields && row < m_fields->size() ? &(*m_fields)[row] : nullptr;
 }
 
 } // namespace QtGui

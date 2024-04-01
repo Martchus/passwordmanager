@@ -1,4 +1,5 @@
 #include "./cli/cli.h"
+
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
 #include "./gui/initiategui.h"
 #endif
@@ -9,13 +10,12 @@
 #include "resources/config.h"
 #include "resources/qtconfig.h"
 
-#include <passwordfile/util/openssl.h>
-
 #include <c++utilities/application/argumentparser.h>
 #include <c++utilities/application/commandlineutils.h>
 #include <c++utilities/misc/parseerror.h>
 
 #if defined(PASSWORD_MANAGER_GUI_QTWIDGETS) || defined(PASSWORD_MANAGER_GUI_QTQUICK)
+#define PASSWORD_MANAGER_GUI_QTWIDGETS_OR_QTQUICK
 #include <QCoreApplication>
 #include <QString>
 #include <qtutilities/resources/qtconfigarguments.h>
@@ -24,33 +24,39 @@ ENABLE_QT_RESOURCES_OF_STATIC_DEPENDENCIES
 #include <c++utilities/application/fakeqtconfigarguments.h>
 #endif
 
+#include <cstdlib>
 #include <iostream>
 
 // force (preferably Qt Quick) GUI under Android
 #ifdef Q_OS_ANDROID
-#if defined(PASSWORD_MANAGER_GUI_QTWIDGETS) || defined(PASSWORD_MANAGER_GUI_QTQUICK)
+#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS_OR_QTQUICK
 #define PASSWORD_MANAGER_FORCE_GUI
 #else
-#error "Must build at least one kind of GUI under Android."
+#error "Must configure building at least one kind of GUI under Android."
 #endif
 #endif
 
-using namespace std;
 using namespace CppUtilities;
-using namespace Util;
+
+#ifndef PASSWORD_MANAGER_FORCE_GUI
+static int fail(std::string_view error)
+{
+    CMD_UTILS_START_CONSOLE;
+    std::cerr << error << std::endl;
+    return EXIT_FAILURE;
+}
+#endif
 
 int main(int argc, char *argv[])
 {
     CMD_UTILS_CONVERT_ARGS_TO_UTF8;
     SET_APPLICATION_INFO;
-    QT_CONFIG_ARGUMENTS qtConfigArgs;
-    int returnCode = 0;
 
+    // parse CLI arguments
+    auto qtConfigArgs = QT_CONFIG_ARGUMENTS();
 #ifndef PASSWORD_MANAGER_FORCE_GUI
-    // setup argument parser
-    ArgumentParser parser;
-    // file argument
-    Argument fileArg("file", 'f', "specifies the file to be opened (or created when using --modify)");
+    auto parser = ArgumentParser();
+    auto fileArg = Argument("file", 'f', "specifies the file to be opened (or created when using --modify)");
     fileArg.setValueNames({ "path" });
     fileArg.setRequiredValueCount(1);
     fileArg.setCombinable(true);
@@ -58,63 +64,44 @@ int main(int argc, char *argv[])
     fileArg.setImplicit(true);
     qtConfigArgs.qtWidgetsGuiArg().addSubArgument(&fileArg);
     qtConfigArgs.qtQuickGuiArg().addSubArgument(&fileArg);
-    // cli argument
-    Argument cliArg("interactive-cli", 'i', "starts the interactive command line interface");
+    auto cliArg = Argument("interactive-cli", 'i', "starts the interactive command line interface");
     cliArg.setDenotesOperation(true);
     cliArg.setSubArguments({ &fileArg });
-    // help argument
-    HelpArgument helpArg(parser);
+    auto helpArg = HelpArgument(parser);
     parser.setMainArguments({ &qtConfigArgs.qtWidgetsGuiArg(), &qtConfigArgs.qtQuickGuiArg(), &cliArg, &helpArg });
-    // parse the specified arguments
     parser.parseArgs(argc, argv);
-#endif
 
-#ifndef PASSWORD_MANAGER_FORCE_GUI
-    // start either interactive CLI or GUI
+    // run CLI if CLI-argument is present
     if (cliArg.isPresent()) {
-        // init OpenSSL
-        OpenSsl::init();
+        return Cli::InteractiveCli().run(fileArg.isPresent() ? std::string(fileArg.firstValue()) : std::string());
+    }
 
-        Cli::InteractiveCli cli;
-        if (fileArg.isPresent()) {
-            cli.run(fileArg.firstValue());
-        } else {
-            cli.run();
-        }
-
-        // clean OpenSSL
-        OpenSsl::clean();
-
-    } else if (qtConfigArgs.areQtGuiArgsPresent()) {
-#if defined(PASSWORD_MANAGER_GUI_QTWIDGETS) || defined(PASSWORD_MANAGER_GUI_QTQUICK)
-        const auto file(fileArg.isPresent() ? QString::fromLocal8Bit(fileArg.firstValue()) : QString());
+    // run GUI depending on which GUI-argument is present
+    if (qtConfigArgs.areQtGuiArgsPresent()) {
+#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS_OR_QTQUICK
+        const auto file = fileArg.isPresent() ? QString::fromLocal8Bit(fileArg.firstValue()) : QString();
 #endif
         if (qtConfigArgs.qtWidgetsGuiArg().isPresent()) {
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
-            returnCode = QtGui::runWidgetsGui(argc, argv, qtConfigArgs, file);
+            return QtGui::runWidgetsGui(argc, argv, qtConfigArgs, file);
 #else
-            CMD_UTILS_START_CONSOLE;
-            cerr << "The application has not been built with Qt widgets support." << endl;
+            return fail("The application has not been built with Qt Widgets GUI support.");
 #endif
         } else if (qtConfigArgs.qtQuickGuiArg().isPresent()) {
 #ifdef PASSWORD_MANAGER_GUI_QTQUICK
-            returnCode = QtGui::runQuickGui(argc, argv, qtConfigArgs, file);
+            return QtGui::runQuickGui(argc, argv, qtConfigArgs, file);
 #else
-            CMD_UTILS_START_CONSOLE;
-            cerr << "The application has not been built with Qt quick support." << endl;
+            return fail("The application has not been built with Qt Quick GUI support.");
 #endif
-        } else {
-            CMD_UTILS_START_CONSOLE;
-            cerr << "See --help for usage." << endl;
         }
     }
+    return fail("See --help for usage.");
+
 #else // PASSWORD_MANAGER_FORCE_GUI
 #ifdef PASSWORD_MANAGER_GUI_QTQUICK
-    returnCode = QtGui::runQuickGui(argc, argv, qtConfigArgs, QString());
+    return QtGui::runQuickGui(argc, argv, qtConfigArgs, QString());
 #else
-    returnCode = QtGui::runWidgetsGui(argc, argv, qtConfigArgs, QString());
+    return QtGui::runWidgetsGui(argc, argv, qtConfigArgs, QString());
 #endif
 #endif
-
-    return returnCode;
 }

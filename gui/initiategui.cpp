@@ -31,7 +31,8 @@ int runWidgetsGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs,
     OpenSsl::init();
 
     // init application
-    QApplication application(argc, argv);
+    auto application = QApplication(argc, argv);
+    QObject::connect(&application, &QCoreApplication::aboutToQuit, &OpenSsl::clean);
 
     // restore Qt settings
     auto qtSettings = QtSettings();
@@ -56,7 +57,6 @@ int runWidgetsGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs,
     }
 
     // start event loop
-    QObject::connect(&application, &QCoreApplication::aboutToQuit, &OpenSsl::clean);
     auto res = application.exec();
 
     // save settings to disk

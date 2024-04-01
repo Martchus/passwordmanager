@@ -12,7 +12,7 @@
 #include <istream>
 #include <ostream>
 #include <string>
-#include <vector>
+#include <string_view>
 
 namespace Io {
 class Entry;
@@ -23,7 +23,7 @@ namespace Cli {
 
 class InputMuter {
 public:
-    InputMuter();
+    explicit InputMuter();
     ~InputMuter();
 
 private:
@@ -39,9 +39,10 @@ void clearConsole();
 
 class InteractiveCli {
 public:
-    InteractiveCli();
-    void run(const std::string &file = std::string());
-    void openFile(const std::string &file, Io::PasswordFileOpenFlags openFlags);
+    explicit InteractiveCli();
+    ~InteractiveCli();
+    int run(std::string_view file);
+    void openFile(std::string_view file, Io::PasswordFileOpenFlags openFlags);
     void closeFile();
     void saveFile();
     void createFile(const std::string &file);

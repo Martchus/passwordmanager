@@ -7,7 +7,7 @@ namespace QtGui {
 
 class FieldDelegate : public QStyledItemDelegate {
 public:
-    FieldDelegate(QObject *parent = nullptr);
+    explicit FieldDelegate(QObject *parent = nullptr);
 
     void setEditorData(QWidget *editor, const QModelIndex &index) const override;
 };

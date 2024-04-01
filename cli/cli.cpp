@@ -5,6 +5,7 @@
 #include <passwordfile/io/field.h>
 #include <passwordfile/io/parsingexception.h>
 #include <passwordfile/io/passwordfile.h>
+#include <passwordfile/util/openssl.h>
 
 #include <c++utilities/application/commandlineutils.h>
 #include <c++utilities/conversion/stringconversion.h>
@@ -15,7 +16,9 @@
 #endif
 
 #include <algorithm>
+#include <cstdlib>
 #include <functional>
+#include <stdexcept>
 
 using namespace std;
 using namespace std::placeholders;
@@ -89,32 +92,39 @@ InteractiveCli::InteractiveCli()
     , m_modified(false)
     , m_quit(false)
 {
+    Util::OpenSsl::init();
     CMD_UTILS_START_CONSOLE;
 }
 
-void InteractiveCli::run(const string &file)
+InteractiveCli::~InteractiveCli()
+{
+    Util::OpenSsl::clean();
+}
+
+int InteractiveCli::run(string_view file)
 {
     if (!file.empty()) {
         openFile(file, PasswordFileOpenFlags::Default);
     }
-    string input;
+    auto input = std::string();
     while (!m_quit) {
-        getline(m_i, input);
+        std::getline(m_i, input);
         if (!input.empty()) {
             processCommand(input);
         }
     }
+    return EXIT_SUCCESS;
 }
 
-void InteractiveCli::processCommand(const string &cmd)
+void InteractiveCli::processCommand(const std::string &cmd)
 {
 #define CMD(value) !paramMissing &&cmd == value
 #define CMD2(value1, value2) !paramMissing && (cmd == value1 || cmd == value2)
 #define CMD_P(value) !paramMissing &&checkCommand(cmd, value, param, paramMissing)
 #define CMD2_P(value1, value2) !paramMissing && (checkCommand(cmd, value1, param, paramMissing) || checkCommand(cmd, value2, param, paramMissing))
 
-    string param;
-    bool paramMissing = false;
+    auto param = std::string();
+    auto paramMissing = false;
     if (CMD2("quit", "q")) {
         quit();
     } else if (CMD("q!")) {
@@ -175,9 +185,9 @@ void InteractiveCli::processCommand(const string &cmd)
     }
 }
 
-Entry *InteractiveCli::resolvePath(const string &path)
+Entry *InteractiveCli::resolvePath(const std::string &path)
 {
-    auto parts = splitString<vector<string>>(path, "/", EmptyPartsTreat::Merge);
+    auto parts = splitString<std::vector<std::string>>(path, "/", EmptyPartsTreat::Merge);
     bool fromRoot = path.at(0) == '/';
     if (fromRoot && parts.empty()) {
         return m_file.rootEntry();
@@ -213,7 +223,7 @@ Entry *InteractiveCli::resolvePath(const string &path)
     }
 }
 
-bool InteractiveCli::checkCommand(const string &str, const char *phrase, std::string &param, bool &paramMissing)
+bool InteractiveCli::checkCommand(const std::string &str, const char *phrase, std::string &param, bool &paramMissing)
 {
     for (auto i = str.cbegin(), end = str.cend(); i != end; ++i, ++phrase) {
         if (*phrase == 0) {
@@ -234,13 +244,13 @@ bool InteractiveCli::checkCommand(const string &str, const char *phrase, std::st
     return false;
 }
 
-void InteractiveCli::openFile(const string &file, PasswordFileOpenFlags openFlags)
+void InteractiveCli::openFile(std::string_view file, PasswordFileOpenFlags openFlags)
 {
     if (m_file.isOpen()) {
         m_o << "file \"" << m_file.path() << "\" currently open; close first" << endl;
         return;
     }
-    m_file.setPath(file);
+    m_file.setPath(std::string(file));
     for (;;) {
         try {
             try {
@@ -322,7 +332,7 @@ void InteractiveCli::saveFile()
     m_modified = false;
 }
 
-void InteractiveCli::createFile(const string &file)
+void InteractiveCli::createFile(const std::string &file)
 {
     if (m_file.isOpen()) {
         m_o << "file \"" << m_file.path() << "\" currently open; close first" << endl;
@@ -392,7 +402,7 @@ void InteractiveCli::pwd()
     m_o << joinStrings(path, "/") << endl;
 }
 
-void InteractiveCli::cd(const string &path)
+void InteractiveCli::cd(const std::string &path)
 {
     if (!m_file.isOpen()) {
         m_o << "can not change directory; no file open" << endl;
@@ -450,7 +460,7 @@ void InteractiveCli::tree()
     printEntries(m_currentEntry, 0);
 }
 
-void InteractiveCli::makeEntry(EntryType entryType, const string &label)
+void InteractiveCli::makeEntry(EntryType entryType, const std::string &label)
 {
     if (!m_file.isOpen()) {
         m_o << "can not make entry; no file open" << endl;
@@ -473,7 +483,7 @@ void InteractiveCli::makeEntry(EntryType entryType, const string &label)
     }
 }
 
-void InteractiveCli::removeEntry(const string &path)
+void InteractiveCli::removeEntry(const std::string &path)
 {
     if (!m_file.isOpen()) {
         m_o << "can not remove entry; no file open" << endl;
@@ -493,16 +503,16 @@ void InteractiveCli::removeEntry(const string &path)
     }
 }
 
-void InteractiveCli::renameEntry(const string &path)
+void InteractiveCli::renameEntry(const std::string &path)
 {
     if (!m_file.isOpen()) {
         m_o << "can not rename entry; no file open" << endl;
         return;
     }
     if (Entry *entry = resolvePath(path)) {
-        string label;
+        auto label = std::string();
         m_o << "enter new name: " << endl;
-        getline(m_i, label);
+        std::getline(m_i, label);
         if (label.empty()) {
             m_o << "can not rename; new name is empty" << endl;
         } else {
@@ -513,16 +523,16 @@ void InteractiveCli::renameEntry(const string &path)
     }
 }
 
-void InteractiveCli::moveEntry(const string &path)
+void InteractiveCli::moveEntry(const std::string &path)
 {
     if (!m_file.isOpen()) {
         m_o << "can not rename entry; no file open" << endl;
         return;
     }
     if (Entry *entry = resolvePath(path)) {
-        string newParentPath;
+        auto newParentPath = std::string();
         m_o << "enter path of new parent: " << endl;
-        getline(m_i, newParentPath);
+        std::getline(m_i, newParentPath);
         if (newParentPath.empty()) {
             m_o << "can not move; path of new parent is empty" << endl;
         } else {
@@ -547,7 +557,7 @@ void InteractiveCli::moveEntry(const string &path)
     }
 }
 
-void InteractiveCli::readField(const string &fieldName)
+void InteractiveCli::readField(const std::string &fieldName)
 {
     if (!m_file.isOpen()) {
         m_o << "can not read field; no file open" << endl;
@@ -571,7 +581,7 @@ void InteractiveCli::readField(const string &fieldName)
     }
 }
 
-void InteractiveCli::setField(bool useMuter, const string &fieldName)
+void InteractiveCli::setField(bool useMuter, const std::string &fieldName)
 {
     if (!m_file.isOpen()) {
         m_o << "can not set field; no file open" << endl;
@@ -581,22 +591,22 @@ void InteractiveCli::setField(bool useMuter, const string &fieldName)
         m_o << "can not set field; current entry is no account entry" << endl;
         return;
     }
-    vector<Field> &fields = static_cast<AccountEntry *>(m_currentEntry)->fields();
-    unsigned int valuesFound = 0;
-    string value;
+    auto &fields = static_cast<AccountEntry *>(m_currentEntry)->fields();
+    auto valuesFound = unsigned();
+    auto value = std::string();
     m_o << "enter new value: ";
     if (useMuter) {
         InputMuter m;
-        getline(m_i, value);
+        std::getline(m_i, value);
         m_o << endl << "repeat: ";
-        string repeat;
-        getline(m_i, repeat);
+        auto repeat = std::string();
+        std::getline(m_i, repeat);
         if (value != repeat) {
             m_o << "values do not match; field has not been altered" << endl;
             return;
         }
     } else {
-        getline(m_i, value);
+        std::getline(m_i, value);
     }
     for (Field &field : fields) {
         if (field.name() == fieldName) {
@@ -643,7 +653,7 @@ void InteractiveCli::setField(bool useMuter, const string &fieldName)
     }
 }
 
-void InteractiveCli::removeField(const string &fieldName)
+void InteractiveCli::removeField(const std::string &fieldName)
 {
     if (!m_file.isOpen()) {
         m_o << "can not remove field; no file open" << endl;
@@ -653,8 +663,8 @@ void InteractiveCli::removeField(const string &fieldName)
         m_o << "can not remove field; current entry is no account entry" << endl;
         return;
     }
-    vector<Field> &fields = static_cast<AccountEntry *>(m_currentEntry)->fields();
-    unsigned int valuesFound = 0;
+    auto &fields = static_cast<AccountEntry *>(m_currentEntry)->fields();
+    auto valuesFound = unsigned();
     for (const Field &field : fields) {
         if (field.name() == fieldName) {
             ++valuesFound;
@@ -730,7 +740,7 @@ void InteractiveCli::quit()
     }
 }
 
-string InteractiveCli::askForPassphrase(bool confirm)
+std::string InteractiveCli::askForPassphrase(bool confirm)
 {
     if (confirm) {
         m_o << "enter new passphrase: ";
@@ -738,10 +748,10 @@ string InteractiveCli::askForPassphrase(bool confirm)
         m_o << "enter passphrase: ";
     }
     m_o.flush();
-    string input1;
+    auto input1 = std::string();
     {
-        InputMuter m;
-        getline(m_i, input1);
+        auto m = InputMuter();
+        std::getline(m_i, input1);
     }
     m_o << endl;
     if (input1.empty()) {
@@ -751,15 +761,15 @@ string InteractiveCli::askForPassphrase(bool confirm)
     if (confirm) {
         m_o << "confirm new passphrase: ";
         m_o.flush();
-        string input2;
+        auto input2 = std::string();
         {
-            InputMuter m;
-            getline(m_i, input2);
+            auto m = InputMuter();
+            std::getline(m_i, input2);
         }
         m_o << endl;
         if (input1 != input2) {
             m_o << "phrases do not match" << endl;
-            throw runtime_error("confirmation failed");
+            throw std::runtime_error("confirmation failed");
         }
     }
     return input1;

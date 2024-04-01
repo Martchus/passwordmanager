@@ -17,7 +17,7 @@ class StackSupport {
     friend class StackAbsorper;
 
 public:
-    StackSupport(QUndoStack *undoStack = nullptr);
+    explicit StackSupport(QUndoStack *undoStack = nullptr);
 
 protected:
     QUndoStack *undoStack();
@@ -68,7 +68,7 @@ inline void StackSupport::clearUndoStack()
  */
 class StackAbsorper {
 public:
-    StackAbsorper(StackSupport *supported);
+    explicit StackAbsorper(StackSupport *supported);
     ~StackAbsorper();
     QUndoStack *stack();
 
