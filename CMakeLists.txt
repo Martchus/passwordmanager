@@ -105,7 +105,7 @@ set(REQUIRED_ICONS
     preferences-desktop-locale
     qtcreator
     search
-    story-editor
+    view-list-details-symbolic
     system-file-manager
     system-run
     system-search

@@ -32,7 +32,7 @@ Item {
                         height: Kirigami.Units.iconSizes.smallMedium
                         Layout.fillHeight: true
                         source: delegateModel.isNode(
-                                    index) ? "folder-symbolic" : "story-editor"
+                                    index) ? "folder-symbolic" : "view-list-details-symbolic"
                     }
                     Controls.Label {
                         Layout.fillWidth: true
