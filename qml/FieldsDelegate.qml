@@ -31,6 +31,8 @@ Item {
                     Controls.Label {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
+                        Layout.maximumWidth: availableWidth - listItem.overlayWidth
+                        elide: Text.ElideRight
                         text: {
                             let pieces = []
                             if (model.key) {

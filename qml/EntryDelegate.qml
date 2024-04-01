@@ -38,6 +38,8 @@ Item {
                     Controls.Label {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
+                        Layout.maximumWidth: availableWidth - listItem.overlayWidth
+                        elide: Text.ElideRight
                         text: model.name
                         verticalAlignment: Text.AlignVCenter
                     }
