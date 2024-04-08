@@ -126,25 +126,25 @@
 <context>
     <name>EntryDelegate</name>
     <message>
-        <location filename="../qml/EntryDelegate.qml" line="61"/>
-        <location filename="../qml/EntryDelegate.qml" line="91"/>
+        <location filename="../qml/EntryDelegate.qml" line="63"/>
+        <location filename="../qml/EntryDelegate.qml" line="93"/>
         <source>Cut</source>
         <translation>Ausschneiden</translation>
     </message>
     <message>
-        <location filename="../qml/EntryDelegate.qml" line="67"/>
+        <location filename="../qml/EntryDelegate.qml" line="69"/>
         <source>Cut %1</source>
         <translation>%1 ausgeschnitten</translation>
     </message>
     <message>
-        <location filename="../qml/EntryDelegate.qml" line="73"/>
-        <location filename="../qml/EntryDelegate.qml" line="102"/>
+        <location filename="../qml/EntryDelegate.qml" line="75"/>
+        <location filename="../qml/EntryDelegate.qml" line="104"/>
         <source>Delete</source>
         <translation>Löschen</translation>
     </message>
     <message>
-        <location filename="../qml/EntryDelegate.qml" line="80"/>
-        <location filename="../qml/EntryDelegate.qml" line="110"/>
+        <location filename="../qml/EntryDelegate.qml" line="82"/>
+        <location filename="../qml/EntryDelegate.qml" line="112"/>
         <source>Rename</source>
         <translation>Umbenennen</translation>
     </message>
@@ -171,50 +171,50 @@
 <context>
     <name>FieldsDelegate</name>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="63"/>
-        <location filename="../qml/FieldsDelegate.qml" line="96"/>
+        <location filename="../qml/FieldsDelegate.qml" line="65"/>
+        <location filename="../qml/FieldsDelegate.qml" line="98"/>
         <source>Mark as normal field</source>
         <translation>Als normales Feld markieren</translation>
     </message>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="63"/>
-        <location filename="../qml/FieldsDelegate.qml" line="97"/>
+        <location filename="../qml/FieldsDelegate.qml" line="65"/>
+        <location filename="../qml/FieldsDelegate.qml" line="99"/>
         <source>Mark as password field</source>
         <translation>Als Passwortfeld markieren</translation>
     </message>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="72"/>
-        <location filename="../qml/FieldsDelegate.qml" line="105"/>
+        <location filename="../qml/FieldsDelegate.qml" line="74"/>
+        <location filename="../qml/FieldsDelegate.qml" line="107"/>
         <source>Copy password</source>
         <translation>Passwort kopieren</translation>
     </message>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="72"/>
-        <location filename="../qml/FieldsDelegate.qml" line="105"/>
+        <location filename="../qml/FieldsDelegate.qml" line="74"/>
+        <location filename="../qml/FieldsDelegate.qml" line="107"/>
         <source>Copy value</source>
         <translation>Wert kopieren</translation>
     </message>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="76"/>
-        <location filename="../qml/FieldsDelegate.qml" line="109"/>
+        <location filename="../qml/FieldsDelegate.qml" line="78"/>
+        <location filename="../qml/FieldsDelegate.qml" line="111"/>
         <source>Copied</source>
         <translation>Kopiert</translation>
     </message>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="76"/>
-        <location filename="../qml/FieldsDelegate.qml" line="109"/>
+        <location filename="../qml/FieldsDelegate.qml" line="78"/>
+        <location filename="../qml/FieldsDelegate.qml" line="111"/>
         <source>Unable to access clipboard</source>
         <translation>Fehler beim Zugriff auf die Zwischenablage</translation>
     </message>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="81"/>
-        <location filename="../qml/FieldsDelegate.qml" line="115"/>
+        <location filename="../qml/FieldsDelegate.qml" line="83"/>
+        <location filename="../qml/FieldsDelegate.qml" line="117"/>
         <source>Delete field</source>
         <translation>Feld löschen</translation>
     </message>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="86"/>
-        <location filename="../qml/FieldsDelegate.qml" line="121"/>
+        <location filename="../qml/FieldsDelegate.qml" line="88"/>
+        <location filename="../qml/FieldsDelegate.qml" line="123"/>
         <source>Insert empty field after this</source>
         <translation>Leeres Feld nach diesem einfügen</translation>
     </message>
