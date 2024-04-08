@@ -10,6 +10,15 @@
 // enable inline helper functions for Qt Quick provided by qtutilities
 #define QT_UTILITIES_GUI_QTQUICK
 
+// ensure QGuiApplication is defined before resources.h for desktop file name
+#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
+#include <QApplication>
+using App = QApplication;
+#else
+#include <QGuiApplication>
+using App = QGuiApplication;
+#endif
+
 #include <qtutilities/misc/desktoputils.h>
 #include <qtutilities/resources/qtconfigarguments.h>
 #include <qtutilities/resources/resources.h>
@@ -22,14 +31,6 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QSettings>
-
-#ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
-#include <QApplication>
-using App = QApplication;
-#else
-#include <QGuiApplication>
-using App = QGuiApplication;
-#endif
 
 #include <cstdlib>
 

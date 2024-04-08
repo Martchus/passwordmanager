@@ -5,6 +5,8 @@
 #include "resources/config.h"
 #include "resources/qtconfig.h"
 
+#include <QApplication> // ensure QGuiApplication is defined before resources.h for desktop file name
+
 #include <qtutilities/resources/importplugin.h>
 #include <qtutilities/resources/qtconfigarguments.h>
 #include <qtutilities/resources/resources.h>
@@ -12,7 +14,6 @@
 
 #include <passwordfile/util/openssl.h>
 
-#include <QApplication>
 #include <QFile>
 #include <QMessageBox>
 #include <QSettings>
