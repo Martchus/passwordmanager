@@ -120,6 +120,11 @@ find_package(c++utilities${CONFIGURATION_PACKAGE_SUFFIX} 5.6.0 REQUIRED)
 use_cpp_utilities()
 
 # apply basic configuration
+set(BUILD_QUICK_GUI_BY_DEFAULT ON)
+if (WIN32 OR APPLE)
+    set(BUILD_QUICK_GUI_BY_DEFAULT OFF)
+endif ()
+option(QUICK_GUI "enables/disables building the Qt Quick GUI using Kirigami" "${BUILD_QUICK_GUI_BY_DEFAULT}")
 include(BasicConfig)
 
 # find qtutilities
