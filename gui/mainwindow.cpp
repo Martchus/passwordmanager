@@ -254,6 +254,9 @@ bool MainWindow::event(QEvent *event)
 {
     switch (event->type()) {
     case QEvent::PaletteChange:
+        if (m_qtSettings) {
+            m_qtSettings->reevaluatePaletteAndDefaultIconTheme();
+        }
         updateStyleSheet();
         break;
     default:;
