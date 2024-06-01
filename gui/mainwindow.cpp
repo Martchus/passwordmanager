@@ -281,7 +281,8 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
                 QString data;
                 const QMimeData *mimeData = dropEvent->mimeData();
                 if (mimeData->hasUrls()) {
-                    const QUrl url = mimeData->urls().front();
+                    const auto urls = mimeData->urls();
+                    const auto &url = urls.front();
                     if (url.scheme() == QLatin1String("file")) {
                         data = url.path();
                     }
