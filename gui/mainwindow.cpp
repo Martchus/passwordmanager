@@ -120,6 +120,21 @@ void MainWindow::updateStyleSheet()
 }
 
 /*!
+ * \brief Updates the columns sizing according to the checked action/option.
+ */
+void MainWindow::updateColumnSizing()
+{
+    auto *const header = m_ui->tableView->horizontalHeader();
+    if (m_ui->actionColumnWidthCustom->isChecked()) {
+        header->setStretchLastSection(true);
+        header->setCascadingSectionResizes(true);
+        header->setSectionResizeMode(QHeaderView::Interactive);
+    } else {
+        header->setSectionResizeMode(QHeaderView::Stretch);
+    }
+}
+
+/*!
  * \brief Constructs a new main window.
  */
 MainWindow::MainWindow(QSettings &settings, QtUtilities::QtSettings *qtSettings, QWidget *parent)
@@ -172,7 +187,18 @@ MainWindow::MainWindow(QSettings &settings, QtUtilities::QtSettings *qtSettings,
     m_ui->treeView->setFrameShape(QFrame::StyledPanel);
     m_ui->tableView->setFrameShape(QFrame::StyledPanel);
 #endif
-    m_ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+    // setup column sizing
+    auto *const columnSizingGroup = new QActionGroup(this);
+    columnSizingGroup->addAction(m_ui->actionColumnWidthAuto);
+    columnSizingGroup->addAction(m_ui->actionColumnWidthCustom);
+    if (settings.value(QStringLiteral("interactivecolumns")).toBool()) {
+        m_ui->actionColumnWidthCustom->setChecked(true);
+    } else {
+        m_ui->actionColumnWidthAuto->setChecked(true);
+    }
+    updateColumnSizing();
+
     // splitter sizes
     m_ui->splitter->setSizes(QList<int>() << 100 << 800);
 
@@ -225,6 +251,7 @@ MainWindow::MainWindow(QSettings &settings, QtUtilities::QtSettings *qtSettings,
     connect(m_undoStack, &QUndoStack::canRedoChanged, m_ui->actionRedo, &QAction::setEnabled);
     // -> view
     connect(passwordVisibilityGroup, &QActionGroup::triggered, this, &MainWindow::setPasswordVisibility);
+    connect(columnSizingGroup, &QActionGroup::triggered, this, &MainWindow::updateColumnSizing);
     connect(m_ui->actionShowUndoStack, &QAction::triggered, this, &MainWindow::showUndoView);
     // -> models
     connect(m_ui->treeView->selectionModel(), &QItemSelectionModel::currentRowChanged, this, &MainWindow::accountSelected);
@@ -333,6 +360,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
         pwVisibility = QStringLiteral("editing");
     }
     m_settings.setValue(QStringLiteral("pwvisibility"), QVariant(pwVisibility));
+    m_settings.setValue(QStringLiteral("interactivecolumns"), m_ui->actionColumnWidthCustom->isChecked());
     m_settings.endGroup();
     if (m_qtSettings) {
         m_qtSettings->save(m_settings);

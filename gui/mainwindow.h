@@ -110,6 +110,7 @@ private Q_SLOTS:
     void setSomethingChanged();
     void setSomethingChanged(bool somethingChanged);
     void updateStyleSheet();
+    void updateColumnSizing();
 
 private:
     // showing conditional messages/prompts

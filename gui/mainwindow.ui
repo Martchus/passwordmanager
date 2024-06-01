@@ -249,7 +249,15 @@
      <addaction name="actionShowOnlyWhenEditing"/>
      <addaction name="actionHideAlways"/>
     </widget>
+    <widget class="QMenu" name="menuColumnWiths">
+     <property name="title">
+      <string>Column withs</string>
+     </property>
+     <addaction name="actionColumnWidthAuto"/>
+     <addaction name="actionColumnWidthCustom"/>
+    </widget>
     <addaction name="menuPassword_visibility"/>
+    <addaction name="menuColumnWiths"/>
     <addaction name="actionShowUndoStack"/>
    </widget>
    <addaction name="menuProgramm"/>
@@ -567,6 +575,22 @@
    </property>
    <property name="text">
     <string>Details ...</string>
+   </property>
+  </action>
+  <action name="actionColumnWidthAuto">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Auto</string>
+   </property>
+  </action>
+  <action name="actionColumnWidthCustom">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Custom</string>
    </property>
   </action>
  </widget>
