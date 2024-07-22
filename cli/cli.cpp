@@ -39,7 +39,7 @@ InputMuter::InputMuter()
     m_cinHandle = GetStdHandle(STD_INPUT_HANDLE);
     m_mode = 0;
     GetConsoleMode(m_cinHandle, &m_mode);
-    SetConsoleMode(m_cinHandle, m_mode & (~ENABLE_ECHO_INPUT));
+    SetConsoleMode(m_cinHandle, m_mode & static_cast<DWORD>(~ENABLE_ECHO_INPUT));
 #endif
 }
 
@@ -55,12 +55,9 @@ InputMuter::~InputMuter()
 void clearConsole()
 {
 #if defined(PLATFORM_WINDOWS)
-    HANDLE hStdOut;
-    CONSOLE_SCREEN_BUFFER_INFO csbi;
-    DWORD count;
-    DWORD cellCount;
-    COORD homeCoords = { 0, 0 };
-    hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    auto hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    auto csbi = CONSOLE_SCREEN_BUFFER_INFO();
+    auto homeCoords = COORD{ 0, 0 };
     if (hStdOut == INVALID_HANDLE_VALUE) {
         return;
     }
@@ -68,9 +65,10 @@ void clearConsole()
     if (!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
         return;
     }
-    cellCount = csbi.dwSize.X * csbi.dwSize.Y;
+    auto count = DWORD();
+    auto cellCount = DWORD(csbi.dwSize.X * csbi.dwSize.Y);
     // fill the entire buffer with spaces
-    if (!FillConsoleOutputCharacter(hStdOut, (TCHAR)' ', cellCount, homeCoords, &count)) {
+    if (!FillConsoleOutputCharacter(hStdOut, static_cast<TCHAR>(' '), cellCount, homeCoords, &count)) {
         return;
     }
     // fill the entire buffer with the current colors and attributes
