@@ -28,7 +28,7 @@ ENABLE_QT_RESOURCES_OF_STATIC_DEPENDENCIES
 #include <iostream>
 
 // force (preferably Qt Quick) GUI under Android
-#ifdef Q_OS_ANDROID
+#if defined(Q_OS_ANDROID) || defined(Q_OS_WASM)
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS_OR_QTQUICK
 #define PASSWORD_MANAGER_FORCE_GUI
 #else
