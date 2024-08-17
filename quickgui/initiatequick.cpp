@@ -105,16 +105,17 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
 #endif
 
     // load main QML file; run event loop or exit if it cannot be loaded
-    const auto mainUrl = QUrl(QStringLiteral("qrc:/qml/main.qml"));
     QObject::connect(
         &engine, &QQmlApplicationEngine::objectCreated, &application,
-        [&mainUrl](QObject *obj, const QUrl &objUrl) {
-            if (!obj && objUrl == mainUrl) {
+        [](QObject *obj, const QUrl &objUrl) {
+            if (!obj) {
+                std::cerr << "Unable to load " << objUrl.toString().toStdString() << '\n';
                 QCoreApplication::exit(EXIT_FAILURE);
             }
         },
         Qt::QueuedConnection);
-    engine.load(mainUrl);
+    QObject::connect(&engine, &QQmlApplicationEngine::quit, &application, &QGuiApplication::quit);
+    engine.loadFromModule("Main", "Main");
     return application.exec();
 }
 } // namespace QtGui

@@ -40,6 +40,17 @@ set(WIDGETS_UI_FILES gui/mainwindow.ui gui/passwordgeneratordialog.ui)
 
 set(QML_HEADER_FILES quickgui/controller.h quickgui/initiatequick.h)
 set(QML_SRC_FILES quickgui/controller.cpp quickgui/initiatequick.cpp resources/icons.qrc resources/qml.qrc)
+set(QML_MODULE_FILES
+    qml/AboutDialog.qml
+    qml/BasicDialog.qml
+    qml/EntriesPage.qml
+    qml/EntryDelegate.qml
+    qml/FieldsDelegate.qml
+    qml/FieldsPage.qml
+    qml/FileDialog.qml
+    qml/Main.qml
+    qml/PasswordDialog.qml)
+list(APPEND EXCLUDED_FILES ${QML_MODULE_FILES}) # enable translations for qml files
 if (ANDROID)
     list(APPEND QML_HEADER_FILES quickgui/android.h)
     list(APPEND QML_SRC_FILES quickgui/android.cpp)
@@ -172,22 +183,6 @@ if (QUICK_GUI)
     list(APPEND ADDITIONAL_KF_MODULES Kirigami)
 endif ()
 
-# add Qt-version-specific QML files
-unset(QML_FILE)
-if (MAJOR_QT_VERSION)
-    set(QML_FILE "resources/qml${MAJOR_QT_VERSION}.qrc")
-endif ()
-if (NOT QML_FILE)
-    message(FATAL_ERROR "Unable to add Qt-version-specific resource file for QT_PACKAGE_PREFIX \"${QT_PACKAGE_PREFIX}\".")
-endif ()
-message(STATUS "Adding Qt-version-specific resource file \"${QML_FILE}\" to build")
-list(APPEND QML_SRC_FILES "${QML_FILE}")
-
-# add other QML files to "EXCLUDED_FILES" so they're still considered for translations in any case
-file(GLOB OTHER_QML_FILES "resources/qml*.qrc")
-list(REMOVE_ITEM OTHER_QML_FILES ${QML_SRC_FILES})
-list(APPEND EXCLUDED_FILES ${OTHER_QML_FILES})
-
 # apply further configuration
 if (WIDGETS_GUI OR QUICK_GUI)
     include(QtGuiConfig)
@@ -197,6 +192,21 @@ include(WindowsResources)
 include(AppTarget)
 include(ShellCompletion)
 include(ConfigHeader)
+
+# add Qml module
+if (QUICK_GUI)
+    qt_add_qml_module(
+        ${META_TARGET_NAME}
+        URI
+        "Main"
+        VERSION
+        1.0
+        NO_PLUGIN
+        QML_FILES
+        ${QML_MODULE_FILES}
+        RESOURCE_PREFIX
+        "/qt/qml/")
+endif ()
 
 # configure creating an Android package using androiddeployqt
 if (ANDROID)
