@@ -16,6 +16,12 @@
 #include <sstream>
 #include <string>
 
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+#define CHECK_STATE_CHANGED_SIGNAL &QCheckBox::checkStateChanged
+#else
+#define CHECK_STATE_CHANGED_SIGNAL &QCheckBox::stateChanged
+#endif
+
 using namespace std;
 using namespace Io;
 using namespace Util;
@@ -48,10 +54,10 @@ PasswordGeneratorDialog::PasswordGeneratorDialog(QWidget *parent)
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
 
     connect(m_ui->generatePassowordCommandLinkButton, &QCommandLinkButton::clicked, this, &PasswordGeneratorDialog::generateNewPassword);
-    connect(m_ui->useCapitalLettersCheckBox, &QCheckBox::stateChanged, this, &PasswordGeneratorDialog::handleCheckedCategoriesChanged);
-    connect(m_ui->useCapitalLettersCheckBox, &QCheckBox::stateChanged, this, &PasswordGeneratorDialog::handleCheckedCategoriesChanged);
-    connect(m_ui->useSmallLettersCheckBox, &QCheckBox::stateChanged, this, &PasswordGeneratorDialog::handleCheckedCategoriesChanged);
-    connect(m_ui->useDigitsCheckBox, &QCheckBox::stateChanged, this, &PasswordGeneratorDialog::handleCheckedCategoriesChanged);
+    connect(m_ui->useCapitalLettersCheckBox, CHECK_STATE_CHANGED_SIGNAL, this, &PasswordGeneratorDialog::handleCheckedCategoriesChanged);
+    connect(m_ui->useCapitalLettersCheckBox, CHECK_STATE_CHANGED_SIGNAL, this, &PasswordGeneratorDialog::handleCheckedCategoriesChanged);
+    connect(m_ui->useSmallLettersCheckBox, CHECK_STATE_CHANGED_SIGNAL, this, &PasswordGeneratorDialog::handleCheckedCategoriesChanged);
+    connect(m_ui->useDigitsCheckBox, CHECK_STATE_CHANGED_SIGNAL, this, &PasswordGeneratorDialog::handleCheckedCategoriesChanged);
     connect(m_ui->otherCharsLineEdit, &QLineEdit::textChanged, this, &PasswordGeneratorDialog::handleCheckedCategoriesChanged);
     connect(m_ui->passwordLineEdit, &QLineEdit::textChanged, this, &PasswordGeneratorDialog::handlePasswordChanged);
     connect(m_ui->closePushButton, &QPushButton::clicked, this, &PasswordGeneratorDialog::close);
