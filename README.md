@@ -118,13 +118,15 @@ always requires the same major Qt version as your KDE modules use.
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX="/install/prefix" \
     "$SOURCES/subdirs/passwordmanager"
-   ninja install
+   cmake --build .
    ```
     * If the install directory is not writable, do **not** conduct the build as root. Instead, set `DESTDIR` to a
-      writable location (e.g. `DESTDIR="temporary/install/dir" ninja install`) and move the files from there to
+      writable location (e.g. `DESTDIR="temporary/install/dir" cmake --build .`) and move the files from there to
       the desired location afterwards.
+    * Especially for development it is more straight forward to use
+      [CMake presets](https://github.com/Martchus/cpp-utilities/blob/master/README.md#cmake-presets).
 
-#### Concrete example of 3. for building an Android APK under Arch Linux
+#### Concrete example of building an Android APK under Arch Linux using CMake preset
 Create a key for signing the package (always required; otherwise the APK file won't install):
 ```
 # set variables for creating keystore and androiddeployqt to find it
@@ -140,23 +142,19 @@ popd
 Build c++utilities, passwordfile, qtutilities and passwordmanager in one step to create an Android APK for aarch64:
 
 ```
-# use Java 17 (the latest Java doesn't work at this point) and avoid unwanted Java options
+# use Java 17 (the latest Java doesn't work at this point, see QTBUG-119223) and avoid unwanted Java options
 export PATH=/usr/lib/jvm/java-17-openjdk/bin:$PATH
 export _JAVA_OPTIONS=
 
-# configure and build using helpers from android-cmake package
-android_arch=aarch64
-build_dir=$BUILD_DIR/../manual/passwordmanager-android-$android_arch-release
-source /usr/bin/android-env $android_arch
-android-$android_arch-cmake -G Ninja -S . -B "$build_dir" \
-  -DCMAKE_FIND_ROOT_PATH="${ANDROID_PREFIX}" -DANDROID_SDK_ROOT="${ANDROID_HOME}" \
-  -DPKG_CONFIG_EXECUTABLE:FILEPATH="/usr/bin/$ANDROID_PKGCONFIG" \
-  -DBUILTIN_ICON_THEMES='breeze;breeze-dark' -DBUILTIN_TRANSLATIONS=ON \
-  -DQT_PACKAGE_PREFIX:STRING=Qt6 -DKF_PACKAGE_PREFIX:STRING=KF6
-cmake --build "$build_dir"
+# configure and build using CMake presets and helpers from android-cmake package
+source /usr/bin/android-env aarch64
+export BUILD_DIR=…
+cd "$SOURCES/subdirs/passwordmanager"
+cmake --preset arch-android -DBUILTIN_ICON_THEMES='breeze;breeze-dark'
+cmake --build --preset arch-android
 
 # install the app
-adb install "$build_dir/passwordmanager/android-build//build/outputs/apk/release/android-build-release-signed.apk"
+adb install "$BUILD_DIR/passwordmanager/arch-android-arm64-v8a/android-build//build/outputs/apk/release/android-build-release-signed.apk"
 ```
 
 ##### Notes
@@ -165,6 +163,7 @@ adb install "$build_dir/passwordmanager/android-build//build/outputs/apk/release
 * The latest Java I was able to use was version 17.
 * Use  `QT_QUICK_CONTROLS_STYLE=Material` and `QT_QUICK_CONTROLS_MOBILE=1` to test the Qt Quick GUI like it would be shown under
   Android via a normal desktop build.
+* One can open the Gradle project that is created within the build directory in Android Studio.
 
 ### Building without Qt GUI
 It is possible to build without the GUI if only the CLI is needed. In this case no Qt dependencies (including qtutilities) are required.
