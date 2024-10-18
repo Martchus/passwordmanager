@@ -299,39 +299,202 @@
     </message>
 </context>
 <context>
-    <name>FileDialog5</name>
+    <name>FileDialog</name>
     <message>
-        <location filename="../qml/FileDialog5.qml" line="6"/>
+        <location filename="../qml/FileDialog.qml" line="7"/>
         <source>Select an existing file</source>
         <translation>Bestehende Datei auswählen</translation>
     </message>
     <message>
-        <location filename="../qml/FileDialog5.qml" line="6"/>
+        <location filename="../qml/FileDialog.qml" line="7"/>
         <source>Select path to save file</source>
         <translation>Neuen Pfad für Datei auswählen</translation>
     </message>
     <message>
-        <location filename="../qml/FileDialog5.qml" line="6"/>
+        <location filename="../qml/FileDialog.qml" line="7"/>
         <source>Select path for new file</source>
         <translation>Pfad für neue Datei auswählen</translation>
     </message>
 </context>
 <context>
+    <name>FileDialog5</name>
+    <message>
+        <source>Select an existing file</source>
+        <translation type="vanished">Bestehende Datei auswählen</translation>
+    </message>
+    <message>
+        <source>Select path to save file</source>
+        <translation type="vanished">Neuen Pfad für Datei auswählen</translation>
+    </message>
+    <message>
+        <source>Select path for new file</source>
+        <translation type="vanished">Pfad für neue Datei auswählen</translation>
+    </message>
+</context>
+<context>
     <name>FileDialog6</name>
     <message>
-        <location filename="../qml/FileDialog6.qml" line="7"/>
         <source>Select an existing file</source>
-        <translation>Bestehende Datei auswählen</translation>
+        <translation type="vanished">Bestehende Datei auswählen</translation>
     </message>
     <message>
-        <location filename="../qml/FileDialog6.qml" line="7"/>
         <source>Select path to save file</source>
-        <translation>Neuen Pfad für Datei auswählen</translation>
+        <translation type="vanished">Neuen Pfad für Datei auswählen</translation>
     </message>
     <message>
-        <location filename="../qml/FileDialog6.qml" line="7"/>
         <source>Select path for new file</source>
-        <translation>Pfad für neue Datei auswählen</translation>
+        <translation type="vanished">Pfad für neue Datei auswählen</translation>
+    </message>
+</context>
+<context>
+    <name>Main</name>
+    <message>
+        <location filename="../qml/Main.qml" line="39"/>
+        <source>Filter</source>
+        <translation>Filter</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="71"/>
+        <source>No file opened</source>
+        <translation>Keine Datei geöffnet</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="96"/>
+        <source>No password set
+File will be saved unencrypted!</source>
+        <translation>Kein Passwort gesetzt
+Datei wird unverschlüsselt gespeichert!</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="106"/>
+        <source>Create new file</source>
+        <translation>Neue Datei erstellen</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="112"/>
+        <source>Open existing file</source>
+        <translation>Bestehende Datei öffnen</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="119"/>
+        <source>Recently opened ...</source>
+        <translation>Kürzlich geöffnet ...</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="127"/>
+        <source>Save modifications</source>
+        <translation>Änderungen Speichern</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="134"/>
+        <source>Save as</source>
+        <translation>Speichern unter</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="141"/>
+        <source>Change password</source>
+        <translation>Passwort ändern</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="141"/>
+        <source>Add password</source>
+        <translation>Passwort hinzufügen</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="146"/>
+        <source>Change password for %1</source>
+        <translation>Passwort für %1 ändern</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="151"/>
+        <source>Details</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="161"/>
+        <source>Search</source>
+        <translation>Suchen</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="161"/>
+        <source>Adjust search</source>
+        <translation>Suche ändern</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="173"/>
+        <location filename="../qml/Main.qml" line="285"/>
+        <source>Clear search</source>
+        <translation>Suchmodus verlassen</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="185"/>
+        <source>Undo &quot;%1&quot;</source>
+        <translation>&quot;%1&quot; rückgängig machen</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="194"/>
+        <source>Redo &quot;%1&quot;</source>
+        <translation>&quot;%1&quot; wiederherstellen</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="203"/>
+        <source>Close file</source>
+        <translation>Datei schließen</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="213"/>
+        <source>About</source>
+        <translation>Über</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="245"/>
+        <source>File details</source>
+        <translation>Details über geöffnete Datei</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="267"/>
+        <source>Search for categories and accounts</source>
+        <translation>Nach Kategorien/Konten suchen</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="280"/>
+        <source>Apply search term</source>
+        <translation>Suche starten</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="290"/>
+        <source>Quit dialog</source>
+        <translation>Suchdialog schließen</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="318"/>
+        <source>Retry</source>
+        <translation>Nochmal versuchen</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="329"/>
+        <source>Password required to open %1</source>
+        <translation>Zum Öffnen von %1 wird ein Passwort benötigt</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="336"/>
+        <source>%1 closed</source>
+        <translation>%1 geschlossen</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="341"/>
+        <source>%1 opened</source>
+        <translation>%1 geöffnet</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="346"/>
+        <source>%1 saved</source>
+        <translation>%1 gespeichert</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="400"/>
+        <source>Clear recently opened files</source>
+        <translation>Liste kürzlich geöffneter Dateien löschen</translation>
     </message>
 </context>
 <context>
@@ -1189,19 +1352,19 @@ OpenSSL-Fehler: %1</translation>
         <translation>Schließen</translation>
     </message>
     <message>
-        <location filename="../gui/passwordgeneratordialog.cpp" line="151"/>
+        <location filename="../gui/passwordgeneratordialog.cpp" line="157"/>
         <source>Failed to generate password.
 OpenSSL error: %1</source>
         <translation>Passwort kann nicht generiert werden.
 OpenSSL-Fehler: %1</translation>
     </message>
     <message>
-        <location filename="../gui/passwordgeneratordialog.cpp" line="137"/>
+        <location filename="../gui/passwordgeneratordialog.cpp" line="143"/>
         <source>You have to select at least one checkbox.</source>
         <translation>Du musst mindestens eine Zeichenkategorie wählen.</translation>
     </message>
     <message>
-        <location filename="../gui/passwordgeneratordialog.cpp" line="94"/>
+        <location filename="../gui/passwordgeneratordialog.cpp" line="100"/>
         <source>The length has to be at least one.</source>
         <translation>Die Länge muss positiv sein.</translation>
     </message>
@@ -1216,111 +1379,82 @@ OpenSSL-Fehler: %1</translation>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="39"/>
-        <source>Filter</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="71"/>
         <source>No file opened</source>
-        <translation>Keine Datei geöffnet</translation>
+        <translation type="vanished">Keine Datei geöffnet</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="96"/>
         <source>No password set
 File will be saved unencrypted!</source>
-        <translation>Kein Passwort gesetzt
+        <translation type="vanished">Kein Passwort gesetzt
 Datei wird unverschlüsselt gespeichert!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="106"/>
         <source>Create new file</source>
-        <translation>Neue Datei erstellen</translation>
+        <translation type="vanished">Neue Datei erstellen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="112"/>
         <source>Open existing file</source>
-        <translation>Bestehende Datei öffnen</translation>
+        <translation type="vanished">Bestehende Datei öffnen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="119"/>
         <source>Recently opened ...</source>
-        <translation>Kürzlich geöffnet ...</translation>
+        <translation type="vanished">Kürzlich geöffnet ...</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="127"/>
         <source>Save modifications</source>
-        <translation>Änderungen Speichern</translation>
+        <translation type="vanished">Änderungen Speichern</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="134"/>
         <source>Save as</source>
-        <translation>Speichern unter</translation>
+        <translation type="vanished">Speichern unter</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="141"/>
         <source>Change password</source>
-        <translation>Passwort ändern</translation>
+        <translation type="vanished">Passwort ändern</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="141"/>
         <source>Add password</source>
-        <translation>Passwort hinzufügen</translation>
+        <translation type="vanished">Passwort hinzufügen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="146"/>
         <source>Change password for %1</source>
-        <translation>Passwort für %1 ändern</translation>
+        <translation type="vanished">Passwort für %1 ändern</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="151"/>
-        <source>Details</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="161"/>
         <source>Search</source>
-        <translation>Suchen</translation>
+        <translation type="vanished">Suchen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="161"/>
         <source>Adjust search</source>
-        <translation>Suche ändern</translation>
+        <translation type="vanished">Suche ändern</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="173"/>
-        <location filename="../qml/main.qml" line="285"/>
         <source>Clear search</source>
-        <translation>Suchmodus verlassen</translation>
+        <translation type="vanished">Suchmodus verlassen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="185"/>
         <source>Undo &quot;%1&quot;</source>
-        <translation>&quot;%1&quot; rückgängig machen</translation>
+        <translation type="vanished">&quot;%1&quot; rückgängig machen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="194"/>
         <source>Redo &quot;%1&quot;</source>
-        <translation>&quot;%1&quot; wiederherstellen</translation>
+        <translation type="vanished">&quot;%1&quot; wiederherstellen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="203"/>
         <source>Close file</source>
-        <translation>Datei schließen</translation>
+        <translation type="vanished">Datei schließen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="213"/>
         <source>About</source>
-        <translation>Über</translation>
+        <translation type="vanished">Über</translation>
     </message>
     <message>
         <source>Use native file dialog</source>
         <translation type="vanished">Nativen Dateidialog verwenden</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="245"/>
         <source>File details</source>
-        <translation>Details über geöffnete Datei</translation>
+        <translation type="vanished">Details über geöffnete Datei</translation>
     </message>
     <message>
         <source>Select an existing file</source>
@@ -1335,49 +1469,40 @@ Datei wird unverschlüsselt gespeichert!</translation>
         <translation type="vanished">Neuen Pfad für Datei auswählen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="267"/>
         <source>Search for categories and accounts</source>
-        <translation>Nach Kategorien/Konten suchen</translation>
+        <translation type="vanished">Nach Kategorien/Konten suchen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="280"/>
         <source>Apply search term</source>
-        <translation>Suche starten</translation>
+        <translation type="vanished">Suche starten</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="290"/>
         <source>Quit dialog</source>
-        <translation>Suchdialog schließen</translation>
+        <translation type="vanished">Suchdialog schließen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="318"/>
         <source>Retry</source>
-        <translation>Nochmal versuchen</translation>
+        <translation type="vanished">Nochmal versuchen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="329"/>
         <source>Password required to open %1</source>
-        <translation>Zum Öffnen von %1 wird ein Passwort benötigt</translation>
+        <translation type="vanished">Zum Öffnen von %1 wird ein Passwort benötigt</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="336"/>
         <source>%1 closed</source>
-        <translation>%1 geschlossen</translation>
+        <translation type="vanished">%1 geschlossen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="341"/>
         <source>%1 opened</source>
-        <translation>%1 geöffnet</translation>
+        <translation type="vanished">%1 geöffnet</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="346"/>
         <source>%1 saved</source>
-        <translation>%1 gespeichert</translation>
+        <translation type="vanished">%1 gespeichert</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="400"/>
         <source>Clear recently opened files</source>
-        <translation>Liste kürzlich geöffneter Dateien löschen</translation>
+        <translation type="vanished">Liste kürzlich geöffneter Dateien löschen</translation>
     </message>
 </context>
 <context>
