@@ -126,45 +126,6 @@ always requires the same major Qt version as your KDE modules use.
     * Especially for development it is more straight forward to use
       [CMake presets](https://github.com/Martchus/cpp-utilities/blob/master/README.md#cmake-presets).
 
-#### Concrete example of building an Android APK under Arch Linux using CMake preset
-Create a key for signing the package (always required; otherwise the APK file won't install):
-```
-# set variables for creating keystore and androiddeployqt to find it
-export QT_ANDROID_KEYSTORE_PATH=/path/to/keystore-dir QT_ANDROID_KEYSTORE_ALIAS=$USER-devel QT_ANDROID_KEYSTORE_STORE_PASS=$USER-devel QT_ANDROID_KEYSTORE_KEY_PASS=$USER-devel
-
-# create keystore (do only once)
-mkdir -p "${QT_ANDROID_KEYSTORE_PATH%/*}"
-pushd "${QT_ANDROID_KEYSTORE_PATH%/*}"
-keytool -genkey -v -keystore "$QT_ANDROID_KEYSTORE_ALIAS" -alias "$QT_ANDROID_KEYSTORE_ALIAS" -keyalg RSA -keysize 2048 -validity 10000
-popd
-```
-
-Build c++utilities, passwordfile, qtutilities and passwordmanager in one step to create an Android APK for aarch64:
-
-```
-# use Java 17 (the latest Java doesn't work at this point, see QTBUG-119223) and avoid unwanted Java options
-export PATH=/usr/lib/jvm/java-17-openjdk/bin:$PATH
-export _JAVA_OPTIONS=
-
-# configure and build using CMake presets and helpers from android-cmake package
-source /usr/bin/android-env aarch64
-export BUILD_DIR=…
-cd "$SOURCES/subdirs/passwordmanager"
-cmake --preset arch-android -DBUILTIN_ICON_THEMES='breeze;breeze-dark'
-cmake --build --preset arch-android
-
-# install the app
-adb install "$BUILD_DIR/passwordmanager/arch-android-arm64-v8a/android-build//build/outputs/apk/release/android-build-release-signed.apk"
-```
-
-##### Notes
-* The Android packages for the dependencies Boost, Qt, iconv, OpenSSL and Kirigami are provided in
-  my [PKGBUILDs](http://github.com/Martchus/PKGBUILDs) repo.
-* The latest Java I was able to use was version 17.
-* Use  `QT_QUICK_CONTROLS_STYLE=Material` and `QT_QUICK_CONTROLS_MOBILE=1` to test the Qt Quick GUI like it would be shown under
-  Android via a normal desktop build.
-* One can open the Gradle project that is created within the build directory in Android Studio.
-
 ### Building without Qt GUI
 It is possible to build without the GUI if only the CLI is needed. In this case no Qt dependencies (including qtutilities) are required.
 
