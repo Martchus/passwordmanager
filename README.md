@@ -134,6 +134,10 @@ To build without GUI, add the following parameters to the CMake call:
 -DWIDGETS_GUI=OFF -DQUICK_GUI=OFF
 ```
 
+### Further remarks
+Set the environment variable `QT_QUICK_CONTROLS_MOBILE=1` to let the Qt Quick GUI behave as on a mobile platform; useful
+for testing the behavior in mobile mode without deployment on a real/emulated device.
+
 ## Copyright notice and license
 Copyright © 2015-2024 Marius Kittler
 
