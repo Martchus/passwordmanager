@@ -1,5 +1,4 @@
 # C++ objects and libs
-
 *.slo
 *.lo
 *.o
@@ -11,7 +10,6 @@
 *.dylib
 
 # Qt-es
-
 /.qmake.cache
 /.qmake.stash
 *.pro.user
@@ -25,14 +23,21 @@ qrc_*.cpp
 ui_*.h
 Makefile*
 *-build-*
+.qmlls.ini
 
 # QtCreator
-
 *.autosave
 
-#QtCtreator Qml
+# QtCtreator Qml
 *.qmlproject.user
 *.qmlproject.user.*
+
+# Generated files
+/*/android/AndroidManifest.xml
+
+# Created by Java extension of Visual Studio Code
+/android/.gradle
+/android/build
 
 # Dolphin
 .directory
@@ -40,8 +45,16 @@ Makefile*
 # documentation
 /doc
 
-# clang-format
-/.clang-format
+# tests
+/*/testfiles/output.*
+/*/testfiles/workingdir/*
 
-# Android-specific
-/android/AndroidManifest.xml
+# experimental
+scripts/
+
+# clang-format
+.clang-format
+
+# clangd
+compile_commands.json
+.cache
