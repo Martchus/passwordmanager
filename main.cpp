@@ -47,7 +47,17 @@ static int fail(std::string_view error)
 }
 #endif
 
-int main(int argc, char *argv[])
+// define macro to export main function if required
+// note: This macro can be removed when depending on c++utilities 5.28.0.
+#ifndef CPP_UTILITIES_MAIN_EXPORT
+#ifdef PLATFORM_ANDROID
+#define CPP_UTILITIES_MAIN_EXPORT CPP_UTILITIES_GENERIC_LIB_EXPORT
+#else
+#define CPP_UTILITIES_MAIN_EXPORT
+#endif
+#endif
+
+CPP_UTILITIES_MAIN_EXPORT int main(int argc, char *argv[])
 {
     CMD_UTILS_CONVERT_ARGS_TO_UTF8;
     SET_APPLICATION_INFO;
