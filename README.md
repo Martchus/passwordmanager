@@ -139,6 +139,6 @@ Set the environment variable `QT_QUICK_CONTROLS_MOBILE=1` to let the Qt Quick GU
 for testing the behavior in mobile mode without deployment on a real/emulated device.
 
 ## Copyright notice and license
-Copyright © 2015-2024 Marius Kittler
+Copyright © 2015-2025 Marius Kittler
 
 All code is licensed under [GPL-2-or-later](LICENSE).
