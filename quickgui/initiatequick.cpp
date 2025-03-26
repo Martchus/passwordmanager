@@ -88,6 +88,7 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
     LOAD_QT_TRANSLATIONS;
 
     // init QML engine
+    QtUtilities::deletePipelineCacheIfNeeded();
     auto engine = QQmlApplicationEngine();
 #ifdef Q_OS_ANDROID
     registerControllerForAndroid(&controller);
