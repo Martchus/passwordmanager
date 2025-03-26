@@ -127,7 +127,7 @@ set(REQUIRED_ICONS
 set(CONFIGURATION_PACKAGE_SUFFIX
     ""
     CACHE STRING "sets the suffix for find_package() calls to packages configured via c++utilities")
-find_package(c++utilities${CONFIGURATION_PACKAGE_SUFFIX} 5.6.0 REQUIRED)
+find_package(c++utilities${CONFIGURATION_PACKAGE_SUFFIX} 5.28.0 REQUIRED)
 use_cpp_utilities()
 
 # apply basic configuration
