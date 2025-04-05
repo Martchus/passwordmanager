@@ -220,7 +220,21 @@ if (ANDROID)
                    QT_ANDROID_TARGET_SDK_VERSION "34")
 
     set(ANDROID_MANIFEST_PATH "${ANDROID_PACKAGE_SOURCE_DIR}/AndroidManifest.xml")
-    configure_file("resources/AndroidManifest.xml.in" "${ANDROID_MANIFEST_PATH}")
+    configure_file("resources/AndroidManifest.xml.in" "${ANDROID_MANIFEST_PATH}" @ONLY)
+
+    # specify required plugins so androiddeployqt knows what we need and don't need
+    # cmake-format: off
+    qt_import_plugins(${META_TARGET_NAME}
+        INCLUDE_BY_TYPE imageformats Qt::QSvgPlugin
+        INCLUDE_BY_TYPE iconengines Qt::QSvgIconPlugin
+        INCLUDE_BY_TYPE tls
+        INCLUDE_BY_TYPE networkinformation
+        INCLUDE_BY_TYPE platforms Qt::QAndroidIntegrationPlugin
+    )
+    # cmake-format: on
+    if (NOT CMAKE_BUILD_TYPE STREQUAL Debug)
+        qt_import_plugins(${META_TARGET_NAME} EXCLUDE_BY_TYPE qmltooling)
+    endif ()
 
     # bundle OpenMP (used by Kirigami) explicitly as it is otherwise not bundled
     find_package(OpenMP)
@@ -230,6 +244,9 @@ if (ANDROID)
     endif ()
 
     set(QT_ANDROID_SIGN_APK ON)
+    if (COMMAND _qt_internal_configure_android_multiabi_target)
+        _qt_internal_configure_android_multiabi_target(${META_TARGET_NAME}) # required as of Qt 6.9.0 (probably Qt bug)
+    endif ()
     qt_android_generate_deployment_settings(${META_TARGET_NAME})
     qt_android_add_apk_target(${META_TARGET_NAME})
 endif ()

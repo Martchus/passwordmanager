@@ -93,6 +93,7 @@ can be passed to CMake to influence the build.
 * When building any Qt GUI, the library qtutilities is required.
 * When building with Qt Widgets GUI support, the following Qt modules are required (version 5.6 or higher): core gui widgets
 * When building with support for the experimental Qt Quick GUI, the following Qt/KDE modules are required (version 6.6 or higher): core gui qml quick quickcontrols2 kirigami
+* When building for Android at least Qt 6.9.0 is required.
 
 To specify the major Qt version to use, set `QT_PACKAGE_PREFIX` (e.g. add `-DQT_PACKAGE_PREFIX:STRING=Qt6`
 to the CMake arguments). There's also `KF_PACKAGE_PREFIX` for KDE dependencies. Note that the Qt Quick GUI
