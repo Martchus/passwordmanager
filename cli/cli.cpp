@@ -22,7 +22,6 @@
 #include <map>
 #include <stdexcept>
 
-using namespace std::placeholders;
 using namespace CppUtilities;
 using namespace CppUtilities::EscapeCodes;
 using namespace Io;
