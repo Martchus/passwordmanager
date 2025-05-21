@@ -349,150 +349,150 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../qml/Main.qml" line="39"/>
+        <location filename="../qml/Main.qml" line="37"/>
         <source>Filter</source>
         <translation>Filter</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="71"/>
+        <location filename="../qml/Main.qml" line="69"/>
         <source>No file opened</source>
         <translation>Keine Datei geöffnet</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="96"/>
+        <location filename="../qml/Main.qml" line="94"/>
         <source>No password set
 File will be saved unencrypted!</source>
         <translation>Kein Passwort gesetzt
 Datei wird unverschlüsselt gespeichert!</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="106"/>
+        <location filename="../qml/Main.qml" line="104"/>
         <source>Create new file</source>
         <translation>Neue Datei erstellen</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="112"/>
+        <location filename="../qml/Main.qml" line="110"/>
         <source>Open existing file</source>
         <translation>Bestehende Datei öffnen</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="119"/>
+        <location filename="../qml/Main.qml" line="117"/>
         <source>Recently opened ...</source>
         <translation>Kürzlich geöffnet ...</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="127"/>
+        <location filename="../qml/Main.qml" line="125"/>
         <source>Save modifications</source>
         <translation>Änderungen Speichern</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="134"/>
+        <location filename="../qml/Main.qml" line="132"/>
         <source>Save as</source>
         <translation>Speichern unter</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="141"/>
+        <location filename="../qml/Main.qml" line="139"/>
         <source>Change password</source>
         <translation>Passwort ändern</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="141"/>
+        <location filename="../qml/Main.qml" line="139"/>
         <source>Add password</source>
         <translation>Passwort hinzufügen</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="146"/>
+        <location filename="../qml/Main.qml" line="144"/>
         <source>Change password for %1</source>
         <translation>Passwort für %1 ändern</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="151"/>
+        <location filename="../qml/Main.qml" line="149"/>
         <source>Details</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="161"/>
+        <location filename="../qml/Main.qml" line="159"/>
         <source>Search</source>
         <translation>Suchen</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="161"/>
+        <location filename="../qml/Main.qml" line="159"/>
         <source>Adjust search</source>
         <translation>Suche ändern</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="173"/>
-        <location filename="../qml/Main.qml" line="285"/>
+        <location filename="../qml/Main.qml" line="171"/>
+        <location filename="../qml/Main.qml" line="283"/>
         <source>Clear search</source>
         <translation>Suchmodus verlassen</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="185"/>
+        <location filename="../qml/Main.qml" line="183"/>
         <source>Undo &quot;%1&quot;</source>
         <translation>&quot;%1&quot; rückgängig machen</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="194"/>
+        <location filename="../qml/Main.qml" line="192"/>
         <source>Redo &quot;%1&quot;</source>
         <translation>&quot;%1&quot; wiederherstellen</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="203"/>
+        <location filename="../qml/Main.qml" line="201"/>
         <source>Close file</source>
         <translation>Datei schließen</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="213"/>
+        <location filename="../qml/Main.qml" line="211"/>
         <source>About</source>
         <translation>Über</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="245"/>
+        <location filename="../qml/Main.qml" line="243"/>
         <source>File details</source>
         <translation>Details über geöffnete Datei</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="267"/>
+        <location filename="../qml/Main.qml" line="265"/>
         <source>Search for categories and accounts</source>
         <translation>Nach Kategorien/Konten suchen</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="280"/>
+        <location filename="../qml/Main.qml" line="278"/>
         <source>Apply search term</source>
         <translation>Suche starten</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="290"/>
+        <location filename="../qml/Main.qml" line="288"/>
         <source>Quit dialog</source>
         <translation>Suchdialog schließen</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="318"/>
+        <location filename="../qml/Main.qml" line="316"/>
         <source>Retry</source>
         <translation>Nochmal versuchen</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="329"/>
+        <location filename="../qml/Main.qml" line="327"/>
         <source>Password required to open %1</source>
         <translation>Zum Öffnen von %1 wird ein Passwort benötigt</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="336"/>
+        <location filename="../qml/Main.qml" line="334"/>
         <source>%1 closed</source>
         <translation>%1 geschlossen</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="341"/>
+        <location filename="../qml/Main.qml" line="339"/>
         <source>%1 opened</source>
         <translation>%1 geöffnet</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="346"/>
+        <location filename="../qml/Main.qml" line="344"/>
         <source>%1 saved</source>
         <translation>%1 gespeichert</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="400"/>
+        <location filename="../qml/Main.qml" line="398"/>
         <source>Clear recently opened files</source>
         <translation>Liste kürzlich geöffneter Dateien löschen</translation>
     </message>
