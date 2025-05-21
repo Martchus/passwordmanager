@@ -52,6 +52,8 @@ public:
     void cd(const std::string &path);
     void ls();
     void tree();
+    void search(const std::string &term);
+    void duplicates();
     void makeEntry(Io::EntryType entryType, const std::string &label);
     void removeEntry(const std::string &path);
     void renameEntry(const std::string &path);
