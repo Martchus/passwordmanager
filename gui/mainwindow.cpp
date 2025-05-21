@@ -115,7 +115,7 @@ void MainWindow::updateStyleSheet()
     const auto p = palette();
     setStyleSheet(QStringLiteral("%1 #splitter QWidget { background-color: palette(base); color: palette(text); } #splitter QWidget *, #splitter "
                                  "QWidget * { background-color: none; } #leftWidget { border-right: 1px solid %2; }")
-                      .arg(dialogStyleForPalette(p), windowFrameColorForPalette(p).name()));
+            .arg(dialogStyleForPalette(p), windowFrameColorForPalette(p).name()));
 #endif
 }
 

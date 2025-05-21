@@ -184,7 +184,7 @@ void PasswordGeneratorDialog::updateStyleSheet()
 #ifdef Q_OS_WINDOWS
     const auto p = palette();
     setStyleSheet(QStringLiteral("%1 QCommandLinkButton  { font-size: 12pt; color: %2; font-weight: normal; }")
-                      .arg(dialogStyleForPalette(p), instructionTextColorForPalette(p).name()));
+            .arg(dialogStyleForPalette(p), instructionTextColorForPalette(p).name()));
 #endif
 }
 

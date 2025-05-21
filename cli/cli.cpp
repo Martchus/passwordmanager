@@ -28,14 +28,14 @@ using namespace Io;
 
 namespace Cli {
 
-template<typename CharType> static CharType toLower(CharType c)
+template <typename CharType> static CharType toLower(CharType c)
 {
     return (c >= 'A' && c <= 'Z') ? (c + ('a' - 'A')) : c;
 }
 
-template<typename StringType> static bool containsCaseInsensitive(const StringType &str1, const StringType &str2)
+template <typename StringType> static bool containsCaseInsensitive(const StringType &str1, const StringType &str2)
 {
-    return std::search(str1.begin(), str1.end(), str2.begin(), str2.end(), [] (auto a, auto b) { return toLower(a) == toLower(b); }) != str1.end();
+    return std::search(str1.begin(), str1.end(), str2.begin(), str2.end(), [](auto a, auto b) { return toLower(a) == toLower(b); }) != str1.end();
 }
 
 InputMuter::InputMuter()
@@ -126,9 +126,9 @@ int InteractiveCli::run(std::string_view file)
 
 void InteractiveCli::processCommand(const std::string &cmd)
 {
-#define CMD(value) !paramMissing && cmd == value
+#define CMD(value) !paramMissing &&cmd == value
 #define CMD2(value1, value2) !paramMissing && (cmd == value1 || cmd == value2)
-#define CMD_P(value) !paramMissing && checkCommand(cmd, value, param, paramMissing)
+#define CMD_P(value) !paramMissing &&checkCommand(cmd, value, param, paramMissing)
 #define CMD2_P(value1, value2) !paramMissing && (checkCommand(cmd, value1, param, paramMissing) || checkCommand(cmd, value2, param, paramMissing))
 
     auto param = std::string();
