@@ -20,6 +20,9 @@
 #include <qtutilities/settingsdialog/optioncategorymodel.h>
 #include <qtutilities/settingsdialog/qtsettings.h>
 #include <qtutilities/settingsdialog/settingsdialog.h>
+#ifdef PASSWORD_MANAGER_SETUP_TOOLS_ENABLED
+#include <qtutilities/settingsdialog/optioncategory.h>
+#endif
 
 #include <c++utilities/conversion/stringconversion.h>
 #include <c++utilities/io/path.h>
@@ -146,6 +149,10 @@ MainWindow::MainWindow(QSettings &settings, QtUtilities::QtSettings *qtSettings,
     , m_settings(settings)
     , m_qtSettings(qtSettings)
     , m_settingsDlg(nullptr)
+#ifdef PASSWORD_MANAGER_SETUP_TOOLS_ENABLED
+    , m_updateSettingsDlg(nullptr)
+    , m_updateOptionPage(nullptr)
+#endif
 {
     // setup ui
     updateStyleSheet();
@@ -219,6 +226,11 @@ MainWindow::MainWindow(QSettings &settings, QtUtilities::QtSettings *qtSettings,
     pwVisibilityAction->setChecked(true);
     setPasswordVisibility(pwVisibilityAction);
 
+    // add action for updater if setup tools are enabled
+#ifdef PASSWORD_MANAGER_SETUP_TOOLS_ENABLED
+    auto *const updaterAction = m_ui->menu->addAction(QIcon::fromTheme(QStringLiteral("install")), tr("Check for updates"));
+#endif
+
     // connect signals and slots
     // -> file related actions
     connect(m_ui->actionSave, &QAction::triggered, this, &MainWindow::saveFile);
@@ -235,6 +247,9 @@ MainWindow::MainWindow(QSettings &settings, QtUtilities::QtSettings *qtSettings,
     connect(m_ui->actionOpen, &QAction::triggered, this, &MainWindow::showOpenFileDialog);
     connect(m_ui->actionSaveAs, &QAction::triggered, this, &MainWindow::showSaveFileDialog);
     connect(m_ui->actionQtSettings, &QAction::triggered, this, &MainWindow::showSettingsDialog);
+#ifdef PASSWORD_MANAGER_SETUP_TOOLS_ENABLED
+    connect(updaterAction, &QAction::triggered, this, &MainWindow::showUpdaterDialog);
+#endif
     // -> add/remove account
     connect(m_ui->actionAddAccount, &QAction::triggered, this, &MainWindow::addAccount);
     connect(m_ui->actionAddCategory, &QAction::triggered, this, &MainWindow::addCategory);
@@ -406,6 +421,32 @@ void MainWindow::showAboutDialog()
     }
     m_aboutDlg->show();
 }
+
+#ifdef PASSWORD_MANAGER_SETUP_TOOLS_ENABLED
+/*!
+ * \brief Shows the updater dialog.
+ */
+void MainWindow::showUpdaterDialog()
+{
+    if (!m_updateSettingsDlg) {
+        m_updateSettingsDlg = new SettingsDialog(this);
+        m_updateOptionPage = new UpdateOptionPage(UpdateHandler::mainInstance(), m_updateSettingsDlg);
+        m_updateOptionPage->setRestartHandler(m_restartHandler.requester());
+        auto *const category = new OptionCategory;
+        category->setDisplayName(QCoreApplication::translate("QtGui::QtOptionCategory", "About"));
+        category->setIcon(QIcon::fromTheme(QStringLiteral("help-about")));
+        category->assignPages({ m_updateOptionPage });
+        m_updateSettingsDlg->setWindowTitle(m_updateOptionPage->widget()->windowTitle());
+        m_updateSettingsDlg->setTabBarAlwaysVisible(false);
+        m_updateSettingsDlg->setSingleCategory(category);
+    }
+    if (m_updateSettingsDlg->isHidden()) {
+        m_updateSettingsDlg->showNormal();
+    } else {
+        m_updateSettingsDlg->activateWindow();
+    }
+}
+#endif
 
 /*!
  * \brief Shows the password generator dialog.

@@ -8,6 +8,10 @@
 #include <c++utilities/io/binaryreader.h>
 #include <c++utilities/io/binarywriter.h>
 
+#ifdef PASSWORD_MANAGER_SETUP_TOOLS_ENABLED
+#include <qtutilities/setup/updater.h>
+#endif
+
 #include <QMainWindow>
 #include <QMap>
 
@@ -67,6 +71,10 @@ public Q_SLOTS:
     void showSaveFileDialog();
     void showSettingsDialog();
     void showAboutDialog();
+#ifdef PASSWORD_MANAGER_SETUP_TOOLS_ENABLED
+    void showUpdaterDialog();
+    void respawnIfRestartRequested();
+#endif
     void showPassowrdGeneratorDialog();
     void showUndoView();
 
@@ -139,6 +147,11 @@ private:
     QSettings &m_settings;
     QtUtilities::QtSettings *m_qtSettings;
     QtUtilities::SettingsDialog *m_settingsDlg;
+#ifdef PASSWORD_MANAGER_SETUP_TOOLS_ENABLED
+    QtUtilities::RestartHandler m_restartHandler;
+    QtUtilities::SettingsDialog *m_updateSettingsDlg;
+    QtUtilities::UpdateOptionPage *m_updateOptionPage;
+#endif
 };
 
 /*!
@@ -149,6 +162,13 @@ inline bool MainWindow::openFile(const QString &path)
 {
     return openFile(path, Io::PasswordFileOpenFlags::Default);
 }
+
+#ifdef PASSWORD_MANAGER_SETUP_TOOLS_ENABLED
+inline void MainWindow::respawnIfRestartRequested()
+{
+    m_restartHandler.respawnIfRestartRequested();
+}
+#endif
 
 } // namespace QtGui
 

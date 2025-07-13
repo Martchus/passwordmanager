@@ -124,10 +124,15 @@ set(REQUIRED_ICONS
     window-close)
 
 # find c++utilities
+option(SETUP_TOOLS "enables setup tools; needs qtutilities built with this option as well" OFF)
+set(CPP_UTILITIES_REQUIRED_VERSION 5.28.0)
+if (SETUP_TOOLS)
+    set(CPP_UTILITIES_REQUIRED_VERSION 5.29.0)
+endif ()
 set(CONFIGURATION_PACKAGE_SUFFIX
     ""
     CACHE STRING "sets the suffix for find_package() calls to packages configured via c++utilities")
-find_package(c++utilities${CONFIGURATION_PACKAGE_SUFFIX} 5.28.0 REQUIRED)
+find_package(c++utilities${CONFIGURATION_PACKAGE_SUFFIX} ${CPP_UTILITIES_REQUIRED_VERSION} REQUIRED)
 use_cpp_utilities()
 
 # apply basic configuration
@@ -139,10 +144,14 @@ option(QUICK_GUI "enables/disables building the Qt Quick GUI using Kirigami" "${
 include(BasicConfig)
 
 # find qtutilities
+set(QT_UTILITIES_REQUIRED_VERSION 6.15.0)
+if (SETUP_TOOLS)
+    set(QT_UTILITIES_REQUIRED_VERSION 6.18.0)
+endif ()
 set(CONFIGURATION_PACKAGE_SUFFIX_QTUTILITIES
     "${CONFIGURATION_PACKAGE_SUFFIX}"
     CACHE STRING "sets the suffix for qtutilities")
-find_package(qtutilities${CONFIGURATION_PACKAGE_SUFFIX_QTUTILITIES} 6.15.0 REQUIRED)
+find_package(qtutilities${CONFIGURATION_PACKAGE_SUFFIX_QTUTILITIES} ${QT_UTILITIES_REQUIRED_VERSION} REQUIRED)
 use_qt_utilities()
 
 # find passwordfile
@@ -181,6 +190,14 @@ endif ()
 # add further Qt/KF modules required by Qt Quick GUI
 if (QUICK_GUI)
     list(APPEND ADDITIONAL_KF_MODULES Kirigami)
+endif ()
+
+# configure whether setup tools are enabled
+if (SETUP_TOOLS)
+    list(APPEND ADDITIONAL_QT_MODULES Network)
+    list(APPEND META_PRIVATE_COMPILE_DEFINITIONS ${META_PROJECT_VARNAME_UPPER}_SETUP_TOOLS_ENABLED)
+    list(APPEND REQUIRED_ICONS install)
+    use_crypto()
 endif ()
 
 # apply further configuration
