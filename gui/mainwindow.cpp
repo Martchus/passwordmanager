@@ -151,7 +151,6 @@ MainWindow::MainWindow(QSettings &settings, QtUtilities::QtSettings *qtSettings,
     , m_settingsDlg(nullptr)
 #ifdef PASSWORD_MANAGER_SETUP_TOOLS_ENABLED
     , m_updateSettingsDlg(nullptr)
-    , m_updateOptionPage(nullptr)
 #endif
 {
     // setup ui
@@ -429,16 +428,8 @@ void MainWindow::showAboutDialog()
 void MainWindow::showUpdaterDialog()
 {
     if (!m_updateSettingsDlg) {
-        m_updateSettingsDlg = new SettingsDialog(this);
-        m_updateOptionPage = new UpdateOptionPage(UpdateHandler::mainInstance(), m_updateSettingsDlg);
-        m_updateOptionPage->setRestartHandler(m_restartHandler.requester());
-        auto *const category = new OptionCategory;
-        category->setDisplayName(QCoreApplication::translate("QtGui::QtOptionCategory", "About"));
-        category->setIcon(QIcon::fromTheme(QStringLiteral("help-about")));
-        category->assignPages({ m_updateOptionPage });
-        m_updateSettingsDlg->setWindowTitle(m_updateOptionPage->widget()->windowTitle());
-        m_updateSettingsDlg->setTabBarAlwaysVisible(false);
-        m_updateSettingsDlg->setSingleCategory(category);
+        m_updateSettingsDlg = new UpdateDialog(this);
+        m_updateSettingsDlg->page()->setRestartHandler(m_restartHandler.requester());
     }
     if (m_updateSettingsDlg->isHidden()) {
         m_updateSettingsDlg->showNormal();

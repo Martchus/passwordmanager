@@ -149,8 +149,7 @@ private:
     QtUtilities::SettingsDialog *m_settingsDlg;
 #ifdef PASSWORD_MANAGER_SETUP_TOOLS_ENABLED
     QtUtilities::RestartHandler m_restartHandler;
-    QtUtilities::SettingsDialog *m_updateSettingsDlg;
-    QtUtilities::UpdateOptionPage *m_updateOptionPage;
+    QtUtilities::UpdateDialog *m_updateSettingsDlg;
 #endif
 };
 
