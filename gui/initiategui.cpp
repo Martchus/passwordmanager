@@ -38,7 +38,6 @@ namespace QtGui {
 // define public key and signature extension
 #ifdef PASSWORD_MANAGER_SETUP_TOOLS_ENABLED
 #define SYNCTHINGTRAY_SIGNATURE_EXTENSION ".openssl.sig"
-constexpr auto signingKeyOpenSSL = SigningKeys::openssl[0];
 #endif
 
 int runWidgetsGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, const QString &file)
@@ -71,7 +70,7 @@ int runWidgetsGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs,
         if (update.signature.empty()) {
             error = QStringLiteral("empty/non-existent signature");
         } else {
-            const auto res = CppUtilities::verifySignature(signingKeyOpenSSL, update.signature, update.data);
+            const auto res = CppUtilities::verifySignature(SigningKeys::openssl, update.signature, update.data);
             error = QString::fromUtf8(res.data(), static_cast<QString::size_type>(res.size()));
         }
         if (!error.isEmpty()) {
