@@ -374,7 +374,7 @@ void InteractiveCli::createFile(const std::string &file)
 
 void InteractiveCli::changePassphrase()
 {
-    if (m_file.isOpen()) {
+    if (!m_file.isOpen()) {
         m_o << "can not set passphrase; no file opened or created" << std::endl;
         return;
     }
