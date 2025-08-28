@@ -19,6 +19,8 @@
 #include <c++utilities/misc/verification.h>
 #endif
 
+#include <c++utilities/application/commandlineutils.h>
+
 #include <passwordfile/util/openssl.h>
 
 #include <QFile>
@@ -48,7 +50,17 @@ int runWidgetsGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs,
     OpenSsl::init();
 
     // init application
-    auto application = QApplication(argc, argv);
+    CMD_UTILS_START_CONSOLE;
+    std::cerr << "before qapp\n";
+    std::cerr << "platform: " << QGuiApplication::platformName().toStdString() << '\n';
+    auto loop = QEventLoop();
+    qDebug() << "foobar";
+    std::cerr << "after QEventLoop\n";
+    int argco = 3;
+    char *args[] = {"foo", "-platform", "offscreen"};
+    //auto application = QApplication(argc, argv);
+    auto application = QCoreApplication(argco, args);
+    std::cerr << "after qapp\n";
     QObject::connect(&application, &QCoreApplication::aboutToQuit, &OpenSsl::clean);
 
     // restore Qt settings
