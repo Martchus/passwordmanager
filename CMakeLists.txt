@@ -234,7 +234,7 @@ if (ANDROID)
                    QT_ANDROID_VERSION_NAME "${META_APP_VERSION}"
                    QT_ANDROID_VERSION_CODE "1"
                    QT_ANDROID_PACKAGE_SOURCE_DIR "${ANDROID_PACKAGE_SOURCE_DIR}"
-                   QT_ANDROID_TARGET_SDK_VERSION "34")
+                   QT_ANDROID_TARGET_SDK_VERSION "35")
 
     set(ANDROID_MANIFEST_PATH "${ANDROID_PACKAGE_SOURCE_DIR}/AndroidManifest.xml")
     configure_file("resources/AndroidManifest.xml.in" "${ANDROID_MANIFEST_PATH}" @ONLY)
