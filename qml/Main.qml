@@ -263,31 +263,18 @@ Kirigami.ApplicationWindow {
     BasicDialog {
         id: filterDialog
         title: qsTr("Search for categories and accounts")
-        onAccepted: nativeInterface.entryFilter = filterDialogTextField.text
-        onReset: {
-            nativeInterface.entryFilter = ""
-            filterDialog.close()
-        }
+        onAccepted: applyFilter()
+        onApplied: applyFilter()
+        onReset: resetFilter()
         onVisibleChanged: {
             if (visible) {
                 filterDialogTextField.forceActiveFocus()
             }
         }
         footer: Controls.DialogButtonBox {
-            Controls.Button {
-                text: qsTr("Apply search term")
-                Controls.DialogButtonBox.buttonRole: Controls.DialogButtonBox.AcceptRole
-                enabled: filterDialogTextField.text.length > 0
-            }
-            Controls.Button {
-                text: qsTr("Clear search")
-                Controls.DialogButtonBox.buttonRole: Controls.DialogButtonBox.ResetRole
-                enabled: nativeInterface.entryFilter
-            }
-            Controls.Button {
-                text: qsTr("Quit dialog")
-                Controls.DialogButtonBox.buttonRole: Controls.DialogButtonBox.RejectRole
-            }
+            standardButtons: filterDialogTextField.text.length > 0
+                ? Controls.DialogButtonBox.Apply | Controls.DialogButtonBox.Reset | Controls.DialogButtonBox.Cancel
+                : Controls.DialogButtonBox.Reset | Controls.DialogButtonBox.Cancel
         }
         contentItem: ColumnLayout {
             Controls.TextField {
@@ -295,6 +282,14 @@ Kirigami.ApplicationWindow {
                 Layout.preferredWidth: filterDialog.availableWidth
                 Keys.onPressed: filterDialog.acceptOnReturn(event)
             }
+        }
+        function applyFilter() {
+            nativeInterface.entryFilter = filterDialogTextField.text
+            close()
+        }
+        function resetFilter() {
+            nativeInterface.entryFilter = ""
+            close()
         }
     }
 
