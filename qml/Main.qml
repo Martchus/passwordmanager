@@ -4,6 +4,7 @@ import QtQuick.Controls 2.1 as Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts 1.2
 import org.kde.kirigami 2.4 as Kirigami
+import org.kde.kirigami.templates // import transtive dependency (shouldn't org.kde.kirigami pull this in?)
 
 Kirigami.ApplicationWindow {
     id: root
