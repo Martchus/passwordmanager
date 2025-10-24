@@ -44,7 +44,7 @@ See the release section on GitHub.
 
 ### Packages and binaries
 * Arch Linux
-    * for PKGBUILDs checkout [my GitHub repository](https://github.com/Martchus/PKGBUILDs) or
+    * for PKGBUILDs check out [my GitHub repository](https://github.com/Martchus/PKGBUILDs) or
       [the AUR](https://aur.archlinux.org/packages?SeB=m&K=Martchus)
     * there is also a [binary repository](https://martchus.dyn.f3l.de/repo/arch/ownstuff)
 * Tumbleweed, Leap, Fedora
@@ -61,7 +61,7 @@ See the release section on GitHub.
           [repositories URL](https://download.opensuse.org/repositories/home:/mkittler:/vcs),
           [project page](https://build.opensuse.org/project/show/home:mkittler:vcs)
 * Other GNU/Linux systems
-    * for generic, self-contained binaries checkout the [release section on GitHub](https://github.com/Martchus/passwordmanager/releases)
+    * for generic, self-contained binaries check out the [release section on GitHub](https://github.com/Martchus/passwordmanager/releases)
         * Requires glibc>=2.26, OpenGL and libX11
             * openSUSE Leap 15, Fedora 27, Debian 10 and Ubuntu 18.04 are recent enough (be sure
               the packages `libglx0`, `libopengl0` and `libegl1` are installed on Debian/Ubuntu)
@@ -70,18 +70,18 @@ See the release section on GitHub.
         * Binaries are signed with the GPG key
           [`B9E36A7275FC61B464B67907E06FE8F53CDC6A4C`](https://keyserver.ubuntu.com/pks/lookup?search=B9E36A7275FC61B464B67907E06FE8F53CDC6A4C&fingerprint=on&op=index).
 * Windows
-    * for binaries checkout the [release section on GitHub](https://github.com/Martchus/tageditor/releases)
+    * for binaries check out the [release section on GitHub](https://github.com/Martchus/tageditor/releases)
         * The Qt 6 based version is stable and preferable but only supports Windows 10 version 1809 and newer.
         * The Qt 5 based version should still work on older versions down to Windows 7 although this is not regularly checked.
         * The Universal CRT needs to be [installed](https://learn.microsoft.com/en-us/cpp/windows/universal-crt-deployment#central-deployment).
         * Binaries are signed with the GPG key
           [`B9E36A7275FC61B464B67907E06FE8F53CDC6A4C`](https://keyserver.ubuntu.com/pks/lookup?search=B9E36A7275FC61B464B67907E06FE8F53CDC6A4C&fingerprint=on&op=index).
-    * for mingw-w64 PKGBUILDs checkout [my GitHub repository](https://github.com/Martchus/PKGBUILDs)
+    * for mingw-w64 PKGBUILDs check out [my GitHub repository](https://github.com/Martchus/PKGBUILDs)
 
 ## Build instructions
 The application depends on [c++utilities](https://github.com/Martchus/cpp-utilities) and
 [passwordfile](https://github.com/Martchus/passwordfile) and is built the same way as these libraries.
-For basic instructions checkout the README file of [c++utilities](https://github.com/Martchus/cpp-utilities).
+For basic instructions check out the README file of [c++utilities](https://github.com/Martchus/cpp-utilities).
 When the Qt GUI is enabled, Qt and [qtutilities](https://github.com/Martchus/qtutilities) are required, too.
 
 To avoid building c++utilities/passwordfile/qtutilities separately, follow the instructions under
