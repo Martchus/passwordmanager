@@ -7,10 +7,10 @@ A simple [password manager](https://en.wikipedia.org/wiki/Password_manager) with
 * Qt Quick GUI (using Qt Quick Controls 2 and Kirigami) for mobile platforms
 * Interactive command-line interface
 * Simple architecture: All data is stored in ordinary files with AES-256-CBC applied. No cloud stuff. Use
-  eg. Syncthing for synchronization.
+  e.g. Syncthing for synchronization.
 
 ## Covered C++/Qt topics
-I've mainly started this project to learn C++ and Qt programming. So beside the mentioned features this project
+I've mainly started this project to learn C++ and Qt programming. So besides the mentioned features, this project
 and the underlying libraries serve as an example project covering some interesting C++/Qt topics:
 
 * Basic use of Qt Widgets, Qt Quick and Kirigami
@@ -26,7 +26,7 @@ and the underlying libraries serve as an example project covering some interesti
     * Customize activity
     * Customize gradle project to add additional Java dependency
     * Adjust the window style of the activity
-    * Call Java function from C++ and vice verca
+    * Call Java function from C++ and vice versa
     * Show native file dialog
     * Open `content://` URL with `std::iostream`
 * Windows specific issues
@@ -34,7 +34,7 @@ and the underlying libraries serve as an example project covering some interesti
 * Use of zlib to (de)compress buffer
 * Use of OpenSSL for symmetric (de)cryption
 
-Note that some of the mentioned points are actually implemented the underlying libraries
+Note that some of the mentioned points are actually implemented in the underlying libraries
 [c++utilities](http://github.com/Martchus/cpp-utilities), [qtutilities](http://github.com/Martchus/qtutilities)
 and [passwordfile](http://github.com/Martchus/passwordfile).
 
@@ -52,7 +52,7 @@ See the release section on GitHub.
         * remarks
             * Be sure to add the repository that matches the version of your OS and to keep it
               in sync when upgrading.
-            * The linked download pages might be incomplete, use the repositories URL for a full
+            * The linked download pages might be incomplete; use the repositories URL for a full
               list.
         * latest releases: [download page](https://software.opensuse.org/download.html?project=home:mkittler&package=passwordmanager),
           [repositories URL](https://download.opensuse.org/repositories/home:/mkittler),
@@ -63,16 +63,16 @@ See the release section on GitHub.
 * Other GNU/Linux systems
     * for generic, self-contained binaries check out the [release section on GitHub](https://github.com/Martchus/passwordmanager/releases)
         * Requires glibc>=2.26, OpenGL and libX11
-            * openSUSE Leap 15, Fedora 27, Debian 10 and Ubuntu 18.04 are recent enough (be sure
+            * openSUSE Leap 15, Fedora 27, Debian 10, and Ubuntu 18.04 are recent enough (be sure
               the packages `libglx0`, `libopengl0` and `libegl1` are installed on Debian/Ubuntu)
         * Supports X11 and Wayland (set the environment variable `QT_QPA_PLATFORM=xcb` to disable
           native Wayland support if it does not work on your system)
         * Binaries are signed with the GPG key
           [`B9E36A7275FC61B464B67907E06FE8F53CDC6A4C`](https://keyserver.ubuntu.com/pks/lookup?search=B9E36A7275FC61B464B67907E06FE8F53CDC6A4C&fingerprint=on&op=index).
 * Windows
-    * for binaries check out the [release section on GitHub](https://github.com/Martchus/tageditor/releases)
-        * The Qt 6 based version is stable and preferable but only supports Windows 10 version 1809 and newer.
-        * The Qt 5 based version should still work on older versions down to Windows 7 although this is not regularly checked.
+    * for binaries check out the [release section on GitHub](https://github.com/Martchus/passwordmanager/releases)
+        * The Qt 6-based version is stable and preferable but only supports Windows 10 version 1809 and newer.
+        * The Qt 5-based version should still work on older versions down to Windows 7, although this is not regularly checked.
         * The Universal CRT needs to be [installed](https://learn.microsoft.com/en-us/cpp/windows/universal-crt-deployment#central-deployment).
         * Binaries are signed with the GPG key
           [`B9E36A7275FC61B464B67907E06FE8F53CDC6A4C`](https://keyserver.ubuntu.com/pks/lookup?search=B9E36A7275FC61B464B67907E06FE8F53CDC6A4C&fingerprint=on&op=index).
@@ -91,12 +91,12 @@ can be passed to CMake to influence the build.
 
 ### Optional dependencies
 * When building any Qt GUI, the library qtutilities is required.
-* When building with Qt Widgets GUI support, the following Qt modules are required (version 5.6 or higher): core gui widgets
-* When building with support for the experimental Qt Quick GUI, the following Qt/KDE modules are required (version 6.6 or higher): core gui qml quick quickcontrols2 kirigami
+* When building with Qt Widgets GUI support, the following Qt modules are required (version 5.6 or higher): core, gui, widgets
+* When building with support for the experimental Qt Quick GUI, the following Qt/KDE modules are required (version 6.6 or higher): core, gui, qml, quick, quickcontrols2, and kirigami
 * When building for Android at least Qt 6.9.0 is required.
 
 To specify the major Qt version to use, set `QT_PACKAGE_PREFIX` (e.g. add `-DQT_PACKAGE_PREFIX:STRING=Qt6`
-to the CMake arguments). There's also `KF_PACKAGE_PREFIX` for KDE dependencies. Note that the Qt Quick GUI
+to the CMake arguments). There is also `KF_PACKAGE_PREFIX` for KDE dependencies. Note that the Qt Quick GUI
 always requires the same major Qt version as your KDE modules use.
 
 ### Building this straight
@@ -136,7 +136,7 @@ To build without GUI, add the following parameters to the CMake call:
 ```
 
 ### Further remarks
-Set the environment variable `QT_QUICK_CONTROLS_MOBILE=1` to let the Qt Quick GUI behave as on a mobile platform; useful
+Set the environment variable `QT_QUICK_CONTROLS_MOBILE=1` to let the Qt Quick GUI behave as if on a mobile platform; this is useful
 for testing the behavior in mobile mode without deployment on a real/emulated device.
 
 ## Copyright notice and license
