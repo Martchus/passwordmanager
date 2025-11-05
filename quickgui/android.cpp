@@ -101,8 +101,7 @@ void setupAndroidSpecifics()
 
 static void onAndroidError(JNIEnv *, jobject, jstring message)
 {
-    QMetaObject::invokeMethod(
-        QtGui::controllerForAndroid, "newNotification", Qt::QueuedConnection, Q_ARG(QString, QJniObject(message).toString()));
+    QMetaObject::invokeMethod(QtGui::controllerForAndroid, "newNotification", Qt::QueuedConnection, Q_ARG(QString, QJniObject(message).toString()));
 }
 
 static void onAndroidFileDialogAccepted(JNIEnv *, jobject, jstring fileName, jboolean existing, jboolean createNew)
@@ -115,8 +114,8 @@ static void onAndroidFileDialogAcceptedDescriptor(
     JNIEnv *, jobject, jstring nativeUrl, jstring fileName, jint fileHandle, jboolean existing, jboolean createNew)
 {
     QMetaObject::invokeMethod(QtGui::controllerForAndroid, "handleFileSelectionAcceptedDescriptor", Qt::QueuedConnection,
-        Q_ARG(QString, QJniObject(nativeUrl).toString()), Q_ARG(QString, QJniObject(fileName).toString()),
-        Q_ARG(int, fileHandle), Q_ARG(bool, existing), Q_ARG(bool, createNew));
+        Q_ARG(QString, QJniObject(nativeUrl).toString()), Q_ARG(QString, QJniObject(fileName).toString()), Q_ARG(int, fileHandle),
+        Q_ARG(bool, existing), Q_ARG(bool, createNew));
 }
 
 static void onAndroidFileDialogRejected(JNIEnv *, jobject)
