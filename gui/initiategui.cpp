@@ -37,7 +37,7 @@ namespace QtGui {
 
 // define public key and signature extension
 #ifdef PASSWORD_MANAGER_SETUP_TOOLS_ENABLED
-#define SYNCTHINGTRAY_SIGNATURE_EXTENSION ".openssl.sig"
+#define PASSWORD_MANAGER_SIGNATURE_EXTENSION ".openssl.sig"
 #endif
 
 int runWidgetsGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, const QString &file)
@@ -62,7 +62,7 @@ int runWidgetsGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs,
     // initialize updater
 #ifdef PASSWORD_MANAGER_SETUP_TOOLS_ENABLED
     auto *const nam = new QNetworkAccessManager;
-    auto updateHandler = UpdateHandler(settings.get(), nam);
+    auto updateHandler = UpdateHandler(QString(), QStringLiteral(PASSWORD_MANAGER_SIGNATURE_EXTENSION), settings.get(), nam);
     nam->setParent(&updateHandler);
     auto verificationErrorMsgBox = QtUtilities::VerificationErrorMessageBox();
     updateHandler.updater()->setVerifier([&verificationErrorMsgBox](const QtUtilities::Updater::Update &update) {
