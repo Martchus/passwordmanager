@@ -118,6 +118,9 @@ always requires the same major Qt version as your KDE modules use.
     -G Ninja \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX="/install/prefix" \
+    -DQT_PACKAGE_PREFIX:STRING=Qt6 \
+    -DKF_PACKAGE_PREFIX:STRING=KF6 \
+    -DBUILTIN_TRANSLATIONS:BOOL=ON \
     "$SOURCES/subdirs/passwordmanager"
    cmake --build .
    ```
