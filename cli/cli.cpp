@@ -101,7 +101,6 @@ InteractiveCli::InteractiveCli()
     , m_quit(false)
 {
     Util::OpenSsl::init();
-    CMD_UTILS_START_CONSOLE;
 }
 
 InteractiveCli::~InteractiveCli()

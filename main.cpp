@@ -41,7 +41,6 @@ using namespace CppUtilities;
 #ifndef PASSWORD_MANAGER_FORCE_GUI
 static int fail(std::string_view error)
 {
-    CMD_UTILS_START_CONSOLE;
     std::cerr << error << std::endl;
     return EXIT_FAILURE;
 }
@@ -49,8 +48,9 @@ static int fail(std::string_view error)
 
 CPP_UTILITIES_MAIN_EXPORT int main(int argc, char *argv[])
 {
-    CMD_UTILS_CONVERT_ARGS_TO_UTF8;
     SET_APPLICATION_INFO;
+    CMD_UTILS_CONVERT_ARGS_TO_UTF8;
+    CMD_UTILS_START_CONSOLE;
 
     // parse CLI arguments
     auto qtConfigArgs = QT_CONFIG_ARGUMENTS();
