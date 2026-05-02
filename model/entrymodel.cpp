@@ -566,7 +566,6 @@ bool EntryModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int 
     // decode and insert
     QByteArray encoded(data->data(format));
     QDataStream stream(&encoded, QIODevice::ReadOnly);
-    int moved = 0;
     while (!stream.atEnd()) {
         quint32 size;
         stream >> size;
@@ -581,8 +580,8 @@ bool EntryModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int 
             continue;
         }
         auto *const srcParentEntry = entry->parent();
-        if (srcParentEntry && moveRows(index(srcParentEntry), entry->index(), 1, parent, row)) {
-            ++moved;
+        if (srcParentEntry) {
+            moveRows(index(srcParentEntry), entry->index(), 1, parent, row);
         }
     }
     return false;
