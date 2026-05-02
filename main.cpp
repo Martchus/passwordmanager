@@ -71,12 +71,12 @@ CPP_UTILITIES_MAIN_EXPORT int main(int argc, char *argv[])
     auto cliArg = OperationArgument("interactive-cli", 'i', "starts the interactive command line interface");
     cliArg.setSubArguments({ &fileArg });
     auto totpArg = OperationArgument("totp", '\0', "computes a time-based one-time password (TOTP)");
-    auto urlArg = ConfigValueArgument("url", '\0', "URL, e.g. \"otpauth://…?secret=…&period=…&digits=…\"", {"url"});
+    auto urlArg = ConfigValueArgument("url", '\0', "URL, e.g. \"otpauth://…?secret=…&period=…&digits=…\"", { "url" });
     urlArg.setRequired(false);
     urlArg.setImplicit(true);
-    auto timeArg = ConfigValueArgument("time", '\0', "time", {"ISO time stamp"});
+    auto timeArg = ConfigValueArgument("time", '\0', "time", { "ISO time stamp" });
     timeArg.setRequired(false);
-    totpArg.setSubArguments({&urlArg, &timeArg});
+    totpArg.setSubArguments({ &urlArg, &timeArg });
     auto helpArg = HelpArgument(parser);
     parser.setMainArguments({ &qtConfigArgs.qtWidgetsGuiArg(), &qtConfigArgs.qtQuickGuiArg(), &cliArg, &totpArg, &helpArg });
     parser.parseArgs(argc, argv);
