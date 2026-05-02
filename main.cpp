@@ -68,8 +68,7 @@ CPP_UTILITIES_MAIN_EXPORT int main(int argc, char *argv[])
     fileArg.setImplicit(true);
     qtConfigArgs.qtWidgetsGuiArg().addSubArgument(&fileArg);
     qtConfigArgs.qtQuickGuiArg().addSubArgument(&fileArg);
-    auto cliArg = Argument("interactive-cli", 'i', "starts the interactive command line interface");
-    cliArg.setDenotesOperation(true);
+    auto cliArg = OperationArgument("interactive-cli", 'i', "starts the interactive command line interface");
     cliArg.setSubArguments({ &fileArg });
     auto totpArg = OperationArgument("totp", '\0', "computes a time-based one-time password (TOTP)");
     auto urlArg = ConfigValueArgument("url", '\0', "URL, e.g. \"otpauth://…?secret=…&period=…&digits=…\"", {"url"});
