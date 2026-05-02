@@ -12,6 +12,8 @@
 #include <passwordfile/io/cryptoexception.h>
 #include <passwordfile/io/entry.h>
 
+#include <passwordfile/util/openssl.h>
+
 #include <qtutilities/aboutdialog/aboutdialog.h>
 #include <qtutilities/enterpassworddialog/enterpassworddialog.h>
 #include <qtutilities/misc/desktoputils.h>
@@ -1298,19 +1300,24 @@ void MainWindow::showTableViewContextMenu(const QPoint &pos)
     bool hasFirstFieldType = false;
     int row = selectedIndexes.front().row();
     int multipleRows = 1;
-    QUrl url;
+    QUrl serviceUrl;
+    auto totpUrl = std::string_view();
     static const string protocols[] = { "http:", "https:", "file:" };
     for (const QModelIndex &index : selectedIndexes) {
         if (!index.isValid()) {
             continue;
         }
         if (const Field *field = m_fieldModel->field(static_cast<size_t>(index.row()))) {
-            if (url.isEmpty() && field->type() != FieldType::Password) {
+            if (serviceUrl.isEmpty() && field->type() != FieldType::Password) {
                 for (const string &protocol : protocols) {
                     if (startsWith(field->value(), protocol)) {
-                        url = QString::fromUtf8(field->value().data());
+                        serviceUrl = QString::fromUtf8(field->value().data());
+                        break;
                     }
                 }
+            }
+            if (totpUrl.empty() && startsWith(field->value(), "otpauth:")) {
+                totpUrl = field->value();
             }
             if (hasFirstFieldType) {
                 if (firstType != field->type()) {
@@ -1349,14 +1356,25 @@ void MainWindow::showTableViewContextMenu(const QPoint &pos)
     contextMenu.addSeparator();
     contextMenu.addAction(QIcon::fromTheme(QStringLiteral("edit-copy")), tr("Copy"), this, &MainWindow::copyFields);
     contextMenu.addAction(QIcon::fromTheme(QStringLiteral("edit-copy")), tr("Copy for 5 seconds"), this, &MainWindow::copyFieldsForXMilliSeconds);
+    if (multipleRows == 1 && !totpUrl.empty()) {
+        auto *copyTotpAction = new QAction(QIcon::fromTheme(QStringLiteral("preferences-system-time-symbolic")), tr("Copy TOTP"), &contextMenu);
+        connect(copyTotpAction, &QAction::triggered, [this, url = std::string(totpUrl)] {
+            try {
+                QGuiApplication::clipboard()->setText(QString::fromStdString(Util::OpenSsl::computeTOTP(url, DateTime::gmtNow())));
+            } catch (const std::runtime_error &e) {
+                QMessageBox::warning(this, QCoreApplication::applicationName(), tr("Unable to compute TOTP: %1").arg(QString::fromUtf8(e.what())));
+            }
+        });
+        contextMenu.addAction(copyTotpAction);
+    }
     const auto *const mimeData = QGuiApplication::clipboard()->mimeData();
     if (mimeData && mimeData->hasText()) {
         contextMenu.addAction(QIcon::fromTheme(QStringLiteral("edit-paste")), tr("Paste"), this, &MainWindow::insertFieldsFromClipboard);
     }
     // -> insert open URL
-    if (multipleRows == 1 && !url.isEmpty()) {
+    if (multipleRows == 1 && !serviceUrl.isEmpty()) {
         auto *openUrlAction = new QAction(QIcon::fromTheme(QStringLiteral("applications-internet")), tr("Open URL"), &contextMenu);
-        connect(openUrlAction, &QAction::triggered, bind(&QDesktopServices::openUrl, url));
+        connect(openUrlAction, &QAction::triggered, bind(&QDesktopServices::openUrl, serviceUrl));
         contextMenu.addAction(openUrlAction);
     }
 

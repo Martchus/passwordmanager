@@ -114,6 +114,7 @@ set(REQUIRED_ICONS
     password-show-on
     preferences-desktop-icons
     preferences-desktop-locale
+    preferences-system-time-symbolic
     qtcreator
     search
     view-list-details-symbolic
