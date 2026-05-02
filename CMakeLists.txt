@@ -163,7 +163,7 @@ find_package(${PACKAGE_NAMESPACE_PREFIX}qtutilities${CONFIGURATION_PACKAGE_SUFFI
 use_qt_utilities()
 
 # find passwordfile
-find_package(passwordfile${CONFIGURATION_PACKAGE_SUFFIX} 5.0.0 REQUIRED)
+find_package(passwordfile${CONFIGURATION_PACKAGE_SUFFIX} 5.1.0 REQUIRED)
 use_password_file()
 
 # allow to enable undo support from the widgets GUI in the quick GUI as well (so the quick GUI will depend on Qt Widgets as

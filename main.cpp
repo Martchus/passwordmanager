@@ -10,8 +10,11 @@
 #include "resources/config.h"
 #include "resources/qtconfig.h"
 
+#include <passwordfile/util/openssl.h>
+
 #include <c++utilities/application/argumentparser.h>
 #include <c++utilities/application/commandlineutils.h>
+#include <c++utilities/chrono/datetime.h>
 #include <c++utilities/misc/parseerror.h>
 
 #if defined(PASSWORD_MANAGER_GUI_QTWIDGETS) || defined(PASSWORD_MANAGER_GUI_QTQUICK)
@@ -26,6 +29,7 @@ ENABLE_QT_RESOURCES_OF_STATIC_DEPENDENCIES
 
 #include <cstdlib>
 #include <iostream>
+#include <string>
 
 // force (preferably Qt Quick) GUI under Android
 #if defined(Q_OS_ANDROID) || defined(Q_OS_WASM)
@@ -67,13 +71,47 @@ CPP_UTILITIES_MAIN_EXPORT int main(int argc, char *argv[])
     auto cliArg = Argument("interactive-cli", 'i', "starts the interactive command line interface");
     cliArg.setDenotesOperation(true);
     cliArg.setSubArguments({ &fileArg });
+    auto totpArg = OperationArgument("totp", '\0', "computes a time-based one-time password (TOTP)");
+    auto urlArg = ConfigValueArgument("url", '\0', "URL, e.g. \"otpauth://…?secret=…&period=…&digits=…\"", {"url"});
+    urlArg.setRequired(false);
+    urlArg.setImplicit(true);
+    auto timeArg = ConfigValueArgument("time", '\0', "time", {"ISO time stamp"});
+    timeArg.setRequired(false);
+    totpArg.setSubArguments({&urlArg, &timeArg});
     auto helpArg = HelpArgument(parser);
-    parser.setMainArguments({ &qtConfigArgs.qtWidgetsGuiArg(), &qtConfigArgs.qtQuickGuiArg(), &cliArg, &helpArg });
+    parser.setMainArguments({ &qtConfigArgs.qtWidgetsGuiArg(), &qtConfigArgs.qtQuickGuiArg(), &cliArg, &totpArg, &helpArg });
     parser.parseArgs(argc, argv);
 
     // run CLI if CLI-argument is present
     if (cliArg.isPresent()) {
         return Cli::InteractiveCli().run(fileArg.isPresent() ? std::string(fileArg.firstValue()) : std::string());
+    }
+
+    // compute TOTP if TOTP-argument is present
+    if (totpArg.isPresent()) {
+        auto url = urlArg.isPresent() ? std::string(urlArg.firstValue()) : std::string();
+        auto time = std::optional<DateTime>();
+        try {
+            if (timeArg.isPresent()) {
+                time = DateTime::fromIsoStringGmt(timeArg.firstValue());
+            }
+        } catch (const std::runtime_error &e) {
+            std::cerr << "Unable to parse specified time: " << e.what() << '\n';
+            return EXIT_FAILURE;
+        }
+        try {
+            if (url.empty() || url == "-") {
+                std::getline(std::cin, url);
+            }
+            if (!time.has_value()) {
+                time = DateTime::gmtNow();
+            }
+            std::cout << Util::OpenSsl::computeTOTP(url, time.value()) << std::endl;
+            return EXIT_SUCCESS;
+        } catch (const std::runtime_error &e) {
+            std::cerr << "Unable to compute TOTP: " << e.what() << '\n';
+            return EXIT_FAILURE;
+        }
     }
 
     // run GUI depending on which GUI-argument is present
