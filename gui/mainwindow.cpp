@@ -26,6 +26,7 @@
 #include <qtutilities/settingsdialog/optioncategory.h>
 #endif
 
+#include <c++utilities/chrono/datetime.h>
 #include <c++utilities/conversion/stringconversion.h>
 #include <c++utilities/io/path.h>
 
