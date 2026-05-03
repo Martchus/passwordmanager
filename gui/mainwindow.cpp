@@ -78,6 +78,19 @@ void MainWindow::copyFields()
 }
 
 /*!
+ * \brief Computes the TOTP for the selected fields and sets it as clipboard text.
+ */
+void MainWindow::copyFieldsTOTP()
+{
+    const auto text = selectedFieldsString();
+    if (text.startsWith(QLatin1String("otpauth:"))) {
+        copyTOTP(text.toStdString());
+    } else {
+        QMessageBox::warning(this, QApplication::applicationName(), tr("The selection does not contain an \"otpauth:\" URL."));
+    }
+}
+
+/*!
  * \brief Computes the TOTP for the specified \a url and sets it as clipboard text.
  */
 void MainWindow::copyTOTP(std::string url)
@@ -272,6 +285,7 @@ MainWindow::MainWindow(QSettings &settings, QtUtilities::QtSettings *qtSettings,
     connect(m_ui->actionInsertRow, &QAction::triggered, this, &MainWindow::insertRow);
     connect(m_ui->actionRemoveRows, &QAction::triggered, this, &MainWindow::removeRows);
     connect(m_ui->actionCopyFields, &QAction::triggered, this, &MainWindow::copyFields);
+    connect(m_ui->actionCopyTOTP, &QAction::triggered, this, &MainWindow::copyFieldsTOTP);
     connect(m_ui->actionPasteFields, &QAction::triggered, this, &MainWindow::insertFieldsFromClipboard);
     // -> undo/redo
     connect(m_ui->actionUndo, &QAction::triggered, m_undoStack, &QUndoStack::undo);
@@ -1405,7 +1419,7 @@ void MainWindow::showFileDetails()
  */
 void MainWindow::copyFieldsForXMilliSeconds(int x)
 {
-    const QString text(selectedFieldsString());
+    const auto text = selectedFieldsString();
     if (text.isEmpty()) {
         QMessageBox::warning(this, QApplication::applicationName(), tr("The selection is empty."));
         return;

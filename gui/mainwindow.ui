@@ -225,6 +225,7 @@
     <addaction name="actionInsertRow"/>
     <addaction name="actionRemoveRows"/>
     <addaction name="actionCopyFields"/>
+    <addaction name="actionCopyTOTP"/>
     <addaction name="actionPasteFields"/>
    </widget>
    <widget class="QMenu" name="menuTools">
@@ -591,6 +592,17 @@
    </property>
    <property name="text">
     <string>Custom</string>
+   </property>
+  </action>
+  <action name="actionCopyTOTP">
+   <property name="icon">
+    <iconset theme="preferences-system-time-symbolic"/>
+   </property>
+   <property name="text">
+    <string>Copy TOTP for selected field</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
    </property>
   </action>
  </widget>

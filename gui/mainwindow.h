@@ -107,6 +107,7 @@ private Q_SLOTS:
     void insertFields(const QString &fieldsString);
     void copyFieldsForXMilliSeconds(int x = 5000);
     void copyFields();
+    void copyFieldsTOTP();
     void copyTOTP(std::string url);
     void insertFieldsFromClipboard();
     // showing context menus
