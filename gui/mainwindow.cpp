@@ -78,6 +78,18 @@ void MainWindow::copyFields()
 }
 
 /*!
+ * \brief Computes the TOTP for the specified \a url and sets it as clipboard text.
+ */
+void MainWindow::copyTOTP(std::string url)
+{
+    try {
+        QGuiApplication::clipboard()->setText(QString::fromStdString(Util::OpenSsl::computeTOTP(url, DateTime::gmtNow())));
+    } catch (const std::runtime_error &e) {
+        QMessageBox::warning(this, QCoreApplication::applicationName(), tr("Unable to compute TOTP: %1").arg(QString::fromUtf8(e.what())));
+    }
+}
+
+/*!
  * \brief Inserts fields from the clipboard.
  */
 void MainWindow::insertFieldsFromClipboard()
@@ -1359,13 +1371,7 @@ void MainWindow::showTableViewContextMenu(const QPoint &pos)
     contextMenu.addAction(QIcon::fromTheme(QStringLiteral("edit-copy")), tr("Copy for 5 seconds"), this, &MainWindow::copyFieldsForXMilliSeconds);
     if (multipleRows == 1 && !totpUrl.empty()) {
         auto *copyTotpAction = new QAction(QIcon::fromTheme(QStringLiteral("preferences-system-time-symbolic")), tr("Copy TOTP"), &contextMenu);
-        connect(copyTotpAction, &QAction::triggered, [this, url = std::string(totpUrl)] {
-            try {
-                QGuiApplication::clipboard()->setText(QString::fromStdString(Util::OpenSsl::computeTOTP(url, DateTime::gmtNow())));
-            } catch (const std::runtime_error &e) {
-                QMessageBox::warning(this, QCoreApplication::applicationName(), tr("Unable to compute TOTP: %1").arg(QString::fromUtf8(e.what())));
-            }
-        });
+        connect(copyTotpAction, &QAction::triggered, this, std::bind(&MainWindow::copyTOTP, this, std::string(totpUrl)));
         contextMenu.addAction(copyTotpAction);
     }
     const auto *const mimeData = QGuiApplication::clipboard()->mimeData();
