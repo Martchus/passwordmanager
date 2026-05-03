@@ -105,7 +105,7 @@ CPP_UTILITIES_MAIN_EXPORT int main(int argc, char *argv[])
             if (!time.has_value()) {
                 time = DateTime::gmtNow();
             }
-            std::cout << Util::OpenSsl::computeTOTP(url, time.value()) << std::endl;
+            std::cout << Util::OpenSsl::computeTOTP(url, time.value()).digits << std::endl;
             return EXIT_SUCCESS;
         } catch (const std::runtime_error &e) {
             std::cerr << "Unable to compute TOTP: " << e.what() << '\n';

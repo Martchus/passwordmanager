@@ -96,7 +96,11 @@ void MainWindow::copyFieldsTOTP()
 void MainWindow::copyTOTP(std::string url)
 {
     try {
-        QGuiApplication::clipboard()->setText(QString::fromStdString(Util::OpenSsl::computeTOTP(url, DateTime::gmtNow())));
+        const auto totp = Util::OpenSsl::computeTOTP(url, DateTime::gmtNow());
+        QGuiApplication::clipboard()->setText(QString::fromStdString(totp.digits));
+        statusBar()->showMessage(
+            tr("Copied TOTP, valid for %1").arg(QString::fromStdString(totp.remaining.toString(TimeSpanOutputFormat::WithMeasures))),
+            static_cast<int>(totp.remaining.totalMilliseconds()));
     } catch (const std::runtime_error &e) {
         QMessageBox::warning(this, QCoreApplication::applicationName(), tr("Unable to compute TOTP: %1").arg(QString::fromUtf8(e.what())));
     }
@@ -1430,6 +1434,9 @@ void MainWindow::copyFieldsForXMilliSeconds(int x)
     QApplication::clipboard()->setText(text);
     if (x > 0) {
         m_clearClipboardTimer = startTimer(x, Qt::CoarseTimer);
+        statusBar()->showMessage(tr("Copied values, clearing clipboard in %1 s").arg(x / 1000), x);
+    } else {
+        statusBar()->showMessage(tr("Copied values"), 10000);
     }
 }
 } // namespace QtGui
