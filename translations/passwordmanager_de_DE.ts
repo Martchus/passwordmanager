@@ -172,51 +172,57 @@
     <name>FieldsDelegate</name>
     <message>
         <location filename="../qml/FieldsDelegate.qml" line="65"/>
-        <location filename="../qml/FieldsDelegate.qml" line="98"/>
+        <location filename="../qml/FieldsDelegate.qml" line="113"/>
         <source>Mark as normal field</source>
         <translation>Als normales Feld markieren</translation>
     </message>
     <message>
         <location filename="../qml/FieldsDelegate.qml" line="65"/>
-        <location filename="../qml/FieldsDelegate.qml" line="99"/>
+        <location filename="../qml/FieldsDelegate.qml" line="114"/>
         <source>Mark as password field</source>
         <translation>Als Passwortfeld markieren</translation>
     </message>
     <message>
         <location filename="../qml/FieldsDelegate.qml" line="74"/>
-        <location filename="../qml/FieldsDelegate.qml" line="107"/>
+        <location filename="../qml/FieldsDelegate.qml" line="122"/>
         <source>Copy password</source>
         <translation>Passwort kopieren</translation>
     </message>
     <message>
         <location filename="../qml/FieldsDelegate.qml" line="74"/>
-        <location filename="../qml/FieldsDelegate.qml" line="107"/>
+        <location filename="../qml/FieldsDelegate.qml" line="122"/>
         <source>Copy value</source>
         <translation>Wert kopieren</translation>
     </message>
     <message>
         <location filename="../qml/FieldsDelegate.qml" line="78"/>
-        <location filename="../qml/FieldsDelegate.qml" line="111"/>
+        <location filename="../qml/FieldsDelegate.qml" line="126"/>
         <source>Copied</source>
         <translation>Kopiert</translation>
     </message>
     <message>
         <location filename="../qml/FieldsDelegate.qml" line="78"/>
-        <location filename="../qml/FieldsDelegate.qml" line="111"/>
+        <location filename="../qml/FieldsDelegate.qml" line="126"/>
         <source>Unable to access clipboard</source>
         <translation>Fehler beim Zugriff auf die Zwischenablage</translation>
     </message>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="83"/>
-        <location filename="../qml/FieldsDelegate.qml" line="117"/>
+        <location filename="../qml/FieldsDelegate.qml" line="90"/>
+        <location filename="../qml/FieldsDelegate.qml" line="132"/>
         <source>Delete field</source>
         <translation>Feld löschen</translation>
     </message>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="88"/>
-        <location filename="../qml/FieldsDelegate.qml" line="123"/>
+        <location filename="../qml/FieldsDelegate.qml" line="95"/>
+        <location filename="../qml/FieldsDelegate.qml" line="138"/>
         <source>Insert empty field after this</source>
         <translation>Leeres Feld nach diesem einfügen</translation>
+    </message>
+    <message>
+        <location filename="../qml/FieldsDelegate.qml" line="83"/>
+        <location filename="../qml/FieldsDelegate.qml" line="105"/>
+        <source>Copy TOTP</source>
+        <translation>TOTP kopieren</translation>
     </message>
 </context>
 <context>
@@ -232,27 +238,27 @@
         <translation>Feld von %1 editieren</translation>
     </message>
     <message>
-        <location filename="../qml/FieldsPage.qml" line="65"/>
+        <location filename="../qml/FieldsPage.qml" line="66"/>
         <source>Copied field name</source>
         <translation>Feldname kopiert</translation>
     </message>
     <message>
-        <location filename="../qml/FieldsPage.qml" line="92"/>
+        <location filename="../qml/FieldsPage.qml" line="93"/>
         <source>Copied password</source>
         <translation>Password kopiert</translation>
     </message>
     <message>
-        <location filename="../qml/FieldsPage.qml" line="92"/>
+        <location filename="../qml/FieldsPage.qml" line="93"/>
         <source>Copied value</source>
         <translation>Wert kopiert</translation>
     </message>
     <message>
-        <location filename="../qml/FieldsPage.qml" line="101"/>
+        <location filename="../qml/FieldsPage.qml" line="109"/>
         <source>Mark as password</source>
         <translation>Als Password markieren</translation>
     </message>
     <message>
-        <location filename="../qml/FieldsPage.qml" line="106"/>
+        <location filename="../qml/FieldsPage.qml" line="114"/>
         <source>Show characters</source>
         <translation>Zeichen anzeigen</translation>
     </message>
@@ -535,12 +541,12 @@ Datei wird unverschlüsselt gespeichert!</translation>
 <context>
     <name>QtGui::Controller</name>
     <message>
-        <location filename="../quickgui/controller.cpp" line="138"/>
+        <location filename="../quickgui/controller.cpp" line="140"/>
         <source>An error occurred when opening the file: root element missing</source>
         <translation>Die Datei konnte nicht geöffnet werden, weil das Root-Element fehlt.</translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="149"/>
+        <location filename="../quickgui/controller.cpp" line="151"/>
         <source>A crypto error occurred when opening the file: </source>
         <translation>Ein Verschlüsselungsfehler ist beim Öffnen der Datei aufgetreten: </translation>
     </message>
@@ -549,28 +555,28 @@ Datei wird unverschlüsselt gespeichert!</translation>
         <translation type="vanished">Die Datei konnte nicht richtig eingelesen werden: </translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="157"/>
+        <location filename="../quickgui/controller.cpp" line="159"/>
         <source>loading</source>
         <translation>beim Laden</translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="167"/>
+        <location filename="../quickgui/controller.cpp" line="169"/>
         <source>creating</source>
         <translation>beim Erstellen</translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="183"/>
-        <location filename="../quickgui/controller.cpp" line="192"/>
+        <location filename="../quickgui/controller.cpp" line="185"/>
+        <location filename="../quickgui/controller.cpp" line="194"/>
         <source>closing</source>
         <translation>beim Schließen</translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="224"/>
+        <location filename="../quickgui/controller.cpp" line="226"/>
         <source>Unable to open file descriptor for saving the file.</source>
         <translation>Fehler beim Öffnen des Dateideskriptors zum Speichern der Datei.</translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="239"/>
+        <location filename="../quickgui/controller.cpp" line="241"/>
         <source>A crypto error occurred when saving the file: </source>
         <translation>Ein Verschlüsselungsfehler ist beim Speichern der Datei aufgetreten: </translation>
     </message>
@@ -579,7 +585,7 @@ Datei wird unverschlüsselt gespeichert!</translation>
         <translation type="vanished">Ein interner Fehler ist beim Speichern der Datei aufgetreten: </translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="241"/>
+        <location filename="../quickgui/controller.cpp" line="243"/>
         <source>saving</source>
         <translation>beim Speichern</translation>
     </message>
@@ -588,32 +594,42 @@ Datei wird unverschlüsselt gespeichert!</translation>
         <translation type="vanished">beim Öffnen mittels nativem Dateideskriptors</translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="317"/>
+        <location filename="../quickgui/controller.cpp" line="319"/>
         <source>Canceled file selection</source>
         <translation>Dateiauswahl geschlossen</translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="444"/>
+        <location filename="../quickgui/controller.cpp" line="440"/>
+        <source>Copied TOTP, valid for %1</source>
+        <translation>TOTP kopiert, läuft in %1 ab</translation>
+    </message>
+    <message>
+        <location filename="../quickgui/controller.cpp" line="442"/>
+        <source>Unable to copy TOTP: %1</source>
+        <translation>TOTP konnte nicht kopert werden: %1</translation>
+    </message>
+    <message>
+        <location filename="../quickgui/controller.cpp" line="459"/>
         <source>No file opened.</source>
         <translation>Keine Datei geöffnet.</translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="461"/>
+        <location filename="../quickgui/controller.cpp" line="476"/>
         <source>An IO error occurred when %1 the file %2: </source>
         <translation>Ein Ein- bzw. Ausgabefehler ist %1 der Datei %2 aufgetreten: </translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="463"/>
+        <location filename="../quickgui/controller.cpp" line="478"/>
         <source>An error occurred when %1 the file: </source>
         <translation>Ein Fehler ist %1 der Datei aufgetreten: </translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="465"/>
+        <location filename="../quickgui/controller.cpp" line="480"/>
         <source>An unknown exception occurred when %1 the file %2: </source>
         <translation>Eine unbekannte Ausnahme ist %1 der Datei %2 aufgetreten: </translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="468"/>
+        <location filename="../quickgui/controller.cpp" line="483"/>
         <source>An unknown error occurred when %1 the file %2.</source>
         <translation>Ein unbekannter Fehler ist %1 der Datei %2 aufgetreten.</translation>
     </message>
@@ -672,162 +688,172 @@ Datei wird unverschlüsselt gespeichert!</translation>
         <translation>Bearbeiten</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="232"/>
+        <location filename="../gui/mainwindow.ui" line="233"/>
         <source>&amp;Tools</source>
         <translation>Werkzeuge</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="239"/>
+        <location filename="../gui/mainwindow.ui" line="240"/>
         <source>&amp;View</source>
         <translation>Ansicht</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="243"/>
+        <location filename="../gui/mainwindow.ui" line="244"/>
         <source>Sets the visibility of fields marked as &quot;password field&quot;</source>
         <translation>Setzt die Sichtbarkeit der Passwortfelder</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="246"/>
+        <location filename="../gui/mainwindow.ui" line="247"/>
         <source>Password &amp;visibility</source>
         <translation>Passwortsichtbarkeit</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="254"/>
+        <location filename="../gui/mainwindow.ui" line="255"/>
         <source>Column withs</source>
         <translation>Größe der Spalten</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="280"/>
+        <location filename="../gui/mainwindow.ui" line="281"/>
         <source>&amp;Open ...</source>
         <translation>Öffnen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="283"/>
+        <location filename="../gui/mainwindow.ui" line="284"/>
         <source>Ctrl+O</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="292"/>
+        <location filename="../gui/mainwindow.ui" line="293"/>
         <source>&amp;Quit</source>
         <translation>Verlassen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="295"/>
+        <location filename="../gui/mainwindow.ui" line="296"/>
         <source>Ctrl+Q</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="304"/>
+        <location filename="../gui/mainwindow.ui" line="305"/>
         <source>&amp;About</source>
         <translation>Über</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="313"/>
+        <location filename="../gui/mainwindow.ui" line="314"/>
         <source>&amp;Save</source>
         <translation>Speichern</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="316"/>
+        <location filename="../gui/mainwindow.ui" line="317"/>
         <source>Ctrl+S</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="325"/>
+        <location filename="../gui/mainwindow.ui" line="326"/>
         <source>&amp;New ...</source>
         <translation>Neu ...</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="328"/>
+        <location filename="../gui/mainwindow.ui" line="329"/>
         <source>Ctrl+N</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="337"/>
+        <location filename="../gui/mainwindow.ui" line="338"/>
         <source>&amp;Close</source>
         <translation>Schließen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="340"/>
+        <location filename="../gui/mainwindow.ui" line="341"/>
         <source>Ctrl+Shift+Q</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="349"/>
+        <location filename="../gui/mainwindow.ui" line="350"/>
         <source>Change &amp;password ...</source>
         <translation>Passwort ändern</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="358"/>
+        <location filename="../gui/mainwindow.ui" line="359"/>
         <source>&amp;Add new account</source>
         <translation>Konto hinzufügen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="361"/>
+        <location filename="../gui/mainwindow.ui" line="362"/>
         <source>Ctrl+Shift+A</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="370"/>
+        <location filename="../gui/mainwindow.ui" line="371"/>
         <source>Sa&amp;ve as ...</source>
         <translation>Speichern unter ...</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="373"/>
+        <location filename="../gui/mainwindow.ui" line="374"/>
         <source>Ctrl+Shift+S</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="382"/>
-        <location filename="../gui/mainwindow.ui" line="385"/>
+        <location filename="../gui/mainwindow.ui" line="383"/>
+        <location filename="../gui/mainwindow.ui" line="386"/>
         <source>Remove selected entry</source>
         <translation>Lösche gewählten Eintrag</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="388"/>
+        <location filename="../gui/mainwindow.ui" line="389"/>
         <source>Ctrl+Shift+Del</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="397"/>
+        <location filename="../gui/mainwindow.ui" line="398"/>
         <source>&amp;Insert new field</source>
         <translation>Eintrag hinzufügen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="400"/>
+        <location filename="../gui/mainwindow.ui" line="401"/>
         <source>Ctrl+I</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="554"/>
+        <location filename="../gui/mainwindow.ui" line="555"/>
         <source>&amp;Copy selected field(s)</source>
         <translation>Kopiere ausgewählte Felder</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="566"/>
+        <location filename="../gui/mainwindow.ui" line="567"/>
         <source>&amp;Paste to selected field(s)</source>
         <translation>Einfügen vor ausgewählten Feldern</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="577"/>
+        <location filename="../gui/mainwindow.ui" line="578"/>
         <source>Details ...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="585"/>
+        <location filename="../gui/mainwindow.ui" line="586"/>
         <source>Auto</source>
         <translation>Automatisch</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="593"/>
+        <location filename="../gui/mainwindow.ui" line="594"/>
         <source>Custom</source>
         <translation>Anpassbar</translation>
+    </message>
+    <message>
+        <location filename="../gui/mainwindow.ui" line="602"/>
+        <source>Copy TOTP for selected field</source>
+        <translation>Kopiere TOTP für ausgewähltes Feld</translation>
+    </message>
+    <message>
+        <location filename="../gui/mainwindow.ui" line="605"/>
+        <source>Ctrl+T</source>
+        <translation></translation>
     </message>
     <message>
         <source>Copy selected field(s)</source>
         <translation type="vanished">Kopiere ausgewählte Felder</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="557"/>
+        <location filename="../gui/mainwindow.ui" line="558"/>
         <source>Ctrl+C</source>
         <translation></translation>
     </message>
@@ -836,138 +862,138 @@ Datei wird unverschlüsselt gespeichert!</translation>
         <translation type="vanished">Einfügen vor ausgewählten Feldern</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="569"/>
+        <location filename="../gui/mainwindow.ui" line="570"/>
         <source>Ctrl+V</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="409"/>
+        <location filename="../gui/mainwindow.ui" line="410"/>
         <source>Remove selected &amp;field(s)</source>
         <translation>Lösche ausgewählte Felder</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="412"/>
+        <location filename="../gui/mainwindow.ui" line="413"/>
         <source>Ctrl+Del</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="421"/>
+        <location filename="../gui/mainwindow.ui" line="422"/>
         <source>&amp;Password generator</source>
         <translation>Passwortgenerator</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="424"/>
+        <location filename="../gui/mainwindow.ui" line="425"/>
         <source>Ctrl+G</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="435"/>
+        <location filename="../gui/mainwindow.ui" line="436"/>
         <source>&amp;Always create backup</source>
         <translation>Immer Backup erstellen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="444"/>
+        <location filename="../gui/mainwindow.ui" line="445"/>
         <source>&amp;Export ...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="447"/>
+        <location filename="../gui/mainwindow.ui" line="448"/>
         <source>Export passwords to plain text files</source>
         <translation>Exportiere Passwörter als Textdatei</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="450"/>
+        <location filename="../gui/mainwindow.ui" line="451"/>
         <source>Ctrl+E</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="459"/>
+        <location filename="../gui/mainwindow.ui" line="460"/>
         <source>Show containing &amp;directory</source>
         <translation>Enthaltenes Verzeichnis öffnen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="471"/>
+        <location filename="../gui/mainwindow.ui" line="472"/>
         <source>&amp;Undo</source>
         <translation>Rückgängig machen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="474"/>
+        <location filename="../gui/mainwindow.ui" line="475"/>
         <source>Ctrl+Z</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="486"/>
+        <location filename="../gui/mainwindow.ui" line="487"/>
         <source>&amp;Redo</source>
         <translation>Wiederherstellen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="489"/>
+        <location filename="../gui/mainwindow.ui" line="490"/>
         <source>Ctrl+Shift+Z</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="498"/>
+        <location filename="../gui/mainwindow.ui" line="499"/>
         <source>Add &amp;new category</source>
         <translation>Kategorie hinzufügen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="501"/>
+        <location filename="../gui/mainwindow.ui" line="502"/>
         <source>Ctrl+Shift+C</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="509"/>
+        <location filename="../gui/mainwindow.ui" line="510"/>
         <source>&amp;Show undo stack</source>
         <translation>Zeige Änderungshistorie</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="512"/>
+        <location filename="../gui/mainwindow.ui" line="513"/>
         <source>Ctrl+U</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="520"/>
+        <location filename="../gui/mainwindow.ui" line="521"/>
         <source>&amp;show always</source>
         <translation>immer zeigen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="528"/>
+        <location filename="../gui/mainwindow.ui" line="529"/>
         <source>show &amp;only when editing</source>
         <translation>nur beim Bearbeiten zeigen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="536"/>
+        <location filename="../gui/mainwindow.ui" line="537"/>
         <source>&amp;hide always</source>
         <translation>immer verstecken</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.ui" line="545"/>
+        <location filename="../gui/mainwindow.ui" line="546"/>
         <source>&amp;Qt settings</source>
         <translation>Qt-spezifische Einstellungen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="402"/>
+        <location filename="../gui/mainwindow.cpp" line="433"/>
         <source>Qt settings</source>
         <translation>Qt-spezifische Einstellungen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="420"/>
+        <location filename="../gui/mainwindow.cpp" line="451"/>
         <source>A simple password store using AES-256-CBC encryption via OpenSSL.</source>
         <translation>Einfacher Passwortmanager unter Verwendung von AES-256-CBC mittels OpenSSL.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="462"/>
+        <location filename="../gui/mainwindow.cpp" line="493"/>
         <source>Select a password list</source>
         <translation>Passwortdatei auswählen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="462"/>
-        <location filename="../gui/mainwindow.cpp" line="822"/>
+        <location filename="../gui/mainwindow.cpp" line="493"/>
+        <location filename="../gui/mainwindow.cpp" line="853"/>
         <source>Password Manager files (*.pwmgr);;All files (*)</source>
         <translation>Password-Manager-Dateien (*.pwmgr);;Alle Dateien (*)</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="489"/>
+        <location filename="../gui/mainwindow.cpp" line="520"/>
         <source>Undo stack</source>
         <translation>Änderungshistorie</translation>
     </message>
@@ -980,35 +1006,35 @@ Datei wird unverschlüsselt gespeichert!</translation>
 (%2)</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="533"/>
+        <location filename="../gui/mainwindow.cpp" line="564"/>
         <source>The file you want to load seems to be very big. Do you really want to open it?</source>
         <translation>Die zu öffnende Datei ist ziemlich groß. Trotzdem öffnen?</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="542"/>
+        <location filename="../gui/mainwindow.cpp" line="573"/>
         <source>Opening file</source>
         <translation>Datei öffnen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="543"/>
+        <location filename="../gui/mainwindow.cpp" line="574"/>
         <source>Enter the password to open the file &quot;%1&quot;</source>
         <translation>Gib das Passwort ein, um die Datei &quot;%1&quot; zu öffnen.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="548"/>
-        <location filename="../gui/mainwindow.cpp" line="549"/>
+        <location filename="../gui/mainwindow.cpp" line="579"/>
+        <location filename="../gui/mainwindow.cpp" line="580"/>
         <source>A password is needed to open the file.</source>
         <translation>Zum Öffnen der Datei wird ein Passwort benötigt.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="568"/>
+        <location filename="../gui/mainwindow.cpp" line="599"/>
         <source>The file couldn&apos;t be decrypted.
 OpenSSL error queue: %1</source>
         <translation>Die Datei konnte nicht entschlüsselt werden.
 OpenSSL-Fehler: %1</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="573"/>
+        <location filename="../gui/mainwindow.cpp" line="604"/>
         <source>Unable to parse the file. %1</source>
         <translation>Die Datei konnte nicht eingelesen werden. %1</translation>
     </message>
@@ -1017,17 +1043,17 @@ OpenSSL-Fehler: %1</translation>
         <translation type="vanished">Die Datei &lt;i&gt;%1&lt;/i&gt; konnte nicht erstellt werden.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="652"/>
+        <location filename="../gui/mainwindow.cpp" line="683"/>
         <source>A new password list has been created.</source>
         <translation>Neue Passwortdatei erstellt</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="655"/>
+        <location filename="../gui/mainwindow.cpp" line="686"/>
         <source>The password list has been load.</source>
         <translation>Passwortdatei geladen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="700"/>
+        <location filename="../gui/mainwindow.cpp" line="731"/>
         <source> [read-only]</source>
         <translation> [schreibgeschützt]</translation>
     </message>
@@ -1036,37 +1062,37 @@ OpenSSL-Fehler: %1</translation>
         <translation type="vanished">Genau ein Feld muss ausgewählt sein.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="822"/>
+        <location filename="../gui/mainwindow.cpp" line="853"/>
         <source>Select where you want to save the password list</source>
         <translation>Wähle, wo die Passwortdatei gespeichert werden soll</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="824"/>
+        <location filename="../gui/mainwindow.cpp" line="855"/>
         <source>The file was not be saved.</source>
         <translation>Datei wurde nicht gespeichert.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="846"/>
+        <location filename="../gui/mainwindow.cpp" line="877"/>
         <source>There is no password list opened.</source>
         <translation>Keine Passwortdatei geöffnet.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="859"/>
+        <location filename="../gui/mainwindow.cpp" line="890"/>
         <source>There&apos;s no account selected.</source>
         <translation>Kein Konto ausgewählt.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="876"/>
+        <location filename="../gui/mainwindow.cpp" line="907"/>
         <source>The password file has been modified.</source>
         <translation>Passwortdatei wurde geändert.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="877"/>
+        <location filename="../gui/mainwindow.cpp" line="908"/>
         <source>Do you want to save the changes before closing?</source>
         <translation>Änderungen vor dem Schließen speichern?</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="896"/>
+        <location filename="../gui/mainwindow.cpp" line="927"/>
         <source>The password list has been closed.</source>
         <translation>Passwortdatei wurde geschlossen.</translation>
     </message>
@@ -1075,34 +1101,34 @@ OpenSSL-Fehler: %1</translation>
         <translation type="vanished">Die Backupdatei konnte aufgrund eines Ein-/Ausgabefehlers nicht erstellt werden: %1</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="932"/>
+        <location filename="../gui/mainwindow.cpp" line="963"/>
         <source>Saving file</source>
         <translation>Speichere Datei</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="933"/>
+        <location filename="../gui/mainwindow.cpp" line="964"/>
         <source>Enter a password to save the file</source>
         <translation>Lege vor dem Speichern ein Passwort fest</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="941"/>
+        <location filename="../gui/mainwindow.cpp" line="972"/>
         <source>The file hasn&apos;t been saved.</source>
         <translation>Die Datei wurde nicht gespeichert.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="951"/>
+        <location filename="../gui/mainwindow.cpp" line="982"/>
         <source>The password list couldn&apos;t be saved due to encryption failure.
 OpenSSL error queue: %1</source>
         <translation>Die Passwortdatei konnte aufgrund eines Verschlüsselungsfehlers nicht gespeichert werden.
 OpenSSL-Fehler: %1</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="967"/>
+        <location filename="../gui/mainwindow.cpp" line="998"/>
         <source>The password list has been saved.</source>
         <translation>Die Passwortdatei wurde gespeichert.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="980"/>
+        <location filename="../gui/mainwindow.cpp" line="1011"/>
         <source>Plain text document (*.txt);;All files (*.*)</source>
         <translation>Einfache Textdatei (*.txt);;Alle Dateien (*.*)</translation>
     </message>
@@ -1111,149 +1137,159 @@ OpenSSL-Fehler: %1</translation>
         <translation type="vanished">Die Passwörter konnten nicht exportiert werden. %1</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="991"/>
+        <location filename="../gui/mainwindow.cpp" line="1022"/>
         <source>The password list has been exported.</source>
         <translation>Die Passwörter wurden exportiert.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1007"/>
+        <location filename="../gui/mainwindow.cpp" line="1038"/>
         <source>The currently opened file hasn&apos;t been saved yet.</source>
         <translation>Die aktuell geöffnete Datei wurde noch nicht gespeichert.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1049"/>
-        <location filename="../gui/mainwindow.cpp" line="1268"/>
+        <location filename="../gui/mainwindow.cpp" line="1080"/>
+        <location filename="../gui/mainwindow.cpp" line="1299"/>
         <source>Add account</source>
         <translation>Konto hinzufügen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1049"/>
-        <location filename="../gui/mainwindow.cpp" line="1269"/>
+        <location filename="../gui/mainwindow.cpp" line="1080"/>
+        <location filename="../gui/mainwindow.cpp" line="1300"/>
         <source>Add category</source>
         <translation>Kategorie hinzufügen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1049"/>
+        <location filename="../gui/mainwindow.cpp" line="1080"/>
         <source>Enter the entry name</source>
         <translation>Name für Eintrag eingeben</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1050"/>
+        <location filename="../gui/mainwindow.cpp" line="1081"/>
         <source>new entry</source>
         <translation>neuer Eintrag</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1061"/>
+        <location filename="../gui/mainwindow.cpp" line="1092"/>
         <source>Unable to create new entry.</source>
         <translation>Neuer Eintrag kann nicht erstellt werden.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1390"/>
+        <location filename="../gui/mainwindow.cpp" line="1415"/>
         <source>File details</source>
         <translation>Details über geöffnete Datei</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1055"/>
+        <location filename="../gui/mainwindow.cpp" line="1086"/>
         <source>You didn&apos;t enter text.</source>
         <translation>Es wurde kein Text eingegeben.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1045"/>
+        <location filename="../gui/mainwindow.cpp" line="1076"/>
         <source>No node element selected.</source>
         <translation>Es ist kein Knotenelement ausgewählt.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1083"/>
+        <location filename="../gui/mainwindow.cpp" line="1114"/>
         <source>Unable to remove the entry.</source>
         <translation>Der Eintrag konnte nicht gelöscht werden.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1078"/>
+        <location filename="../gui/mainwindow.cpp" line="1109"/>
         <source>No entry selected.</source>
         <translation>Kein Eintrag ausgewählt.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="232"/>
+        <location filename="../gui/mainwindow.cpp" line="89"/>
+        <source>The selection does not contain an &quot;otpauth:&quot; URL.</source>
+        <translation>Die Auswähl beinhaltet keine &quot;otpauth:&quot;-URL.</translation>
+    </message>
+    <message>
+        <location filename="../gui/mainwindow.cpp" line="102"/>
+        <source>Copied TOTP, valid for %1</source>
+        <translation>TOTP kopiert, läuft in %1 ab</translation>
+    </message>
+    <message>
+        <location filename="../gui/mainwindow.cpp" line="262"/>
         <source>Check for updates</source>
         <translation>Nach Updates suchen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="524"/>
+        <location filename="../gui/mainwindow.cpp" line="555"/>
         <source>An IO error occurred when opening the specified file &quot;%1&quot;: %2</source>
         <translation>Beim Öffnen der Datei &quot;%1&quot; ist ein Ein-/Ausgabefehler aufgetreten: %2</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="635"/>
+        <location filename="../gui/mainwindow.cpp" line="666"/>
         <source>The file &lt;i&gt;%1&lt;/i&gt; couldn&apos;t be created: %2</source>
         <translation>Die Datei &lt;i&gt;%1&lt;/i&gt; konnte nicht erstellt werden: %2</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="781"/>
+        <location filename="../gui/mainwindow.cpp" line="812"/>
         <source>Exactly one field needs to be selected (top-left corner for insertion).</source>
         <translation>Genau ein Feld muss ausgewählt sein (linke obere Ecke fürs Einfügen).</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="919"/>
+        <location filename="../gui/mainwindow.cpp" line="950"/>
         <source>An IO error occurred when making the backup file: %1</source>
         <translation>Beim Erstellen der Backup-Datei ist ein Ein-/Ausgabefehler aufgetreten: %1</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="988"/>
+        <location filename="../gui/mainwindow.cpp" line="1019"/>
         <source>An IO error occurred when exporting the password list: %1</source>
         <translation>Beim Exportieren ist ein Ein-/Ausgabefehler aufgetreten: %1</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1133"/>
+        <location filename="../gui/mainwindow.cpp" line="1164"/>
         <source>A field has to be selected since new fields are always inserted before the currently selected field.</source>
         <translation>Es muss ein Feld ausgewählt werden. Neue Fehler werden dann vor diesem eingefügt.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1161"/>
+        <location filename="../gui/mainwindow.cpp" line="1192"/>
         <source>No fields have been removed since there are currently no fields selected.</source>
         <translation>Es wurden keine Felder gelöscht, da keine ausgewählt sind.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1197"/>
+        <location filename="../gui/mainwindow.cpp" line="1228"/>
         <source>No fields have been changed since there are currently no fields selected.</source>
         <translation>Es wurden keine Felder geändert, da keine ausgewählt sind.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1231"/>
+        <location filename="../gui/mainwindow.cpp" line="1262"/>
         <source>Changing password</source>
         <translation>Passwort ändern</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1239"/>
+        <location filename="../gui/mainwindow.cpp" line="1270"/>
         <source>You didn&apos;t enter a password. &lt;strong&gt;No encryption&lt;/strong&gt; will be used when saving the file next time.</source>
         <translation>Du hast kein Passwort eingegeben. Beim nächsten Speichern wird die Datei &lt;strong&gt;nicht verschlüsselt&lt;/strong&gt;.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1243"/>
+        <location filename="../gui/mainwindow.cpp" line="1274"/>
         <source>The new password will be used next time you save the file.</source>
         <translation>Das neue Passwort wird beim nächsten Speichern verwendet.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1248"/>
+        <location filename="../gui/mainwindow.cpp" line="1279"/>
         <source>You aborted. The old password will still be used when saving the file next time.</source>
         <translation>Du hast abgebrochen. Beim nächsten Speichern wird weiterhin das alte Passwort verwendet.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1271"/>
+        <location filename="../gui/mainwindow.cpp" line="1302"/>
         <source>Remove entry</source>
         <translation>Eintrag löschen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1277"/>
+        <location filename="../gui/mainwindow.cpp" line="1308"/>
         <source>Expanded by default</source>
         <translation>Standardmäßig ausgeklappt</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1340"/>
+        <location filename="../gui/mainwindow.cpp" line="1371"/>
         <source>Insert field</source>
         <translation>Feld einfügen</translation>
     </message>
     <message numerus="yes">
-        <location filename="../gui/mainwindow.cpp" line="1342"/>
+        <location filename="../gui/mainwindow.cpp" line="1373"/>
         <source>Remove field(s)</source>
         <translation>
             <numerusform>Feld löschen</numerusform>
@@ -1261,47 +1297,57 @@ OpenSSL-Fehler: %1</translation>
         </translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1348"/>
+        <location filename="../gui/mainwindow.cpp" line="1379"/>
         <source>Mark as password field</source>
         <translation>Als Passwortfeld markieren</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1351"/>
+        <location filename="../gui/mainwindow.cpp" line="1382"/>
         <source>Mark as normal field</source>
         <translation>Als normales Feld markieren</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1357"/>
+        <location filename="../gui/mainwindow.cpp" line="1388"/>
         <source>Copy</source>
         <translation>Kopieren</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1358"/>
+        <location filename="../gui/mainwindow.cpp" line="1389"/>
         <source>Copy for 5 seconds</source>
         <translation>Für 5 Sekunden kopieren</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1372"/>
+        <location filename="../gui/mainwindow.cpp" line="1397"/>
         <source>Paste</source>
         <translation>Einfügen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1376"/>
+        <location filename="../gui/mainwindow.cpp" line="1401"/>
         <source>Open URL</source>
         <translation>URL öffnen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1360"/>
+        <location filename="../gui/mainwindow.cpp" line="1437"/>
+        <source>Copied values, clearing clipboard in %1 s</source>
+        <translation>Wert kopiert, lösche Zwischenablage in %1 s</translation>
+    </message>
+    <message>
+        <location filename="../gui/mainwindow.cpp" line="1439"/>
+        <source>Copied values</source>
+        <translation>Wert kopiert</translation>
+    </message>
+    <message>
+        <location filename="../gui/mainwindow.cpp" line="1391"/>
         <source>Copy TOTP</source>
         <translation>TOTP kopieren</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1365"/>
+        <location filename="../gui/mainwindow.cpp" line="105"/>
         <source>Unable to compute TOTP: %1</source>
         <translation>TOTP kann nicht berechnet werden: %1</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1403"/>
+        <location filename="../gui/mainwindow.cpp" line="1428"/>
         <source>The selection is empty.</source>
         <translation>Die Auswahl ist leer.</translation>
     </message>
