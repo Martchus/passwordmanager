@@ -72,6 +72,7 @@ public:
     Q_INVOKABLE void cutEntry(const QModelIndex &entryIndexMaybeFromFilterModel);
     Q_INVOKABLE QStringList pasteEntries(const QModelIndex &destinationParent, int row = -1);
     Q_INVOKABLE bool copyToClipboard(const QString &text) const;
+    Q_INVOKABLE QString copyTOTP(const QString &url) const;
     bool canPaste() const;
     const QStringList &recentFiles() const;
     Q_INVOKABLE void clearRecentFiles();

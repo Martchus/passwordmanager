@@ -47,7 +47,7 @@ Kirigami.ScrollablePage {
         contentItem: ColumnLayout {
             GridLayout {
                 Layout.preferredWidth: fieldDialog.availableWidth
-                columns: 2
+                columns: 3
                 columnSpacing: 0
 
                 Controls.TextField {
@@ -60,6 +60,7 @@ Kirigami.ScrollablePage {
                     flat: true
                     icon.name: "username-copy"
                     Layout.preferredWidth: height
+                    Layout.columnSpan: 2
                     onClicked: {
                         nativeInterface.copyToClipboard(fieldNameEdit.text)
                         showPassiveNotification(qsTr("Copied field name"))
@@ -92,6 +93,13 @@ Kirigami.ScrollablePage {
                                     fieldDialog.isPassword ? qsTr("Copied password") : qsTr(
                                                                  "Copied value"))
                     }
+                }
+                Controls.RoundButton {
+                    flat: true
+                    icon.name: "preferences-system-time-symbolic"
+                    Layout.preferredWidth: height
+                    visible: fieldValueEdit.text.startsWith("otpauth:")
+                    onClicked: showPassiveNotification(nativeInterface.copyTOTP(fieldValueEdit.text))
                 }
             }
             RowLayout {

@@ -79,6 +79,13 @@ Item {
                                                                     "Unable to access clipboard"))
                     }
                     Controls.MenuItem {
+                        icon.name: "preferences-system-time-symbolic"
+                        text: qsTr("Copy TOTP")
+                        visible: model.actualValue.startsWith("otpauth:")
+                        enabled: visible
+                        onClicked: showPassiveNotification(nativeInterface.copyTOTP(model.actualValue))
+                    }
+                    Controls.MenuItem {
                         icon.name: "edit-delete"
                         text: qsTr("Delete field")
                         onClicked: view.model.removeRows(index, 1)
@@ -93,6 +100,14 @@ Item {
             }
         }
         actions: [
+            Kirigami.Action {
+                icon.name: "preferences-system-time-symbolic"
+                text: qsTr("Copy TOTP")
+                visible: model.actualValue.startsWith("otpauth:")
+                enabled: visible
+                onTriggered: showPassiveNotification(nativeInterface.copyTOTP(model.actualValue))
+                shortcut: "Ctrl+T"
+            },
             Kirigami.Action {
                 icon.name: !model.isPassword ? "password-show-off" : "password-show-on"
                 text: model.isPassword ? qsTr(

@@ -3,11 +3,13 @@
 
 #include <passwordfile/io/cryptoexception.h>
 #include <passwordfile/io/parsingexception.h>
+#include <passwordfile/util/openssl.h>
 
 #include <qtutilities/misc/compat.h>
 #include <qtutilities/misc/dialogutils.h>
 #include <qtutilities/resources/resources.h>
 
+#include <c++utilities/chrono/datetime.h>
 #include <c++utilities/io/nativefilestream.h>
 #include <c++utilities/io/path.h>
 
@@ -426,6 +428,19 @@ bool Controller::copyToClipboard(const QString &text) const
 #else
     return false;
 #endif
+}
+
+QString Controller::copyTOTP(const QString &url) const
+{
+    try {
+        const auto totp = Util::OpenSsl::computeTOTP(url.toStdString(), CppUtilities::DateTime::gmtNow());
+        if (!copyToClipboard(QString::fromStdString(totp.digits))) {
+            throw std::runtime_error("clipboard not available");
+        }
+        return tr("Copied TOTP, valid for %1").arg(QString::fromStdString(totp.remaining.toString(TimeSpanOutputFormat::WithMeasures)));
+    } catch (const std::runtime_error &e) {
+        return tr("Unable to copy TOTP: %1").arg(QString::fromUtf8(e.what()));
+    }
 }
 
 void Controller::resetFileStatus()
