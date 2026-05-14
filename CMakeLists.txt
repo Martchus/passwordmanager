@@ -67,6 +67,7 @@ set(DOC_FILES README.md)
 set(REQUIRED_ICONS
     application-exit
     applications-internet
+    clock-symbolic
     dialog-cancel
     dialog-ok
     dialog-ok-apply
@@ -114,7 +115,6 @@ set(REQUIRED_ICONS
     password-show-on
     preferences-desktop-icons
     preferences-desktop-locale
-    preferences-system-time-symbolic
     qtcreator
     search
     view-list-details-symbolic

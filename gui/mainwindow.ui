@@ -596,7 +596,7 @@
   </action>
   <action name="actionCopyTOTP">
    <property name="icon">
-    <iconset theme="preferences-system-time-symbolic"/>
+    <iconset theme="clock-symbolic"/>
    </property>
    <property name="text">
     <string>Copy TOTP for selected field</string>

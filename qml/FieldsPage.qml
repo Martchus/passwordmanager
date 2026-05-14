@@ -96,7 +96,7 @@ Kirigami.ScrollablePage {
                 }
                 Controls.RoundButton {
                     flat: true
-                    icon.name: "preferences-system-time-symbolic"
+                    icon.name: "clock-symbolic"
                     Layout.preferredWidth: height
                     visible: fieldValueEdit.text.startsWith("otpauth:")
                     onClicked: showPassiveNotification(nativeInterface.copyTOTP(fieldValueEdit.text))

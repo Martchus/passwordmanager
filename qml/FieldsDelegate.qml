@@ -79,7 +79,7 @@ Item {
                                                                     "Unable to access clipboard"))
                     }
                     Controls.MenuItem {
-                        icon.name: "preferences-system-time-symbolic"
+                        icon.name: "clock-symbolic"
                         text: qsTr("Copy TOTP")
                         visible: model.actualValue.startsWith("otpauth:")
                         enabled: visible
@@ -101,7 +101,7 @@ Item {
         }
         actions: [
             Kirigami.Action {
-                icon.name: "preferences-system-time-symbolic"
+                icon.name: "clock-symbolic"
                 text: qsTr("Copy TOTP")
                 visible: model.actualValue.startsWith("otpauth:")
                 enabled: visible

@@ -1388,7 +1388,7 @@ void MainWindow::showTableViewContextMenu(const QPoint &pos)
     contextMenu.addAction(QIcon::fromTheme(QStringLiteral("edit-copy")), tr("Copy"), this, &MainWindow::copyFields);
     contextMenu.addAction(QIcon::fromTheme(QStringLiteral("edit-copy")), tr("Copy for 5 seconds"), this, &MainWindow::copyFieldsForXMilliSeconds);
     if (multipleRows == 1 && !totpUrl.empty()) {
-        auto *copyTotpAction = new QAction(QIcon::fromTheme(QStringLiteral("preferences-system-time-symbolic")), tr("Copy TOTP"), &contextMenu);
+        auto *copyTotpAction = new QAction(QIcon::fromTheme(QStringLiteral("clock-symbolic")), tr("Copy TOTP"), &contextMenu);
         connect(copyTotpAction, &QAction::triggered, this, std::bind(&MainWindow::copyTOTP, this, std::string(totpUrl)));
         contextMenu.addAction(copyTotpAction);
     }
