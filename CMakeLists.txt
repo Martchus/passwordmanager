@@ -17,7 +17,7 @@ set(META_ANDROID_PACKAGE_NAME "org.martchus.passwordmanager")
 set(META_VERSION_MAJOR 4)
 set(META_VERSION_MINOR 3)
 set(META_VERSION_PATCH 0)
-set(META_RELEASE_DATE "2025-12-02")
+set(META_RELEASE_DATE "2026-05-14")
 
 # add project files
 set(HEADER_FILES cli/cli.h model/entryfiltermodel.h model/entrymodel.h model/fieldmodel.h)
