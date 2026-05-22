@@ -605,11 +605,17 @@ bool MainWindow::openFile(const QString &path, PasswordFileOpenFlags openFlags)
         }
     }
 
-    // show a message in the error case
+    // show warning if a file is encrypted but no auth tag is present
+    if ((m_file.saveOptions() & PasswordFileSaveFlags::Encryption) && !(m_file.saveOptions() & PasswordFileSaveFlags::AuthenticationTag)) {
+        QMessageBox::warning(this, windowTitle(), tr("The encrypted file could be opened but its authenticity could not be verified because it was written with an old version of the password manager that did not include an authentication tag."));
+    }
+
+    // show contents
     if (msg.isEmpty()) {
-        // show contents
         return showFile();
     }
+
+    // clear file and show a message in the error case
     m_file.clear();
     m_ui->statusBar->showMessage(msg, 5000);
     if (QMessageBox::critical(this, QApplication::applicationName(), msg, QMessageBox::Cancel, QMessageBox::Retry) == QMessageBox::Retry) {
