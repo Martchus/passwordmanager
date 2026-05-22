@@ -501,9 +501,6 @@ void MainWindow::showOpenFileDialog()
  */
 void MainWindow::showSaveFileDialog()
 {
-    if (showNoFileOpened()) {
-        return;
-    }
     if (askForCreatingFile()) {
         saveFile();
     }
