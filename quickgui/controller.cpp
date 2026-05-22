@@ -199,9 +199,9 @@ void Controller::clear()
 
 PasswordFileSaveFlags Controller::prepareSaving()
 {
-    auto flags = PasswordFileSaveFlags::Compression | PasswordFileSaveFlags::PasswordHashing | PasswordFileSaveFlags::AllowToCreateNewFile;
+    auto flags = PasswordFileSaveFlags::Compression | PasswordFileSaveFlags::AllowToCreateNewFile;
     if (!m_password.isEmpty()) {
-        flags |= PasswordFileSaveFlags::Encryption;
+        flags |= PasswordFileSaveFlags::Encryption | PasswordFileSaveFlags::PasswordHashing | PasswordFileSaveFlags::AuthenticationTag;
         const auto passwordUtf8(m_password.toUtf8());
         m_file.setPassword(passwordUtf8.data(), static_cast<size_t>(passwordUtf8.size()));
     } else {

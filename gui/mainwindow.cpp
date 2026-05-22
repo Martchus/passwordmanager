@@ -750,9 +750,9 @@ void MainWindow::applyDefaultExpanding(const QModelIndex &parent)
  */
 PasswordFileSaveFlags MainWindow::saveOptions() const
 {
-    auto options = PasswordFileSaveFlags::Compression | PasswordFileSaveFlags::PasswordHashing;
+    auto options = PasswordFileSaveFlags::Compression;
     if (!m_file.password().empty()) {
-        options |= PasswordFileSaveFlags::Encryption;
+        options |= PasswordFileSaveFlags::Encryption | PasswordFileSaveFlags::PasswordHashing | PasswordFileSaveFlags::AuthenticationTag;
     }
     return options;
 }
@@ -1415,6 +1415,8 @@ void MainWindow::showFileDetails()
     msgBox.setWindowTitle(tr("File details"));
     msgBox.setText(QString::fromStdString(m_file.summary(saveOptions())));
     msgBox.setIcon(QMessageBox::NoIcon);
+    msgBox.setWindowIcon(windowIcon());
+    msgBox.setWindowIconText(windowIconText());
     msgBox.exec();
 }
 
