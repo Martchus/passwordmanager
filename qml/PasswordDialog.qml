@@ -42,8 +42,8 @@ BasicDialog {
             Layout.preferredWidth: passwordDialog.availableWidth
             echoMode: showCharactersCheckBox.checked ? TextInput.Normal : TextInput.Password
             placeholderText: newPassword
-                ? qsTr("enter password here, leave empty for no encryption")
-                : qsTr("enter password here")
+                ? qsTr("Enter password here, leave empty for no encryption")
+                : qsTr("Enter password here")
             Keys.onPressed: (event) => passwordDialog.acceptOnReturn(event)
         }
         Controls.TextField {
@@ -52,7 +52,7 @@ BasicDialog {
             visible: passwordDialog.newPassword
             enabled: visible && !showCharactersCheckBox.checked
             echoMode: TextInput.Password
-            placeholderText: qsTr("repeat password")
+            placeholderText: qsTr("Repeat password")
             Keys.onPressed: passwordDialog.acceptOnReturn(event)
         }
         Controls.CheckBox {
