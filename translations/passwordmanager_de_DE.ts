@@ -519,18 +519,30 @@ Datei wird unverschlüsselt gespeichert!</translation>
     </message>
     <message>
         <location filename="../qml/PasswordDialog.qml" line="45"/>
-        <source>enter password here, leave empty for no encryption</source>
+        <source>Enter password here, leave empty for no encryption</source>
         <translation>Passwort hier eingeben, leer lassen um Verschlüsselung zu deaktivieren</translation>
     </message>
     <message>
         <location filename="../qml/PasswordDialog.qml" line="46"/>
-        <source>enter password here</source>
+        <source>Enter password here</source>
         <translation>Passwort hier eingeben</translation>
     </message>
     <message>
         <location filename="../qml/PasswordDialog.qml" line="55"/>
-        <source>repeat password</source>
+        <source>Repeat password</source>
         <translation>Passwort wiederholen</translation>
+    </message>
+    <message>
+        <source>enter password here, leave empty for no encryption</source>
+        <translation type="vanished">Passwort hier eingeben, leer lassen um Verschlüsselung zu deaktivieren</translation>
+    </message>
+    <message>
+        <source>enter password here</source>
+        <translation type="vanished">Passwort hier eingeben</translation>
+    </message>
+    <message>
+        <source>repeat password</source>
+        <translation type="vanished">Passwort wiederholen</translation>
     </message>
     <message>
         <location filename="../qml/PasswordDialog.qml" line="60"/>
@@ -546,7 +558,12 @@ Datei wird unverschlüsselt gespeichert!</translation>
         <translation>Die Datei konnte nicht geöffnet werden, weil das Root-Element fehlt.</translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="151"/>
+        <location filename="../quickgui/controller.cpp" line="144"/>
+        <source>The encrypted file could be opened but its authenticity could not be verified because it was written with an old version of the password manager that did not include an authentication tag.</source>
+        <translation>Die verschlüsselte Datei konnte geöffnet werden, ihre Authentizität ließ sich jedoch nicht überprüfen, da sie mit einer alten Version des Passwortmanagers erstellt wurde, die kein Authentifizierungs-Tag unterstützt.</translation>
+    </message>
+    <message>
+        <location filename="../quickgui/controller.cpp" line="154"/>
         <source>A crypto error occurred when opening the file: </source>
         <translation>Ein Verschlüsselungsfehler ist beim Öffnen der Datei aufgetreten: </translation>
     </message>
@@ -555,28 +572,28 @@ Datei wird unverschlüsselt gespeichert!</translation>
         <translation type="vanished">Die Datei konnte nicht richtig eingelesen werden: </translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="159"/>
+        <location filename="../quickgui/controller.cpp" line="162"/>
         <source>loading</source>
         <translation>beim Laden</translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="169"/>
+        <location filename="../quickgui/controller.cpp" line="172"/>
         <source>creating</source>
         <translation>beim Erstellen</translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="185"/>
-        <location filename="../quickgui/controller.cpp" line="194"/>
+        <location filename="../quickgui/controller.cpp" line="188"/>
+        <location filename="../quickgui/controller.cpp" line="197"/>
         <source>closing</source>
         <translation>beim Schließen</translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="226"/>
+        <location filename="../quickgui/controller.cpp" line="229"/>
         <source>Unable to open file descriptor for saving the file.</source>
         <translation>Fehler beim Öffnen des Dateideskriptors zum Speichern der Datei.</translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="241"/>
+        <location filename="../quickgui/controller.cpp" line="244"/>
         <source>A crypto error occurred when saving the file: </source>
         <translation>Ein Verschlüsselungsfehler ist beim Speichern der Datei aufgetreten: </translation>
     </message>
@@ -585,7 +602,7 @@ Datei wird unverschlüsselt gespeichert!</translation>
         <translation type="vanished">Ein interner Fehler ist beim Speichern der Datei aufgetreten: </translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="243"/>
+        <location filename="../quickgui/controller.cpp" line="246"/>
         <source>saving</source>
         <translation>beim Speichern</translation>
     </message>
@@ -594,42 +611,42 @@ Datei wird unverschlüsselt gespeichert!</translation>
         <translation type="vanished">beim Öffnen mittels nativem Dateideskriptors</translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="319"/>
+        <location filename="../quickgui/controller.cpp" line="322"/>
         <source>Canceled file selection</source>
         <translation>Dateiauswahl geschlossen</translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="440"/>
+        <location filename="../quickgui/controller.cpp" line="443"/>
         <source>Copied TOTP, valid for %1</source>
         <translation>TOTP kopiert, läuft in %1 ab</translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="442"/>
+        <location filename="../quickgui/controller.cpp" line="445"/>
         <source>Unable to copy TOTP: %1</source>
         <translation>TOTP konnte nicht kopert werden: %1</translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="459"/>
+        <location filename="../quickgui/controller.cpp" line="462"/>
         <source>No file opened.</source>
         <translation>Keine Datei geöffnet.</translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="476"/>
+        <location filename="../quickgui/controller.cpp" line="479"/>
         <source>An IO error occurred when %1 the file %2: </source>
         <translation>Ein Ein- bzw. Ausgabefehler ist %1 der Datei %2 aufgetreten: </translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="478"/>
+        <location filename="../quickgui/controller.cpp" line="481"/>
         <source>An error occurred when %1 the file: </source>
         <translation>Ein Fehler ist %1 der Datei aufgetreten: </translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="480"/>
+        <location filename="../quickgui/controller.cpp" line="483"/>
         <source>An unknown exception occurred when %1 the file %2: </source>
         <translation>Eine unbekannte Ausnahme ist %1 der Datei %2 aufgetreten: </translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="483"/>
+        <location filename="../quickgui/controller.cpp" line="486"/>
         <source>An unknown error occurred when %1 the file %2.</source>
         <translation>Ein unbekannter Fehler ist %1 der Datei %2 aufgetreten.</translation>
     </message>
@@ -988,12 +1005,12 @@ Datei wird unverschlüsselt gespeichert!</translation>
     </message>
     <message>
         <location filename="../gui/mainwindow.cpp" line="493"/>
-        <location filename="../gui/mainwindow.cpp" line="859"/>
+        <location filename="../gui/mainwindow.cpp" line="856"/>
         <source>Password Manager files (*.pwmgr);;All files (*)</source>
         <translation>Password-Manager-Dateien (*.pwmgr);;Alle Dateien (*)</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="520"/>
+        <location filename="../gui/mainwindow.cpp" line="517"/>
         <source>Undo stack</source>
         <translation>Änderungshistorie</translation>
     </message>
@@ -1006,35 +1023,35 @@ Datei wird unverschlüsselt gespeichert!</translation>
 (%2)</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="564"/>
+        <location filename="../gui/mainwindow.cpp" line="561"/>
         <source>The file you want to load seems to be very big. Do you really want to open it?</source>
         <translation>Die zu öffnende Datei ist ziemlich groß. Trotzdem öffnen?</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="573"/>
+        <location filename="../gui/mainwindow.cpp" line="570"/>
         <source>Opening file</source>
         <translation>Datei öffnen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="574"/>
+        <location filename="../gui/mainwindow.cpp" line="571"/>
         <source>Enter the password to open the file &quot;%1&quot;</source>
         <translation>Gib das Passwort ein, um die Datei &quot;%1&quot; zu öffnen.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="579"/>
-        <location filename="../gui/mainwindow.cpp" line="580"/>
+        <location filename="../gui/mainwindow.cpp" line="576"/>
+        <location filename="../gui/mainwindow.cpp" line="577"/>
         <source>A password is needed to open the file.</source>
         <translation>Zum Öffnen der Datei wird ein Passwort benötigt.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="599"/>
+        <location filename="../gui/mainwindow.cpp" line="596"/>
         <source>The file couldn&apos;t be decrypted.
 OpenSSL error queue: %1</source>
         <translation>Die Datei konnte nicht entschlüsselt werden.
 OpenSSL-Fehler: %1</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="604"/>
+        <location filename="../gui/mainwindow.cpp" line="601"/>
         <source>Unable to parse the file. %1</source>
         <translation>Die Datei konnte nicht eingelesen werden. %1</translation>
     </message>
@@ -1043,17 +1060,17 @@ OpenSSL-Fehler: %1</translation>
         <translation type="vanished">Die Datei &lt;i&gt;%1&lt;/i&gt; konnte nicht erstellt werden.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="689"/>
+        <location filename="../gui/mainwindow.cpp" line="686"/>
         <source>A new password list has been created.</source>
         <translation>Neue Passwortdatei erstellt</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="692"/>
+        <location filename="../gui/mainwindow.cpp" line="689"/>
         <source>The password list has been load.</source>
         <translation>Passwortdatei geladen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="737"/>
+        <location filename="../gui/mainwindow.cpp" line="734"/>
         <source> [read-only]</source>
         <translation> [schreibgeschützt]</translation>
     </message>
@@ -1062,37 +1079,37 @@ OpenSSL-Fehler: %1</translation>
         <translation type="vanished">Genau ein Feld muss ausgewählt sein.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="859"/>
+        <location filename="../gui/mainwindow.cpp" line="856"/>
         <source>Select where you want to save the password list</source>
         <translation>Wähle, wo die Passwortdatei gespeichert werden soll</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="861"/>
+        <location filename="../gui/mainwindow.cpp" line="858"/>
         <source>The file was not be saved.</source>
         <translation>Datei wurde nicht gespeichert.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="883"/>
+        <location filename="../gui/mainwindow.cpp" line="880"/>
         <source>There is no password list opened.</source>
         <translation>Keine Passwortdatei geöffnet.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="896"/>
+        <location filename="../gui/mainwindow.cpp" line="893"/>
         <source>There&apos;s no account selected.</source>
         <translation>Kein Konto ausgewählt.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="913"/>
+        <location filename="../gui/mainwindow.cpp" line="910"/>
         <source>The password file has been modified.</source>
         <translation>Passwortdatei wurde geändert.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="914"/>
+        <location filename="../gui/mainwindow.cpp" line="911"/>
         <source>Do you want to save the changes before closing?</source>
         <translation>Änderungen vor dem Schließen speichern?</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="933"/>
+        <location filename="../gui/mainwindow.cpp" line="930"/>
         <source>The password list has been closed.</source>
         <translation>Passwortdatei wurde geschlossen.</translation>
     </message>
@@ -1101,34 +1118,34 @@ OpenSSL-Fehler: %1</translation>
         <translation type="vanished">Die Backupdatei konnte aufgrund eines Ein-/Ausgabefehlers nicht erstellt werden: %1</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="969"/>
+        <location filename="../gui/mainwindow.cpp" line="966"/>
         <source>Saving file</source>
         <translation>Speichere Datei</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="970"/>
+        <location filename="../gui/mainwindow.cpp" line="967"/>
         <source>Enter a password to save the file</source>
         <translation>Lege vor dem Speichern ein Passwort fest</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="978"/>
+        <location filename="../gui/mainwindow.cpp" line="975"/>
         <source>The file hasn&apos;t been saved.</source>
         <translation>Die Datei wurde nicht gespeichert.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="988"/>
+        <location filename="../gui/mainwindow.cpp" line="985"/>
         <source>The password list couldn&apos;t be saved due to encryption failure.
 OpenSSL error queue: %1</source>
         <translation>Die Passwortdatei konnte aufgrund eines Verschlüsselungsfehlers nicht gespeichert werden.
 OpenSSL-Fehler: %1</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1004"/>
+        <location filename="../gui/mainwindow.cpp" line="1001"/>
         <source>The password list has been saved.</source>
         <translation>Die Passwortdatei wurde gespeichert.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1017"/>
+        <location filename="../gui/mainwindow.cpp" line="1014"/>
         <source>Plain text document (*.txt);;All files (*.*)</source>
         <translation>Einfache Textdatei (*.txt);;Alle Dateien (*.*)</translation>
     </message>
@@ -1137,64 +1154,64 @@ OpenSSL-Fehler: %1</translation>
         <translation type="vanished">Die Passwörter konnten nicht exportiert werden. %1</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1028"/>
+        <location filename="../gui/mainwindow.cpp" line="1025"/>
         <source>The password list has been exported.</source>
         <translation>Die Passwörter wurden exportiert.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1044"/>
+        <location filename="../gui/mainwindow.cpp" line="1041"/>
         <source>The currently opened file hasn&apos;t been saved yet.</source>
         <translation>Die aktuell geöffnete Datei wurde noch nicht gespeichert.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1086"/>
-        <location filename="../gui/mainwindow.cpp" line="1305"/>
+        <location filename="../gui/mainwindow.cpp" line="1083"/>
+        <location filename="../gui/mainwindow.cpp" line="1302"/>
         <source>Add account</source>
         <translation>Konto hinzufügen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1086"/>
-        <location filename="../gui/mainwindow.cpp" line="1306"/>
+        <location filename="../gui/mainwindow.cpp" line="1083"/>
+        <location filename="../gui/mainwindow.cpp" line="1303"/>
         <source>Add category</source>
         <translation>Kategorie hinzufügen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1086"/>
+        <location filename="../gui/mainwindow.cpp" line="1083"/>
         <source>Enter the entry name</source>
         <translation>Name für Eintrag eingeben</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1087"/>
+        <location filename="../gui/mainwindow.cpp" line="1084"/>
         <source>new entry</source>
         <translation>neuer Eintrag</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1098"/>
+        <location filename="../gui/mainwindow.cpp" line="1095"/>
         <source>Unable to create new entry.</source>
         <translation>Neuer Eintrag kann nicht erstellt werden.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1421"/>
+        <location filename="../gui/mainwindow.cpp" line="1418"/>
         <source>File details</source>
         <translation>Details über geöffnete Datei</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1092"/>
+        <location filename="../gui/mainwindow.cpp" line="1089"/>
         <source>You didn&apos;t enter text.</source>
         <translation>Es wurde kein Text eingegeben.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1082"/>
+        <location filename="../gui/mainwindow.cpp" line="1079"/>
         <source>No node element selected.</source>
         <translation>Es ist kein Knotenelement ausgewählt.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1120"/>
+        <location filename="../gui/mainwindow.cpp" line="1117"/>
         <source>Unable to remove the entry.</source>
         <translation>Der Eintrag konnte nicht gelöscht werden.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1115"/>
+        <location filename="../gui/mainwindow.cpp" line="1112"/>
         <source>No entry selected.</source>
         <translation>Kein Eintrag ausgewählt.</translation>
     </message>
@@ -1214,87 +1231,87 @@ OpenSSL-Fehler: %1</translation>
         <translation>Nach Updates suchen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="555"/>
+        <location filename="../gui/mainwindow.cpp" line="552"/>
         <source>An IO error occurred when opening the specified file &quot;%1&quot;: %2</source>
         <translation>Beim Öffnen der Datei &quot;%1&quot; ist ein Ein-/Ausgabefehler aufgetreten: %2</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="610"/>
+        <location filename="../gui/mainwindow.cpp" line="607"/>
         <source>The encrypted file could be opened but its authenticity could not be verified because it was written with an old version of the password manager that did not include an authentication tag.</source>
         <translation>Die verschlüsselte Datei konnte geöffnet werden, ihre Authentizität ließ sich jedoch nicht überprüfen, da sie mit einer alten Version des Passwortmanagers erstellt wurde, die kein Authentifizierungs-Tag unterstützt.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="672"/>
+        <location filename="../gui/mainwindow.cpp" line="669"/>
         <source>The file &lt;i&gt;%1&lt;/i&gt; couldn&apos;t be created: %2</source>
         <translation>Die Datei &lt;i&gt;%1&lt;/i&gt; konnte nicht erstellt werden: %2</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="818"/>
+        <location filename="../gui/mainwindow.cpp" line="815"/>
         <source>Exactly one field needs to be selected (top-left corner for insertion).</source>
         <translation>Genau ein Feld muss ausgewählt sein (linke obere Ecke fürs Einfügen).</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="956"/>
+        <location filename="../gui/mainwindow.cpp" line="953"/>
         <source>An IO error occurred when making the backup file: %1</source>
         <translation>Beim Erstellen der Backup-Datei ist ein Ein-/Ausgabefehler aufgetreten: %1</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1025"/>
+        <location filename="../gui/mainwindow.cpp" line="1022"/>
         <source>An IO error occurred when exporting the password list: %1</source>
         <translation>Beim Exportieren ist ein Ein-/Ausgabefehler aufgetreten: %1</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1170"/>
+        <location filename="../gui/mainwindow.cpp" line="1167"/>
         <source>A field has to be selected since new fields are always inserted before the currently selected field.</source>
         <translation>Es muss ein Feld ausgewählt werden. Neue Fehler werden dann vor diesem eingefügt.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1198"/>
+        <location filename="../gui/mainwindow.cpp" line="1195"/>
         <source>No fields have been removed since there are currently no fields selected.</source>
         <translation>Es wurden keine Felder gelöscht, da keine ausgewählt sind.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1234"/>
+        <location filename="../gui/mainwindow.cpp" line="1231"/>
         <source>No fields have been changed since there are currently no fields selected.</source>
         <translation>Es wurden keine Felder geändert, da keine ausgewählt sind.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1268"/>
+        <location filename="../gui/mainwindow.cpp" line="1265"/>
         <source>Changing password</source>
         <translation>Passwort ändern</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1276"/>
+        <location filename="../gui/mainwindow.cpp" line="1273"/>
         <source>You didn&apos;t enter a password. &lt;strong&gt;No encryption&lt;/strong&gt; will be used when saving the file next time.</source>
         <translation>Du hast kein Passwort eingegeben. Beim nächsten Speichern wird die Datei &lt;strong&gt;nicht verschlüsselt&lt;/strong&gt;.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1280"/>
+        <location filename="../gui/mainwindow.cpp" line="1277"/>
         <source>The new password will be used next time you save the file.</source>
         <translation>Das neue Passwort wird beim nächsten Speichern verwendet.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1285"/>
+        <location filename="../gui/mainwindow.cpp" line="1282"/>
         <source>You aborted. The old password will still be used when saving the file next time.</source>
         <translation>Du hast abgebrochen. Beim nächsten Speichern wird weiterhin das alte Passwort verwendet.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1308"/>
+        <location filename="../gui/mainwindow.cpp" line="1305"/>
         <source>Remove entry</source>
         <translation>Eintrag löschen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1314"/>
+        <location filename="../gui/mainwindow.cpp" line="1311"/>
         <source>Expanded by default</source>
         <translation>Standardmäßig ausgeklappt</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1377"/>
+        <location filename="../gui/mainwindow.cpp" line="1374"/>
         <source>Insert field</source>
         <translation>Feld einfügen</translation>
     </message>
     <message numerus="yes">
-        <location filename="../gui/mainwindow.cpp" line="1379"/>
+        <location filename="../gui/mainwindow.cpp" line="1376"/>
         <source>Remove field(s)</source>
         <translation>
             <numerusform>Feld löschen</numerusform>
@@ -1302,47 +1319,47 @@ OpenSSL-Fehler: %1</translation>
         </translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1385"/>
+        <location filename="../gui/mainwindow.cpp" line="1382"/>
         <source>Mark as password field</source>
         <translation>Als Passwortfeld markieren</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1388"/>
+        <location filename="../gui/mainwindow.cpp" line="1385"/>
         <source>Mark as normal field</source>
         <translation>Als normales Feld markieren</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1394"/>
+        <location filename="../gui/mainwindow.cpp" line="1391"/>
         <source>Copy</source>
         <translation>Kopieren</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1395"/>
+        <location filename="../gui/mainwindow.cpp" line="1392"/>
         <source>Copy for 5 seconds</source>
         <translation>Für 5 Sekunden kopieren</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1403"/>
+        <location filename="../gui/mainwindow.cpp" line="1400"/>
         <source>Paste</source>
         <translation>Einfügen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1407"/>
+        <location filename="../gui/mainwindow.cpp" line="1404"/>
         <source>Open URL</source>
         <translation>URL öffnen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1445"/>
+        <location filename="../gui/mainwindow.cpp" line="1442"/>
         <source>Copied values, clearing clipboard in %1 s</source>
         <translation>Wert kopiert, lösche Zwischenablage in %1 s</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1447"/>
+        <location filename="../gui/mainwindow.cpp" line="1444"/>
         <source>Copied values</source>
         <translation>Wert kopiert</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1397"/>
+        <location filename="../gui/mainwindow.cpp" line="1394"/>
         <source>Copy TOTP</source>
         <translation>TOTP kopieren</translation>
     </message>
@@ -1352,7 +1369,7 @@ OpenSSL-Fehler: %1</translation>
         <translation>TOTP kann nicht berechnet werden: %1</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1436"/>
+        <location filename="../gui/mainwindow.cpp" line="1433"/>
         <source>The selection is empty.</source>
         <translation>Die Auswahl ist leer.</translation>
     </message>

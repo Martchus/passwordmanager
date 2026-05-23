@@ -371,17 +371,17 @@ File will be saved unencrypted!</source>
     </message>
     <message>
         <location filename="../qml/PasswordDialog.qml" line="45"/>
-        <source>enter password here, leave empty for no encryption</source>
+        <source>Enter password here, leave empty for no encryption</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/PasswordDialog.qml" line="46"/>
-        <source>enter password here</source>
+        <source>Enter password here</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/PasswordDialog.qml" line="55"/>
-        <source>repeat password</source>
+        <source>Repeat password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -398,78 +398,83 @@ File will be saved unencrypted!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="151"/>
+        <location filename="../quickgui/controller.cpp" line="144"/>
+        <source>The encrypted file could be opened but its authenticity could not be verified because it was written with an old version of the password manager that did not include an authentication tag.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../quickgui/controller.cpp" line="154"/>
         <source>A crypto error occurred when opening the file: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="159"/>
+        <location filename="../quickgui/controller.cpp" line="162"/>
         <source>loading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="169"/>
+        <location filename="../quickgui/controller.cpp" line="172"/>
         <source>creating</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="185"/>
-        <location filename="../quickgui/controller.cpp" line="194"/>
+        <location filename="../quickgui/controller.cpp" line="188"/>
+        <location filename="../quickgui/controller.cpp" line="197"/>
         <source>closing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="226"/>
+        <location filename="../quickgui/controller.cpp" line="229"/>
         <source>Unable to open file descriptor for saving the file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="241"/>
+        <location filename="../quickgui/controller.cpp" line="244"/>
         <source>A crypto error occurred when saving the file: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="243"/>
+        <location filename="../quickgui/controller.cpp" line="246"/>
         <source>saving</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="319"/>
+        <location filename="../quickgui/controller.cpp" line="322"/>
         <source>Canceled file selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="440"/>
+        <location filename="../quickgui/controller.cpp" line="443"/>
         <source>Copied TOTP, valid for %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="442"/>
+        <location filename="../quickgui/controller.cpp" line="445"/>
         <source>Unable to copy TOTP: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="459"/>
+        <location filename="../quickgui/controller.cpp" line="462"/>
         <source>No file opened.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="476"/>
+        <location filename="../quickgui/controller.cpp" line="479"/>
         <source>An IO error occurred when %1 the file %2: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="478"/>
+        <location filename="../quickgui/controller.cpp" line="481"/>
         <source>An error occurred when %1 the file: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="480"/>
+        <location filename="../quickgui/controller.cpp" line="483"/>
         <source>An unknown exception occurred when %1 the file %2: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="483"/>
+        <location filename="../quickgui/controller.cpp" line="486"/>
         <source>An unknown error occurred when %1 the file %2.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -820,182 +825,182 @@ File will be saved unencrypted!</source>
     </message>
     <message>
         <location filename="../gui/mainwindow.cpp" line="493"/>
-        <location filename="../gui/mainwindow.cpp" line="859"/>
+        <location filename="../gui/mainwindow.cpp" line="856"/>
         <source>Password Manager files (*.pwmgr);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="520"/>
+        <location filename="../gui/mainwindow.cpp" line="517"/>
         <source>Undo stack</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="564"/>
+        <location filename="../gui/mainwindow.cpp" line="561"/>
         <source>The file you want to load seems to be very big. Do you really want to open it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="573"/>
+        <location filename="../gui/mainwindow.cpp" line="570"/>
         <source>Opening file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="574"/>
+        <location filename="../gui/mainwindow.cpp" line="571"/>
         <source>Enter the password to open the file &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="579"/>
-        <location filename="../gui/mainwindow.cpp" line="580"/>
+        <location filename="../gui/mainwindow.cpp" line="576"/>
+        <location filename="../gui/mainwindow.cpp" line="577"/>
         <source>A password is needed to open the file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="599"/>
+        <location filename="../gui/mainwindow.cpp" line="596"/>
         <source>The file couldn&apos;t be decrypted.
 OpenSSL error queue: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="604"/>
+        <location filename="../gui/mainwindow.cpp" line="601"/>
         <source>Unable to parse the file. %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="610"/>
+        <location filename="../gui/mainwindow.cpp" line="607"/>
         <source>The encrypted file could be opened but its authenticity could not be verified because it was written with an old version of the password manager that did not include an authentication tag.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="689"/>
+        <location filename="../gui/mainwindow.cpp" line="686"/>
         <source>A new password list has been created.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="692"/>
+        <location filename="../gui/mainwindow.cpp" line="689"/>
         <source>The password list has been load.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="737"/>
+        <location filename="../gui/mainwindow.cpp" line="734"/>
         <source> [read-only]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="859"/>
+        <location filename="../gui/mainwindow.cpp" line="856"/>
         <source>Select where you want to save the password list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="861"/>
+        <location filename="../gui/mainwindow.cpp" line="858"/>
         <source>The file was not be saved.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="883"/>
+        <location filename="../gui/mainwindow.cpp" line="880"/>
         <source>There is no password list opened.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="896"/>
+        <location filename="../gui/mainwindow.cpp" line="893"/>
         <source>There&apos;s no account selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="913"/>
+        <location filename="../gui/mainwindow.cpp" line="910"/>
         <source>The password file has been modified.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="914"/>
+        <location filename="../gui/mainwindow.cpp" line="911"/>
         <source>Do you want to save the changes before closing?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="933"/>
+        <location filename="../gui/mainwindow.cpp" line="930"/>
         <source>The password list has been closed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="969"/>
+        <location filename="../gui/mainwindow.cpp" line="966"/>
         <source>Saving file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="970"/>
+        <location filename="../gui/mainwindow.cpp" line="967"/>
         <source>Enter a password to save the file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="978"/>
+        <location filename="../gui/mainwindow.cpp" line="975"/>
         <source>The file hasn&apos;t been saved.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="988"/>
+        <location filename="../gui/mainwindow.cpp" line="985"/>
         <source>The password list couldn&apos;t be saved due to encryption failure.
 OpenSSL error queue: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1004"/>
+        <location filename="../gui/mainwindow.cpp" line="1001"/>
         <source>The password list has been saved.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1017"/>
+        <location filename="../gui/mainwindow.cpp" line="1014"/>
         <source>Plain text document (*.txt);;All files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1028"/>
+        <location filename="../gui/mainwindow.cpp" line="1025"/>
         <source>The password list has been exported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1044"/>
+        <location filename="../gui/mainwindow.cpp" line="1041"/>
         <source>The currently opened file hasn&apos;t been saved yet.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1086"/>
-        <location filename="../gui/mainwindow.cpp" line="1305"/>
+        <location filename="../gui/mainwindow.cpp" line="1083"/>
+        <location filename="../gui/mainwindow.cpp" line="1302"/>
         <source>Add account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1086"/>
-        <location filename="../gui/mainwindow.cpp" line="1306"/>
+        <location filename="../gui/mainwindow.cpp" line="1083"/>
+        <location filename="../gui/mainwindow.cpp" line="1303"/>
         <source>Add category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1086"/>
+        <location filename="../gui/mainwindow.cpp" line="1083"/>
         <source>Enter the entry name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1087"/>
+        <location filename="../gui/mainwindow.cpp" line="1084"/>
         <source>new entry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1098"/>
+        <location filename="../gui/mainwindow.cpp" line="1095"/>
         <source>Unable to create new entry.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1397"/>
+        <location filename="../gui/mainwindow.cpp" line="1394"/>
         <source>Copy TOTP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1445"/>
+        <location filename="../gui/mainwindow.cpp" line="1442"/>
         <source>Copied values, clearing clipboard in %1 s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1447"/>
+        <location filename="../gui/mainwindow.cpp" line="1444"/>
         <source>Copied values</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1005,27 +1010,27 @@ OpenSSL error queue: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1421"/>
+        <location filename="../gui/mainwindow.cpp" line="1418"/>
         <source>File details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1092"/>
+        <location filename="../gui/mainwindow.cpp" line="1089"/>
         <source>You didn&apos;t enter text.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1082"/>
+        <location filename="../gui/mainwindow.cpp" line="1079"/>
         <source>No node element selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1120"/>
+        <location filename="../gui/mainwindow.cpp" line="1117"/>
         <source>Unable to remove the entry.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1115"/>
+        <location filename="../gui/mainwindow.cpp" line="1112"/>
         <source>No entry selected.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1045,82 +1050,82 @@ OpenSSL error queue: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="555"/>
+        <location filename="../gui/mainwindow.cpp" line="552"/>
         <source>An IO error occurred when opening the specified file &quot;%1&quot;: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="672"/>
+        <location filename="../gui/mainwindow.cpp" line="669"/>
         <source>The file &lt;i&gt;%1&lt;/i&gt; couldn&apos;t be created: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="818"/>
+        <location filename="../gui/mainwindow.cpp" line="815"/>
         <source>Exactly one field needs to be selected (top-left corner for insertion).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="956"/>
+        <location filename="../gui/mainwindow.cpp" line="953"/>
         <source>An IO error occurred when making the backup file: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1025"/>
+        <location filename="../gui/mainwindow.cpp" line="1022"/>
         <source>An IO error occurred when exporting the password list: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1170"/>
+        <location filename="../gui/mainwindow.cpp" line="1167"/>
         <source>A field has to be selected since new fields are always inserted before the currently selected field.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1198"/>
+        <location filename="../gui/mainwindow.cpp" line="1195"/>
         <source>No fields have been removed since there are currently no fields selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1234"/>
+        <location filename="../gui/mainwindow.cpp" line="1231"/>
         <source>No fields have been changed since there are currently no fields selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1268"/>
+        <location filename="../gui/mainwindow.cpp" line="1265"/>
         <source>Changing password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1276"/>
+        <location filename="../gui/mainwindow.cpp" line="1273"/>
         <source>You didn&apos;t enter a password. &lt;strong&gt;No encryption&lt;/strong&gt; will be used when saving the file next time.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1280"/>
+        <location filename="../gui/mainwindow.cpp" line="1277"/>
         <source>The new password will be used next time you save the file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1285"/>
+        <location filename="../gui/mainwindow.cpp" line="1282"/>
         <source>You aborted. The old password will still be used when saving the file next time.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1308"/>
+        <location filename="../gui/mainwindow.cpp" line="1305"/>
         <source>Remove entry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1314"/>
+        <location filename="../gui/mainwindow.cpp" line="1311"/>
         <source>Expanded by default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1377"/>
+        <location filename="../gui/mainwindow.cpp" line="1374"/>
         <source>Insert field</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../gui/mainwindow.cpp" line="1379"/>
+        <location filename="../gui/mainwindow.cpp" line="1376"/>
         <source>Remove field(s)</source>
         <translation type="unfinished">
             <numerusform>Remove field</numerusform>
@@ -1128,37 +1133,37 @@ OpenSSL error queue: %1</source>
         </translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1385"/>
+        <location filename="../gui/mainwindow.cpp" line="1382"/>
         <source>Mark as password field</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1388"/>
+        <location filename="../gui/mainwindow.cpp" line="1385"/>
         <source>Mark as normal field</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1394"/>
+        <location filename="../gui/mainwindow.cpp" line="1391"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1395"/>
+        <location filename="../gui/mainwindow.cpp" line="1392"/>
         <source>Copy for 5 seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1403"/>
+        <location filename="../gui/mainwindow.cpp" line="1400"/>
         <source>Paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1407"/>
+        <location filename="../gui/mainwindow.cpp" line="1404"/>
         <source>Open URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1436"/>
+        <location filename="../gui/mainwindow.cpp" line="1433"/>
         <source>The selection is empty.</source>
         <translation type="unfinished"></translation>
     </message>
