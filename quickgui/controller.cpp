@@ -140,6 +140,9 @@ void Controller::load()
             emit fileError(tr("An error occurred when opening the file: root element missing"), QStringLiteral("load"));
             return;
         }
+        if ((m_file.saveOptions() & PasswordFileSaveFlags::Encryption) && !(m_file.saveOptions() & PasswordFileSaveFlags::AuthenticationTag)) {
+            emit fileError(tr("The encrypted file could be opened but its authenticity could not be verified because it was written with an old version of the password manager that did not include an authentication tag."), QString());
+        }
         setFileOpen(true);
         updateWindowTitle();
     } catch (const CryptoException &e) {
