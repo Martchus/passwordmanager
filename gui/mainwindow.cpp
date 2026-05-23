@@ -615,7 +615,7 @@ bool MainWindow::openFile(const QString &path, PasswordFileOpenFlags openFlags)
     // clear file and show a message in the error case
     m_file.clear();
     m_ui->statusBar->showMessage(msg, 5000);
-    if (QMessageBox::critical(this, QApplication::applicationName(), msg, QMessageBox::Cancel, QMessageBox::Retry) == QMessageBox::Retry) {
+    if (QMessageBox::critical(this, QApplication::applicationName(), msg, QMessageBox::Cancel | QMessageBox::Retry, QMessageBox::Retry) == QMessageBox::Retry) {
         return openFile(path, openFlags); // retry
     } else {
         return false;
