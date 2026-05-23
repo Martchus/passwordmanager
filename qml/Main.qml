@@ -306,7 +306,7 @@ Kirigami.ApplicationWindow {
             if (retryAction === "load" || retryAction === "save") {
                 retryMethod = retryAction
             }
-            if (retryMethod) {
+            if (retryMethod === null) {
                 showPassiveNotification(errorMessage)
             } else {
                 showPassiveNotification(errorMessage, 2500, qsTr("Retry"),
