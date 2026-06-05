@@ -4,6 +4,8 @@
 
 #include <passwordfile/io/cryptoexception.h>
 
+#include <passwordfile/util/openssl.h>
+
 #include <qtutilities/misc/dialogutils.h>
 
 #include <c++utilities/conversion/binaryconversion.h>
@@ -12,8 +14,6 @@
 #include <QMessageBox>
 
 #include <algorithm>
-#include <random>
-#include <sstream>
 #include <string>
 
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
@@ -146,11 +146,12 @@ void PasswordGeneratorDialog::generateNewPassword()
 
     // create random string
     try {
-        default_random_engine rng(m_random());
-        uniform_int_distribution<size_t> dist(0, m_charset.size() - 1);
-        const auto getRandomCharacter = [this, &dist, &rng]() { return m_charset[dist(rng)]; };
-        string res(static_cast<size_t>(length), 0);
-        generate_n(res.begin(), length, getRandomCharacter);
+        const auto getRandomCharacter
+            = [this, randMax = std::min(static_cast<std::uint32_t>(m_charset.size() - 1), std::numeric_limits<std::uint32_t>::max())]() {
+                  return m_charset[OpenSsl::generateRandomNumber(0, randMax)];
+              };
+        auto res = std::string(static_cast<std::size_t>(length), 0);
+        std::generate_n(res.begin(), length, getRandomCharacter);
         m_ui->passwordLineEdit->setText(QString::fromLatin1(res.data(), length));
     } catch (const CryptoException &ex) {
         QMessageBox::warning(

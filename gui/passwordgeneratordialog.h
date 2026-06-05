@@ -1,8 +1,6 @@
 #ifndef PASSWORDGENERATORDIALOG_H
 #define PASSWORDGENERATORDIALOG_H
 
-#include <passwordfile/util/opensslrandomdevice.h>
-
 #include <QDialog>
 
 #include <memory>
@@ -36,7 +34,6 @@ private Q_SLOTS:
 private:
     std::unique_ptr<Ui::PasswordGeneratorDialog> m_ui;
     std::vector<char> m_charset;
-    Util::OpenSslRandomDevice m_random;
 };
 } // namespace QtGui
 
