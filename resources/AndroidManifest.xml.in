@@ -3,8 +3,8 @@
     package="@META_ANDROID_PACKAGE_NAME@"
     android:label="@META_APP_NAME@"
     android:installLocation="auto"
-    android:versionName="@META_APP_VERSION@"
-    android:versionCode="@META_VERSION_MAJOR@">
+    android:versionName="-- %%INSERT_VERSION_NAME%% --"
+    android:versionCode="-- %%INSERT_VERSION_CODE%% --">
     <!-- %%INSERT_PERMISSIONS -->
     <!-- %%INSERT_FEATURES -->
     <supports-screens
