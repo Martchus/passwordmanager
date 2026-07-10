@@ -46,6 +46,9 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
     setupAndroidSpecifics();
 #endif
 
+    // disable mobile setting of Kirigami as it is broken since versions
+    qputenv("QT_QUICK_CONTROLS_MOBILE", "0");
+
     // init OpenSSL
     OpenSsl::init();
 
