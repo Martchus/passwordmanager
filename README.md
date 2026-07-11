@@ -4,7 +4,7 @@ A simple [password manager](https://en.wikipedia.org/wiki/Password_manager) with
 ## Features
 * Cross-platform: tested under GNU/Linux, Android and Windows
 * Qt Widgets GUI for desktop platforms
-* Qt Quick GUI (using Qt Quick Controls 2 and Kirigami) for mobile platforms
+* Qt Quick GUI (using Qt Quick Controls 2) for mobile platforms
 * Interactive command-line interface
 * Simple architecture: All data is stored in ordinary files with AES-256-CBC applied. No cloud stuff. Use
   e.g. Syncthing for synchronization.
@@ -13,15 +13,15 @@ A simple [password manager](https://en.wikipedia.org/wiki/Password_manager) with
 I've mainly started this project to learn C++ and Qt programming. So besides the mentioned features, this project
 and the underlying libraries serve as an example project covering some interesting C++/Qt topics:
 
-* Basic use of Qt Widgets, Qt Quick and Kirigami
+* Basic use of Qt Widgets, Qt Quick and Qt Quick Controls 2
 * Creating custom Qt models
     * Nested model and model with multiple columns
     * Support Drag & Drop in `QTreeView`
-    * Support re-ordering in Qt Quick `ListView`
-    * Use nested and table model within Qt QML
+    * Use of Qt Quick `ListView` and `TreeView`
+    * Use of nested models within Qt QML
     * Integration with Qt Widgets' undo/redo framework
     * Filtering
-* Android tweaks
+* Android specifics
     * Create APK via CMake (using `androiddeployqt`)
     * Customize activity
     * Customize gradle project to add additional Java dependency
@@ -31,8 +31,8 @@ and the underlying libraries serve as an example project covering some interesti
     * Open `content://` URL with `std::iostream`
 * Windows specific issues
     * Open an `std::iostream` for files which have non-ASCII characters in the path
-* Use of zlib to (de)compress buffer
-* Use of OpenSSL for symmetric (de)cryption
+* Use of zlib to (de)compress an in-memory buffer
+* Use of OpenSSL for symmetric (de)cryption and TOTP generation
 
 Note that some of the mentioned points are actually implemented in the underlying libraries
 [c++utilities](http://github.com/Martchus/cpp-utilities), [qtutilities](http://github.com/Martchus/qtutilities)
@@ -94,14 +94,13 @@ To avoid building c++utilities/passwordfile/qtutilities separately, follow the i
 can be passed to CMake to influence the build.
 
 ### Optional dependencies
-* When building any Qt GUI, the library qtutilities is required.
-* When building with Qt Widgets GUI support, the following Qt modules are required (version 5.6 or higher): core, gui, widgets
-* When building with support for the experimental Qt Quick GUI, the following Qt/KDE modules are required (version 6.6 or higher): core, gui, qml, quick, quickcontrols2, and kirigami
+* When building any Qt GUI, the library `qtutilities` is required.
+* When building with Qt Widgets GUI support, the following Qt modules are required (version 5.6 or higher): Core, Gui, Widgets
+* When building with support for the experimental Qt Quick GUI, the following Qt modules are required (version 6.10 or higher): Core, Gui, Qml, Quick, Quick Controls 2
 * When building for Android at least Qt 6.9.0 is required.
 
 To specify the major Qt version to use, set `QT_PACKAGE_PREFIX` (e.g. add `-DQT_PACKAGE_PREFIX:STRING=Qt6`
-to the CMake arguments). There is also `KF_PACKAGE_PREFIX` for KDE dependencies. Note that the Qt Quick GUI
-always requires the same major Qt version as your KDE modules use.
+to the CMake arguments).
 
 ### Building this straight
 0. Install (preferably the latest version of) the GCC toolchain or Clang, the required Qt modules, OpenSSL, iconv,
@@ -123,7 +122,6 @@ always requires the same major Qt version as your KDE modules use.
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX="/install/prefix" \
     -DQT_PACKAGE_PREFIX:STRING=Qt6 \
-    -DKF_PACKAGE_PREFIX:STRING=KF6 \
     -DBUILTIN_TRANSLATIONS:BOOL=ON \
     "$SOURCES/subdirs/passwordmanager"
    cmake --build .
@@ -141,10 +139,6 @@ To build without GUI, add the following parameters to the CMake call:
 ```
 -DWIDGETS_GUI=OFF -DQUICK_GUI=OFF
 ```
-
-### Further remarks
-Set the environment variable `QT_QUICK_CONTROLS_MOBILE=1` to let the Qt Quick GUI behave as if on a mobile platform; this is useful
-for testing the behavior in mobile mode without deployment on a real/emulated device.
 
 ## Copyright notice and license
 Copyright © 2015-2026 Marius Kittler

@@ -7,9 +7,6 @@
 #include "resources/config.h"
 #include "resources/qtconfig.h"
 
-// enable inline helper functions for Qt Quick provided by qtutilities
-#define QT_UTILITIES_GUI_QTQUICK
-
 // ensure QGuiApplication is defined before resources.h for desktop file name
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS
 #include <QApplication>
@@ -49,6 +46,9 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
     // init OpenSSL
     OpenSsl::init();
 
+    auto sha256sum = OpenSsl::computeSha256Sum(reinterpret_cast<const unsigned char *>("foo"), 3);
+    qDebug() << "sha256sum: " << QByteArray(reinterpret_cast<const char *>(sha256sum.data), sha256sum.size);
+
     // init application
     SET_QT_APPLICATION_INFO;
     auto application = App(argc, argv);
@@ -63,28 +63,14 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
     qtSettings.restore(*settings);
     qtSettings.apply();
 
-    // create controller and handle dark mode
-    // note: Not handling changes of the dark mode setting dynamically yet because it does not work with Kirigami.
-    //       It looks like Kirigami does not follow the QCC2 theme (the Material.theme/Material.theme settings) but
-    //       instead uses colors based on the initial palette. Not sure how to toggle Kirigami's palette in accordance
-    //       with the QCC2 theme. Hence this code is disabled via APPLY_COLOR_SCHEME_DYNAMICALLY for now.
-    auto controller = Controller(*settings, file);
-#ifdef APPLY_COLOR_SCHEME_DYNAMICALLY
-    QtUtilities::onDarkModeChanged(
-        [&qtSettings, &controller](bool isDarkModeEnabled) {
-            qtSettings.reapplyDefaultIconTheme(isDarkModeEnabled);
-            controller.setDarkModeEnabled(isDarkModeEnabled);
-        },
-        &controller);
-#else
-    const auto isDarkModeEnabled = QtUtilities::isDarkModeEnabled().value_or(false);
-    qtSettings.reapplyDefaultIconTheme(isDarkModeEnabled);
-    controller.setDarkModeEnabled(isDarkModeEnabled);
-#endif
+    // create controller
+    auto controller = Controller(application, qtSettings, *settings, file);
 
     // apply settings specified via command line args
     qtConfigArgs.applySettings(qtSettings.hasCustomFont());
+#ifdef QT_UTILITIES_GUI_QTQUICK
     qtConfigArgs.applySettingsForQuickGui();
+#endif
     LOAD_QT_TRANSLATIONS;
 
     // init QML engine
@@ -98,6 +84,7 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
     context->setContextProperty(QStringLiteral("app"), &application);
     context->setContextProperty(QStringLiteral("description"), QStringLiteral(APP_DESCRIPTION));
     context->setContextProperty(QStringLiteral("dependencyVersions"), QStringList(DEPENCENCY_VERSIONS));
+    QObject::connect(&controller, &Controller::retranslate, &engine, &QQmlEngine::retranslate);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
     const auto importPaths = qEnvironmentVariable(PROJECT_VARNAME_UPPER "_QML_IMPORT_PATHS").split(QChar(':'));
     for (const auto &path : importPaths) {

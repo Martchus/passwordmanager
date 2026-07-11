@@ -57,7 +57,7 @@ EntryModel::EntryModel(QUndoStack *undoStack, QObject *parent)
 QHash<int, QByteArray> EntryModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles{
-        { Qt::DisplayRole, "name" },
+        { Qt::DisplayRole, "display" },
         { EntryModelRoles::DefaultExpandedRole, "isDefaultExpanded" },
     };
     return roles;

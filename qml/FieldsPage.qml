@@ -1,20 +1,18 @@
-import QtQuick 2.15
-import QtQuick.Layouts 1.2
-import QtQml.Models 2.2
-import QtQuick.Controls 2.4 as Controls
-import org.kde.kirigami 2.5 as Kirigami
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls.Material
 
-Kirigami.ScrollablePage {
+Page {
     id: page
     property var main: undefined
 
-    Layout.fillWidth: true
     title: nativeInterface.currentAccountName
-    actions:[
-        Kirigami.Action {
-            icon.name: "list-add"
+
+    property list<Action> actions: [
+        Action {
+            icon.name: "list-add-symbolic"
             text: qsTr("Add field")
-            visible: !nativeInterface.hasEntryFilter
+            property bool visible: !nativeInterface.hasEntryFilter
             enabled: !nativeInterface.hasEntryFilter
             onTriggered: {
                 const delegateModel = fieldsListView.model
@@ -22,7 +20,6 @@ Kirigami.ScrollablePage {
                 fieldDialog.init(delegateModel, row)
                 fieldDialog.open()
             }
-            shortcut: "Ctrl+Shift+A"
         }
     ]
 
@@ -34,7 +31,7 @@ Kirigami.ScrollablePage {
         property alias fieldValue: fieldValueEdit.text
         property alias isPassword: fieldIsPasswordCheckBox.checked
         title: qsTr("Edit field of %1").arg(nativeInterface.currentAccountName)
-        standardButtons: Controls.Dialog.Ok | Controls.Dialog.Cancel
+        standardButtons: Dialog.Ok | Dialog.Cancel
 
         onAccepted: {
             var column0 = fieldsListView.model.index(entryIndex, 0)
@@ -50,13 +47,13 @@ Kirigami.ScrollablePage {
                 columns: 3
                 columnSpacing: 0
 
-                Controls.TextField {
+                TextField {
                     id: fieldNameEdit
                     Layout.fillWidth: true
                     text: fieldDialog.fieldName
                     Keys.onPressed: (event) => fieldDialog.acceptOnReturn(event)
                 }
-                Controls.RoundButton {
+                RoundButton {
                     flat: true
                     icon.name: "username-copy"
                     Layout.preferredWidth: height
@@ -66,7 +63,7 @@ Kirigami.ScrollablePage {
                         showPassiveNotification(qsTr("Copied field name"))
                     }
                 }
-                Controls.TextField {
+                TextField {
                     id: fieldValueEdit
                     property bool hideCharacters: fieldDialog.isPassword
                                                   && !showCharactersCheckBox.checked
@@ -83,7 +80,7 @@ Kirigami.ScrollablePage {
                                                      * 0.5 : fieldNameEdit.font.pointSize
                     Keys.onPressed: (event) => fieldDialog.acceptOnReturn(event)
                 }
-                Controls.RoundButton {
+                RoundButton {
                     flat: true
                     icon.name: "password-copy"
                     Layout.preferredWidth: height
@@ -94,7 +91,7 @@ Kirigami.ScrollablePage {
                                                                  "Copied value"))
                     }
                 }
-                Controls.RoundButton {
+                RoundButton {
                     flat: true
                     icon.name: "clock-symbolic"
                     Layout.preferredWidth: height
@@ -102,14 +99,15 @@ Kirigami.ScrollablePage {
                     onClicked: showPassiveNotification(nativeInterface.copyTOTP(fieldValueEdit.text))
                 }
             }
-            RowLayout {
+            GridLayout {
                 Layout.preferredWidth: fieldDialog.availableWidth
-                Controls.CheckBox {
+                columns: width > 350 ? 2 : 1
+                CheckBox {
                     id: fieldIsPasswordCheckBox
                     text: qsTr("Mark as password")
                     checked: false
                 }
-                Controls.CheckBox {
+                CheckBox {
                     id: showCharactersCheckBox
                     text: qsTr("Show characters")
                     checked: false
@@ -127,14 +125,14 @@ Kirigami.ScrollablePage {
     }
 
     // list view to edit the currently selected account
-    ListView {
+    CustomListView {
         id: fieldsListView
-        implicitWidth: Kirigami.Units.gridUnit * 30
+        anchors.fill: parent
         model: nativeInterface.fieldModel
         reuseItems: true
         moveDisplaced: Transition {
             YAnimator {
-                duration: Kirigami.Units.longDuration
+                duration: 300
                 easing.type: Easing.InOutQuad
             }
         }

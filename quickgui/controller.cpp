@@ -1,3 +1,5 @@
+#define QT_UTILITIES_GUI_QTQUICK
+
 #include "./controller.h"
 #include "./android.h"
 
@@ -6,8 +8,10 @@
 #include <passwordfile/util/openssl.h>
 
 #include <qtutilities/misc/compat.h>
+#include <qtutilities/misc/desktoputils.h>
 #include <qtutilities/misc/dialogutils.h>
 #include <qtutilities/resources/resources.h>
+#include <qtutilities/settingsdialog/qtsettings.h>
 
 #include <c++utilities/chrono/datetime.h>
 #include <c++utilities/io/nativefilestream.h>
@@ -36,8 +40,10 @@ using namespace QtUtilities;
 
 namespace QtGui {
 
-Controller::Controller(QSettings &settings, const QString &filePath, QObject *parent)
+Controller::Controller(QGuiApplication &app, QtUtilities::QtSettings &qtSettings, QSettings &settings, const QString &filePath, QObject *parent)
     : QObject(parent)
+    , m_app(app)
+    , m_qtSettings(qtSettings)
     , m_settings(settings)
 #ifdef PASSWORD_MANAGER_UNDO_SUPPORT
     , m_entryModel(&m_undoStack)
@@ -48,12 +54,15 @@ Controller::Controller(QSettings &settings, const QString &filePath, QObject *pa
     , m_useNativeFileDialog(supportsNativeFileDialog())
     , m_filterAsDialog(
 #ifdef Q_OS_ANDROID
-          true
+          // try filter on the drawer under Android as well for now
+          false
 #else
           false
 #endif
           )
     , m_darkModeEnabled(false)
+    , m_darkColorScheme(false)
+    , m_darkPalette(QT_UTILITIES_IS_PALETTE_DARK(app.palette()))
 {
     m_fieldModel.setPasswordVisibility(PasswordVisibility::Never);
     m_entryFilterModel.setFilterCaseSensitivity(Qt::CaseInsensitive);
@@ -64,6 +73,14 @@ Controller::Controller(QSettings &settings, const QString &filePath, QObject *pa
     connect(&m_undoStack, &QUndoStack::undoTextChanged, this, &Controller::undoTextChanged);
     connect(&m_undoStack, &QUndoStack::redoTextChanged, this, &Controller::redoTextChanged);
 #endif
+
+#ifdef QT_UTILITIES_DARK_MODE_FROM_COLOR_SCHEME
+    QtUtilities::onDarkModeChanged([this](bool darkColorScheme) { applyDarkmodeChange(darkColorScheme, m_darkPalette); }, this);
+#else
+    applyDarkmodeChange(m_darkColorScheme, m_darkPalette);
+#endif
+    app.setWindowIcon(QIcon(QStringLiteral(":/icons/hicolor/scalable/apps/passwordmanager.svg")));
+    app.installEventFilter(this);
 
     // share settings with main window
     m_settings.beginGroup(QStringLiteral("mainwindow"));
@@ -322,6 +339,44 @@ void Controller::handleFileSelectionAcceptedDescriptor(
 void Controller::handleFileSelectionCanceled()
 {
     emit newNotification(tr("Canceled file selection"));
+}
+
+void Controller::applyDarkmodeChange(const QPalette &palette)
+{
+    applyDarkmodeChange(m_darkColorScheme, QT_UTILITIES_IS_PALETTE_DARK(palette));
+}
+
+void Controller::applyDarkmodeChange(bool isDarkColorSchemeEnabled, bool isDarkPaletteEnabled)
+{
+    m_darkColorScheme = isDarkColorSchemeEnabled;
+    m_darkPalette = isDarkPaletteEnabled;
+    const auto isDarkmodeEnabled = m_darkColorScheme || m_darkPalette;
+    m_qtSettings.reapplyDefaultIconTheme(isDarkmodeEnabled);
+    if (isDarkmodeEnabled == m_darkModeEnabled) {
+        return;
+    }
+    qDebug() << "Darkmode has changed: " << isDarkmodeEnabled;
+    m_darkModeEnabled = isDarkmodeEnabled;
+    emit darkModeEnabledChanged(isDarkmodeEnabled);
+}
+
+bool Controller::eventFilter(QObject *object, QEvent *event)
+{
+    if (object != &m_app) {
+        return false;
+    }
+    switch (event->type()) {
+    case QEvent::ApplicationPaletteChange:
+#ifndef QT_UTILITIES_DARK_MODE_FROM_COLOR_SCHEME
+        applyDarkmodeChange(m_app.palette());
+#endif
+        break;
+    case QEvent::LanguageChange:
+        emit retranslate();
+        break;
+    default:;
+    }
+    return false;
 }
 
 void Controller::handleEntriesRemoved(const QModelIndex &parentIndex, int first, int last)

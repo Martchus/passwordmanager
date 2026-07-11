@@ -1,13 +1,12 @@
-import QtQuick 2.7
-import QtQuick.Controls 2.1 as Controls
-import org.kde.kirigami 2.4 as Kirigami
+import QtQuick
+import QtQuick.Controls.Material
 
-Controls.Dialog {
+Dialog {
     modal: true
     focus: true
-    parent: applicationWindow().overlay
+    parent: root.overlay
     anchors.centerIn: parent
-    width: Math.min(parent.width, Kirigami.Units.gridUnit * 30)
+    width: Math.min(parent.width - 40, 500)
 
     function acceptOnReturn(event) {
         if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {

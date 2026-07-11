@@ -1,7 +1,6 @@
-import QtQuick 2.7
-import QtQuick.Controls 2.1 as Controls
-import QtQuick.Layouts 1.2
-import org.kde.kirigami 2.4 as Kirigami
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls.Material
 
 BasicDialog {
     id: passwordDialog
@@ -12,8 +11,8 @@ BasicDialog {
                                       || showCharactersCheckBox.checked
                                       || passwordTextField.text === repeatPasswordTextField.text
 
-    standardButtons: canAccept ? Controls.Dialog.Ok
-                                 | Controls.Dialog.Cancel : Controls.Dialog.Cancel
+    standardButtons: canAccept ? Dialog.Ok
+                                 | Dialog.Cancel : Dialog.Cancel
     title: qsTr("Enter password")
     onAccepted: {
         nativeInterface.password = password
@@ -31,13 +30,13 @@ BasicDialog {
         }
     }
     contentItem: ColumnLayout {
-        Controls.Label {
+        Label {
             id: instructionLabel
             Layout.preferredWidth: passwordDialog.availableWidth
-            wrapMode: Controls.Label.Wrap
+            wrapMode: Label.Wrap
         }
 
-        Controls.TextField {
+        TextField {
             id: passwordTextField
             Layout.preferredWidth: passwordDialog.availableWidth
             echoMode: showCharactersCheckBox.checked ? TextInput.Normal : TextInput.Password
@@ -46,7 +45,7 @@ BasicDialog {
                 : qsTr("Enter password here")
             Keys.onPressed: (event) => passwordDialog.acceptOnReturn(event)
         }
-        Controls.TextField {
+        TextField {
             id: repeatPasswordTextField
             Layout.preferredWidth: passwordDialog.availableWidth
             visible: passwordDialog.newPassword
@@ -55,7 +54,7 @@ BasicDialog {
             placeholderText: qsTr("Repeat password")
             Keys.onPressed: passwordDialog.acceptOnReturn(event)
         }
-        Controls.CheckBox {
+        CheckBox {
             id: showCharactersCheckBox
             text: qsTr("Show characters")
             checked: false

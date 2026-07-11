@@ -1,227 +1,338 @@
-import QtQuick 2.7
-import QtQuick.Templates 2.0 as T2
-import QtQuick.Controls 2.1 as Controls
+import QtQuick
+import QtQuick.Layouts
 import QtQuick.Controls.Material
-import QtQuick.Layouts 1.2
-import org.kde.kirigami 2.4 as Kirigami
-import org.kde.kirigami.templates // import transtive dependency (shouldn't org.kde.kirigami pull this in?)
 
-Kirigami.ApplicationWindow {
+ApplicationWindow {
     id: root
     property var fieldsPage: undefined
-    property var lastEntriesPage: undefined
 
+    Material.primary: "#2c714a"
+    Material.accent: "#2c8352"
     Material.theme: nativeInterface.darkModeEnabled ? Material.Dark : Material.Light
 
-    globalDrawer: Kirigami.GlobalDrawer {
-        id: leftMenu
-        property bool showNoPasswordWarning: nativeInterface.fileOpen
-                                             && !nativeInterface.passwordSet
+    width: 600
+    height: 800
+    visible: true
 
-        visible: true
-        resetMenuOnTriggered: false
-        topContent: ColumnLayout {
-            Layout.fillWidth: true
-
-            Item {
-                Layout.preferredHeight: 4
-            }
-            Item {
-                Layout.fillWidth: true
-                Layout.preferredHeight: filterTextField.implicitHeight
-                enabled: nativeInterface.fileOpen
-                visible: !nativeInterface.filterAsDialog
-
-                Controls.TextField {
-                    id: filterTextField
-                    anchors.fill: parent
-                    placeholderText: qsTr("Filter")
-                    onTextChanged: nativeInterface.entryFilter = text
-                }
-                Kirigami.Icon {
-                    source: "edit-clear"
-                    anchors.right: parent.right
-                    anchors.rightMargin: 6
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: Kirigami.Units.iconSizes.small
-                    height: Kirigami.Units.iconSizes.small
-                    visible: filterTextField.text.length !== 0
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: filterTextField.text = ""
+    header: ToolBar {
+        Material.theme: Material.Light
+        Material.background: Material.primary
+        RowLayout {
+            anchors.fill: parent
+            anchors.leftMargin: pageStack.anchors.leftMargin
+            Material.theme: Material.Dark
+            ToolButton {
+                icon.name: pageStack.depth > 1 ? "go-previous-symbolic" : "application-menu-symbolic"
+                onClicked: {
+                    if (pageStack.depth > 1) {
+                        pageStack.pop()
+                    } else {
+                        if (leftMenu.opened) {
+                            leftMenu.close()
+                        } else {
+                            leftMenu.open()
+                        }
                     }
                 }
             }
 
-            Controls.MenuSeparator {
-                padding: 0
-                topPadding: 8
-                bottomPadding: 0
+            Label {
+                text: pageStack.currentItem ? pageStack.currentItem.title : qsTr("Password Manager")
                 Layout.fillWidth: true
+                elide: Text.ElideRight
+                verticalAlignment: Text.AlignVCenter
             }
-            Controls.Label {
-                id: fileNameLabel
-                padding: 8
-                wrapMode: Controls.Label.Wrap
-                fontSizeMode: Text.HorizontalFit
-                minimumPixelSize: 10
-                font.pixelSize: 20
-                Layout.fillWidth: true
-                text: nativeInterface.fileOpen ? nativeInterface.fileName : qsTr(
-                                                     "No file opened")
-                MouseArea {
-                    id: fileNameMouseArea
-                    anchors.fill: parent
-                    hoverEnabled: true
-                }
-                Controls.ToolTip {
-                    z: 1000
-                    text: nativeInterface.filePath
-                    visible: text ? fileNameMouseArea.containsMouse : false
-                    delay: Qt.styleHints.mousePressAndHoldInterval
-                    onAboutToShow: {
-                        x = fileNameMouseArea.mouseX + 10
-                        y = fileNameMouseArea.mouseY + 10
-                    }
-                }
-            }
-            RowLayout {
-                visible: leftMenu.showNoPasswordWarning
 
-                Item {
-                    Layout.preferredWidth: 2
+            Repeater {
+                model: pageStack.currentItem ? pageStack.currentItem.actions : []
+                delegate: ToolButton {
+                    action: modelData
+                    visible: modelData.visible !== undefined ? modelData.visible : true
+                    display: root.width < 500 ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
+                    ToolTip.visible: (hovered || pressed) && text.length > 0 && display === AbstractButton.IconOnly
+                    ToolTip.text: text
                 }
-                Controls.Label {
-                    text: qsTr("No password set\nFile will be saved unencrypted!")
-                }
-            }
-            Item {
-                visible: leftMenu.showNoPasswordWarning
-                height: 4
             }
         }
-        actions: [
-            Kirigami.Action {
-                text: qsTr("Create new file")
-                icon.name: "document-new"
-                onTriggered: fileDialog.createNew()
-                shortcut: StandardKey.New
-            },
-            Kirigami.Action {
-                text: qsTr("Open existing file")
-                icon.name: "document-open"
-                onTriggered: fileDialog.openExisting()
-                shortcut: StandardKey.Open
-            },
-            Kirigami.Action {
-                id: recentlyOpenedAction
-                text: qsTr("Recently opened ...")
-                icon.name: "document-open-recent"
-                children: createRecentlyOpenedActions(
-                              nativeInterface.recentFiles)
-                visible: nativeInterface.recentFiles.length > 0
-                shortcut: "Ctrl+R"
-            },
-            Kirigami.Action {
-                text: qsTr("Save modifications")
-                enabled: nativeInterface.fileOpen
-                icon.name: "document-save"
-                onTriggered: nativeInterface.save()
-                shortcut: StandardKey.Save
-            },
-            Kirigami.Action {
-                text: qsTr("Save as")
-                enabled: nativeInterface.fileOpen
-                icon.name: "document-save-as"
-                onTriggered: fileDialog.saveAs()
-                shortcut: StandardKey.SaveAs
-            },
-            Kirigami.Action {
-                text: nativeInterface.passwordSet ? qsTr("Change password") : qsTr(
-                                                        "Add password")
-                enabled: nativeInterface.fileOpen
-                icon.name: "document-encrypt"
-                onTriggered: enterPasswordDialog.askForNewPassword(
-                                 qsTr("Change password for %1").arg(
-                                     nativeInterface.filePath))
-                shortcut: "Ctrl+P"
-            },
-            Kirigami.Action {
-                text: qsTr("Details")
-                enabled: nativeInterface.fileOpen
-                icon.name: "document-properties"
-                onTriggered: {
-                    leftMenu.resetMenu()
-                    fileSummaryDialog.show()
+    }
+
+    Drawer {
+        id: leftMenu
+        width: Math.min(parent.width * 0.8, 300)
+        height: parent.height
+        interactive: inPortrait || parent.width < 600
+        modal: interactive
+        position: initialPosition
+        visible: !interactive
+
+        readonly property bool inPortrait: parent.width < parent.height
+        readonly property bool showNoPasswordWarning: nativeInterface.fileOpen
+                                             && !nativeInterface.passwordSet
+        readonly property double initialPosition: interactive ? 0 : 1
+        readonly property int effectiveWidth: !interactive ? width : 0
+
+        function closeIfInteractive() {
+            return leftMenu.interactive && leftMenu.close();
+        }
+
+        CustomFlickable {
+            anchors.fill: parent
+            clip: true
+            contentHeight: drawerLayout.height
+            ColumnLayout {
+                id: drawerLayout
+                width: parent.width
+                spacing: 10
+
+                Label {
+                    id: fileNameLabel
+                    padding: 10
+                    wrapMode: Text.Wrap
+                    font.bold: true
+                    font.pixelSize: 18
+                    Layout.fillWidth: true
+                    text: nativeInterface.fileOpen ? nativeInterface.fileName : qsTr("No file opened")
+
+                    MouseArea {
+                        id: fileNameMouseArea
+                        anchors.fill: parent
+                        hoverEnabled: true
+                    }
+
+                    ToolTip {
+                        z: 1000
+                        text: nativeInterface.filePath
+                        visible: text ? fileNameMouseArea.containsMouse : false
+                        delay: Qt.styleHints.mousePressAndHoldInterval
+                        onAboutToShow: {
+                            x = fileNameMouseArea.mouseX + 10
+                            y = fileNameMouseArea.mouseY + 10
+                        }
+                    }
                 }
-                shortcut: "Ctrl+I"
-            },
-            Kirigami.Action {
-                text: nativeInterface.entryFilter.length === 0 ? qsTr("Search") : qsTr(
-                                                                     "Adjust search")
-                enabled: nativeInterface.fileOpen
-                visible: nativeInterface.filterAsDialog
-                icon.name: "search"
-                onTriggered: {
-                    leftMenu.resetMenu()
-                    filterDialog.open()
+
+                Item {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: filterTextField.implicitHeight
+                    enabled: nativeInterface.fileOpen
+                    visible: !nativeInterface.filterAsDialog
+                    Layout.leftMargin: 10
+                    Layout.rightMargin: 10
+
+                    SearchField {
+                        id: filterTextField
+                        anchors.fill: parent
+                        //placeholderText: qsTr("Filter")
+                        onTextChanged: nativeInterface.entryFilter = text
+                        onClearButtonPressed: filterTextField.text = ""
+                    }
                 }
-                shortcut: "Ctrl+F"
-            },
-            Kirigami.Action {
-                text: qsTr("Clear search")
-                enabled: nativeInterface.fileOpen
-                visible: nativeInterface.filterAsDialog
-                         && nativeInterface.entryFilter.length > 0
-                icon.name: "edit-clear"
-                onTriggered: {
-                    leftMenu.resetMenu()
-                    nativeInterface.entryFilter = ""
+
+                RowLayout {
+                    visible: leftMenu.showNoPasswordWarning
+                    Layout.leftMargin: 10
+                    Layout.rightMargin: 10
+
+                    Label {
+                        text: qsTr("No password set\nFile will be saved unencrypted!")
+                        color: Material ? Material.color(Material.red) : "red"
+                    }
                 }
-                shortcut: "Ctrl+Shift+F"
-            },
-            Kirigami.Action {
-                text: qsTr("Undo \"%1\"").arg(nativeInterface.undoText)
-                visible: nativeInterface.undoText.length !== 0
-                         && nativeInterface.entryFilter.length === 0
-                enabled: visible
-                icon.name: "edit-undo"
-                shortcut: StandardKey.Undo
-                onTriggered: nativeInterface.undo()
-            },
-            Kirigami.Action {
-                text: qsTr("Redo \"%1\"").arg(nativeInterface.redoText)
-                visible: nativeInterface.redoText.length !== 0
-                         && nativeInterface.entryFilter.length === 0
-                enabled: visible
-                icon.name: "edit-redo"
-                shortcut: StandardKey.Redo
-                onTriggered: nativeInterface.redo()
-            },
-            Kirigami.Action {
-                text: qsTr("Close file")
-                enabled: nativeInterface.fileOpen
-                icon.name: "document-close"
-                shortcut: StandardKey.Close
-                onTriggered: nativeInterface.close()
-            },
-            Kirigami.Action {
-                separator: true
-            },
-            Kirigami.Action {
-                text: qsTr("About")
-                icon.name: "help-about"
-                shortcut: "Ctrl+?"
-                onTriggered: {
-                    leftMenu.resetMenu()
-                    aboutDialog.open()
+
+                MenuSeparator {
+                    Layout.fillWidth: true
+                }
+
+                // Actions represented as delegates
+                ItemDelegate {
+                    text: qsTr("Create new file")
+                    icon.name: "document-new-symbolic"
+                    Layout.fillWidth: true
+                    onClicked: {
+                        fileDialog.createNew()
+                        leftMenu.closeIfInteractive()
+                    }
+                }
+
+                ItemDelegate {
+                    text: qsTr("Open existing file")
+                    icon.name: "document-open-symbolic"
+                    Layout.fillWidth: true
+                    onClicked: {
+                        fileDialog.openExisting()
+                        leftMenu.closeIfInteractive()
+                    }
+                }
+
+                ItemDelegate {
+                    id: recentlyOpenedDelegate
+                    text: qsTr("Recently opened ...")
+                    icon.name: "document-open-recent-symbolic"
+                    Layout.fillWidth: true
+                    visible: nativeInterface.recentFiles.length > 0
+                    onClicked: recentFilesColumn.visible = !recentFilesColumn.visible
+                }
+
+                ColumnLayout {
+                    id: recentFilesColumn
+                    visible: false
+                    Layout.fillWidth: true
+                    Layout.leftMargin: 20
+
+                    Repeater {
+                        model: nativeInterface.recentFiles
+                        delegate: ItemDelegate {
+                            text: modelData.substring(modelData.lastIndexOf('/') + 1)
+                            icon.name: "document-open-symbolic"
+                            Layout.fillWidth: true
+                            onClicked: {
+                                Qt.callLater(root.openRecentFile, modelData)
+                                leftMenu.closeIfInteractive()
+                            }
+                        }
+                    }
+
+                    ItemDelegate {
+                        text: qsTr("Clear recently opened files")
+                        icon.name: "edit-clear-symbolic"
+                        Layout.fillWidth: true
+                        onClicked: {
+                            nativeInterface.clearRecentFiles()
+                            leftMenu.closeIfInteractive()
+                        }
+                    }
+                }
+
+                ItemDelegate {
+                    text: nativeInterface.fileOpen ? qsTr("Save modifications") : qsTr("Save")
+                    enabled: nativeInterface.fileOpen
+                    icon.name: "document-save-symbolic"
+                    Layout.fillWidth: true
+                    onClicked: {
+                        nativeInterface.save()
+                        leftMenu.closeIfInteractive()
+                    }
+                }
+
+                ItemDelegate {
+                    text: qsTr("Save as")
+                    enabled: nativeInterface.fileOpen
+                    icon.name: "document-save-as-symbolic"
+                    Layout.fillWidth: true
+                    onClicked: {
+                        fileDialog.saveAs()
+                        leftMenu.closeIfInteractive()
+                    }
+                }
+
+                ItemDelegate {
+                    text: nativeInterface.passwordSet ? qsTr("Change password") : qsTr("Add password")
+                    enabled: nativeInterface.fileOpen
+                    icon.name: "document-encrypt-symbolic"
+                    Layout.fillWidth: true
+                    onClicked: {
+                        enterPasswordDialog.askForNewPassword(
+                                         qsTr("Change password for %1").arg(
+                                             nativeInterface.filePath))
+                        leftMenu.closeIfInteractive()
+                    }
+                }
+
+                ItemDelegate {
+                    text: qsTr("Details")
+                    enabled: nativeInterface.fileOpen
+                    icon.name: "document-properties-symbolic"
+                    Layout.fillWidth: true
+                    onClicked: {
+                        fileSummaryDialog.show()
+                        leftMenu.closeIfInteractive()
+                    }
+                }
+
+                ItemDelegate {
+                    text: nativeInterface.entryFilter.length === 0 ? qsTr("Search") : qsTr("Adjust search")
+                    enabled: nativeInterface.fileOpen
+                    visible: nativeInterface.filterAsDialog
+                    icon.name: "search-symbolic"
+                    Layout.fillWidth: true
+                    onClicked: {
+                        filterDialog.open()
+                        leftMenu.closeIfInteractive()
+                    }
+                }
+
+                ItemDelegate {
+                    text: qsTr("Clear search")
+                    enabled: nativeInterface.fileOpen
+                    visible: nativeInterface.filterAsDialog && nativeInterface.entryFilter.length > 0
+                    icon.name: "edit-clear-symbolic"
+                    Layout.fillWidth: true
+                    onClicked: {
+                        nativeInterface.entryFilter = ""
+                        leftMenu.closeIfInteractive()
+                    }
+                }
+
+                ItemDelegate {
+                    text: qsTr("Undo \"%1\"").arg(nativeInterface.undoText)
+                    visible: nativeInterface.undoText.length !== 0 && nativeInterface.entryFilter.length === 0
+                    enabled: visible
+                    icon.name: "edit-undo-symbolic"
+                    Layout.fillWidth: true
+                    onClicked: {
+                        nativeInterface.undo()
+                        leftMenu.closeIfInteractive()
+                    }
+                }
+
+                ItemDelegate {
+                    text: qsTr("Redo \"%1\"").arg(nativeInterface.redoText)
+                    visible: nativeInterface.redoText.length !== 0 && nativeInterface.entryFilter.length === 0
+                    enabled: visible
+                    icon.name: "edit-redo-symbolic"
+                    Layout.fillWidth: true
+                    onClicked: {
+                        nativeInterface.redo()
+                        leftMenu.closeIfInteractive()
+                    }
+                }
+
+                ItemDelegate {
+                    text: qsTr("Close file")
+                    enabled: nativeInterface.fileOpen
+                    icon.name: "document-close-symbolic"
+                    Layout.fillWidth: true
+                    onClicked: {
+                        nativeInterface.close()
+                        leftMenu.closeIfInteractive()
+                    }
+                }
+
+                MenuSeparator {
+                    Layout.fillWidth: true
+                }
+
+                ItemDelegate {
+                    text: qsTr("About")
+                    icon.name: "help-about-symbolic"
+                    Layout.fillWidth: true
+                    onClicked: {
+                        aboutDialog.open()
+                        leftMenu.closeIfInteractive()
+                    }
                 }
             }
-        ]
+        }
     }
-    contextDrawer: Kirigami.ContextDrawer {
-        id: contextDrawer
+
+    StackView {
+        id: pageStack
+        anchors.fill: parent
+        anchors.leftMargin: leftMenu.visible ? leftMenu.effectiveWidth : parent.SafeArea.margins.left
+        anchors.rightMargin: parent.SafeArea.margins.right
+        clip: true
     }
+
     Component.onCompleted: nativeInterface.init()
 
     AboutDialog {
@@ -230,7 +341,7 @@ Kirigami.ApplicationWindow {
 
     PasswordDialog {
         id: enterPasswordDialog
-        onAboutToShow: leftMenu.close()
+        onAboutToShow: leftMenu.closeIfInteractive()
         onRejected: {
             if (!nativeInterface.fileOpen) {
                 leftMenu.open()
@@ -240,9 +351,9 @@ Kirigami.ApplicationWindow {
 
     BasicDialog {
         id: fileSummaryDialog
-        standardButtons: Controls.Dialog.Ok
+        standardButtons: Dialog.Ok
         title: qsTr("File details")
-        contentItem: Controls.TextArea {
+        contentItem: TextArea {
             id: fileSummaryLabel
             readOnly: true
             text: "No file summary available"
@@ -272,13 +383,13 @@ Kirigami.ApplicationWindow {
                 filterDialogTextField.forceActiveFocus()
             }
         }
-        footer: Controls.DialogButtonBox {
+        footer: DialogButtonBox {
             standardButtons: filterDialogTextField.text.length > 0
-                ? Controls.DialogButtonBox.Apply | Controls.DialogButtonBox.Reset | Controls.DialogButtonBox.Cancel
-                : Controls.DialogButtonBox.Reset | Controls.DialogButtonBox.Cancel
+                ? DialogButtonBox.Apply | DialogButtonBox.Reset | DialogButtonBox.Cancel
+                : DialogButtonBox.Reset | DialogButtonBox.Cancel
         }
         contentItem: ColumnLayout {
-            Controls.TextField {
+            TextField {
                 id: filterDialogTextField
                 Layout.preferredWidth: filterDialog.availableWidth
                 Keys.onPressed: filterDialog.acceptOnReturn(event)
@@ -322,7 +433,7 @@ Kirigami.ApplicationWindow {
             enterPasswordDialog.askForExistingPassword(
                         qsTr("Password required to open %1").arg(
                             nativeInterface.filePath))
-            leftMenu.resetMenu()
+            leftMenu.closeIfInteractive()
         }
         function onFileOpenChanged(fileOpen) {
             clearStack()
@@ -334,7 +445,7 @@ Kirigami.ApplicationWindow {
             initStack()
             showPassiveNotification(qsTr("%1 opened").arg(
                                         nativeInterface.fileName))
-            leftMenu.close()
+            leftMenu.closeIfInteractive()
         }
         function onFileSaved() {
             showPassiveNotification(qsTr("%1 saved").arg(
@@ -346,56 +457,16 @@ Kirigami.ApplicationWindow {
         function onCurrentAccountChanged() {
             // remove the fields page if the current account has been removed
             if (!nativeInterface.hasCurrentAccount) {
-                pageStack.pop(lastEntriesPage)
+                pageStack.pop(null)
             }
         }
         function onEntryAboutToBeRemoved(removedIndex) {
-            // get the filter entry index
-            if (nativeInterface.hasEntryFilter) {
-                removedIndex = nativeInterface.filterEntryIndex(removedIndex)
-            }
-
-            // remove all possibly open stack pages of the removed entry and its children
-            for (var i = pageStack.depth - 1; i >= 0; --i) {
-                var stackPage = pageStack.get(i)
-                if (!stackPage) {
-                    continue
-                }
-                if (stackPage.rootIndex === removedIndex) {
-                    pageStack.pop(lastEntriesPage = pageStack.get(i - 1))
-                    return
-                }
-            }
+            // under TreeView model, the active fields page is handled by onCurrentAccountChanged
         }
         function onHasEntryFilterChanged(hasEntryFilter) {
             if (nativeInterface.fileOpen) {
                 pageStack.clear()
                 initStack()
-            }
-        }
-    }
-
-    Component {
-        id: fileActionComponent
-        Kirigami.Action {
-            property string filePath
-            text: filePath.substring(filePath.lastIndexOf('/') + 1)
-            onTriggered: {
-                nativeInterface.clear()
-                nativeInterface.filePath = filePath
-                nativeInterface.load()
-            }
-        }
-    }
-
-    Component {
-        id: clearRecentFilesActionComponent
-        Kirigami.Action {
-            text: qsTr("Clear recently opened files")
-            icon.name: "edit-clear"
-            onTriggered: {
-                nativeInterface.clearRecentFiles()
-                leftMenu.resetMenu()
             }
         }
     }
@@ -420,21 +491,11 @@ Kirigami.ApplicationWindow {
     }
 
     function initStack() {
-        var entryModel = nativeInterface.hasEntryFilter ? nativeInterface.entryFilterModel : nativeInterface.entryModel
-        var rootIndex = entryModel.index(0, 0)
-        pushStackEntry(entryModel, rootIndex)
+        pageStack.push(entriesComponent.createObject(root))
     }
 
     function clearStack() {
-        pageStack.pop(lastEntriesPage = root.pageStack.initialPage,
-                      Controls.StackView.Immediate)
-    }
-
-    function pushStackEntry(entryModel, rootIndex) {
-        pageStack.push(lastEntriesPage = entriesComponent.createObject(root, {
-                                                                           "entryModel": entryModel,
-                                                                           "rootIndex": rootIndex
-                                                                       }))
+        pageStack.clear()
     }
 
     function pushAccountEdit() {
@@ -444,22 +505,97 @@ Kirigami.ApplicationWindow {
         }
         // remove fieldsPage if already shown to prevent warning
         if (pageStack.get(pageStack.depth - 1) === fieldsPage) {
-            pageStack.pop(lastEntriesPage)
+            pageStack.pop()
         }
         pageStack.push(fieldsPage)
     }
 
-    function createFileActions(files) {
-        return files.map(function (filePath) {
-            return this.createObject(root, {
-                                         "filePath": filePath
-                                     })
-        }, fileActionComponent)
+    function openRecentFile(filePath) {
+        nativeInterface.clear()
+        nativeInterface.filePath = filePath
+        nativeInterface.load()
+        recentFilesColumn.visible = false
     }
 
-    function createRecentlyOpenedActions(files) {
-        var actions = createFileActions(files)
-        actions.push(clearRecentFilesActionComponent.createObject(root))
-        return actions
+    // passive notification (toast popup implementation)
+    Popup {
+        id: toastPopup
+        parent: Overlay.overlay
+        x: parent ? (parent.width - width) / 2 : 0
+        y: parent ? (parent.height - height - 60) : 0
+        padding: 12
+        leftPadding: 16
+        rightPadding: 16
+        width: Math.min(parent ? parent.width - 40 : 360, 400)
+        modal: false
+        focus: false
+        closePolicy: Popup.NoAutoClose
+
+        background: Rectangle {
+            color: nativeInterface.darkModeEnabled ? "#333333" : "#f0f0f0"
+            radius: 10
+            border.color: nativeInterface.darkModeEnabled ? "#555555" : "#cccccc"
+            border.width: 1
+        }
+
+        contentItem: RowLayout {
+            spacing: 12
+
+            Label {
+                id: toastLabel
+                Layout.fillWidth: true
+                wrapMode: Text.Wrap
+                font.pixelSize: 13
+                font.weight: Font.Medium
+                color: nativeInterface.darkModeEnabled ? "#ffffff" : "#333333"
+                verticalAlignment: Text.AlignVCenter
+            }
+            Button {
+                id: toastActionButton
+                visible: false
+                flat: true
+                Layout.alignment: Qt.AlignVCenter
+                onClicked: {
+                    toastPopup.close()
+                    if (toastPopup.actionCallback) {
+                        toastPopup.actionCallback()
+                    }
+                }
+            }
+        }
+
+        enter: Transition {
+            NumberAnimation { property: "opacity"; from: 0.0; to: 1.0; duration: 200; easing.type: Easing.OutCubic }
+        }
+        exit: Transition {
+            NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; duration: 200; easing.type: Easing.InCubic }
+        }
+
+        Timer {
+            id: toastTimer
+            interval: 3000
+            onTriggered: toastPopup.close()
+        }
+
+        property var actionCallback: null
+
+        function show(message, duration, actionText, actionCallbackFunc) {
+            toastLabel.text = message
+            if (actionText && actionCallbackFunc) {
+                toastActionButton.text = actionText
+                toastActionButton.visible = true
+                toastPopup.actionCallback = actionCallbackFunc
+            } else {
+                toastActionButton.visible = false
+                toastPopup.actionCallback = null
+            }
+            toastTimer.interval = duration ? duration : 3000
+            toastTimer.restart()
+            toastPopup.open()
+        }
+    }
+
+    function showPassiveNotification(message, duration, actionText, actionCallbackFunc) {
+        toastPopup.show(message, duration, actionText, actionCallbackFunc)
     }
 }

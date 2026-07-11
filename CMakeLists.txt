@@ -12,11 +12,10 @@ set(META_APP_URL "https://github.com/${META_APP_AUTHOR}/${META_PROJECT_NAME}")
 set(META_APP_DOMAIN "${META_APP_URL}")
 set(META_APP_DESCRIPTION "A simple password store using AES-256-CBC encryption via OpenSSL")
 set(META_GUI_OPTIONAL YES)
-set(META_USE_QQC2 ON)
 set(META_ANDROID_PACKAGE_NAME "org.martchus.passwordmanager")
 set(META_VERSION_MAJOR 4)
-set(META_VERSION_MINOR 3)
-set(META_VERSION_PATCH 2)
+set(META_VERSION_MINOR 4)
+set(META_VERSION_PATCH 0)
 set(META_RELEASE_DATE "2026-07-09")
 
 # add project files
@@ -39,12 +38,14 @@ set(WIDGETS_SRC_FILES
 set(WIDGETS_UI_FILES gui/mainwindow.ui gui/passwordgeneratordialog.ui)
 
 set(QML_HEADER_FILES quickgui/controller.h quickgui/initiatequick.h)
-set(QML_SRC_FILES quickgui/controller.cpp quickgui/initiatequick.cpp resources/icons.qrc resources/qml.qrc)
+set(QML_SRC_FILES quickgui/controller.cpp quickgui/initiatequick.cpp resources/icons.qrc)
 set(QML_MODULE_FILES
     qml/AboutDialog.qml
     qml/BasicDialog.qml
+    qml/CustomFlickable.qml
+    qml/CustomListView.qml
+    qml/CustomMenu.qml
     qml/EntriesPage.qml
-    qml/EntryDelegate.qml
     qml/FieldsDelegate.qml
     qml/FieldsPage.qml
     qml/FileDialog.qml
@@ -66,6 +67,7 @@ set(DOC_FILES README.md)
 
 set(REQUIRED_ICONS
     application-exit
+    application-menu-symbolic
     applications-internet
     clock-symbolic
     dialog-cancel
@@ -73,55 +75,67 @@ set(REQUIRED_ICONS
     dialog-ok-apply
     dialog-password
     document-close
+    document-close-symbolic
     document-encrypt
+    document-encrypt-symbolic
     document-export
     document-new
+    document-new-symbolic
     document-open
     document-open-recent
+    document-open-recent-symbolic
+    document-open-symbolic
     document-properties
+    document-properties-symbolic
     document-save
-    document-save-as
+    document-save-as-symbolic
+    document-save-symbolic
     edit-clear
+    edit-clear-symbolic
     edit-copy
-    edit-cut
-    edit-delete
+    edit-copy-symbolic
+    edit-cut-symbolic
+    edit-delete-symbolic
     edit-paste
+    edit-paste-symbolic
     edit-redo
-    edit-rename
+    edit-redo-symbolic
+    edit-rename-symbolic
     edit-undo
-    emblem-warning
+    edit-undo-symbolic
     flag-black
     flag-blue
     folder
-    folder-add
+    folder-add-symbolic
     folder-symbolic
+    go-down-symbolic
     go-next
-    go-next-symbolic
-    go-next-symbolic-rtl
     go-previous
     go-previous-symbolic
-    go-previous-symbolic-rtl
-    handle-right
+    go-up-symbolic
     handle-sort
-    overflow-menu-right
-    overflow-menu-left
-    help-about
+    help-about-symbolic
     insert-text
     list-add
+    list-add-symbolic
     list-remove
+    overflow-menu
     password-copy
     password-generate
     password-show-off
+    password-show-off-symbolic
     password-show-on
+    password-show-on-symbolic
     preferences-desktop-icons
     preferences-desktop-locale
     qtcreator
     search
-    view-list-details-symbolic
+    search-symbolic
     system-file-manager
     system-run
     system-search
     username-copy
+    view-list-details-symbolic
     window-close)
 
 # find c++utilities
@@ -155,6 +169,9 @@ include(BasicConfig)
 set(QT_UTILITIES_REQUIRED_VERSION 6.15.0)
 if (SETUP_TOOLS)
     set(QT_UTILITIES_REQUIRED_VERSION 6.18.0)
+endif ()
+if (QUICK_GUI)
+    set(QT_UTILITIES_REQUIRED_VERSION 6.22.0)
 endif ()
 set(CONFIGURATION_PACKAGE_SUFFIX_QTUTILITIES
     "${CONFIGURATION_PACKAGE_SUFFIX}"
@@ -196,11 +213,6 @@ if (MAJOR_QT_VERSION GREATER_EQUAL 6 AND NOT QT_FEATURE_zstd)
     set(CMAKE_AUTORCC_OPTIONS "--no-zstd")
 endif ()
 
-# add further Qt/KF modules required by Qt Quick GUI
-if (QUICK_GUI)
-    list(APPEND ADDITIONAL_KF_MODULES Kirigami)
-endif ()
-
 # configure whether setup tools are enabled
 if (SETUP_TOOLS)
     list(APPEND ADDITIONAL_QT_MODULES Network)
@@ -212,6 +224,13 @@ endif ()
 # apply further configuration
 if (WIDGETS_GUI OR QUICK_GUI)
     include(QtGuiConfig)
+
+    # configure Qt Quick GUI
+    if (QUICK_GUI)
+        qt_utilities_change_qt_quick_controls_style(QML_MODULE_FILES)
+        qt_utilities_configure_qt_quick_controls("Material" "quickgui/initiatequick.cpp")
+    endif ()
+
     include(QtConfig)
 endif ()
 include(WindowsResources)
@@ -221,6 +240,7 @@ include(ConfigHeader)
 
 # add Qml module
 if (QUICK_GUI)
+    qt_policy(SET QTP0004 NEW)
     qt_add_qml_module(
         ${META_TARGET_NAME}
         URI
@@ -232,6 +252,12 @@ if (QUICK_GUI)
         ${QML_MODULE_FILES}
         RESOURCE_PREFIX
         "/qt/qml/")
+    if (QUICK_GUI_CONTROLS_STYLE STREQUAL dynamic)
+        set_property(
+            SOURCE quickgui/initiatequick.cpp
+            APPEND
+            PROPERTY COMPILE_DEFINITIONS QT_UTILITIES_GUI_QTQUICK)
+    endif ()
 endif ()
 
 # configure creating an Android package using androiddeployqt
@@ -260,13 +286,6 @@ if (ANDROID)
     # cmake-format: on
     if (NOT CMAKE_BUILD_TYPE STREQUAL Debug)
         qt_import_plugins(${META_TARGET_NAME} EXCLUDE_BY_TYPE qmltooling)
-    endif ()
-
-    # bundle OpenMP (used by Kirigami) explicitly as it is otherwise not bundled
-    find_package(OpenMP)
-    if (OpenMP_CXX_FOUND)
-        message(STATUS "Bundling OpenMP library for Kirigami: ${OpenMP_omp_LIBRARY}")
-        set_target_properties(${META_TARGET_NAME} PROPERTIES QT_ANDROID_EXTRA_LIBS "${OpenMP_omp_LIBRARY}")
     endif ()
 
     set(QT_ANDROID_SIGN_APK ON)

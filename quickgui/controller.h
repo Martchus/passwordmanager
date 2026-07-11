@@ -10,11 +10,16 @@
 #include <QObject>
 #include <QPersistentModelIndex>
 
+QT_FORWARD_DECLARE_CLASS(QGuiApplication)
 QT_FORWARD_DECLARE_CLASS(QSettings)
 
 #if defined(PASSWORD_MANAGER_GUI_QTWIDGETS) || defined(PASSWORD_MANAGER_ENABLE_UNDO_SUPPORT_FOR_QUICK_GUI)
 #include "../gui/stacksupport.h"
 #endif
+
+namespace QtUtilities {
+class QtSettings;
+}
 
 namespace QtGui {
 
@@ -47,7 +52,8 @@ class Controller : public QObject {
     Q_PROPERTY(bool darkModeEnabled READ isDarkModeEnabled WRITE setDarkModeEnabled NOTIFY darkModeEnabledChanged)
 
 public:
-    explicit Controller(QSettings &settings, const QString &filePath = QString(), QObject *parent = nullptr);
+    explicit Controller(QGuiApplication &app, QtUtilities::QtSettings &qtSettings, QSettings &settings, const QString &filePath = QString(),
+        QObject *parent = nullptr);
 
     const QString &filePath() const;
     const QString &fileName() const;
@@ -107,6 +113,8 @@ public Q_SLOTS:
     void undo();
     void redo();
     QString computeFileSummary();
+    void applyDarkmodeChange(const QPalette &palette);
+    void applyDarkmodeChange(bool isDarkColorSchemeEnabled, bool isDarkPaletteEnabled);
 
 Q_SIGNALS:
     void filePathChanged(const QString &newFilePath);
@@ -134,6 +142,10 @@ Q_SIGNALS:
     void redoTextChanged(const QString &redoText);
     void settingsError(const QString &errorMessage);
     void darkModeEnabledChanged(bool darkModeEnabled);
+    void retranslate();
+
+protected:
+    bool eventFilter(QObject *object, QEvent *event) override;
 
 private Q_SLOTS:
     void handleEntriesRemoved(const QModelIndex &parentIndex, int first, int last);
@@ -146,6 +158,8 @@ private:
     void emitFileError(const QString &when);
     QModelIndex ensureSourceEntryIndex(const QModelIndex &entryIndexMaybeFromFilterModel) const;
 
+    QGuiApplication &m_app;
+    QtUtilities::QtSettings &m_qtSettings;
     QSettings &m_settings;
     QString m_filePath;
     QString m_fileName;
@@ -166,6 +180,8 @@ private:
     bool m_useNativeFileDialog;
     bool m_filterAsDialog;
     bool m_darkModeEnabled;
+    bool m_darkColorScheme;
+    bool m_darkPalette;
 };
 
 inline QModelIndex Controller::ensureSourceEntryIndex(const QModelIndex &entryIndexMaybeFromFilterModel) const
