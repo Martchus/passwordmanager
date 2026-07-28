@@ -184,6 +184,13 @@ Page {
                 enabled: !nativeInterface.hasEntryFilter && currentModelIndex !== entryModel.index(0, 0)
                 visible: enabled
 
+                background: Rectangle {
+                    color: (dragArea.dragging)
+                           ? (nativeInterface.darkModeEnabled ? "#444444" : "#e0e0e0")
+                           : "transparent"
+                    radius: 0
+                }
+
                 MouseArea {
                     id: dragArea
                     anchors.fill: parent
