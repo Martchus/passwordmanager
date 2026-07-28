@@ -5,6 +5,8 @@ import QtQuick.Controls.Material
 ApplicationWindow {
     id: root
     property var fieldsPage: undefined
+    property real lastBackEvent: 0
+    property Dialog currentDialog: null
 
     Material.primary: "#2c714a"
     Material.accent: "#2c8352"
@@ -13,6 +15,36 @@ ApplicationWindow {
     width: 600
     height: 800
     visible: true
+
+    Component.onCompleted: {
+        nativeInterface.init()
+
+        // handle global keyboard and mouse events
+        root.contentItem.forceActiveFocus(Qt.ActiveWindowFocusReason);
+        root.contentItem.Keys.released.connect((event) => {
+            const key = event.key
+            if (key === Qt.Key_Back || (key === Qt.Key_Backspace && typeof activeFocusItem.getText !== "function")) {
+                event.accepted = true
+                if (root.currentDialog?.visible) {
+                    root.currentDialog.close()
+                } else if (pageStack.depth >= 2) {
+                    pageStack.pop()
+                } else {
+                    const now = Date.now() / 1000
+                    if ((now - root.lastBackEvent) < 2) {
+                        root.close()
+                    } else {
+                        root.lastBackEvent = now
+                        root.showPassiveNotification(qsTr("Tap again to quit"), 2000)
+                    }
+                }
+            }
+        });
+    }
+
+    onClosing: (event) => {
+
+    }
 
     header: ToolBar {
         Material.theme: Material.Light
@@ -332,8 +364,6 @@ ApplicationWindow {
         anchors.rightMargin: parent.SafeArea.margins.right
         clip: true
     }
-
-    Component.onCompleted: nativeInterface.init()
 
     AboutDialog {
         id: aboutDialog
