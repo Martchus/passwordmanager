@@ -7,6 +7,8 @@
 
 #include <passwordfile/io/passwordfile.h>
 
+#include <qtutilities/misc/desktoputils.h>
+
 #include <QObject>
 #include <QPersistentModelIndex>
 
@@ -105,6 +107,8 @@ public Q_SLOTS:
     void clear();
     void save();
     bool showNativeFileDialog(bool existing, bool createNew);
+    bool showToast(const QString &message);
+    bool performHapticFeedback();
     void handleFileSelectionAccepted(const QString &filePath, const QString &nativeUrl, bool existing, bool createNew);
 #if defined(Q_OS_ANDROID) && defined(CPP_UTILITIES_USE_NATIVE_FILE_BUFFER)
     void handleFileSelectionAcceptedDescriptor(const QString &nativeUrl, const QString &fileName, int fileDescriptor, bool existing, bool createNew);
@@ -377,6 +381,16 @@ inline void Controller::setDarkModeEnabled(bool darkModeEnabled)
     if (darkModeEnabled != m_darkModeEnabled) {
         emit darkModeEnabledChanged(m_darkModeEnabled = darkModeEnabled);
     }
+}
+
+inline bool Controller::showToast(const QString &message)
+{
+    return QtUtilities::showToast(message);
+}
+
+inline bool Controller::performHapticFeedback()
+{
+    return QtUtilities::performHapticFeedback();
 }
 
 inline void Controller::undo()

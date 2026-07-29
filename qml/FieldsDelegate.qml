@@ -44,6 +44,7 @@ ItemDelegate {
                 startY = mapToItem(view, mouse.x, mouse.y).y
                 dragging = true
                 view.interactive = false
+                nativeInterface.performHapticFeedback()
             }
 
             onPositionChanged: (mouse) => {
@@ -114,6 +115,7 @@ ItemDelegate {
         }
 
         TapHandler {
+            acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad | PointerDevice.Stylus
             acceptedButtons: Qt.RightButton
             onTapped: fieldContextMenu.showCenteredIn(dragHandle)
         }

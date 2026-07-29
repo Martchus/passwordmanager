@@ -5,8 +5,11 @@ import android.content.ActivityNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
+import android.view.HapticFeedbackConstants;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager.LayoutParams;
+import android.widget.Toast;
 import androidx.documentfile.provider.DocumentFile;
 import java.io.FileNotFoundException;
 import org.qtproject.qt.android.bindings.QtActivity;
@@ -15,6 +18,26 @@ public class Activity extends QtActivity {
     private final int REQUEST_CODE_OPEN_EXISTING_FILE = 1;
     private final int REQUEST_CODE_CREATE_NEW_FILE = 2;
     private final int REQUEST_CODE_SAVE_FILE_AS = 3;
+
+    public boolean showToast(String message, int duration) {
+        Activity activity = this;
+        runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(activity, message, duration).show();
+            }
+        });
+        return true;
+    }
+
+    public boolean performHapticFeedback() {
+        View rootView = getWindow().getDecorView().getRootView();
+        boolean res = false;
+        if (rootView != null) {
+            rootView.setHapticFeedbackEnabled(true);
+            res = rootView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+        }
+        return res;
+    }
 
     /*!
      * \brief Shows the native Android file dialog. Results are handled in onActivityResult().

@@ -6,7 +6,7 @@ ApplicationWindow {
     id: root
     property var fieldsPage: undefined
     property real lastBackEvent: 0
-    property Dialog currentDialog: null
+    property list<Dialog> dialogs
 
     Material.primary: "#2c714a"
     Material.accent: "#2c8352"
@@ -15,6 +15,7 @@ ApplicationWindow {
     width: 600
     height: 800
     visible: true
+    flags: Qt.Window | Qt.ExpandedClientAreaHint | Qt.NoTitleBarBackgroundHint
 
     Component.onCompleted: {
         nativeInterface.init()
@@ -23,10 +24,10 @@ ApplicationWindow {
         root.contentItem.forceActiveFocus(Qt.ActiveWindowFocusReason);
         root.contentItem.Keys.released.connect((event) => {
             const key = event.key
-            if (key === Qt.Key_Back || (key === Qt.Key_Backspace && typeof activeFocusItem.getText !== "function")) {
+            if (key === Qt.Key_Back || (key === Qt.Key_Backspace && typeof root.activeFocusItem.getText !== "function")) {
                 event.accepted = true
-                if (root.currentDialog?.visible) {
-                    root.currentDialog.close()
+                if (root.dialogs.length) {
+                    root.dialogs[root.dialogs.length - 1].close()
                 } else if (pageStack.depth >= 2) {
                     pageStack.pop()
                 } else {
@@ -42,6 +43,12 @@ ApplicationWindow {
         });
     }
 
+    onActiveFocusItemChanged: {
+        if (root.activeFocusItem?.toString().startsWith("QQuickPopupItem")) {
+            root.contentItem.forceActiveFocus(Qt.ActiveWindowFocusReason);
+        }
+    }
+
     onClosing: (event) => {
 
     }
@@ -55,6 +62,7 @@ ApplicationWindow {
             Material.theme: Material.Dark
             ToolButton {
                 icon.name: pageStack.depth > 1 ? "go-previous-symbolic" : "application-menu-symbolic"
+                onPressAndHold: nativeInterface.performHapticFeedback()
                 onClicked: {
                     if (pageStack.depth > 1) {
                         pageStack.pop()
@@ -81,6 +89,7 @@ ApplicationWindow {
                     action: modelData
                     visible: modelData.visible !== undefined ? modelData.visible : true
                     display: root.width < 500 ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
+                    onPressAndHold: nativeInterface.performHapticFeedback()
                     ToolTip.visible: (hovered || pressed) && text.length > 0 && display === AbstractButton.IconOnly
                     ToolTip.text: text
                 }
@@ -626,6 +635,6 @@ ApplicationWindow {
     }
 
     function showPassiveNotification(message, duration, actionText, actionCallbackFunc) {
-        toastPopup.show(message, duration, actionText, actionCallbackFunc)
+        return (!actionText && nativeInterface.showToast(message)) || toastPopup.show(message, duration, actionText, actionCallbackFunc)
     }
 }

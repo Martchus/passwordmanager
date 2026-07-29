@@ -7,6 +7,7 @@
 
 #include <QColor>
 #include <QCoreApplication>
+#include <QJniEnvironment>
 #include <QJniObject>
 #include <QMessageLogContext>
 #include <QMetaObject>
@@ -123,25 +124,20 @@ static void onAndroidFileDialogRejected(JNIEnv *, jobject)
     QMetaObject::invokeMethod(QtGui::controllerForAndroid, "handleFileSelectionCanceled", Qt::QueuedConnection);
 }
 
+static bool returnFalse(JNIEnv *, jobject)
+{
+    return false;
+}
+
 /*!
  * \brief Registers the static functions declared above so they can be called from the Java-side.
  * \remarks This method is called automatically by Java after the .so file is loaded.
  */
 JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *)
 {
-    // get the JNIEnv pointer
-    JNIEnv *env;
-    if (vm->GetEnv(reinterpret_cast<void **>(&env), JNI_VERSION_1_6) != JNI_OK) {
-        return JNI_ERR;
-    }
-
-    // search for Java class which declares the native methods
-    const auto javaClass = env->FindClass("org/martchus/passwordmanager/Activity");
-    if (!javaClass) {
-        return JNI_ERR;
-    }
-
     // register native methods
+    auto env = QJniEnvironment();
+    auto registeredMethods = true;
     static const JNINativeMethod methods[] = {
         { "onAndroidError", "(Ljava/lang/String;)V", reinterpret_cast<void *>(onAndroidError) },
         { "onAndroidFileDialogAccepted", "(Ljava/lang/String;ZZ)V", reinterpret_cast<void *>(onAndroidFileDialogAccepted) },
@@ -149,7 +145,13 @@ JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *)
             reinterpret_cast<void *>(onAndroidFileDialogAcceptedDescriptor) },
         { "onAndroidFileDialogRejected", "()V", reinterpret_cast<void *>(onAndroidFileDialogRejected) },
     };
-    if (env->RegisterNatives(javaClass, methods, sizeof(methods) / sizeof(methods[0])) < 0) {
+    static const JNINativeMethod delegateMethods[] = {
+        { "canOverrideColorSchemeHint", "()Z", reinterpret_cast<void *>(returnFalse) },
+    };
+    registeredMethods = env.registerNativeMethods("org/martchus/passwordmanager/Activity", methods, sizeof(methods) / sizeof(methods[0])) && registeredMethods;
+    registeredMethods = env.registerNativeMethods("org/qtproject/qt/android/QtActivityDelegateBase", delegateMethods, sizeof(delegateMethods) / sizeof(delegateMethods[0])) && registeredMethods;
+    if (!registeredMethods) {
+        qWarning() << "Unable to register all native activity methods in JNI environment.";
         return JNI_ERR;
     }
 

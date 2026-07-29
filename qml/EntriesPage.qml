@@ -204,6 +204,7 @@ Page {
                         startY = mapToItem(treeView, mouse.x, mouse.y).y
                         dragging = true
                         treeView.interactive = false
+                        onPressAndHold: nativeInterface.performHapticFeedback()
                     }
 
                     onPositionChanged: (mouse) => {

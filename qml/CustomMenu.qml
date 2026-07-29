@@ -9,6 +9,8 @@ Menu {
     leftMargin: contentItem.Window?.window?.SafeArea?.margins.left ?? 0
     rightMargin: contentItem.Window?.window?.SafeArea?.margins.right ?? 0
     bottomMargin: contentItem.Window?.window?.SafeArea?.margins.bottom ?? 0
+    width: Math.min(300, contentItem.Window?.window?.width ?? 300)
+    onOpened: nativeInterface.performHapticFeedback()
     Component.onCompleted: {
         if (contentItem.boundsMovement === undefined || contentItem.boundsBehavior === undefined) {
             return;

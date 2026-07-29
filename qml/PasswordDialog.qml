@@ -13,6 +13,7 @@ BasicDialog {
 
     standardButtons: canAccept ? Dialog.Ok
                                  | Dialog.Cancel : Dialog.Cancel
+
     title: qsTr("Enter password")
     onAccepted: {
         nativeInterface.password = password
@@ -59,6 +60,8 @@ BasicDialog {
             text: qsTr("Show characters")
             checked: false
         }
+    }
+    footer: DialogButtonBox {
     }
 
     function clear() {
