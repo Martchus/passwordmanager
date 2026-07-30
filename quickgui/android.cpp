@@ -148,8 +148,11 @@ JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *)
     static const JNINativeMethod delegateMethods[] = {
         { "canOverrideColorSchemeHint", "()Z", reinterpret_cast<void *>(returnFalse) },
     };
-    registeredMethods = env.registerNativeMethods("org/martchus/passwordmanager/Activity", methods, sizeof(methods) / sizeof(methods[0])) && registeredMethods;
-    registeredMethods = env.registerNativeMethods("org/qtproject/qt/android/QtActivityDelegateBase", delegateMethods, sizeof(delegateMethods) / sizeof(delegateMethods[0])) && registeredMethods;
+    registeredMethods
+        = env.registerNativeMethods("org/martchus/passwordmanager/Activity", methods, sizeof(methods) / sizeof(methods[0])) && registeredMethods;
+    registeredMethods = env.registerNativeMethods(
+                            "org/qtproject/qt/android/QtActivityDelegateBase", delegateMethods, sizeof(delegateMethods) / sizeof(delegateMethods[0]))
+        && registeredMethods;
     if (!registeredMethods) {
         qWarning() << "Unable to register all native activity methods in JNI environment.";
         return JNI_ERR;
