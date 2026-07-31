@@ -4,7 +4,12 @@
 <context>
     <name>AboutDialog</name>
     <message>
-        <location filename="../qml/AboutDialog.qml" line="49"/>
+        <location filename="../qml/AboutDialog.qml" line="10"/>
+        <source>About %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/AboutDialog.qml" line="53"/>
         <source>developed by %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18,13 +23,13 @@
     </message>
     <message>
         <location filename="../qml/EntriesPage.qml" line="42"/>
-        <location filename="../qml/EntriesPage.qml" line="297"/>
+        <location filename="../qml/EntriesPage.qml" line="298"/>
         <source>Unable to paste the entries here</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/EntriesPage.qml" line="45"/>
-        <location filename="../qml/EntriesPage.qml" line="300"/>
+        <location filename="../qml/EntriesPage.qml" line="301"/>
         <source>Pasted %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -56,7 +61,7 @@
     </message>
     <message>
         <location filename="../qml/EntriesPage.qml" line="30"/>
-        <location filename="../qml/EntriesPage.qml" line="287"/>
+        <location filename="../qml/EntriesPage.qml" line="288"/>
         <source>Paste</source>
         <translation type="unfinished"></translation>
     </message>
@@ -78,36 +83,36 @@
     </message>
     <message>
         <location filename="../qml/EntriesPage.qml" line="112"/>
-        <source>enter new name here</source>
+        <source>New name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="279"/>
+        <location filename="../qml/EntriesPage.qml" line="280"/>
         <source>Cut</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="282"/>
+        <location filename="../qml/EntriesPage.qml" line="283"/>
         <source>Cut %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="305"/>
+        <location filename="../qml/EntriesPage.qml" line="306"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="310"/>
+        <location filename="../qml/EntriesPage.qml" line="311"/>
         <source>Rename</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="315"/>
+        <location filename="../qml/EntriesPage.qml" line="316"/>
         <source>Move up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EntriesPage.qml" line="326"/>
+        <location filename="../qml/EntriesPage.qml" line="327"/>
         <source>Move down</source>
         <translation type="unfinished"></translation>
     </message>
@@ -115,57 +120,57 @@
 <context>
     <name>FieldsDelegate</name>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="126"/>
+        <location filename="../qml/FieldsDelegate.qml" line="128"/>
         <source>Mark as normal field</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="126"/>
+        <location filename="../qml/FieldsDelegate.qml" line="128"/>
         <source>Mark as password field</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="131"/>
+        <location filename="../qml/FieldsDelegate.qml" line="133"/>
         <source>Copy password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="131"/>
+        <location filename="../qml/FieldsDelegate.qml" line="133"/>
         <source>Copy value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="132"/>
+        <location filename="../qml/FieldsDelegate.qml" line="134"/>
         <source>Copied</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="132"/>
+        <location filename="../qml/FieldsDelegate.qml" line="134"/>
         <source>Unable to access clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="136"/>
+        <location filename="../qml/FieldsDelegate.qml" line="138"/>
         <source>Copy TOTP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="143"/>
+        <location filename="../qml/FieldsDelegate.qml" line="145"/>
         <source>Delete field</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="148"/>
+        <location filename="../qml/FieldsDelegate.qml" line="150"/>
         <source>Insert empty field after this</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="158"/>
+        <location filename="../qml/FieldsDelegate.qml" line="160"/>
         <source>Move up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FieldsDelegate.qml" line="166"/>
+        <location filename="../qml/FieldsDelegate.qml" line="168"/>
         <source>Move down</source>
         <translation type="unfinished"></translation>
     </message>
@@ -178,27 +183,42 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FieldsPage.qml" line="63"/>
+        <location filename="../qml/FieldsPage.qml" line="65"/>
         <source>Copied field name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FieldsPage.qml" line="90"/>
+        <location filename="../qml/FieldsPage.qml" line="75"/>
+        <source>Pasted field name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/FieldsPage.qml" line="102"/>
         <source>Copied password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FieldsPage.qml" line="90"/>
+        <location filename="../qml/FieldsPage.qml" line="102"/>
         <source>Copied value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FieldsPage.qml" line="107"/>
-        <source>Mark as password</source>
+        <location filename="../qml/FieldsPage.qml" line="112"/>
+        <source>Pasted password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/FieldsPage.qml" line="112"/>
+        <source>Pasted value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/FieldsPage.qml" line="128"/>
+        <source>Mark as password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/FieldsPage.qml" line="133"/>
         <source>Show characters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -229,148 +249,150 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../qml/Main.qml" line="38"/>
+        <location filename="../qml/Main.qml" line="51"/>
         <source>Tap again to quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="78"/>
+        <location filename="../qml/Main.qml" line="88"/>
         <source>Password Manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="132"/>
+        <location filename="../qml/Main.qml" line="143"/>
         <source>No file opened</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="175"/>
+        <location filename="../qml/Main.qml" line="186"/>
         <source>No password set
 File will be saved unencrypted!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="186"/>
+        <location filename="../qml/Main.qml" line="197"/>
         <source>Create new file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="196"/>
+        <location filename="../qml/Main.qml" line="12"/>
+        <location filename="../qml/Main.qml" line="207"/>
         <source>Open existing file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="207"/>
+        <location filename="../qml/Main.qml" line="218"/>
         <source>Recently opened ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="245"/>
+        <location filename="../qml/Main.qml" line="256"/>
         <source>Save modifications</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="245"/>
+        <location filename="../qml/Main.qml" line="256"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="256"/>
+        <location filename="../qml/Main.qml" line="267"/>
         <source>Save as</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="267"/>
+        <location filename="../qml/Main.qml" line="278"/>
         <source>Change password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="267"/>
+        <location filename="../qml/Main.qml" line="278"/>
         <source>Add password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="273"/>
+        <location filename="../qml/Main.qml" line="284"/>
         <source>Change password for %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="280"/>
+        <location filename="../qml/Main.qml" line="291"/>
         <source>Details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="291"/>
+        <location filename="../qml/Main.qml" line="302"/>
         <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="291"/>
+        <location filename="../qml/Main.qml" line="302"/>
         <source>Adjust search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="303"/>
+        <location filename="../qml/Main.qml" line="314"/>
         <source>Clear search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="315"/>
+        <location filename="../qml/Main.qml" line="326"/>
         <source>Undo &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="327"/>
+        <location filename="../qml/Main.qml" line="338"/>
         <source>Redo &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="339"/>
+        <location filename="../qml/Main.qml" line="350"/>
         <source>Close file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="354"/>
+        <location filename="../qml/Main.qml" line="17"/>
+        <location filename="../qml/Main.qml" line="365"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="391"/>
+        <location filename="../qml/Main.qml" line="402"/>
         <source>File details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="413"/>
+        <location filename="../qml/Main.qml" line="424"/>
         <source>Search for categories and accounts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="459"/>
+        <location filename="../qml/Main.qml" line="470"/>
         <source>Retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="470"/>
+        <location filename="../qml/Main.qml" line="481"/>
         <source>Password required to open %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="477"/>
+        <location filename="../qml/Main.qml" line="488"/>
         <source>%1 closed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="482"/>
+        <location filename="../qml/Main.qml" line="493"/>
         <source>%1 opened</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="487"/>
+        <location filename="../qml/Main.qml" line="498"/>
         <source>%1 saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="234"/>
+        <location filename="../qml/Main.qml" line="245"/>
         <source>Clear recently opened files</source>
         <translation type="unfinished"></translation>
     </message>
@@ -378,37 +400,37 @@ File will be saved unencrypted!</source>
 <context>
     <name>PasswordDialog</name>
     <message>
-        <location filename="../qml/PasswordDialog.qml" line="16"/>
+        <location filename="../qml/PasswordDialog.qml" line="17"/>
         <source>Enter password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/PasswordDialog.qml" line="21"/>
+        <location filename="../qml/PasswordDialog.qml" line="22"/>
         <source>The new password will be used when saving next time.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/PasswordDialog.qml" line="29"/>
+        <location filename="../qml/PasswordDialog.qml" line="30"/>
         <source>You aborted. The password has not been altered.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/PasswordDialog.qml" line="44"/>
+        <location filename="../qml/PasswordDialog.qml" line="49"/>
         <source>Enter password here, leave empty for no encryption</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/PasswordDialog.qml" line="45"/>
+        <location filename="../qml/PasswordDialog.qml" line="50"/>
         <source>Enter password here</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/PasswordDialog.qml" line="54"/>
+        <location filename="../qml/PasswordDialog.qml" line="59"/>
         <source>Repeat password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/PasswordDialog.qml" line="59"/>
+        <location filename="../qml/PasswordDialog.qml" line="64"/>
         <source>Show characters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -467,37 +489,37 @@ File will be saved unencrypted!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="500"/>
+        <location filename="../quickgui/controller.cpp" line="510"/>
         <source>Copied TOTP, valid for %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="502"/>
+        <location filename="../quickgui/controller.cpp" line="512"/>
         <source>Unable to copy TOTP: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="519"/>
+        <location filename="../quickgui/controller.cpp" line="529"/>
         <source>No file opened.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="536"/>
+        <location filename="../quickgui/controller.cpp" line="546"/>
         <source>An IO error occurred when %1 the file %2: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="538"/>
+        <location filename="../quickgui/controller.cpp" line="548"/>
         <source>An error occurred when %1 the file: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="540"/>
+        <location filename="../quickgui/controller.cpp" line="550"/>
         <source>An unknown exception occurred when %1 the file %2: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../quickgui/controller.cpp" line="543"/>
+        <location filename="../quickgui/controller.cpp" line="553"/>
         <source>An unknown error occurred when %1 the file %2.</source>
         <translation type="unfinished"></translation>
     </message>
