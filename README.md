@@ -144,3 +144,8 @@ To build without GUI, add the following parameters to the CMake call:
 Copyright © 2015-2026 Marius Kittler
 
 All code is licensed under [GPL-2-or-later](LICENSE).
+
+### Attribution for 3rd party content
+The builds found in the release section bundle icons from the
+[KDE/Breeze](https://invent.kde.org/frameworks/breeze-icons) project.
+None of these icons have been (intentionally) modified so no copyright for modifications is asserted.
