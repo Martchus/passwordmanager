@@ -46,9 +46,6 @@ int runQuickGui(int argc, char *argv[], const QtConfigArguments &qtConfigArgs, c
     // init OpenSSL
     OpenSsl::init();
 
-    auto sha256sum = OpenSsl::computeSha256Sum(reinterpret_cast<const unsigned char *>("foo"), 3);
-    qDebug() << "sha256sum: " << QByteArray(reinterpret_cast<const char *>(sha256sum.data), sha256sum.size);
-
     // init application
     SET_QT_APPLICATION_INFO;
     auto application = App(argc, argv);

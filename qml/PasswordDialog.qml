@@ -30,35 +30,40 @@ BasicDialog {
                         qsTr("You aborted. The password has not been altered."))
         }
     }
-    contentItem: ColumnLayout {
-        Label {
-            id: instructionLabel
-            Layout.preferredWidth: passwordDialog.availableWidth
-            wrapMode: Label.Wrap
-        }
+    contentItem: ScrollView {
+        contentWidth: availableWidth
+        ColumnLayout {
+            width: availableWidth
 
-        TextField {
-            id: passwordTextField
-            Layout.preferredWidth: passwordDialog.availableWidth
-            echoMode: showCharactersCheckBox.checked ? TextInput.Normal : TextInput.Password
-            placeholderText: newPassword
-                ? qsTr("Enter password here, leave empty for no encryption")
-                : qsTr("Enter password here")
-            Keys.onPressed: (event) => passwordDialog.acceptOnReturn(event)
-        }
-        TextField {
-            id: repeatPasswordTextField
-            Layout.preferredWidth: passwordDialog.availableWidth
-            visible: passwordDialog.newPassword
-            enabled: visible && !showCharactersCheckBox.checked
-            echoMode: TextInput.Password
-            placeholderText: qsTr("Repeat password")
-            Keys.onPressed: passwordDialog.acceptOnReturn(event)
-        }
-        CheckBox {
-            id: showCharactersCheckBox
-            text: qsTr("Show characters")
-            checked: false
+            Label {
+                id: instructionLabel
+                Layout.preferredWidth: passwordDialog.availableWidth
+                wrapMode: Label.Wrap
+            }
+
+            TextField {
+                id: passwordTextField
+                Layout.preferredWidth: passwordDialog.availableWidth
+                echoMode: showCharactersCheckBox.checked ? TextInput.Normal : TextInput.Password
+                placeholderText: newPassword
+                    ? qsTr("Enter password here, leave empty for no encryption")
+                    : qsTr("Enter password here")
+                Keys.onPressed: (event) => passwordDialog.acceptOnReturn(event)
+            }
+            TextField {
+                id: repeatPasswordTextField
+                Layout.preferredWidth: passwordDialog.availableWidth
+                visible: passwordDialog.newPassword
+                enabled: visible && !showCharactersCheckBox.checked
+                echoMode: TextInput.Password
+                placeholderText: qsTr("Repeat password")
+                Keys.onPressed: passwordDialog.acceptOnReturn(event)
+            }
+            CheckBox {
+                id: showCharactersCheckBox
+                text: qsTr("Show characters")
+                checked: false
+            }
         }
     }
     footer: DialogButtonBox {

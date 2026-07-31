@@ -41,77 +41,99 @@ Page {
             fieldsListView.model.setData(column0, isPassword ? 1 : 0,
                                          0x0100 + 1)
         }
-        contentItem: ColumnLayout {
-            GridLayout {
-                Layout.preferredWidth: fieldDialog.availableWidth
-                columns: 3
-                columnSpacing: 0
+        contentItem: ScrollView {
+            contentWidth: availableWidth
+            ColumnLayout {
+                width: availableWidth
+                GridLayout {
+                    Layout.preferredWidth: fieldDialog.availableWidth
+                    columns: 4
+                    columnSpacing: 0
 
-                TextField {
-                    id: fieldNameEdit
-                    Layout.fillWidth: true
-                    text: fieldDialog.fieldName
-                    Keys.onPressed: (event) => fieldDialog.acceptOnReturn(event)
-                }
-                RoundButton {
-                    flat: true
-                    icon.name: "username-copy"
-                    Layout.preferredWidth: height
-                    Layout.columnSpan: 2
-                    onClicked: {
-                        nativeInterface.copyToClipboard(fieldNameEdit.text)
-                        showPassiveNotification(qsTr("Copied field name"))
+                    TextField {
+                        id: fieldNameEdit
+                        Layout.fillWidth: true
+                        text: fieldDialog.fieldName
+                        Keys.onPressed: (event) => fieldDialog.acceptOnReturn(event)
+                    }
+                    RoundButton {
+                        flat: true
+                        icon.name: "username-copy"
+                        Layout.preferredWidth: height
+                        onClicked: {
+                            nativeInterface.copyToClipboard(fieldNameEdit.text)
+                            showPassiveNotification(qsTr("Copied field name"))
+                        }
+                    }
+                    RoundButton {
+                        flat: true
+                        icon.name: "edit-paste"
+                        Layout.preferredWidth: height
+                        Layout.columnSpan: 2
+                        onClicked: {
+                            fieldNameEdit.text = nativeInterface.getClipboardText()
+                            showPassiveNotification(qsTr("Pasted field name"))
+                        }
+                    }
+                    TextField {
+                        id: fieldValueEdit
+                        property bool hideCharacters: fieldDialog.isPassword
+                                                      && !showCharactersCheckBox.checked
+
+                        Layout.fillWidth: true
+                        // ensure height is always the same, regardless of echo mode (under Android the
+                        // bullet points for PasswordEchoOnEdit have a different size causing a different
+                        // height)
+                        Layout.preferredHeight: fieldNameEdit.height
+                        text: fieldDialog.fieldValue
+                        echoMode: hideCharacters ? TextInput.PasswordEchoOnEdit : TextInput.Normal
+                        // fix ugly bullet points under Android
+                        font.pointSize: hideCharacters ? fieldNameEdit.font.pointSize
+                                                         * 0.5 : fieldNameEdit.font.pointSize
+                        Keys.onPressed: (event) => fieldDialog.acceptOnReturn(event)
+                    }
+                    RoundButton {
+                        flat: true
+                        icon.name: "password-copy"
+                        Layout.preferredWidth: height
+                        onClicked: {
+                            nativeInterface.copyToClipboard(fieldValueEdit.text)
+                            showPassiveNotification(
+                                        fieldDialog.isPassword ? qsTr("Copied password") : qsTr(
+                                                                     "Copied value"))
+                        }
+                    }
+                    RoundButton {
+                        flat: true
+                        icon.name: "edit-paste"
+                        Layout.preferredWidth: height
+                        onClicked: {
+                            fieldValueEdit.text = nativeInterface.getClipboardText()
+                            showPassiveNotification(fieldDialog.isPassword ? qsTr("Pasted password") : qsTr("Pasted value"))
+                        }
+                    }
+                    RoundButton {
+                        flat: true
+                        icon.name: "clock-symbolic"
+                        Layout.preferredWidth: height
+                        visible: fieldValueEdit.text.startsWith("otpauth:")
+                        onClicked: showPassiveNotification(nativeInterface.copyTOTP(fieldValueEdit.text))
                     }
                 }
-                TextField {
-                    id: fieldValueEdit
-                    property bool hideCharacters: fieldDialog.isPassword
-                                                  && !showCharactersCheckBox.checked
-
-                    Layout.fillWidth: true
-                    // ensure height is always the same, regardless of echo mode (under Android the
-                    // bullet points for PasswordEchoOnEdit have a different size causing a different
-                    // height)
-                    Layout.preferredHeight: fieldNameEdit.height
-                    text: fieldDialog.fieldValue
-                    echoMode: hideCharacters ? TextInput.PasswordEchoOnEdit : TextInput.Normal
-                    // fix ugly bullet points under Android
-                    font.pointSize: hideCharacters ? fieldNameEdit.font.pointSize
-                                                     * 0.5 : fieldNameEdit.font.pointSize
-                    Keys.onPressed: (event) => fieldDialog.acceptOnReturn(event)
-                }
-                RoundButton {
-                    flat: true
-                    icon.name: "password-copy"
-                    Layout.preferredWidth: height
-                    onClicked: {
-                        nativeInterface.copyToClipboard(fieldValueEdit.text)
-                        showPassiveNotification(
-                                    fieldDialog.isPassword ? qsTr("Copied password") : qsTr(
-                                                                 "Copied value"))
+                GridLayout {
+                    Layout.preferredWidth: fieldDialog.availableWidth
+                    columns: width > 350 ? 2 : 1
+                    CheckBox {
+                        id: fieldIsPasswordCheckBox
+                        text: qsTr("Mark as password")
+                        checked: false
                     }
-                }
-                RoundButton {
-                    flat: true
-                    icon.name: "clock-symbolic"
-                    Layout.preferredWidth: height
-                    visible: fieldValueEdit.text.startsWith("otpauth:")
-                    onClicked: showPassiveNotification(nativeInterface.copyTOTP(fieldValueEdit.text))
-                }
-            }
-            GridLayout {
-                Layout.preferredWidth: fieldDialog.availableWidth
-                columns: width > 350 ? 2 : 1
-                CheckBox {
-                    id: fieldIsPasswordCheckBox
-                    text: qsTr("Mark as password")
-                    checked: false
-                }
-                CheckBox {
-                    id: showCharactersCheckBox
-                    text: qsTr("Show characters")
-                    checked: false
-                    visible: fieldDialog.isPassword
+                    CheckBox {
+                        id: showCharactersCheckBox
+                        text: qsTr("Show characters")
+                        checked: false
+                        visible: fieldDialog.isPassword
+                    }
                 }
             }
         }

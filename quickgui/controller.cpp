@@ -490,6 +490,16 @@ bool Controller::copyToClipboard(const QString &text) const
 #endif
 }
 
+QString Controller::getClipboardText() const
+{
+#ifndef QT_NO_CLIPBOARD
+    if (auto *const clipboard = QGuiApplication::clipboard()) {
+        return clipboard->text();
+    }
+#endif
+    return QString();
+}
+
 QString Controller::copyTOTP(const QString &url) const
 {
     try {

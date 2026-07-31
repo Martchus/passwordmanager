@@ -109,7 +109,7 @@ Page {
             TextField {
                 id: entryNameTextField
                 Layout.preferredWidth: renameDialog.availableWidth
-                placeholderText: qsTr("enter new name here")
+                placeholderText: qsTr("New name")
                 Keys.onPressed: (event) => renameDialog.acceptOnReturn(event)
             }
         }

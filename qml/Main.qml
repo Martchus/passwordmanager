@@ -7,6 +7,18 @@ ApplicationWindow {
     property var fieldsPage: undefined
     property real lastBackEvent: 0
     property list<Dialog> dialogs
+    property list<Action> mainActions: [
+        Action {
+            text: qsTr("Open existing file")
+            icon.name: "document-open-symbolic"
+            onTriggered: fileDialog.openExisting()
+        },
+        Action {
+            text: qsTr("About")
+            icon.name: "help-about-symbolic"
+            onTriggered: aboutDialog.open()
+        }
+    ]
 
     Material.primary: "#2c714a"
     Material.accent: "#2c8352"
@@ -22,7 +34,7 @@ ApplicationWindow {
 
         // handle global keyboard and mouse events
         root.contentItem.forceActiveFocus(Qt.ActiveWindowFocusReason);
-        root.contentItem.Keys.released.connect((event) => {
+        [root.contentItem, root.header].forEach(item => item.Keys.released.connect((event) => {
             const key = event.key
             if (key === Qt.Key_Back || (key === Qt.Key_Backspace && typeof root.activeFocusItem.getText !== "function")) {
                 event.accepted = true
@@ -40,17 +52,13 @@ ApplicationWindow {
                     }
                 }
             }
-        });
+        }));
     }
 
     onActiveFocusItemChanged: {
         if (root.activeFocusItem?.toString().startsWith("QQuickPopupItem")) {
             root.contentItem.forceActiveFocus(Qt.ActiveWindowFocusReason);
         }
-    }
-
-    onClosing: (event) => {
-
     }
 
     header: ToolBar {
@@ -84,7 +92,7 @@ ApplicationWindow {
             }
 
             Repeater {
-                model: pageStack.currentItem ? pageStack.currentItem.actions : []
+                model: pageStack.currentItem ? pageStack.currentItem.actions : mainActions
                 delegate: ToolButton {
                     action: modelData
                     visible: modelData.visible !== undefined ? modelData.visible : true
