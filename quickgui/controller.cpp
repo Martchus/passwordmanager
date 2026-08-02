@@ -54,8 +54,7 @@ Controller::Controller(QGuiApplication &app, QtUtilities::QtSettings &qtSettings
     , m_useNativeFileDialog(supportsNativeFileDialog())
     , m_filterAsDialog(
 #ifdef Q_OS_ANDROID
-          // try filter on the drawer under Android as well for now
-          false
+          true // filter would always take focus, activating the keyboard
 #else
           false
 #endif
