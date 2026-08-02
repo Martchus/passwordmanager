@@ -28,6 +28,8 @@ ApplicationWindow {
     height: 800
     visible: true
     flags: Qt.Window | Qt.ExpandedClientAreaHint | Qt.NoTitleBarBackgroundHint
+    leftPadding: 0
+    rightPadding: 0
 
     Component.onCompleted: {
         nativeInterface.init()
@@ -62,6 +64,7 @@ ApplicationWindow {
     }
 
     header: ToolBar {
+        leftPadding: 0
         Material.theme: Material.Light
         Material.background: Material.primary
         RowLayout {
