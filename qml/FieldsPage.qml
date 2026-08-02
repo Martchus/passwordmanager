@@ -42,11 +42,12 @@ Page {
                                          0x0100 + 1)
         }
         contentItem: ScrollView {
-            contentWidth: availableWidth
+            id: scrollView
+            contentWidth: scrollView.availableWidth
             ColumnLayout {
-                width: availableWidth
+                width: scrollView.availableWidth - scrollView.effectiveScrollBarWidth
                 GridLayout {
-                    Layout.preferredWidth: fieldDialog.availableWidth
+                    Layout.fillWidth: true
                     columns: 4
                     columnSpacing: 0
 
