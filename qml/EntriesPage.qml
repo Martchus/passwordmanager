@@ -26,6 +26,13 @@ Page {
             onTriggered: insertEntry("Node")
         },
         Action {
+            icon.name: "search-symbolic"
+            text: qsTr("Search")
+            property bool visible: nativeInterface.fileOpen && nativeInterface.filterAsDialog
+            enabled: visible
+            onTriggered: root.openFilterDialog()
+        },
+        Action {
             icon.name: "edit-paste-symbolic"
             text: qsTr("Paste")
             property bool visible: nativeInterface.canPaste && !nativeInterface.hasEntryFilter

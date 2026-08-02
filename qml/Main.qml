@@ -648,4 +648,7 @@ ApplicationWindow {
     function showPassiveNotification(message, duration, actionText, actionCallbackFunc) {
         return (!actionText && nativeInterface.showToast(message)) || toastPopup.show(message, duration, actionText, actionCallbackFunc)
     }
+    function openFilterDialog() {
+        filterDialog.open()
+    }
 }
