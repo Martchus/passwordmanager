@@ -119,6 +119,12 @@ void MainWindow::insertFieldsFromClipboard()
  */
 void MainWindow::clearClipboard()
 {
+#ifdef Q_OS_LINUX
+    if (QApplication::platformName() == QStringLiteral("wayland")) {
+        QApplication::clipboard()->setText(QString());
+        return;
+    }
+#endif
     QApplication::clipboard()->clear();
 }
 
@@ -1392,7 +1398,8 @@ void MainWindow::showTableViewContextMenu(const QPoint &pos)
     // -> insert copy & paste
     contextMenu.addSeparator();
     contextMenu.addAction(QIcon::fromTheme(QStringLiteral("edit-copy")), tr("Copy"), this, &MainWindow::copyFields);
-    contextMenu.addAction(QIcon::fromTheme(QStringLiteral("edit-copy")), tr("Copy for 5 seconds"), this, &MainWindow::copyFieldsForXMilliSeconds);
+    contextMenu.addAction(QIcon::fromTheme(QStringLiteral("edit-copy")), tr("Copy for 5 seconds"), this,
+        std::bind(&MainWindow::copyFieldsForXMilliSeconds, this, 5000));
     if (multipleRows == 1 && !totpUrl.empty()) {
         auto *copyTotpAction = new QAction(QIcon::fromTheme(QStringLiteral("clock-symbolic")), tr("Copy TOTP"), &contextMenu);
         connect(copyTotpAction, &QAction::triggered, this, std::bind(&MainWindow::copyTOTP, this, std::string(totpUrl)));
