@@ -14,8 +14,10 @@
 
 #include <QMainWindow>
 #include <QMap>
+#include <QTimer>
 
 #include <memory>
+#include <string_view>
 
 QT_FORWARD_DECLARE_CLASS(QCloseEvent)
 QT_FORWARD_DECLARE_CLASS(QTreeWidgetItem)
@@ -121,6 +123,7 @@ private Q_SLOTS:
     void setSomethingChanged(bool somethingChanged);
     void updateStyleSheet();
     void updateColumnSizing();
+    void updateTotpStatus();
 
 private:
     // showing conditional messages/prompts
@@ -132,6 +135,7 @@ private:
     void updateWindowTitle();
     void applyDefaultExpanding(const QModelIndex &parent);
     Io::PasswordFileSaveFlags saveOptions() const;
+    std::string_view selectedTotpUrl() const;
 
     std::unique_ptr<Ui::MainWindow> m_ui;
     Io::PasswordFile m_file;
@@ -144,6 +148,7 @@ private:
     Io::PasswordFileOpenFlags m_openFlags;
     bool m_dontUpdateSelection;
     int m_clearClipboardTimer;
+    QTimer m_totpTimer;
     QtUtilities::RecentMenuManager *m_recentMgr;
     QtUtilities::AboutDialog *m_aboutDlg;
     QSettings &m_settings;

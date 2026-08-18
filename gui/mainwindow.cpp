@@ -107,6 +107,54 @@ void MainWindow::copyTOTP(std::string url)
 }
 
 /*!
+ * \brief Returns the OTP URL of the selected row/cell in the fields table view.
+ */
+std::string_view MainWindow::selectedTotpUrl() const
+{
+    if (!m_fieldModel || !m_ui || !m_ui->tableView || !m_ui->tableView->selectionModel()) {
+        return std::string_view();
+    }
+    const auto selectedIndexes = m_ui->tableView->selectionModel()->selectedIndexes();
+    for (const auto &index : selectedIndexes) {
+        if (!index.isValid()) {
+            continue;
+        }
+        if (const auto *const field = m_fieldModel->field(static_cast<std::size_t>(index.row()))) {
+            if (startsWith(field->value(), "otpauth:")) {
+                return field->value();
+            }
+        }
+    }
+    return std::string_view();
+}
+
+/*!
+ * \brief Updates the TOTP status bar message and starts/stops the TOTP timer.
+ */
+void MainWindow::updateTotpStatus()
+{
+    const auto url = selectedTotpUrl();
+    if (url.empty()) {
+        if (m_totpTimer.isActive()) {
+            m_totpTimer.stop();
+            statusBar()->clearMessage();
+        }
+        return;
+    }
+    try {
+        const auto totp = Util::OpenSsl::computeTOTP(url, DateTime::gmtNow());
+        if (!m_totpTimer.isActive()) {
+            m_totpTimer.start(900);
+        }
+        statusBar()->showMessage(tr("TOTP: %1 (%2 remaining)")
+                .arg(QString::fromStdString(totp.digits), QString::fromStdString(totp.remaining.toString(TimeSpanOutputFormat::WithMeasures))));
+    } catch (const std::runtime_error &) {
+        statusBar()->clearMessage();
+        m_totpTimer.stop();
+    }
+}
+
+/*!
  * \brief Inserts fields from the clipboard.
  */
 void MainWindow::insertFieldsFromClipboard()
@@ -310,6 +358,10 @@ MainWindow::MainWindow(QSettings &settings, QtUtilities::QtSettings *qtSettings,
     connect(m_ui->treeView->selectionModel(), &QItemSelectionModel::currentRowChanged, this, &MainWindow::accountSelected);
     connect(m_entryModel, &QAbstractItemModel::dataChanged, this, static_cast<void (MainWindow::*)(void)>(&MainWindow::setSomethingChanged));
     connect(m_fieldModel, &QAbstractItemModel::dataChanged, this, static_cast<void (MainWindow::*)(void)>(&MainWindow::setSomethingChanged));
+    // -> totp timer and status updates
+    connect(&m_totpTimer, &QTimer::timeout, this, &MainWindow::updateTotpStatus);
+    connect(m_ui->tableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::updateTotpStatus);
+    connect(m_fieldModel, &QAbstractItemModel::dataChanged, this, &MainWindow::updateTotpStatus);
     // -> context menus
     connect(m_ui->treeView, &QTableView::customContextMenuRequested, this, &MainWindow::showTreeViewContextMenu);
     connect(m_ui->tableView, &QTableView::customContextMenuRequested, this, &MainWindow::showTableViewContextMenu);
