@@ -25,14 +25,21 @@ set(SRC_FILES cli/cli.cpp main.cpp)
 set(GUI_HEADER_FILES model/entryfiltermodel.cpp model/entrymodel.cpp model/fieldmodel.cpp)
 set(GUI_SRC_FILES model/entryfiltermodel.cpp model/entrymodel.cpp model/fieldmodel.cpp)
 
-set(WIDGETS_HEADER_FILES gui/fielddelegate.h gui/initiategui.h gui/mainwindow.h gui/passwordgeneratordialog.h
-                         gui/stacksupport.h gui/undocommands.h)
+set(WIDGETS_HEADER_FILES
+    gui/fielddelegate.h
+    gui/initiategui.h
+    gui/mainwindow.h
+    gui/passwordgeneratordialog.h
+    gui/stacksupport.h
+    gui/totpdialog.h
+    gui/undocommands.h)
 set(WIDGETS_SRC_FILES
     gui/fielddelegate.cpp
     gui/initiategui.cpp
     gui/mainwindow.cpp
     gui/passwordgeneratordialog.cpp
     gui/stacksupport.cpp
+    gui/totpdialog.cpp
     gui/undocommands.cpp
     resources/icons.qrc)
 set(WIDGETS_UI_FILES gui/mainwindow.ui gui/passwordgeneratordialog.ui)

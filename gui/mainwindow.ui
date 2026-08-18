@@ -223,6 +223,7 @@
     <addaction name="actionRemoveAccount"/>
     <addaction name="separator"/>
     <addaction name="actionInsertRow"/>
+    <addaction name="actionInsertTotpField"/>
     <addaction name="actionRemoveRows"/>
     <addaction name="actionCopyFields"/>
     <addaction name="actionCopyTOTP"/>
@@ -603,6 +604,17 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+T</string>
+   </property>
+  </action>
+  <action name="actionInsertTotpField">
+   <property name="icon">
+    <iconset theme="clock-symbolic"/>
+   </property>
+   <property name="text">
+    <string>Insert &amp;TOTP field …</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+T</string>
    </property>
   </action>
  </widget>

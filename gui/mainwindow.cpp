@@ -1,5 +1,6 @@
 #include "./mainwindow.h"
 #include "./fielddelegate.h"
+#include "./totpdialog.h"
 
 #include "../model/entryfiltermodel.h"
 #include "../model/entrymodel.h"
@@ -341,6 +342,7 @@ MainWindow::MainWindow(QSettings &settings, QtUtilities::QtSettings *qtSettings,
     connect(m_ui->actionRemoveAccount, &QAction::triggered, this, &MainWindow::removeEntry);
     // -> insert/remove fields
     connect(m_ui->actionInsertRow, &QAction::triggered, this, &MainWindow::insertRow);
+    connect(m_ui->actionInsertTotpField, &QAction::triggered, this, &MainWindow::insertTotpRow);
     connect(m_ui->actionRemoveRows, &QAction::triggered, this, &MainWindow::removeRows);
     connect(m_ui->actionCopyFields, &QAction::triggered, this, &MainWindow::copyFields);
     connect(m_ui->actionCopyTOTP, &QAction::triggered, this, &MainWindow::copyFieldsTOTP);
@@ -1240,6 +1242,36 @@ void MainWindow::insertRow()
 }
 
 /*!
+ * \brief Prompts the user to insert a new TOTP field before the selected one.
+ */
+void MainWindow::insertTotpRow()
+{
+    if (showNoFileOpened() || showNoAccount()) {
+        return;
+    }
+    const auto selectedIndexes = m_ui->tableView->selectionModel()->selectedIndexes();
+    auto row = std::max(0, m_fieldModel->rowCount() - 1);
+    for (const auto &index : selectedIndexes) {
+        if (index.row() < row) {
+            row = index.row();
+        }
+    }
+    if (row > m_fieldModel->rowCount()) {
+        return;
+    }
+    if (auto dialog = TotpDialog(this); dialog.exec() == QDialog::Accepted) {
+        if (m_fieldModel->insertRow(row)) {
+            const auto keyIndex = m_fieldModel->index(row, 0);
+            m_fieldModel->setData(keyIndex, QStringLiteral("TOTP"), Qt::EditRole);
+            const auto valueIndex = m_fieldModel->index(row, 1);
+            m_fieldModel->setData(valueIndex, dialog.url(), Qt::EditRole);
+            m_fieldModel->setData(valueIndex, static_cast<int>(FieldType::Password), FieldTypeRole);
+            setSomethingChanged(true);
+        }
+    }
+}
+
+/*!
  * \brief Removes the selected rows.
  */
 void MainWindow::removeRows()
@@ -1433,6 +1465,7 @@ void MainWindow::showTableViewContextMenu(const QPoint &pos)
     QMenu contextMenu(this);
     // -> insertion and removal
     contextMenu.addAction(QIcon::fromTheme(QStringLiteral("list-add")), tr("Insert field"), this, &MainWindow::insertRow);
+    contextMenu.addAction(QIcon::fromTheme(QStringLiteral("clock-symbolic")), tr("Insert TOTP field …"), this, &MainWindow::insertTotpRow);
     contextMenu.addAction(
         QIcon::fromTheme(QStringLiteral("list-remove")), tr("Remove field(s)", nullptr, multipleRows), this, &MainWindow::removeRows);
     // -> show the "Mark as ..." action only when all selected indexes are of the same type

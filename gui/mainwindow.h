@@ -101,6 +101,7 @@ private Q_SLOTS:
     // row management
     void accountSelected(const QModelIndex &selected, const QModelIndex &);
     void insertRow();
+    void insertTotpRow();
     void removeRows();
     void markAsPasswordField();
     void markAsNormalField();
