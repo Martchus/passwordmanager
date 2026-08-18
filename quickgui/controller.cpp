@@ -512,6 +512,21 @@ QString Controller::copyTOTP(const QString &url) const
     }
 }
 
+QVariantMap Controller::computeTOTP(const QString &url) const
+{
+    auto result = QVariantMap();
+    try {
+        const auto totp = Util::OpenSsl::computeTOTP(url.toStdString(), DateTime::gmtNow());
+        result[QStringLiteral("valid")] = true;
+        result[QStringLiteral("digits")] = QString::fromStdString(totp.digits);
+        result[QStringLiteral("remaining")] = QString::fromStdString(totp.remaining.toString(TimeSpanOutputFormat::WithMeasures));
+    } catch (const std::runtime_error &e) {
+        result[QStringLiteral("valid")] = false;
+        result[QStringLiteral("error")] = QString::fromUtf8(e.what());
+    }
+    return result;
+}
+
 void Controller::resetFileStatus()
 {
     m_entryModel.reset();

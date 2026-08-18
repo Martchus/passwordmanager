@@ -136,6 +136,41 @@ Page {
                         visible: fieldDialog.isPassword
                     }
                 }
+
+                Label {
+                    id: totpLabel
+                    Layout.fillWidth: true
+                    Layout.topMargin: 10
+                    Layout.bottomMargin: 10
+                    text: totpTimer.totpText
+                    visible: totpTimer.running
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pixelSize: 16
+                    font.weight: Font.Bold
+                    wrapMode: Text.Wrap
+                }
+
+                Timer {
+                    id: totpTimer
+                    interval: 900
+                    repeat: true
+                    running: fieldDialog.visible && fieldValueEdit.text.startsWith("otpauth:")
+                    triggeredOnStart: true
+                    onTriggered: totpTimer.updateTotp()
+
+                    property string totpText
+
+                    function updateTotp() {
+                        const info = nativeInterface.computeTOTP(fieldValueEdit.text)
+                        if (info.valid) {
+                            totpText = qsTr("TOTP: %1 (%2 remaining)").arg(info.digits).arg(info.remaining)
+                        } else if (info.error) {
+                            totpText = info.error
+                        } else {
+                            totpText = ""
+                        }
+                    }
+                }
             }
         }
 

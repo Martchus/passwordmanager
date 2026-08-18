@@ -11,6 +11,7 @@
 
 #include <QObject>
 #include <QPersistentModelIndex>
+#include <QVariant>
 
 QT_FORWARD_DECLARE_CLASS(QGuiApplication)
 QT_FORWARD_DECLARE_CLASS(QSettings)
@@ -82,6 +83,7 @@ public:
     Q_INVOKABLE bool copyToClipboard(const QString &text) const;
     Q_INVOKABLE QString getClipboardText() const;
     Q_INVOKABLE QString copyTOTP(const QString &url) const;
+    Q_INVOKABLE QVariantMap computeTOTP(const QString &url) const;
     bool canPaste() const;
     const QStringList &recentFiles() const;
     Q_INVOKABLE void clearRecentFiles();
