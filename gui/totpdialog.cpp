@@ -8,6 +8,8 @@
 #include <QUrlQuery>
 #include <QVBoxLayout>
 
+#include <algorithm>
+
 namespace QtGui {
 
 TotpDialog::TotpDialog(QWidget *parent)
@@ -48,6 +50,10 @@ TotpDialog::TotpDialog(QWidget *parent)
     connect(m_secretEdit, &QLineEdit::textChanged, this, [okButton](const QString &text) { okButton->setEnabled(!text.trimmed().isEmpty()); });
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+
+    auto hint = sizeHint();
+    hint.setWidth(std::max(hint.width(), 425));
+    resize(hint);
 }
 
 TotpDialog::~TotpDialog() = default;
