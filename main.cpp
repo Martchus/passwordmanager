@@ -36,7 +36,7 @@ ENABLE_QT_RESOURCES_OF_STATIC_DEPENDENCIES
 #ifdef PASSWORD_MANAGER_GUI_QTWIDGETS_OR_QTQUICK
 #define PASSWORD_MANAGER_FORCE_GUI
 #else
-#error "Must configure building at least one kind of GUI under Android."
+#error "Must configure building at least one kind of GUI for Android and WebAssembly."
 #endif
 #endif
 
