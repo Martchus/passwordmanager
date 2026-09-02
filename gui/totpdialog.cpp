@@ -12,7 +12,7 @@
 
 namespace QtGui {
 
-TotpDialog::TotpDialog(QWidget *parent)
+TotpDialog::TotpDialog(const QString &issuer, QWidget *parent)
     : QDialog(parent)
 {
     setWindowTitle(tr("Insert TOTP field"));
@@ -33,6 +33,7 @@ TotpDialog::TotpDialog(QWidget *parent)
 
     m_issuerEdit = new QLineEdit(this);
     m_issuerEdit->setClearButtonEnabled(true);
+    m_issuerEdit->setText(issuer);
 
     formLayout->addRow(tr("&Secret (mandatory):"), m_secretEdit);
     formLayout->addRow(tr("&Duration (seconds):"), m_durationEdit);

@@ -1259,7 +1259,9 @@ void MainWindow::insertTotpRow()
     if (row > m_fieldModel->rowCount()) {
         return;
     }
-    if (auto dialog = TotpDialog(this); dialog.exec() == QDialog::Accepted) {
+    const auto *const account = m_fieldModel->accountEntry();
+    const auto issuer = account ? QString::fromStdString(account->label()) : QString();
+    if (auto dialog = TotpDialog(issuer, this); dialog.exec() == QDialog::Accepted) {
         if (m_fieldModel->insertRow(row)) {
             const auto keyIndex = m_fieldModel->index(row, 0);
             m_fieldModel->setData(keyIndex, QStringLiteral("TOTP"), Qt::EditRole);

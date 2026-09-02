@@ -13,7 +13,7 @@ class TotpDialog : public QDialog {
     Q_PROPERTY(QUrl url READ url)
 
 public:
-    explicit TotpDialog(QWidget *parent = nullptr);
+    explicit TotpDialog(const QString &issuer = QString(), QWidget *parent = nullptr);
     ~TotpDialog() override;
 
     QUrl url() const;
