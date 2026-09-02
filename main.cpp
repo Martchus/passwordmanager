@@ -60,7 +60,7 @@ CPP_UTILITIES_MAIN_EXPORT int main(int argc, char *argv[])
     auto qtConfigArgs = QT_CONFIG_ARGUMENTS();
 #ifndef PASSWORD_MANAGER_FORCE_GUI
     auto parser = ArgumentParser();
-    auto fileArg = Argument("file", 'f', "specifies the file to be opened (or created when using --modify)");
+    auto fileArg = Argument("file", 'f', "specifies the file to be opened (or created when using)");
     fileArg.setValueNames({ "path" });
     fileArg.setRequiredValueCount(1);
     fileArg.setCombinable(true);
