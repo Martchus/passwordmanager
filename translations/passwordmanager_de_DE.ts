@@ -1245,13 +1245,13 @@ OpenSSL-Fehler: %1</translation>
     </message>
     <message>
         <location filename="../gui/mainwindow.cpp" line="1146"/>
-        <location filename="../gui/mainwindow.cpp" line="1395"/>
+        <location filename="../gui/mainwindow.cpp" line="1397"/>
         <source>Add account</source>
         <translation>Konto hinzufügen</translation>
     </message>
     <message>
         <location filename="../gui/mainwindow.cpp" line="1146"/>
-        <location filename="../gui/mainwindow.cpp" line="1396"/>
+        <location filename="../gui/mainwindow.cpp" line="1398"/>
         <source>Add category</source>
         <translation>Kategorie hinzufügen</translation>
     </message>
@@ -1271,12 +1271,12 @@ OpenSSL-Fehler: %1</translation>
         <translation>Neuer Eintrag kann nicht erstellt werden.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1468"/>
+        <location filename="../gui/mainwindow.cpp" line="1470"/>
         <source>Insert TOTP field …</source>
         <translation>TOTP-Feld einfügen …</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1513"/>
+        <location filename="../gui/mainwindow.cpp" line="1515"/>
         <source>File details</source>
         <translation>Details über geöffnete Datei</translation>
     </message>
@@ -1360,47 +1360,47 @@ OpenSSL-Fehler: %1</translation>
         <translation>Es muss ein Feld ausgewählt werden. Neue Fehler werden dann vor diesem eingefügt.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1288"/>
+        <location filename="../gui/mainwindow.cpp" line="1290"/>
         <source>No fields have been removed since there are currently no fields selected.</source>
         <translation>Es wurden keine Felder gelöscht, da keine ausgewählt sind.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1324"/>
+        <location filename="../gui/mainwindow.cpp" line="1326"/>
         <source>No fields have been changed since there are currently no fields selected.</source>
         <translation>Es wurden keine Felder geändert, da keine ausgewählt sind.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1358"/>
+        <location filename="../gui/mainwindow.cpp" line="1360"/>
         <source>Changing password</source>
         <translation>Passwort ändern</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1366"/>
+        <location filename="../gui/mainwindow.cpp" line="1368"/>
         <source>You didn&apos;t enter a password. &lt;strong&gt;No encryption&lt;/strong&gt; will be used when saving the file next time.</source>
         <translation>Du hast kein Passwort eingegeben. Beim nächsten Speichern wird die Datei &lt;strong&gt;nicht verschlüsselt&lt;/strong&gt;.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1370"/>
+        <location filename="../gui/mainwindow.cpp" line="1372"/>
         <source>The new password will be used next time you save the file.</source>
         <translation>Das neue Passwort wird beim nächsten Speichern verwendet.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1375"/>
+        <location filename="../gui/mainwindow.cpp" line="1377"/>
         <source>You aborted. The old password will still be used when saving the file next time.</source>
         <translation>Du hast abgebrochen. Beim nächsten Speichern wird weiterhin das alte Passwort verwendet.</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1398"/>
+        <location filename="../gui/mainwindow.cpp" line="1400"/>
         <source>Remove entry</source>
         <translation>Eintrag löschen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1404"/>
+        <location filename="../gui/mainwindow.cpp" line="1406"/>
         <source>Expanded by default</source>
         <translation>Standardmäßig ausgeklappt</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1467"/>
+        <location filename="../gui/mainwindow.cpp" line="1469"/>
         <source>Insert field</source>
         <translation>Feld einfügen</translation>
     </message>
@@ -1409,7 +1409,7 @@ OpenSSL-Fehler: %1</translation>
         <translation type="vanished">TOTP-Feld einfügen...</translation>
     </message>
     <message numerus="yes">
-        <location filename="../gui/mainwindow.cpp" line="1470"/>
+        <location filename="../gui/mainwindow.cpp" line="1472"/>
         <source>Remove field(s)</source>
         <translation>
             <numerusform>Feld löschen</numerusform>
@@ -1417,47 +1417,47 @@ OpenSSL-Fehler: %1</translation>
         </translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1476"/>
+        <location filename="../gui/mainwindow.cpp" line="1478"/>
         <source>Mark as password field</source>
         <translation>Als Passwortfeld markieren</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1479"/>
+        <location filename="../gui/mainwindow.cpp" line="1481"/>
         <source>Mark as normal field</source>
         <translation>Als normales Feld markieren</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1485"/>
+        <location filename="../gui/mainwindow.cpp" line="1487"/>
         <source>Copy</source>
         <translation>Kopieren</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1486"/>
+        <location filename="../gui/mainwindow.cpp" line="1488"/>
         <source>Copy for 5 seconds</source>
         <translation>Für 5 Sekunden kopieren</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1495"/>
+        <location filename="../gui/mainwindow.cpp" line="1497"/>
         <source>Paste</source>
         <translation>Einfügen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1499"/>
+        <location filename="../gui/mainwindow.cpp" line="1501"/>
         <source>Open URL</source>
         <translation>URL öffnen</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1537"/>
+        <location filename="../gui/mainwindow.cpp" line="1539"/>
         <source>Copied values, clearing clipboard in %1 s</source>
         <translation>Wert kopiert, lösche Zwischenablage in %1 s</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1539"/>
+        <location filename="../gui/mainwindow.cpp" line="1541"/>
         <source>Copied values</source>
         <translation>Wert kopiert</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1489"/>
+        <location filename="../gui/mainwindow.cpp" line="1491"/>
         <source>Copy TOTP</source>
         <translation>TOTP kopieren</translation>
     </message>
@@ -1467,7 +1467,7 @@ OpenSSL-Fehler: %1</translation>
         <translation>TOTP kann nicht berechnet werden: %1</translation>
     </message>
     <message>
-        <location filename="../gui/mainwindow.cpp" line="1528"/>
+        <location filename="../gui/mainwindow.cpp" line="1530"/>
         <source>The selection is empty.</source>
         <translation>Die Auswahl ist leer.</translation>
     </message>
@@ -1557,27 +1557,27 @@ OpenSSL-Fehler: %1</translation>
 <context>
     <name>QtGui::TotpDialog</name>
     <message>
-        <location filename="../gui/totpdialog.cpp" line="16"/>
+        <location filename="../gui/totpdialog.cpp" line="18"/>
         <source>Insert TOTP field</source>
         <translation>TOTP-Feld einfügen</translation>
     </message>
     <message>
-        <location filename="../gui/totpdialog.cpp" line="35"/>
+        <location filename="../gui/totpdialog.cpp" line="38"/>
         <source>&amp;Secret (mandatory):</source>
         <translation>&amp;Geheimnis (erforderlich):</translation>
     </message>
     <message>
-        <location filename="../gui/totpdialog.cpp" line="36"/>
+        <location filename="../gui/totpdialog.cpp" line="39"/>
         <source>&amp;Duration (seconds):</source>
         <translation>&amp;Dauer (Sekunden):</translation>
     </message>
     <message>
-        <location filename="../gui/totpdialog.cpp" line="37"/>
+        <location filename="../gui/totpdialog.cpp" line="40"/>
         <source>&amp;Number of digits:</source>
         <translation>&amp;Anzahl der Stellen:</translation>
     </message>
     <message>
-        <location filename="../gui/totpdialog.cpp" line="38"/>
+        <location filename="../gui/totpdialog.cpp" line="41"/>
         <source>&amp;Issuer (informative):</source>
         <translation>&amp;Aussteller (zur Information):</translation>
     </message>
