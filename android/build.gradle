@@ -5,7 +5,8 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.8.0'
+        //noinspection AndroidGradlePluginVersion
+        classpath 'com.android.tools.build:gradle:9.2.1'
     }
 }
 
@@ -14,12 +15,13 @@ repositories {
     mavenCentral()
 }
 
-apply plugin: 'com.android.application'
+apply plugin: qtGradlePluginType
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+    //noinspection GradleDependency
+    implementation 'androidx.core:core:1.17.0'
     implementation "androidx.documentfile:documentfile:1.0.1"
-    implementation 'androidx.core:core:1.16.0'
 }
 
 android {
@@ -42,17 +44,11 @@ android {
     buildToolsVersion androidBuildToolsVersion
     ndkVersion = androidNdkVersion
 
-    // Exclude certain libraries
-    packagingOptions {
-        exclude 'lib/*/*Controls_Imagine*'
-        exclude 'lib/*/*Controls_Fluent*'
-        exclude 'lib/*/*Controls_Universal*'
-    }
-
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
             java.srcDirs = [qtAndroidDir + '/src', 'src', 'java']
+            kotlin.srcDirs = [qtAndroidDir + '/src', 'src', 'kotlin']
             aidl.srcDirs = [qtAndroidDir + '/src', 'src', 'aidl']
             res.srcDirs = [qtAndroidDir + '/res', 'res']
             resources.srcDirs = ['resources']
@@ -63,25 +59,27 @@ android {
     }
 
     tasks.withType(JavaCompile) {
-        options.incremental = true
+        options.compilerArgs += ['-Xlint:all']
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
-    lintOptions {
-        abortOnError = false
-    }
-
-    // Do not compress Qt binary resources file
     aaptOptions {
+        // Do not compress Qt binary resources file
         noCompress 'rcc'
     }
 
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging = false
+        }
+    }
+
     defaultConfig {
-        resConfig "en"
+        resConfigs "en", "de"
         minSdkVersion qtMinSdkVersion
         targetSdkVersion qtTargetSdkVersion
         ndk.abiFilters = qtTargetAbiList.split(",")
