@@ -24,6 +24,7 @@ set(SRC_FILES cli/cli.cpp main.cpp)
 
 set(GUI_HEADER_FILES model/entryfiltermodel.cpp model/entrymodel.cpp model/fieldmodel.cpp)
 set(GUI_SRC_FILES model/entryfiltermodel.cpp model/entrymodel.cpp model/fieldmodel.cpp)
+set(GUI_RES_FILES resources/icons.qrc)
 
 set(WIDGETS_HEADER_FILES
     gui/fielddelegate.h
@@ -40,12 +41,11 @@ set(WIDGETS_SRC_FILES
     gui/passwordgeneratordialog.cpp
     gui/stacksupport.cpp
     gui/totpdialog.cpp
-    gui/undocommands.cpp
-    resources/icons.qrc)
+    gui/undocommands.cpp)
 set(WIDGETS_UI_FILES gui/mainwindow.ui gui/passwordgeneratordialog.ui)
 
 set(QML_HEADER_FILES quickgui/controller.h quickgui/initiatequick.h)
-set(QML_SRC_FILES quickgui/controller.cpp quickgui/initiatequick.cpp resources/icons.qrc)
+set(QML_SRC_FILES quickgui/controller.cpp quickgui/initiatequick.cpp)
 set(QML_MODULE_FILES
     qml/AboutDialog.qml
     qml/BasicDialog.qml
