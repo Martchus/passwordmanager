@@ -232,7 +232,7 @@ QVariant EntryModel::data(const QModelIndex &index, int role) const
         break;
     case Qt::DecorationRole:
         if (index.column() == 0 && entry->type() == EntryType::Node) {
-            static const QVariant folderIcon = QIcon::fromTheme(QStringLiteral("folder"));
+            static const QVariant folderIcon = QIcon::fromTheme(QStringLiteral("folder-symbolic"));
             return folderIcon;
         }
         break;

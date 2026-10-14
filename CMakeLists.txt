@@ -73,77 +73,60 @@ set(ICON_FILES resources/icons/hicolor/scalable/apps/${META_PROJECT_NAME}.svg)
 set(DOC_FILES README.md)
 
 set(REQUIRED_ICONS
-    application-exit
+    application-exit-symbolic
     application-menu-symbolic
-    applications-internet
+    applications-internet-symbolic
     clock-symbolic
-    dialog-cancel
-    dialog-ok
-    dialog-ok-apply
-    dialog-password
-    document-close
+    dialog-cancel-symbolic
+    dialog-ok-symbolic
+    dialog-ok-apply-symbolic
+    dialog-password-symbolic
     document-close-symbolic
-    document-encrypt
     document-encrypt-symbolic
-    document-export
-    document-new
+    document-export-symbolic
     document-new-symbolic
-    document-open
-    document-open-recent
     document-open-recent-symbolic
     document-open-symbolic
-    document-properties
     document-properties-symbolic
-    document-save
     document-save-as-symbolic
     document-save-symbolic
-    edit-clear
     edit-clear-symbolic
-    edit-copy
     edit-copy-symbolic
     edit-cut-symbolic
     edit-delete-symbolic
-    edit-paste
     edit-paste-symbolic
-    edit-redo
     edit-redo-symbolic
     edit-rename-symbolic
     edit-undo
     edit-undo-symbolic
     flag-black
     flag-blue
-    folder
     folder-add-symbolic
     folder-symbolic
     go-down-symbolic
-    go-next
-    go-previous
+    go-next-symbolic
     go-previous-symbolic
     go-up-symbolic
     handle-sort
     help-about-symbolic
-    insert-text
-    list-add
+    insert-text-symbolic
     list-add-symbolic
-    list-remove
+    list-remove-symbolic
     overflow-menu
-    password-copy
-    password-generate
-    password-show-off
+    password-copy-symbolic
+    password-generate-symbolic
     password-show-off-symbolic
-    password-show-on
     password-show-on-symbolic
     preferences-desktop-icons
     preferences-desktop-locale
     qtcreator
-    search
     search-symbolic
-    system-file-manager
-    system-run
-    system-search
-    username-copy
+    system-file-manager-symbolic
+    system-run-symbolic
+    system-search-symbolic
+    username-copy-symbolic
     view-list-details-symbolic
-    window-close)
+    window-close-symbolic)
 
 # find c++utilities
 option(SETUP_TOOLS "enables setup tools; needs qtutilities built with this option as well" OFF)
@@ -173,13 +156,7 @@ option(QUICK_GUI "enables/disables building the Qt Quick GUI using Kirigami" "${
 include(BasicConfig)
 
 # find qtutilities
-set(QT_UTILITIES_REQUIRED_VERSION 6.15.0)
-if (SETUP_TOOLS)
-    set(QT_UTILITIES_REQUIRED_VERSION 6.18.0)
-endif ()
-if (QUICK_GUI)
-    set(QT_UTILITIES_REQUIRED_VERSION 6.22.0)
-endif ()
+set(QT_UTILITIES_REQUIRED_VERSION 6.23.0)
 set(CONFIGURATION_PACKAGE_SUFFIX_QTUTILITIES
     "${CONFIGURATION_PACKAGE_SUFFIX}"
     CACHE STRING "sets the suffix for qtutilities")
@@ -224,7 +201,7 @@ endif ()
 if (SETUP_TOOLS)
     list(APPEND ADDITIONAL_QT_MODULES Network)
     list(APPEND META_PRIVATE_COMPILE_DEFINITIONS ${META_PROJECT_VARNAME_UPPER}_SETUP_TOOLS_ENABLED)
-    list(APPEND REQUIRED_ICONS install)
+    list(APPEND REQUIRED_ICONS install-symbolic info-symbolic system-software-update)
     use_crypto()
 endif ()
 

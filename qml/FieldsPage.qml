@@ -68,7 +68,7 @@ Page {
                     }
                     RoundButton {
                         flat: true
-                        icon.name: "edit-paste"
+                        icon.name: "edit-paste-symbolic"
                         Layout.preferredWidth: height
                         Layout.columnSpan: 2
                         onClicked: {
@@ -106,7 +106,7 @@ Page {
                     }
                     RoundButton {
                         flat: true
-                        icon.name: "edit-paste"
+                        icon.name: "edit-paste-symbolic"
                         Layout.preferredWidth: height
                         onClicked: {
                             fieldValueEdit.text = nativeInterface.getClipboardText()

@@ -314,7 +314,7 @@ MainWindow::MainWindow(QSettings &settings, QtUtilities::QtSettings *qtSettings,
 
     // add action for updater if setup tools are enabled
 #ifdef PASSWORD_MANAGER_SETUP_TOOLS_ENABLED
-    auto *const updaterAction = m_ui->menu->addAction(QIcon::fromTheme(QStringLiteral("install")), tr("Check for updates"));
+    auto *const updaterAction = m_ui->menu->addAction(QIcon::fromTheme(QStringLiteral("install-symbolic")), tr("Check for updates"));
 #endif
 
     // connect signals and slots
@@ -1394,10 +1394,10 @@ void MainWindow::showTreeViewContextMenu(const QPoint &pos)
     const QModelIndex selected(m_entryFilterModel->mapToSource(selectedIndexes.at(0)));
     const Entry *const entry = m_entryModel->entry(selected);
     if (entry->type() == EntryType::Node) {
-        contextMenu.addAction(QIcon::fromTheme(QStringLiteral("list-add")), tr("Add account"), this, &MainWindow::addAccount);
-        contextMenu.addAction(QIcon::fromTheme(QStringLiteral("list-add")), tr("Add category"), this, &MainWindow::addCategory);
+        contextMenu.addAction(QIcon::fromTheme(QStringLiteral("list-add-symbolic")), tr("Add account"), this, &MainWindow::addAccount);
+        contextMenu.addAction(QIcon::fromTheme(QStringLiteral("list-add-symbolic")), tr("Add category"), this, &MainWindow::addCategory);
     }
-    contextMenu.addAction(QIcon::fromTheme(QStringLiteral("list-remove")), tr("Remove entry"), this, &MainWindow::removeEntry);
+    contextMenu.addAction(QIcon::fromTheme(QStringLiteral("list-remove-symbolic")), tr("Remove entry"), this, &MainWindow::removeEntry);
     if (entry->type() == EntryType::Node) {
         const auto *const nodeEntry = static_cast<const NodeEntry *>(entry);
         contextMenu.addSeparator();
@@ -1466,10 +1466,10 @@ void MainWindow::showTableViewContextMenu(const QPoint &pos)
     // create context menu
     QMenu contextMenu(this);
     // -> insertion and removal
-    contextMenu.addAction(QIcon::fromTheme(QStringLiteral("list-add")), tr("Insert field"), this, &MainWindow::insertRow);
+    contextMenu.addAction(QIcon::fromTheme(QStringLiteral("list-add-symbolic")), tr("Insert field"), this, &MainWindow::insertRow);
     contextMenu.addAction(QIcon::fromTheme(QStringLiteral("clock-symbolic")), tr("Insert TOTP field …"), this, &MainWindow::insertTotpRow);
     contextMenu.addAction(
-        QIcon::fromTheme(QStringLiteral("list-remove")), tr("Remove field(s)", nullptr, multipleRows), this, &MainWindow::removeRows);
+        QIcon::fromTheme(QStringLiteral("list-remove-symbolic")), tr("Remove field(s)", nullptr, multipleRows), this, &MainWindow::removeRows);
     // -> show the "Mark as ..." action only when all selected indexes are of the same type
     if (hasFirstFieldType && allOfSameType) {
         switch (firstType) {
@@ -1484,8 +1484,8 @@ void MainWindow::showTableViewContextMenu(const QPoint &pos)
     }
     // -> insert copy & paste
     contextMenu.addSeparator();
-    contextMenu.addAction(QIcon::fromTheme(QStringLiteral("edit-copy")), tr("Copy"), this, &MainWindow::copyFields);
-    contextMenu.addAction(QIcon::fromTheme(QStringLiteral("edit-copy")), tr("Copy for 5 seconds"), this,
+    contextMenu.addAction(QIcon::fromTheme(QStringLiteral("edit-copy-symbolic")), tr("Copy"), this, &MainWindow::copyFields);
+    contextMenu.addAction(QIcon::fromTheme(QStringLiteral("edit-copy-symbolic")), tr("Copy for 5 seconds"), this,
         std::bind(&MainWindow::copyFieldsForXMilliSeconds, this, 5000));
     if (multipleRows == 1 && !totpUrl.empty()) {
         auto *copyTotpAction = new QAction(QIcon::fromTheme(QStringLiteral("clock-symbolic")), tr("Copy TOTP"), &contextMenu);
@@ -1494,11 +1494,11 @@ void MainWindow::showTableViewContextMenu(const QPoint &pos)
     }
     const auto *const mimeData = QGuiApplication::clipboard()->mimeData();
     if (mimeData && mimeData->hasText()) {
-        contextMenu.addAction(QIcon::fromTheme(QStringLiteral("edit-paste")), tr("Paste"), this, &MainWindow::insertFieldsFromClipboard);
+        contextMenu.addAction(QIcon::fromTheme(QStringLiteral("edit-paste-symbolic")), tr("Paste"), this, &MainWindow::insertFieldsFromClipboard);
     }
     // -> insert open URL
     if (multipleRows == 1 && !serviceUrl.isEmpty()) {
-        auto *openUrlAction = new QAction(QIcon::fromTheme(QStringLiteral("applications-internet")), tr("Open URL"), &contextMenu);
+        auto *openUrlAction = new QAction(QIcon::fromTheme(QStringLiteral("applications-internet-symbolic")), tr("Open URL"), &contextMenu);
         connect(openUrlAction, &QAction::triggered, bind(&QDesktopServices::openUrl, serviceUrl));
         contextMenu.addAction(openUrlAction);
     }
