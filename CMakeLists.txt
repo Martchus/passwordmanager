@@ -119,7 +119,6 @@ set(REQUIRED_ICONS
     password-show-on-symbolic
     preferences-desktop-icons
     preferences-desktop-locale
-    qtcreator
     search-symbolic
     system-file-manager-symbolic
     system-run-symbolic
