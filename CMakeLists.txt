@@ -90,15 +90,25 @@ set(REQUIRED_ICONS
     document-properties-symbolic
     document-save-as-symbolic
     document-save-symbolic
-    edit-clear-symbolic
+    edit-copy
+    edit-clear
+    edit-cut
+    edit-delete
+    edit-paste
+    edit-redo
+    edit-undo
+    edit-select
+    edit-select-all
     edit-copy-symbolic
+    edit-clear-symbolic
     edit-cut-symbolic
     edit-delete-symbolic
     edit-paste-symbolic
     edit-redo-symbolic
-    edit-rename-symbolic
-    edit-undo
     edit-undo-symbolic
+    edit-select-symbolic
+    edit-select-all-symbolic
+    edit-rename-symbolic
     flag-black
     flag-blue
     folder-add-symbolic
