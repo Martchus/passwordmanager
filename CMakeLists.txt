@@ -132,6 +132,7 @@ set(REQUIRED_ICONS
     search-symbolic
     system-file-manager-symbolic
     system-run-symbolic
+    system-search
     system-search-symbolic
     username-copy-symbolic
     view-list-details-symbolic
