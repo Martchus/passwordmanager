@@ -60,7 +60,7 @@ public:
 
 public Q_SLOTS:
     // file management
-    bool openFile(const QString &path);
+    inline bool openFile(const QString &path);
     void createFile(const QString &path, const QString &password);
     void createFile(const QString &path);
     bool createFile();
@@ -75,7 +75,7 @@ public Q_SLOTS:
     void showAboutDialog();
 #ifdef PASSWORD_MANAGER_SETUP_TOOLS_ENABLED
     void showUpdaterDialog();
-    void respawnIfRestartRequested();
+    inline void respawnIfRestartRequested();
 #endif
     void showPassowrdGeneratorDialog();
     void showUndoView();
