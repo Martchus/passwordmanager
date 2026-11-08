@@ -55,11 +55,11 @@ public:
 #endif
 
     QHash<int, QByteArray> roleNames() const override;
-    Io::AccountEntry *accountEntry();
-    const Io::AccountEntry *accountEntry() const;
+    inline Io::AccountEntry *accountEntry();
+    inline const Io::AccountEntry *accountEntry() const;
     void setAccountEntry(Io::AccountEntry *entry);
-    std::vector<Io::Field> *fields();
-    PasswordVisibility passwordVisibility() const;
+    inline std::vector<Io::Field> *fields();
+    inline PasswordVisibility passwordVisibility() const;
     QVariant data(const QModelIndex &index, int role) const override;
     QMap<int, QVariant> itemData(const QModelIndex &index) const override;
     bool setData(const QModelIndex &index, const QVariant &value, int role) override;
@@ -77,8 +77,8 @@ public:
     Q_INVOKABLE const Io::Field *field(std::size_t row) const;
 
 public Q_SLOTS:
-    void setPasswordVisibility(PasswordVisibility passwordVisibility);
-    void reset();
+    inline void setPasswordVisibility(PasswordVisibility passwordVisibility);
+    inline void reset();
 
 private:
     QVariant passwordValue(const QModelIndex &index, int role) const;

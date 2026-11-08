@@ -24,14 +24,14 @@ class StackSupport;
 class CustomUndoCommand : public QUndoCommand {
 public:
     explicit CustomUndoCommand(StackSupport *stackSupport);
-    bool redoResult() const;
-    bool undoResult() const;
-    bool isNoop() const;
+    inline bool redoResult() const;
+    inline bool undoResult() const;
+    inline bool isNoop() const;
     void redo() override;
     void undo() override;
 
 protected:
-    void setNoop(bool noop);
+    inline void setNoop(bool noop);
     virtual bool internalRedo() = 0;
     virtual bool internalUndo() = 0;
 

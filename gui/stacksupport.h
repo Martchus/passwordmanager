@@ -21,8 +21,8 @@ public:
 
 protected:
     QUndoStack *undoStack();
-    bool push(std::unique_ptr<CustomUndoCommand> command);
-    void clearUndoStack();
+    inline bool push(std::unique_ptr<CustomUndoCommand> command);
+    inline void clearUndoStack();
 
 private:
     QUndoStack *m_undoStack;
@@ -68,9 +68,9 @@ inline void StackSupport::clearUndoStack()
  */
 class StackAbsorper {
 public:
-    explicit StackAbsorper(StackSupport *supported);
-    ~StackAbsorper();
-    QUndoStack *stack();
+    explicit inline StackAbsorper(StackSupport *supported);
+    inline ~StackAbsorper();
+    inline QUndoStack *stack();
 
 private:
     StackSupport *m_supported;

@@ -51,8 +51,8 @@ public:
     Q_INVOKABLE Io::Entry *entry(const QModelIndex &index);
     Q_INVOKABLE QList<Io::Entry *> takeEntries(int row, int count, const QModelIndex &parent);
     Q_INVOKABLE bool insertEntries(int row, const QModelIndex &parent, const QList<Io::Entry *> &entries);
-    Io::EntryType insertType() const;
-    void setInsertType(Io::EntryType type);
+    inline Io::EntryType insertType() const;
+    inline void setInsertType(Io::EntryType type);
     QModelIndex index(int row, int column, const QModelIndex &parent) const override;
     QModelIndex index(Io::Entry *entry) const;
     QModelIndex parent(const QModelIndex &child) const override;
@@ -78,7 +78,7 @@ public:
     Q_INVOKABLE void setInsertTypeToAccount();
 
 public Q_SLOTS:
-    void reset();
+    inline void reset();
 
 private:
     Io::NodeEntry *m_rootEntry;
