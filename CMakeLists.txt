@@ -202,7 +202,7 @@ if (QUICK_GUI AND (MAJOR_QT_VERSION VERSION_LESS 6 OR MAJOR_QT_VERSION VERSION_G
     message(FATAL_ERROR "The Qt Quick GUI is only compatible with Qt 6 (but Qt ${MAJOR_QT_VERSION} was found).")
 endif ()
 
-# workaround "ld: error: undefined symbol: qt_resourceFeatureZstd" when Qt 6 is not configured with zstd support
+# work around "ld: error: undefined symbol: qt_resourceFeatureZstd" when Qt 6 is not configured with zstd support
 if (MAJOR_QT_VERSION GREATER_EQUAL 6 AND NOT QT_FEATURE_zstd)
     set(CMAKE_AUTORCC_OPTIONS "--no-zstd")
 endif ()
